@@ -93,6 +93,11 @@ Blah.
 Blah.
 
   * briefly: datatypes and why they are useful
+    (terminology: freely-generated, inductive, algebraic, ..., sometimes
+    with different meanings; we'll clarify below)
+    * Hoare's recursive data structures
+    * comparatively easy to reason about and automate
+    * common in practice, esp. in computer science applications
 
   * less briefly: codatatypes and why they are useful
     * in Agda, Coq, Matita -- recently also in Isabelle/HOL
@@ -100,7 +105,8 @@ Blah.
 
   * single decision procedure for datatypes and codatatypes
   * datatypes are implementation following the lines of Barrett et al.
-  * codatatypes were added later, motivated by CVC4 as Isabelle backend
+  * codatatypes were added later, motivated by the use of SMT solvers as
+    backends to proof assistants (more specifically, CVC4 to Isabelle/HOL)
 
   * setting (Section~\ref{sec:theory-of-co-datatypes}):
     * universal formulas
@@ -113,6 +119,7 @@ Blah.
     * codatatypes are never empty (e.g. finite streams are rejected)
     * no acyclicity (e.g. xs = lcons(0, xs) is satisfiable)
     * instead: bisimilarity
+    * (also: ``enumeration'', e.g. of streams)
 
   * motivation:
     * acyclicity and bisimilarity cannot be axiomatized, so they really belong in
@@ -148,6 +155,9 @@ Blah.
 \paragraph{Related Work.}
 
     * point to Barrett et al. for SMT datatypes
+      * about their own work, they say: "our focus is on generality and
+        efficiency rather than immediacy of implementation"
+      * (deal more directly with finite sorts than Barrett et al., Section 6.1)
     * additional ones since then (e.g. strings?)
     * anything about codatatypes?
       * proof assistants like Agda, Coq, etc. have them
@@ -155,10 +165,18 @@ Blah.
       * also a lot of theoretical research, some of which is loosely connected,
         e.g. decision procedure for corecursive functions (Henning in Nijmegen)
 
+    * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
+
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
   * unlike datatypes, codatatypes are never empty
+
+  * how to deal with "wrong" selectors, e.g.
+      hd(nil1) = hd(nil2)?
+  * ODDITY: Barrett et al. overspecify things (not good w.r.t. SMT-LIB 2, or
+    other solvers, e.g., Z3)
+
 
 \section{The Calculus}
 \label{sec:the-calculus}

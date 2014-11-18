@@ -1,3 +1,13 @@
+theory Stream_Examples
+imports "~~/src/HOL/Library/Stream"
+begin
+
+lemma "smap f (siterate id x) = smap id (siterate id (f x))"
+sledgehammer [cvc4, verbose, overlord, dont_slice, dont_minimize]
+sorry
+
+end
+
 (*
     is_SCons (smap f (siterate id x)))
     siterate id (f x) = SCons (f x) (siterate id (id (f x)))
