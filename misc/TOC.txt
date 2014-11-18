@@ -1,23 +1,35 @@
 1. Introduction
 
-2. theory of codatatypes
+2. Theory of Codatatypes
 
-3. SMT framework
+  * unlike datatypes, codatatypes are never empty
+
+3. SMT Framework
 
   * congruence closure vs. D.P.
 
 4. Calculus for D.P.
 
-5. Correctness
+  * Correctness
 
-6. Strategies
+  * no "internal search"
 
-7. Implementation
+5. Actual D.P.
 
-  * and cooperation with Nelson-Oppen / integration into SMT solver
+  * Rewriter
+  * Strategies
+  * Implementation
+    * cooperation with Nelson-Oppen / integration into SMT solver
+    * "mu" stuff
 
-8. Examples
+  * Enumerator?
+    * for model generation
 
-9. Evaluation / Experimental Results
+6. Examples
 
-10. Conclusion
+7. Evaluation / Experimental Results
+
+  * Constructed examples
+  * Isabelle benchmarks
+
+8. Conclusion
