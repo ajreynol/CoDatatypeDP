@@ -1,0 +1,23 @@
+1. Introduction
+
+2. theory of codatatypes
+
+3. SMT framework
+
+  * congruence closure vs. D.P.
+
+4. Calculus for D.P.
+
+5. Correctness
+
+6. Strategies
+
+7. Implementation
+
+  * and cooperation with Nelson-Oppen / integration into SMT solver
+
+8. Examples
+
+9. Evaluation / Experimental Results
+
+10. Conclusion
