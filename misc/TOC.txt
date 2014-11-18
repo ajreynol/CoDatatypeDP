@@ -1,35 +1,46 @@
-1. Introduction
+Abstract
 
-2. Theory of Codatatypes
+1. Introduction [JCB]
+
+\paragraph{Related Work}
+
+    * point to Barrett et al. for SMT datatypes
+    * additional ones since then (e.g. strings?)
+    * anything about codatatypes?
+      * proof assistants like Agda, Coq, etc. have them
+      * Dafny, Prolog-thingy
+
+2. Theory of (Co)datatypes [JCB]
 
   * unlike datatypes, codatatypes are never empty
 
-3. SMT Framework
+3. The Calculus [AJR]
 
-  * congruence closure vs. D.P.
+  * SMT background
 
-4. Calculus for D.P.
+  * Rewriter
+  * Actual calculus
 
   * Correctness
 
   * no "internal search"
 
-5. Actual D.P.
+4. The Theory Solver [AJR]
 
-  * Rewriter
   * Strategies
   * Implementation
+    * what is an SMT theory solver
     * cooperation with Nelson-Oppen / integration into SMT solver
     * "mu" stuff
 
   * Enumerator?
     * for model generation
 
-6. Examples
+5. Examples [JCB]
 
-7. Evaluation / Experimental Results
+6. Experimental Results [JCB/AJR]
 
   * Constructed examples
   * Isabelle benchmarks
 
-8. Conclusion
+7. Conclusion [JCB]
