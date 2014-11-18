@@ -36,7 +36,7 @@
 \usepackage[
    a4paper,
    pdftex,
-   pdftitle={A Decision Procedure for Codatatypes in SMT Solvers},
+   pdftitle={A Decision Procedure for (Co)datatypes in SMT Solvers},
    pdfauthor={Andrew J. Reynolds and Jasmin Christian Blanchette},
    pdfkeywords={},
    pdfborder={0 0 0},
@@ -67,14 +67,14 @@
 %\subtitle{Infrastructure and Application to Sort Encodings}
 %\title{A Mechanised Metatheory of First-Order Logic \\
 %  and Its Application to Sort Erasure}
-\title{A Decision Procedure for Codatatypes in SMT Solvers}
+\title{A Decision Procedure for (Co)datatypes in SMT Solvers}
 
 \author {Andrew J. Reynolds\inst{1} \and Jasmin Christian Blanchette\inst{2,3}}
 \authorrunning {A. J. Reynolds \and J. C. Blanchette}
 \institute{
 \'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), Switzerland
 \and
-Inria \& LORIA, Villers-l`es-Nancy, France \\
+Inria \& LORIA, Villers-l\`es-Nancy, France \\
 Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 }
 
@@ -92,17 +92,126 @@ Blah.
 
 Blah.
 
+  * briefly: datatypes and why they are useful
+
+  * less briefly: codatatypes and why they are useful
+    * in Agda, Coq, Matita -- recently also in Isabelle/HOL
+    * but not in SMT-LIB (2.5?)
+
+  * single decision procedure for datatypes and codatatypes
+  * datatypes are implementation following the lines of Barrett et al.
+  * codatatypes were added later, motivated by CVC4 as Isabelle backend
+
+  * setting (Section~\ref{sec:theory-of-co-datatypes}):
+    * universal formulas
+    * many-sorted logic
+    * mutually (co)recursive types with constructors, selectors, and
+      discriminators
+
+  * codatatypes: from a theoretical and implementational point of view, like
+      datatypes but:
+    * codatatypes are never empty (e.g. finite streams are rejected)
+    * no acyclicity (e.g. xs = lcons(0, xs) is satisfiable)
+    * instead: bisimilarity
+
+  * motivation:
+    * acyclicity and bisimilarity cannot be axiomatized, so they really belong in
+      a decision procedure
+    * other properties can be done more efficiently by a decision procedure
+
+  * decision procedure is described abstractly as a calculus
+    (Section~\ref{sec:the-calculus})
+    * includes rewriting
+    * and inferences
+
+  * integrated with Nelson-Oppen
+
+  * implemented in CVC4 as rewriting and a theory solver
+    (\ref{sec:the-theory-solver})
+    * precise strategy for applying inferences
+    * about 2000 lines of code, among which 1600 are shared between datatypes
+      and codatatypes
+
+  * useful both for proving and for model finding
+    * in particular, acyclicity and bisimilarity are necessary for some proofs
+      (and cannot be axiomatized finitely)
+    * and for model finding, without them we quickly get spurious models
+
+%\ref{sec:examples}
+
+  * benchmarking is often an issue -- esp. codatatypes
+  * the decision procedure is evaluated on two sets of benchmarks
+    (Section~\ref{sec:experimental-results}):
+    * first set: hand-crafted examples
+    * second set: generated from Isabelle theories using the Sledgehammer tool
+
+\paragraph{Related Work.}
+
+    * point to Barrett et al. for SMT datatypes
+    * additional ones since then (e.g. strings?)
+    * anything about codatatypes?
+      * proof assistants like Agda, Coq, etc. have them
+      * Dafny, CoALP
+      * also a lot of theoretical research, some of which is loosely connected,
+        e.g. decision procedure for corecursive functions (Henning in Nijmegen)
+
+\section{Theory of (Co)datatypes}
+\label{sec:theory-of-co-datatypes}
+
+  * unlike datatypes, codatatypes are never empty
+
+\section{The Calculus}
+\label{sec:the-calculus}
+
+  * SMT background
+
+  * Rewriter
+  * Actual calculus
+
+  * Correctness
+
+  * no "internal search"
+
+\section{The Theory Solver}
+\label{sec:the-theory-solver}
+
+  * Strategies
+  * Implementation
+    * what is an SMT theory solver
+    * cooperation with Nelson-Oppen / integration into SMT solver
+    * "mu" stuff
+
+  * Enumerator?
+    * for model generation
+
+%\section{Examples}
+%\label{sec:examples}
+
+\section{Experimental Results}
+\label{sec:experimental-results}
+
+  * Constructed examples
+  * Isabelle benchmarks
+
 \section{Conclusion}
 \label{sec:conclusion}
 
-\def\ackname{Acknowledgement}
-\ourparagraph{\ackname.}
-We thank Viktor Kuncak and Tobias Nipkow for making this work possible.
+Future work:
+
+  * more evaluation
+  * recursive and corecursive functions
+    (and rewriting)
+
+\def\ackname{Acknowledgment}
+\paragraph{\ackname.}
+
+Clark Barrett and Cesare Tinelli.
+
+Bosses: Viktor Kuncak, Tobias Nipkow, and Stephan Merz.
+
 The research was partially supported by the Deutsche
 Forschungs\-gemein\-schaft (DFG) project
 \relax{Hardening the Hammer} (grant Ni\,491\slash 14-1).
-% The authors are listed in alphabetical order.
-% regardless of individual contributions or seniority.
 
 \bibliographystyle{splncs03}
 \bibliography{bib}{}
