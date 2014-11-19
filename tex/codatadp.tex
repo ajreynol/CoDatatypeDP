@@ -118,7 +118,7 @@ Blah.
       datatypes but:
     * codatatypes are never empty (e.g. finite streams are rejected)
     * no acyclicity (e.g. xs = lcons(0, xs) is satisfiable)
-    * instead: bisimilarity
+    * instead: bisimilarity check
     * (also: ``enumeration'', e.g. of streams)
 
   * motivation:
@@ -170,13 +170,62 @@ Blah.
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
-  * unlike datatypes, codatatypes are never empty
+  * (co)datatype specifications:
+    * N mutually recursive types (datatypes or codatatypes -- no mixture)
+    * list of n constructors (n >= 1)
+    * each constructor has m arguments (m >= 0)
+    * each argument has a sort, which may be 
+
+  * don't consider mixtures (co)datatypes (cf. Agda), nor polymorphic types, nor
+    is it possible to do any nesting; e.g. this is outside our scope:
+
+      datatype tree = Node Int (Array tree)
+
+  * initial algebra
+    * ``no junk, no confusion''
+    * initial algebra ``exists'' only if well-founded
+      otherwise it would be empty, which is disallowed by most formulations of
+      first-order logic (including CVC4 and other SMT solvers)
+      and higher-order logic (including Isabelle/HOL)
+
+  * final coalgebra
+    * this time, no condition: always exists
+    e.g. the specification
+
+      codatatype x = X x
+
+    gives rise to a singleton type {X (X (X ...))}.
+
+  * discriminators/selectors for initial algebras
+  * constructors for final coalgebras
 
   * how to deal with "wrong" selectors, e.g.
-      hd(nil1) = hd(nil2)?
+        hd(nil1) = hd(nil2)?
+      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
+        and not in other models
+
   * ODDITY: Barrett et al. overspecify things (not good w.r.t. SMT-LIB 2, or
     other solvers, e.g., Z3)
 
+  * axiomatically
+    * injectivity
+      distinctness
+      exhaustiveness
+    * datatypes:
+      * induction axiom (schema)
+        * consequence: no infinite objects (in particular, no cyclic objects)
+
+      * when looking at the universal ground (?) theory:
+        enough to consider acyclicity -- no way to specify infinite objects
+        otherwise
+
+    * codatatypes:
+      * coinduction axiom (schema)
+        * consequence: infinite objects are allowed, but
+          two objects yielding the same observations must be equal
+
+      * again: when looking at the universal ground (?) theory, enough to
+        consider bisimilarity/bisimulation
 
 \section{The Calculus}
 \label{sec:the-calculus}

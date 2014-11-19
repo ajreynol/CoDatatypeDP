@@ -1,0 +1,200 @@
+#!/usr/bin/python
+
+
+import os, os.path, random, re, subprocess, sys, time
+
+
+# work items and logging
+
+work_items = {}
+
+work_list_file = sys.argv[1]
+progress_log = work_list_file + '.progress'
+success_log = work_list_file + '.success'
+failure_log = work_list_file + '.failure'
+
+with open(work_list_file, 'r') as ws:
+  for line in ws.readlines():
+    base = line[:-1]
+    work_items[base] = {
+      'output': base + '.out'}
+
+with open(progress_log, 'w') as log:
+  log.write('')
+
+def print_progress(msg):
+  print msg
+  with open(progress_log, 'a') as log:
+    log.write(msg + '\n')
+
+def print_pending(msg):
+  print_progress('# ' + msg)
+
+
+
+# load-balance work items across different machines
+
+available_machines = {
+  'macbroy21': {'max_load': 1, 'checked': 0},
+  'macbroy22': {'max_load': 1, 'checked': 0},
+  'macbroy23': {'max_load': 1, 'checked': 0},
+  'macbroy24': {'max_load': 1, 'checked': 0},
+  'macbroy25': {'max_load': 1, 'checked': 0},
+  'macbroy26': {'max_load': 1, 'checked': 0},
+  'macbroy27': {'max_load': 1, 'checked': 0},
+  'macbroy28': {'max_load': 1, 'checked': 0},
+}
+
+
+def get_load_average(machine):
+  try:
+    output = subprocess.check_output('ssh ' + machine + ' "LANG=en; uptime"' +
+      ' 2>/dev/null', shell=True)
+    m = re.search('load average:\s+(\d+\.\d+)', output)
+    return -1 if m == None else float(m.group(1))
+  except subprocess.CalledProcessError:
+    return -1
+
+
+def has_free_slot(machine):
+  def discrete(value, threshold):
+    # turn a floating-point value into an integer by rounding according to
+    # a given threshold
+    # examples: discrete(1.1, 0.1) = 1, discrete(1.15, 0.1) = 2
+    return int(value) + 1 if value - threshold > int(value) else int(value)
+
+  if time.time() - available_machines[machine]['checked'] < 50:
+    return False
+  available_machines[machine]['checked'] = time.time()
+
+  load = discrete(get_load_average(machine), 0.3)
+  if load < 0:
+    print_pending('   ' + machine + ': not reachable')
+    return False
+  elif load >= available_machines[machine]['max_load']:
+    print_pending('   ' + machine + ': full (load average ' + str(load) + ')')
+    return False
+  else:
+    print_pending('   ' + machine + ': empty slot (load average ' +
+      str(load) + ')')
+    return True
+
+
+def find_free_slot():
+  machines = available_machines.keys()
+  random.shuffle(machines)
+  for machine in machines:
+    if has_free_slot(machine):
+      return machine
+  return None
+
+
+def execute_work_item(item, machine):
+  subprocess.call('ssh ' + machine + ' "' + item + '_run"', shell=True)
+
+
+def get_result(output_file):
+  if os.path.exists(output_file):
+    with open(output_file, 'r') as out:
+      lines = out.readlines()
+      if len(lines) > 0 and lines[-1].startswith('Finished'):
+        result = lines[-1].split('[')[1]
+        if result.startswith('success'):
+          return 'succeeded'
+        elif result.startswith('failure'):
+          return 'failed'
+        else:
+          return 'unknown'
+  return None
+
+
+
+# executing work items
+
+work_items = {}
+
+work_list_file = sys.argv[1]
+progress_log = work_list_file + '.progress'
+success_log = work_list_file + '.success'
+failure_log = work_list_file + '.failure'
+
+with open(work_list_file, 'r') as ws:
+  for line in ws.readlines():
+    base = line[:-1]
+    work_items[base] = {
+      'output': base + '.out'}
+
+with open(progress_log, 'w') as log:
+  log.write('')
+
+def print_progress(msg):
+  print msg
+  with open(progress_log, 'a') as log:
+    log.write(msg + '\n')
+
+
+remaining_work_items = work_items.keys()
+waiting_work_items = []
+running_work_items = {}
+num_started_items = 0
+
+
+def active_work_items():
+  return len(waiting_work_items) + len(running_work_items.keys())
+
+
+max_step = 3
+step = max_step
+
+while len(remaining_work_items) > 0  or active_work_items() > 0:
+  if len(waiting_work_items) > 0:
+    machine = find_free_slot()
+    if machine != None:
+      item = waiting_work_items[0]
+      waiting_work_items = waiting_work_items[1:]
+      num_started_items += 1
+      work_items[item]['index'] = num_started_items
+      running_work_items[item] = {
+        'machine': machine,
+        'start': time.time()}
+      print_progress('[{0:4d}] starting ({1} on {2})'.format(
+        work_items[item]['index'], item, machine))
+      execute_work_item(item, machine)
+      continue
+  elif len(remaining_work_items) > 0:
+    waiting_work_items.append(remaining_work_items[0])
+    remaining_work_items = remaining_work_items[1:]
+    continue
+
+  step -= 1
+  print_pending('')
+
+  def index_of(item):
+    return work_items[item]['index']
+
+  for item in sorted(running_work_items.keys(), key=index_of):
+    result = get_result(work_items[item]['output'])
+    if result == None:
+      if step == 0:
+        print_progress(
+          '[{0:4d}] running since {1} seconds ({2} on {3})'.format(
+            work_items[item]['index'], 
+            str(int(time.time() - running_work_items[item]['start'])),
+            item, running_work_items[item]['machine']))
+    else:
+      machine = running_work_items[item]['machine']
+      del running_work_items[item]
+      log_file = success_log if result == 'succeeded' else failure_log
+      with open(log_file, 'a') as log:
+        log.write(item + '\n')
+      print_progress('[{0:4d}] {1} ({2} on {3})'.format(
+        work_items[item]['index'], result, item, machine))
+
+  if step == 0:
+    print_pending('')
+    step = max_step
+
+  time.sleep(60)  # FIXME
+  print_pending(str(len(waiting_work_items) + len(remaining_work_items)) +
+    ' work items waiting to be started')
+

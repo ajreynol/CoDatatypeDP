@@ -1,0 +1,197 @@
+#!/usr/bin/python
+
+
+import os, os.path, stat, sys
+
+
+
+# configuration
+
+res_dir = '/home/blanchet/resolution'
+isa_dir = '/home/blanchet/isabelle'
+afp_dir = '/home/blanchet/afp/devel'
+isabelle = os.path.join(isa_dir, 'bin/isabelle')
+
+
+provers = {
+  'cvc4': {},
+  'z3': {},
+#  'remote_waldmeister': {},
+#  'remote_waldmeister_new': {},
+  'veriT': {}
+  }
+
+
+preplay_timeout = 2
+prover_timeout = 30
+mirabelle_timeout = 240
+overall_timeout = 57600
+
+
+theories = {
+#  'CL': {
+#    'source': 'res',
+#    'path': 'Clausal_Logic'},
+#  'GRM': {
+#    'source': 'res',
+#    'path': 'Ground_Resolution_Models'},
+#  'IS': {
+#    'source': 'res',
+#    'path': 'Inference_System'},
+#  'LLL': {
+#    'source': 'res',
+#    'path': 'Lazy_List_Limit'},
+#  'MsM': {
+#    'source': 'res',
+#    'path': 'Multiset_More'},
+#  'OGR': {
+#    'source': 'res',
+#    'path': 'Ordered_Ground_Resolution'},
+#  'PP': {
+#    'source': 'res',
+#    'path': 'Proving_Process'},
+#  'SR': {
+#    'source': 'res',
+#    'path': 'Standard_Redundancy'},
+#  'UGR': {
+#    'source': 'res',
+#    'path': 'Unordered_Ground_Resolution'},
+  'Arr': {
+    'source': 'afp',
+    'path': 'thys/ArrowImpossibilityGS/Thys/Arrow_Order'},
+  'Auth': {
+    'source': 'isabelle',
+    'path': 'src/HOL/Auth/NS_Shared'},
+  'FFT': {
+    'source': 'afp',
+    'path': 'thys/FFT/FFT'},
+  'FTA': {
+    'source': 'isabelle',
+    'path': 'src/HOL/Library/Fundamental_Theorem_Algebra'},
+  'Hoa': {
+    'source': 'isabelle',
+    'path': 'src/HOL/IMPP/Hoare'},
+  'Huf': {
+    'source': 'afp',
+    'path': 'thys/Huffman/Huffman'},
+  'Jin': {
+    'source': 'afp',
+    'path': 'thys/Jinja/J/TypeSafe'},
+  'QE': {
+    'source': 'afp',
+    'path': 'thys/LinearQuantifierElim/Thys/QEpres'},
+  'S2S': {
+    'source': 'afp',
+    'path': 'thys/SumSquares/TwoSquares'},
+  'SN': {
+    'source': 'isabelle',
+    'path': 'src/HOL/Proofs/Lambda/StrongNorm'}
+}
+
+def gen_config_for(logdir, keepdir, data):
+  config = {
+    'prover': data['prover'],
+    'prover_timeout': str(prover_timeout),
+#    'max_calls': '100',
+#    'keep': keep_dir(logdir, data['theory']),
+    'fact_filter': 'mepo',
+    'strict': 'true',
+    'smt_proofs': 'false',
+    'preplay_timeout': str(preplay_timeout),
+    'proof_method': 'smart'}
+  
+  return config
+
+
+
+# generating Mirabelle setup theories and run scripts
+
+def keep_dir(logdir, theory):
+  return os.path.join(logdir, theory + '_data')
+
+def run_script_path(logdir, theory):
+  return os.path.join(logdir, theory + '_run')
+
+def setup_theory_name(theory):
+  return theory + '_Setup'
+
+def setup_theory_path(logdir, theory):
+  return os.path.join(logdir, setup_theory_name(theory) + '.thy')
+
+def mirabelle_log_file(logdir, theory):
+  return os.path.join(logdir, theory + '.log')
+
+def output_log_file(logdir, theory):
+  return os.path.join(logdir, theory + '.out')
+
+
+def gen_setup_thy(logdir, data):
+  config = gen_config_for(logdir, keep_dir(logdir, data['theory']), data)
+  options = ['("' + key + '", "' + config[key] + '")' for key in config.keys()]
+
+  with open(setup_theory_path(logdir, data['theory']), 'w') as thy:
+    thy.write('theory "' + setup_theory_name(data['theory']) + '"\n')
+    thy.write('imports "' +
+      os.path.join(isa_dir, 'src/HOL/Mirabelle/Mirabelle') + '" "Main"\n')
+    thy.write('begin\n\n')
+    thy.write('ML_file "' +
+      os.path.join(isa_dir,
+        'src/HOL/Mirabelle/Tools/mirabelle_sledgehammer.ML') + '"\n\n')
+    thy.write('setup {*\n')
+    thy.write('  Config.put_global Mirabelle.logfile "' +
+      mirabelle_log_file(logdir, data['theory']) + '" #>\n')
+    thy.write('  Config.put_global Mirabelle.timeout ' +
+      str(mirabelle_timeout) + ' #>\n')
+    thy.write('  Config.put_global Mirabelle.start_line 0 #>\n')
+    thy.write('  Config.put_global Mirabelle.end_line ~1\n')
+    thy.write('*}\n\n')
+    thy.write('setup {* Mirabelle_Sledgehammer.invoke [\n')
+    thy.write('  ' + ',\n  '.join(options) + ']\n')
+    thy.write('*}\n\n')
+    thy.write('end')
+
+
+def gen_run_script(logdir, theory):
+  (thy_dir, thy_name) = os.path.split(theories[theory]['path'])
+  thy_base_dir = (afp_dir if theories[theory]['source'] == 'afp' else
+                  (isa_dir if theories[theory]['source'] == 'isabelle' else
+                   res_dir))
+  thy_dir = os.path.join(thy_base_dir, thy_dir)
+
+  with open(run_script_path(logdir, theory), 'w') as script:
+    script.write('#!/bin/bash\n')
+    script.write('cd ' + thy_dir + '\n')
+    script.write('ulimit -St ' + str(overall_timeout) + '\n')
+    script.write(isabelle + ' mirabelle ' +
+      '-S ' + setup_theory_path(logdir, theory) + ' none ' +
+      thy_name + '.thy > ' + output_log_file(logdir, theory) + ' &\n')
+  os.chmod(run_script_path(logdir, theory), stat.S_IRWXU | stat.S_IRGRP |
+    stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+
+
+
+data_name = 'data' if len(sys.argv) <= 1 else sys.argv[1]
+data_dir = os.path.join(os.getcwd(), data_name)
+if not os.path.exists(data_dir):
+  os.mkdir(data_dir)
+
+work_items = os.path.join(data_dir, 'work_items')
+with open(work_items, 'w') as ws:
+  ws.write('')
+
+for prover in provers.keys():
+  d = '-'.join([prover, "isar"])
+  logdir = os.path.join(data_dir, d)
+  if not os.path.exists(logdir):
+    os.mkdir(logdir)
+  for theory in theories:
+    if not os.path.exists(keep_dir(logdir, theory)):
+      os.mkdir(keep_dir(logdir, theory))
+    data = {
+      'prover': prover,
+      'theory': theory}
+    gen_setup_thy(logdir, data)
+    gen_run_script(logdir, theory)
+    
+    with open(work_items, 'a') as ws:
+      ws.write(os.path.join(logdir, theory) + '\n')
