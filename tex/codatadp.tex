@@ -14,6 +14,7 @@
 %\usepackage{mathrsfs}
 %\usepackage{pifont}
 %\usepackage{smallcap}
+\usepackage{mathpartir} 
 \usepackage{stmaryrd}
 \usepackage{subfigure}
 \usepackage[usenames]{color}
@@ -31,6 +32,23 @@
 \DeclareMathAlphabet{\mathscr}{OT1}{pzc}{m}{it}
 
 \DeclareMathAlphabet{\mathcal}{OT1}{pzc}{m}{it}
+
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\Ec}{\mathsf{E}}
+\newcommand{\tEc}{\mathcal{T}(\Ec)}
+\newcommand{\rn}[1]{\textsf{\small #1}}
+\newcommand{\cvc}{\textsc{cvc}{\small 4}\xspace}
+\newcommand{\teq}{\approx}
+\newcommand{\tneq}{\not\teq}
+\newcommand{\rem}[1]{\textcolor{red}{[#1]}}
+\newcommand{\tester}[1]{is\text{-} #1}
+\newcommand{\ror}{\quad \parallel \quad}
+\newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
+\newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
+\newcommand{\ec}[1]{ [ #1 ] }
+
+% change?
+\newcommand{\thD}{T_{D}}
 
 %%% For final version as well?
 \usepackage[
@@ -237,8 +255,186 @@ Blah.
 
   * Correctness
 
-  * no "internal search"
+\rem{Discuss signature $\Sigma$, theory $\thD$}
+This section presents a calculus for determining the satisfiability of conjunctions of $\thD$-constraints.
 
+Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sigma$-terms.
+We will write $\tEc$ to denote the set of $\Sigma$-terms occurring in $\Ec$.
+We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
+We assume that all $\Sigma$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( C_j( \vec t ) )$
+are replaced by $t_i$, and moreover assume that all additional constraints added to $\Ec$ are normalized in this manner.
+
+\begin{figure}[t]
+\centering
+\begin{tabular}{c}
+\rn{Refl}
+\(
+\inferrule{
+  t \in \tEc
+}{
+  \Ec := \Ec, t \teq t
+}
+\)
+\qquad
+\rn{Symm}
+\(
+\inferrule{
+ t_1 \teq t_2 \in \Ec
+}{
+ \Ec := \Ec, t_2 \teq t_1
+}
+\)
+\qquad
+\rn{Conflict}
+\(
+\inferrule{
+  t \tneq t \in \Ec
+}{
+  \bot
+}
+\)
+\\[3.7ex]
+\rn{Trans}
+\(
+\inferrule{
+  t_1 \teq t_2, t_2 \teq t_3 \in \Ec
+}{
+  \Ec := \Ec, t_1 \teq t_3
+}
+\)
+\qquad
+\rn{Cong} 
+\(
+\inferrule{
+  \vec t \teq \vec u \in \Ec \quad f( \vec t ), f( \vec u ) \in \tEc
+}{
+  \Ec := \Ec, f( \vec t ) \teq f( \vec u )
+}
+\)
+\\[3.7ex]
+\rn{Unify$_1$} 
+\(
+\inferrule{
+  C_1( \vec t ) \teq C_1( \vec u ) \in \Ec
+}{
+  \Ec := \Ec, \vec t \teq \vec u
+}
+\)
+\qquad
+\rn{Unify$_2$} 
+\(
+\inferrule{
+  C_1( \vec t ) \teq C_2( \vec u ) \in \Ec
+}{
+  \bot
+}
+\)
+\end{tabular}
+\caption{Rules for bidirectional congruence closure.
+}
+\label{fig:cc-rules}
+\end{figure}
+
+Following the conventions from~\cite{}, 
+the derivation rules of our calculus are given in Figures~\ref{fig:cc-rules},~\ref{fig:ab-rules}, and~\ref{fig:split-rule} in \emph{guarded assignment form},
+where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
+The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{non-terminal}),
+or is $\bot$ (in which case we will call an application of it to be \emph{terminal}).
+A rule may have multiple conclusions separated by $\parallel$, which denotes a non-deterministic branching.
+An application of a rule is \emph{redundant} if it is non-terminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
+
+Figure~\ref{fig:cc-rules} gives the rules for constructing the (bidirectional) congruence closure of $\Ec$. \rem{more?}
+
+Assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}, that is,
+no non-redudant application of a rule can be applied to $\Ec$.
+In this case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
+Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
+For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
+
+To explain the rules in Figure~\ref{fig:ab-rules}, we introduce the following notions.
+First, an edge $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ is a transition between two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ (which we will call its source and destination respectively),
+labelled by a constructor $C$ and integer $n$.
+We say that $\Ec$ \emph{induces edge} $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ if and only if $C( \vec u ) \in \ec{t_1}$ for some $\vec u$ and $\ec{t_2} = \ec{u_n}$.
+A \emph{path} $p$ is a non-empty ordered list of edges $e_1, \ldots e_n$ such that the destination of $e_i$ is the source of $e_{i+1}$ for $i = 1, \ldots (n-1)$,
+and the sources of $e_1, \ldots, e_n$ are distinct.
+We say that $\Ec$ \emph{induces path} $p$ if it induces each of its edges.
+Notice that since $\Ec$ contains a finite set of equivalence classes, all paths induced by $\Ec$ are finite.
+The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all induced paths starting with source $\ec{t_1}$ and destination $\ec{t_2}$.
+The set $\tpath{\Ec}{\ec{t_1}}$ is the union of $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ for all $t_2 \in \tEc$.
+
+\begin{figure}[t]
+\centering
+\begin{tabular}{c}
+\rn{Acyclic}
+\(
+\inferrule{
+  t : \tau \text{ inductive } 
+  \quad
+  p \in \ttpath{\Ec}{\ec{t}}{\ec{t}}
+}{
+  \bot
+}
+\)
+\\[3.7ex]
+\rn{Bisimilar}
+\(
+\inferrule{
+ t_1, t_2 : \tau \text{ co-inductive }
+  \quad
+ \exists \sigma. p \sigma \in \tpath{\Ec}{\ec{t_1}} \text{ for each } p \in \tpath{\Ec}{\ec{t_2}}
+}{
+ \Ec := \Ec, t_1 \teq t_2
+}
+\)
+\end{tabular}
+\caption{Rules for acyclicity and bisimilarity.
+}
+\label{fig:ab-rules}
+\end{figure}
+
+\rem{Change notation for inductive/co-inductive.}
+
+\begin{figure}[t]
+\centering
+\begin{tabular}{c}
+\rn{Split} 
+\(
+\inferrule{
+  s^i_j( t ) \in \tEc, \text{ or } t : \tau \text{ finite }
+}{
+  \Ec := \Ec, \tester{C_1}( t ) \ror \ldots \ror \Ec := \Ec, \tester{C_n}( t ) 
+}
+\)
+\end{tabular}
+\caption{Rule for splitting.  We write $\tester{C_i}( t )$ as shorthand for the equality $t \teq C_i( s^1_i( t ), \ldots, s^n_i( t ) )$.
+}
+\label{fig:split-rule}
+\end{figure}
+
+
+
+
+A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by a non-redundant application of a derivation rule to its parent node.
+A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
+A node is \emph{saturated} if no non-redundant application of a rule can be applied to it.
+  
+
+\subsection{Correctness}
+
+\begin{lemma}[Refutation Soundness]
+If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
+\end{lemma}
+
+\begin{lemma}[Solution Soundness]
+If there exists a derivation tree containing a saturated node with root node $\Ec$, then $\Ec$ is satisfiable in $\thD$.
+\end{lemma}
+
+\begin{lemma}[Termination]
+All derivation trees are finite.
+\end{lemma}
+
+\rem{Thus, sound and complete.}
+  
 \section{The Theory Solver}
 \label{sec:the-theory-solver}
 
@@ -247,7 +443,7 @@ Blah.
     * what is an SMT theory solver
     * cooperation with Nelson-Oppen / integration into SMT solver
     * "mu" stuff
-
+    * no "internal search"
   * Enumerator?
     * for model generation
 
