@@ -288,7 +288,7 @@ are replaced by $t_i$, and moreover assume that all additional constraints added
 \rn{Conflict}
 \(
 \inferrule{
-  t \tneq t \in \Ec
+  t \teq u, t \tneq u \in \Ec
 }{
   \bot
 }
@@ -330,36 +330,45 @@ are replaced by $t_i$, and moreover assume that all additional constraints added
 }
 \)
 \end{tabular}
-\caption{Rules for bidirectional congruence closure.
+\caption{Rules for bidirectional closure.
 }
 \label{fig:cc-rules}
 \end{figure}
 
+We present the calculus in three phases, shown in Figures~\ref{fig:cc-rules},~\ref{fig:ab-rules}, and~\ref{fig:split-rule}.
 Following the conventions from~\cite{}, 
-the derivation rules of our calculus are given in Figures~\ref{fig:cc-rules},~\ref{fig:ab-rules}, and~\ref{fig:split-rule} in \emph{guarded assignment form},
+the derivation rules of our calculus are given in \emph{guarded assignment form},
 where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
 The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{non-terminal}),
 or is $\bot$ (in which case we will call an application of it to be \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$, which denotes a non-deterministic branching.
 An application of a rule is \emph{redundant} if it is non-terminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
 
-Figure~\ref{fig:cc-rules} gives the rules for constructing the (bidirectional) congruence closure of $\Ec$. \rem{more?}
+First, Figure~\ref{fig:cc-rules} gives the rules for constructing the bidirectional closure of $\Ec$.
+The rules \rn{Refl}, \rn{Symm}, \rn{Trans}, and \rn{Cong} together compute the (upwards) congruence closure,
+after which a conflict may be recognized by \rn{Conflict} when an inconsistency is found.
+The rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downwards) unification,
+where additional equalities are inferred based on the injectivity of constructors (by \rn{Unify$_1$}),
+and failures to unify equivalent terms are recognized (by \rn{Unify$_2$}).
 
-Assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}, that is,
+Second, when applying the rules in Figure~\ref{fig:ab-rules}, 
+we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}, that is,
 no non-redudant application of a rule can be applied to $\Ec$.
 In this case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
 Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
 For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
 
 To explain the rules in Figure~\ref{fig:ab-rules}, we introduce the following notions.
-First, an edge $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ is a transition between two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ (which we will call its source and destination respectively),
+First, an edge $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ is a transition between two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
+(which we will call its \emph{source} and \emph{destination} respectively),
 labelled by a constructor $C$ and integer $n$.
-We say that $\Ec$ \emph{induces edge} $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ if and only if $C( \vec u ) \in \ec{t_1}$ for some $\vec u$ and $\ec{t_2} = \ec{u_n}$.
+We say that edge $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ is \emph{induced by $\Ec$} if and only if $C( \vec u ) \in \ec{t_1}$ for some $\vec u$ and $\ec{t_2} = \ec{u_n}$.
 A \emph{path} $p$ is a non-empty ordered list of edges $e_1, \ldots e_n$ such that the destination of $e_i$ is the source of $e_{i+1}$ for $i = 1, \ldots (n-1)$,
 and the sources of $e_1, \ldots, e_n$ are distinct.
-We say that $\Ec$ \emph{induces path} $p$ if it induces each of its edges.
-Notice that since $\Ec$ contains a finite set of equivalence classes, all paths induced by $\Ec$ are finite.
-The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all induced paths starting with source $\ec{t_1}$ and destination $\ec{t_2}$.
+We say that path $p$ is \emph{induced by $\Ec$} if and only if each of its edges are induced by $\Ec$.
+Notice that since $\Ec$ contains a finite set of equivalence classes, all paths induced by $\Ec$ have finite length.
+We call the source of a path is the source of its first edge, and the destination of a path is the destination of its last edge.
+The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all paths with source $\ec{t_1}$ and destination $\ec{t_2}$ that are induced by $\Ec$.
 The set $\tpath{\Ec}{\ec{t_1}}$ is the union of $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ for all $t_2 \in \tEc$.
 
 \begin{figure}[t]
