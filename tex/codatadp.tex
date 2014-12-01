@@ -183,8 +183,30 @@ Blah.
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
-  * (co)datatype specifications:
-    * N mutually recursive types (datatypes or codatatypes -- no mixture)
+\newcommand\keyw[1]{\textbf{#1}}
+
+For the purposes of this paper, a (co)datatype specification consists of
+$k$~mutually recursive types which are either all datatypes or all codatatypes.
+Each datatype $\delta$ is equipped by $m \ge 1$ constructors, and each
+constructor for $\delta$ takes $n \ge 0$ arguments, each associated with a
+selector, and returns a $\delta$ value. The argument types must be either
+already existing types or be one of the newly introduced (co)datatypes. The
+introduced names for the (co)datatypes, the constructors, and the selectors must
+be distinct with already introduced ones and among themselves. Schematically:
+%
+\[
+\begin{aligned}[t]
+(\keyw{co})\keyw{datatype}\;\,
+  \delta_1 & {}=\, C_{11}\;(s_{111}{:}\; \sigma_{111}) \,\ldots\, (s_{11n_{11}}{:}\; \sigma_{11n_{11}}) & \\
+           & {}\;\phantom{=\,}\;{} \smash{\,\,\vdots} \\ % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
+           & {}\;\phantom{=\,}\llap{\ensuremath{\mid}}\; C_{1m}\;(s_{1m1}{:}\; \sigma_{1m1}) \,\ldots\, (s_{1mn_{1m}}{:}\; \sigma_{1mn_{1m}}) \\[-.5\jot]
+   \smash{\vdots\,\,\,} \\[-.5\jot]
+  \keyw{and}\; \,\delta_k & =\, \ldots
+\end{aligned}
+\]
+
+
+(datatypes or codatatypes -- no mixture)
     * list of n constructors (n >= 1)
     * each constructor has m arguments (m >= 0)
     * each argument has a sort, which may be 
