@@ -36,11 +36,9 @@ Abstract
   * Enumerator?
     * for model generation
 
-5. Examples [JCB]
-
-6. Experimental Results [JCB/AJR]
+5. Experimental Results [JCB/AJR]
 
   * Constructed examples
   * Isabelle benchmarks
 
-7. Conclusion [JCB]
+6. Conclusion [JCB]
