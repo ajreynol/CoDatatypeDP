@@ -87,7 +87,8 @@
 \institute{
 \'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), Switzerland
 \and
-Inria \& LORIA, Villers-l\`es-Nancy, France \\
+Inria Nancy \& LORIA, Villers-l\`es-Nancy, France
+\and
 Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 }
 
@@ -208,9 +209,9 @@ be distinct with already introduced ones and among themselves. Schematically:
 \[
 \begin{aligned}[t]
 (\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}=\, C_{11}\;(s_{111}{:}\; \sigma_{111}) \,\ldots\, (s_{11n_{11}}{:}\; \sigma_{11n_{11}}) & \\
+  \delta_1 & {}=\, \const{C}_{11}(\bigl[\const{s}_{111}{:}\bigr]\; \sigma_{111}, \,\ldots,\, \bigl[\const{s}_{11n_{11}}{:}\bigr]\; \sigma_{11n_{11}}) & \\
            & {}\;\phantom{=\,}\;{} \smash{\,\,\vdots} \\ % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
-           & {}\;\phantom{=\,}\llap{\ensuremath{\mid}}\; C_{1m}\;(s_{1m1}{:}\; \sigma_{1m1}) \,\ldots\, (s_{1mn_{1m}}{:}\; \sigma_{1mn_{1m}}) \\[-1\jot]
+           & {}\;\phantom{=\,}\llap{\ensuremath{\mid}}\; \const{C}_{1m}(\bigl[\const{s}_{1m1}{:}\bigr]\; \sigma_{1m1}, \,\ldots,\, \big[\const{s}_{1mn_{1m}}{:}\big]\; \sigma_{1mn_{1m}}) \\[-1\jot]
    \smash{\vdots\,\,\,} \\[-1\jot]
   \keyw{and}\; \,\delta_l & =\, \ldots
 \end{aligned}
@@ -218,19 +219,20 @@ be distinct with already introduced ones and among themselves. Schematically:
 %
 with
 $\const{C}_{ij} : \sigma_{ij1}\times\cdots\times\sigma_{ijk_{ij}} \to \delta_i$
-and $\const{s}_{ijk} : \delta_i \to \sigma_{ijk}$.
+and $\const{s}_{ijk} : \delta_i \to \sigma_{ijk}$. The selector names are often
+omitted in our examples, in which case default names are generated.
 
 Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 outside this fragment. For example, the specification
 \[\begin{aligned}[t]
-      \keyw{datatype}\;\, \ty{tree} \,=\, \const{Node}\;\ty{int}\;\ty{forest} \\[-\jot]
-      \keyw{and}\;\, \ty{forest} \,=\, \const{FNil} \mid \const{FCons}\; \ty{tree}\; \ty{forest}
+      \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{forest}) \\[-\jot]
+      \keyw{and}\;\, \ty{forest} & \,=\, \const{FNil} \mid \const{FCons}(\ty{tree},\, \ty{forest})
 \end{aligned}
 \]
 is supported, whereas
 \[\begin{aligned}[t]
-      \keyw{codatatype}\; \,\ty{llist}(\alpha) & \,=\, \const{LNil} \mid \const{LCons}\; \alpha\; \ty{llist}(\alpha) \\
-      \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}\; \ty{int}\; \ty{llist}(\ty{tree})
+      \keyw{codatatype}\; \,\ty{llist}(\alpha) & \,=\, \const{LNil} \mid \const{LCons}(\alpha,\, \ty{llist}(\alpha)) \\
+      \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{llist}(\ty{tree}))
 \end{aligned}
 \]
 is beyond the fragment considered here.
@@ -254,6 +256,8 @@ is beyond the fragment considered here.
 
   * discriminators/selectors for initial algebras
   * constructors for final coalgebras
+
+  * Introduce the discriminators already here.
 
   * how to deal with "wrong" selectors, e.g.
         hd(nil1) = hd(nil2)?
@@ -299,7 +303,7 @@ This section presents a calculus for determining the satisfiability of conjuncti
 Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sigma$-terms.
 We will write $\tEc$ to denote the set of $\Sigma$-terms occurring in $\Ec$.
 We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
-We assume that all $\Sigma$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( C_j( \vec t ) )$
+We assume that all $\Sigma$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( \const{C}_j( \vec t ) )$
 are replaced by $t_i$, and moreover assume that all additional constraints added to $\Ec$ are normalized in this manner.
 
 \begin{figure}[t]
@@ -353,7 +357,7 @@ are replaced by $t_i$, and moreover assume that all additional constraints added
 \rn{Unify$_1$} 
 \(
 \inferrule{
-  C_1( \vec t ) \teq C_1( \vec u ) \in \Ec
+  \const{C}_1( \vec t ) \teq \const{C}_1( \vec u ) \in \Ec
 }{
   \Ec := \Ec, \vec t \teq \vec u
 }
@@ -362,7 +366,7 @@ are replaced by $t_i$, and moreover assume that all additional constraints added
 \rn{Unify$_2$} 
 \(
 \inferrule{
-  C_1( \vec t ) \teq C_2( \vec u ) \in \Ec
+  \const{C}_1( \vec t ) \teq \const{C}_2( \vec u ) \in \Ec
 }{
   \bot
 }
@@ -399,7 +403,7 @@ For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in
 To explain the rules in Figure~\ref{fig:ab-rules}, we introduce the following notions.
 First, an edge $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ is a transition between two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
 (which we will call its \emph{source} and \emph{destination} respectively),
-labelled by a constructor $C$ and integer $n$.
+labeled by a constructor $C$ and integer $n$.
 We say that edge $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ is \emph{induced by $\Ec$} if and only if $C( \vec u ) \in \ec{t_1}$ for some $\vec u$ and $\ec{t_2} = \ec{u_n}$.
 A \emph{path} $p$ is a non-empty ordered list of edges $e_1, \ldots e_n$ such that the destination of $e_i$ is the source of $e_{i+1}$ for $i = 1, \ldots (n-1)$,
 and the sources of $e_1, \ldots, e_n$ are distinct.
@@ -449,11 +453,11 @@ The set $\tpath{\Ec}{\ec{t_1}}$ is the union of $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}
 \inferrule{
   s^i_j( t ) \in \tEc, \text{ or } t : \tau \text{ finite }
 }{
-  \Ec := \Ec, \tester{C_1}( t ) \ror \ldots \ror \Ec := \Ec, \tester{C_n}( t ) 
+  \Ec := \Ec, \tester{\const{C}_1}( t ) \ror \ldots \ror \Ec := \Ec, \tester{\const{C}_n}( t ) 
 }
 \)
 \end{tabular}
-\caption{Rule for splitting.  We write $\tester{C_i}( t )$ as shorthand for the equality $t \teq C_i( s^1_i( t ), \ldots, s^n_i( t ) )$.
+\caption{Rule for splitting.  We write $\tester{\const{C}_i}( t )$ as shorthand for the equality $t \teq \const{C}_i( s^1_i( t ), \ldots, s^n_i( t ) )$.
 }
 \label{fig:split-rule}
 \end{figure}
