@@ -33,6 +33,10 @@
 
 \DeclareMathAlphabet{\mathcal}{OT1}{pzc}{m}{it}
 
+\newcommand\keyw[1]{\textbf{#1}}
+\newcommand\const[1]{\textsf{#1}}
+\newcommand\ty[1]{\textit{#1}}
+
 \renewcommand{\vec}[1]{\boldsymbol{#1}}
 \newcommand{\Ec}{\mathsf{E}}
 \newcommand{\tEc}{\mathcal{T}(\Ec)}
@@ -207,24 +211,20 @@ Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 * although nothing prevents composing the decision procedure with theories
   providing polymorphic types (parametric sorts), such as the theory of arrays
 
-* $\sigma, \tau$ range over types---whether (co)datatypes or uninterpreted types
+* $\tau$ range over types---whether (co)datatypes or uninterpreted types
 * $\delta$ range over (co)datatypes
 
 * use sans-serif for function symbols (e.g., $\const{f}$) to distinguish them
 from variables (e.g., $x$).
 
-* function symbols are accompanied by a type signature, e.g. $\const{f} : \sigma_1 \times \cdots \times \sigma_n \to
-\sigma$ indicates
+* function symbols are accompanied by a type signature, e.g. $\const{f} : \tau_1 \times \cdots \times \tau_n \to
+\tau$ indicates
 
 * don't distinguish between constants and function symbols
-  a constant is merely the case $n = 0$ of a function $f : 
+  a constant is merely the case $n = 0$ of a function $f : $
 
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
-
-\newcommand\keyw[1]{\textbf{#1}}
-\newcommand\const[1]{\textsf{#1}}
-\newcommand\ty[1]{\textit{#1}}
 
 A signature consists of:
   * set of plain types, which can be interpreted or uninterpreted
@@ -244,17 +244,17 @@ introduced ones. Schematically:
 \[
 \begin{aligned}[t]
 (\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}=\, \const{C}_{11}(\bigl[\const{s}_{111}{:}\bigr]\; \sigma_{111}, \,\ldots,\, \bigl[\const{s}_{11n_{11}}{:}\bigr]\; \sigma_{11n_{11}}) & \\
+  \delta_1 & {}=\, \const{C}_{11}(\bigl[\const{s}_{111}{:}\bigr]\; \tau_{111}, \,\ldots,\, \bigl[\const{s}_{11n_{11}}{:}\bigr]\; \tau_{11n_{11}}) & \\
            & {}\;\phantom{=\,}\;{} \smash{\,\,\,\vdots} \\[-\jot] % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
-           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \const{C}_{1m}(\bigl[\const{s}_{1m1}{:}\bigr]\; \sigma_{1m1}, \,\ldots,\, \big[\const{s}_{1mn_{1m}}{:}\big]\; \sigma_{1mn_{1m}}) \\[-1\jot]
+           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \const{C}_{1m}(\bigl[\const{s}_{1m1}{:}\bigr]\; \tau_{1m1}, \,\ldots,\, \big[\const{s}_{1mn_{1m}}{:}\big]\; \tau_{1mn_{1m}}) \\[-1\jot]
    \smash{\vdots\,\,\,} \\[-1\jot]
   \keyw{and}\; \,\delta_l & =\, \ldots
 \end{aligned}
 \]
 %
 with
-$\const{C}_{ij} : \sigma_{ij1}\times\cdots\times\sigma_{ijk_{ij}} \to \delta_i$
-and $\const{s}_{ijk} : \delta_i \to \sigma_{ijk}$. Defaults are assumed for
+$\const{C}_{ij} : \tau_{ij1}\times\cdots\times\tau_{ijk_{ij}} \to \delta_i$
+and $\const{s}_{ijk} : \delta_i \to \tau_{ijk}$. Defaults are assumed for
 the selector names if they are omitted.
 
 Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
