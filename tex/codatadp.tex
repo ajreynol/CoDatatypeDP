@@ -62,8 +62,8 @@
 \newcommand\Funcs{\mathcal{F}}
 
 \newcommand\Data{\Types_{\mathrm{dt}}}
-\newcommand\Codata{\Types_{\mathrm{codt}}}
-\newcommand\Nondata{\Types_{\mathrm{other}}}
+\newcommand\Codata{\Types_{\mathrm{cdt}}}
+\newcommand\Nondata{\Types_{\mathrm{oth}}}
 
 \newcommand\Ctr{\Funcs_{\mathrm{ctr}}}
 \newcommand\Sel{\Funcs_{\mathrm{sel}}}
@@ -146,7 +146,7 @@ Blah.
 
   * less briefly: codatatypes and why they are useful
     * in Agda, Coq, Matita -- recently also in Isabelle/HOL
-    * but not in SMT-LIB (2.5?)
+    * but not in SMT-LIB 2 \cite{xxx}
 
   * single decision procedure for datatypes and codatatypes
   * datatypes are implementation following the lines of Barrett et al.
@@ -225,61 +225,46 @@ Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
     * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
 
 \paragraph{Conventions.}
+This paper assumes a monomorphic (or many-sorted) first-order logic throughout.
+A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
+set of function symbols $\Funcs$. Types are simply atomic sorts, with no
+structure, and interpreted by nonempty domains. The set $\Types$ must contain a
+distinguished type \ty{bool} interpreted as the set of truth
+values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
+Predicates are simply functions that return $\ty{bool}$.
+The metavariables $\delta, \tau$ range over types, with $\delta$ reserved
+for (co)datatypes.
 
-* monomorphic (or many-sorted) first-order logic
-* Signature: $\Sig = (\Types, \Funcs)$
+Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
+distinguish them from variables (e.g., $x$, $y$). With each function symbol \const{f}
+is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
+and a return type $\tau$. This connection can be expressed compactly as
+$\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$
+(which collapses to $\const{f} : \tau$ if $n = 0$).
+For a term $t$, the notation $t : \tau$ indicates that $t$ has type $\tau$.
+Functions are applied the standard way, with $\const{f}(t_1,\ldots,t_n)$
+applying \const{f} to $n$ well-typed arguments $t_1 : \tau_1$, \ldots, $t_n :
+\tau_n$. Nullary function symbols are called constants and can appear as is in
+terms, without parentheses.
 
-* types are simply atomic sorts, with no structure, and interpreted by nonempty
-  domains
-  * set of types must contain the distinguished \ty{bool} type of Booleans, interpreted
-    as the set of truth values, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-
-* although nothing prevents composing the decision procedure with theories
-  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
-
-* in keeping with SMT conventions, there are no separate predicate symbols;
-  predicates are modeled as functions that return $\ty{Bool}$
-
-* $\tau$ range over types---whether (co)datatypes or uninterpreted types
-* $\delta$ range over (co)datatypes
-
-* use sans-serif for function symbols (e.g., $\const{f}$) to distinguish them
-from variables (e.g., $x$).
-
-* function symbols are accompanied by a type signature, e.g. $\const{f} : \tau_1 \times \cdots \times \tau_n \to
-\tau$ indicates takes $n \ge 0$ arguments of types $\tau_1,\ldots,\tau_n$ and returns a value of type $\tau$;
-* applied as $\const{f}(t_1,\ldots,t_n)$ to well-typed arguments $t_1 : \tau_1$, \ldots,
-$t_n : \tau_n$.
-
-* nullary function symbols are called constants;
-  following tradition, we simply write $\const{c} : \tau$ for the type signature 
-  and $\const{c}$ rather than $\const{c}()$.
-
+%* although nothing prevents composing the decision procedure with theories
+%  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
 
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
-We assume a signature $\Sig = (\Types, \Funcs)$.
+We assume a signature $\Sig = (\Types, \Funcs)$. The types are partioned into
+$\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
+datatypes, $\Codata$ are the codatatypes, and $\Nondata$ are the remaining
+types. The functions are partitioned into $\Funcs = \Ctr \mathrel{\uplus} \Sel$, where
+$\Ctr$ are the constructors and $\Sel$ are the selectors. (There is no need to
+consider other function symbols, because they can be abstracted away as
+variables when combining theories.)
 
-Furthermore, a partition of the types:
-  $\Types = \Data \uplus \Codata \uplus \Nondata$
-with
-  * $\Data$: datatypes
-  * $\Codata$: codatatypes
-  * $\Nondata$: non-(co)datatypes
-
-And a partition of the functions:
-  $\Funcs = \Ctr \uplus \Sel$
-with
-  * $\Ctr$: constructors
-  * $\Sel$: selectors
-
-(Do not need to consider other function symbols, because they would be
-abstracted away as variables in the context of theory combination.)
-
-In practice, e.g. in an SMT problem, we'd have:
-  * declaration of uninterpreted types (in any order)
-  * list of specifications of mutually (co)recursive groups of (co)datatypes
+In practice (e.g., in an SMT problem), the signature is given by specifying the
+uninterpreted types first (in any order), then the (co)datatypes with their
+constructors and selectors in groups of mutually (co)recursive groups of
+(co)datatypes, and finally any other function symbols.
 
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Each datatype $\delta$ is equipped by
@@ -288,7 +273,13 @@ arguments and returns a $\delta$ value. The argument types must be either
 plain, be or be one of the newly introduced (co)datatypes. To every
 argument corresponds a selector. The introduced names for the (co)datatypes, the
 constructors, and the selectors must be distinct and different from already
-introduced ones. Schematically:
+introduced ones.%
+\footnote{In practice, it can be useful to specify the same selector
+for several constructors of the same (co)datatype,
+as long as the argument types coincide \cite[Section~3]{blanchette-et-al-2014-codata}.
+However, this is not allowed by SMT-LIB 2.}
+Schematically, using a syntax similar to Standard ML, Haskell,
+or SMT-LIB:
 %
 \[
 \begin{aligned}[t]
