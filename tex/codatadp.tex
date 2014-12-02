@@ -70,6 +70,8 @@
 \newcommand\Sel{\Funcs_{\mathrm{sel}}}
 %\newcommand\Plainfuncs{\Funcs_{\mathrm{other}}}
 
+\newcommand\vthinspace{\kern+0.083333em}
+\newcommand\negvthinspace{\kern-0.083333em}
 
 %%% For final version as well?
 \usepackage[
@@ -286,17 +288,17 @@ or SMT-LIB:
 \[
 \begin{aligned}[t]
 (\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}=\, \const{C}_{1}\rlap{${}_{1}$}\phantom{{}_{m}}(\bigl[\const{s}_{111}{:}\bigr]\; \tau_{111}, \,\ldots,\, \bigl[\const{s}_{11n_{11}}{:}\bigr]\; \tau_{11n_{11}}) & \\
+  \delta_1 & {}=\, \const{C}_{1}\rlap{${}_{1}$}\phantom{{}_{m}}(\bigl[\const{s}_{11}^1{:}\bigr]\; \tau_{11}^1, \,\ldots,\, \bigl[\const{s}_{11}^{n_{11}}{:}\bigr]\; \tau_{11}^{n_{11}}) & \\
            & {}\;\phantom{=\,}\;{} \smash{\,\,\,\vdots} \\[-\jot] % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
-           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \const{C}_{1m}(\bigl[\const{s}_{1m1}{:}\bigr]\; \tau_{1m1}, \,\ldots,\, \big[\const{s}_{1mn_{1m}}{:}\big]\; \tau_{1mn_{1m}}) \\[-1\jot]
+           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \const{C}_{1m}(\bigl[\const{s}_{1m}^1{:}\bigr]\; \tau_{1m}^1, \,\ldots,\, \big[\const{s}_{1m}^{n_{1m}}{:}\big]\; \tau_{1m}^{n_{1m}}) \\[-1\jot]
    \smash{\vdots\,\,\,} \\[-1\jot]
   \keyw{and}\; \,\delta_l & =\, \ldots
 \end{aligned}
 \]
 %
 with
-$\const{C}_{ij} : \tau_{ij1}\times\cdots\times\tau_{ijk_{ij}} \to \delta_i$
-and $\const{s}_{ijk} : \delta_i \to \tau_{ijk}$. Defaults are assumed for
+$\const{C}_{i\negvthinspace j} : \tau_{i\negvthinspace j}^1\times\cdots\times\tau_{i\negvthinspace j}^{\,k_{\smash{i\negvthinspace j}}} \to \delta_i$
+and $\const{s}_{i\negvthinspace j}^{\,k} : \delta_i \to \tau_{i\negvthinspace j}^{\,k}$. Defaults are assumed for
 the selector names if they are omitted.
 
 Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
@@ -308,8 +310,8 @@ outside this fragment. For example, the specification
 \]
 is supported, whereas
 \[\begin{aligned}[t]
-      \keyw{codatatype}\; \,\ty{pllist}(\alpha) & \,=\, \const{PLNil} \,\mid\, \const{PLCons}(\alpha,\, \ty{pllist}(\alpha)) \\[-.5\jot]
-      \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{pllist}(\ty{tree}))
+      \keyw{codatatype}\; \,\ty{gllist}(\alpha) & \,=\, \const{GLNil} \,\mid\, \const{GLCons}(\alpha,\, \ty{gllist}(\alpha)) \\[-.5\jot]
+      \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{gllist}(\ty{tree}))
 \end{aligned}
 \]
 is beyond the fragment considered here. In principle, rank-1 (top-level)
@@ -321,6 +323,25 @@ non-(co)datatype (both of which make sense \cite{blanchette-et-al-2014-codata}).
 
 Axiomatization:
 
+  * axiomatically
+    * injectivity
+      distinctness
+      exhaustiveness
+    * datatypes:
+      * induction axiom (schema)
+        * consequence: no infinite objects (in particular, no cyclic objects)
+
+      * when looking at the universal ground (?) theory:
+        enough to consider acyclicity -- no way to specify infinite objects
+        otherwise
+
+    * codatatypes:
+      * coinduction axiom (schema)
+        * consequence: infinite objects are allowed, but
+          two objects yielding the same observations must be equal
+
+      * again: when looking at the universal ground (?) theory, enough to
+        consider bisimilarity/bisimulation
 
 discriminators go here
 
@@ -328,6 +349,13 @@ discriminators go here
 specifies the 
 
     * ``no junk, no confusion''
+
+
+  * how to deal with "wrong" selectors, e.g.
+        hd(nil1) = hd(nil2)?
+      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
+        and not in other models
+
 
 
 
@@ -350,7 +378,8 @@ by Barrett et al.\ \cite{barrett-et-al-2010}. A disadvantage with this approach
 is that it does not naturally account for selectors applied to wrong
 constructors. Barrett et al.\ address this by parameterizing the construction by
 default values, but these give rise to spurious equalities between unrelated
-terms (e.g., $hd(nil1) \teq hd(nil2)$). This could be corrected, but the added
+terms---for example, $\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$.
+This could be corrected, but the added
 compexity seems to suggest that selectors are better specified axiomatically.
 
 A related semantic view of datatypes is as initial algebra. Codatatypes are then
@@ -359,48 +388,6 @@ constructors, whereas the codatatypes are viewed through their selectors
 \cite{xxx}. By uniformly focusing on the constructors, the axiomatic approach
 emphasizes the commonality between datatypes and codatatypes, while sacrificing
 a theoretically fruitful notion of duality.
-
-
-  * final coalgebra
-    * this time, no condition: always exists
-    e.g. the specification
-
-      codatatype x = X x
-
-    gives rise to a singleton type {X (X (X ...))}.
-
-  * discriminators/selectors for initial algebras
-  * constructors for final coalgebras
-
-  * Introduce the discriminators already here.
-
-  * how to deal with "wrong" selectors, e.g.
-        hd(nil1) = hd(nil2)?
-      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
-        and not in other models
-
-  * ODDITY: Barrett et al. overspecify things (not good w.r.t. SMT-LIB 2, or
-    other solvers, e.g., Z3)
-
-  * axiomatically
-    * injectivity
-      distinctness
-      exhaustiveness
-    * datatypes:
-      * induction axiom (schema)
-        * consequence: no infinite objects (in particular, no cyclic objects)
-
-      * when looking at the universal ground (?) theory:
-        enough to consider acyclicity -- no way to specify infinite objects
-        otherwise
-
-    * codatatypes:
-      * coinduction axiom (schema)
-        * consequence: infinite objects are allowed, but
-          two objects yielding the same observations must be equal
-
-      * again: when looking at the universal ground (?) theory, enough to
-        consider bisimilarity/bisimulation
 
 \section{The Calculus}
 \label{sec:the-calculus}
