@@ -525,9 +525,11 @@ and failures to unify equivalent terms are recognized by \rn{Unify$_2$}.
 \rn{Cyclic}
 \(
 \inferrule{
-  t : \tau, \tau \in \Data
+  t : \tau
   \quad
-  p \in \ttpath{\Ec}{\ec{t}}{\ec{t}}
+  \tau \in \Data
+  \quad
+  \ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
 }{
   \bot
 }
@@ -536,9 +538,11 @@ and failures to unify equivalent terms are recognized by \rn{Unify$_2$}.
 \rn{Bisimilar}
 \(
 \inferrule{
- t_1, t_2 : \tau, \tau \in \Codata
+ t_1, t_2 : \tau
   \quad
- \exists \sigma. p \sigma \in \tpath{\Ec}{\ec{t_1}} \text{ for each } p \in \tpath{\Ec}{\ec{t_2}}
+ \tau \in \Codata
+  \quad
+ \tpath{\Ec}{\ec{t_1}} = \tpath{\Ec}{\ec{t_2}}\sigma \neq \emptyset
 }{
  \Ec := \Ec, t_1 \teq t_2
 }
@@ -567,13 +571,15 @@ and the sources of $e_1, \ldots, e_n$ are distinct.
 We say that path $p$ is \emph{induced by $\Ec$} if and only if each of its edges are induced by $\Ec$.
 Notice that since $\Ec$ contains a finite set of equivalence classes, all paths induced by $\Ec$ have finite length.
 We call the \emph{source} of a path is the source of its first edge, and the \emph{destination} of a path is the destination of its last edge.
-The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all paths with source $\ec{t_1}$ and destination $\ec{t_2}$ that are induced by $\Ec$.
+We say a path $p$ is \emph{maximal} if its destination $\ec{t}$ is either
+the source of an edge in $p$ or does not contain an application of a constructor (including the case when $t$ is not of datatype/codatatype type).
+The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all maximal paths with source $\ec{t_1}$ and destination $\ec{t_2}$ that are induced by $\Ec$.
 The set $\tpath{\Ec}{\ec{t_1}}$ is the union of $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ for all $t_2 \in \tEc$.
 We will write, for instance, $\ec{t_1} \rightarrow^{C_1}_{n_1} \ec{t_2} \rightarrow^{C_2}_{n_2} \ec{t_3}$ 
 as shorthand for the path containing an edge from $\ec{t_1}$ to $\ec{t_2}$, followed by one from $\ec{t_2}$ to $\ec{t_3}$.
 
 The rule \rn{Cyclic} recognizes when a path exists from an equivalence class $\ec{t}$ to itself, as indicated
-by the assumption $p \in \ttpath{\Ec}{\ec{t}}{\ec{t}}$.
+by the assumption $\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset$.
 In this case, $\Ec$ entails that $t$ contains itself as a (strict) subterm,
 and thus if $t$ is a datatype, $\Ec$ must be unsatisfiable.
 The rule \rn{Bisimilar} recognizes when two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ having co-datatype type are observationally equivalent.
@@ -581,10 +587,12 @@ In particular, if there is a mapping $\sigma$ over equivalence classes such that
 have a corresponding path $p \sigma$ from $t_1$,
 then $t_1$ must be equal to $t_2$.
 We demonstrate this rule concretely with the following example.
+\rem{ensure that \const{LCons} understood}
 
 \begin{example}
-Let $\Ec$ be the set $\{ x \teq \const{LCons}(y,\const{LCons}(y,x)), x \tneq \const{LCons}(y,x) \}$.  \rem{ensure that \const{LCons} understood}
-The equivalence classes of $\Ec$ are $\{ x, \const{LCons}(y,\const{LCons}(y,x)) \}$, $\{ \const{LCons}(y,x) \}$, and $\{ y \}$.
+Let $\Ec$ be the set $\{ x \teq \const{LCons}(y,\const{LCons}(y,x)) \}$.
+After taking the bidirectional closure of $\Ec$, we obtain equivalence classes 
+$\{ x, \const{LCons}(y,\const{LCons}(y,x)) \}$, $\{ \const{LCons}(y,x) \}$, and $\{ y \}$.
 The set $\tpath{\Ec}{\ec{x}}$ is:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
 \{ & \ec{x} \rightarrow^{\const{LCons}}_1 & \ec{y}, & & \\ 
@@ -597,9 +605,9 @@ The set $\tpath{\Ec}{\ec{\const{LCons}(y,x)}}$ is:
    & \ec{\const{LCons}(y,x)} \rightarrow^{\const{LCons}}_2 & \ec{x} \rightarrow^{\const{LCons}}_1 & \ec{y},& \\
    & \ec{\const{LCons}(y,x)} \rightarrow^{\const{LCons}}_2 & \ec{x} \rightarrow^{\const{LCons}}_2 & \ec{\const{LCons}(y,x)} & \}.
 \end{array}\]
-Thus, we may conclude $x \teq \const{LCons}(y,x)$ by the rule \rn{Bisimilar}
-for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\const{LCons}(y,x)} \mapsto \ec{x} \}$,
-after which the rule \rn{Conflict} may be applied.
+Thus, we may infer $x \teq \const{LCons}(y,x)$ by the rule \rn{Bisimilar}
+for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\const{LCons}(y,x)} \mapsto \ec{x} \}$.
+\qed
 \end{example}
 
 \begin{figure}[t]
@@ -640,11 +648,11 @@ Let $S^0$ be the set of terms that are arguments of a selector application in $\
 For $i \geq 0$, let $S^{i+1}$ $=$ $S_i \cup \{ s( t ) \mid t \in S^i, t : \tau \text{ finite}, s \in \Sel^\tau  \}$.
 Let $S^\ast$ be the fixed point of this sequence, which is guarenteed to be a finite set 
 since $S^i \setminus S^0$ only includes selectors applied to terms having finite type.
-Now, let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_j}_i( t ) ) \mid t \in S^\ast, t : \tau, C_i \in \Ctr^\tau \}$.
+Now, let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t \in S^\ast, t : \tau, C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$, 
 it can be shown by case analysis on the rules of the calculus that each non-root node is 
-obtained as a result of adding an equality between two terms from $\tcEc$ to its parent node.
-Thus, the maximum depth of a branch in a derivation tree with root node $\Ec$ is $\mid \tcEc \mid^2$,
+the result of adding an equality between two terms from $\tcEc$ to its parent node.
+Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\mid \tcEc \mid^2$,
 which is finite since $\tcEc$ is finite.
 \qed
 \end{proof}
@@ -668,8 +676,7 @@ whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
 \rem{Elaborate on Bisimilar}
 By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is unsatisfiable in $\thD$, 
-and since $\Ec \models_{\thD} t_1 \teq t_2$,
-we have that $\Ec$ is unsatisfiable in $\thD$.
+and thus $\Ec$ is unsatisfiable in $\thD$.
 \qed
 \end{proof}
 
