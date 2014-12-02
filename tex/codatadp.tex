@@ -43,6 +43,7 @@
 \renewcommand{\vec}[1]{\boldsymbol{#1}}
 \newcommand{\Ec}{\mathsf{E}}
 \newcommand{\tEc}{\mathcal{T}(\Ec)}
+\newcommand{\tcEc}{\mathcal{T}^\ast(\Ec)}
 \newcommand{\rn}[1]{\textsf{\small #1}}
 \newcommand{\cvc}{\textsc{cvc}{\small 4}\xspace}
 \newcommand{\teq}{\approx}
@@ -472,10 +473,40 @@ The rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downwards) unifica
 where additional equalities are inferred based on the injectivity of constructors by \rn{Unify$_1$},
 and failures to unify equivalent terms are recognized by \rn{Unify$_2$}.
 
-When applying the rules in Figure~\ref{fig:ab-rules}, 
+\begin{figure}[t]
+\centering
+\begin{tabular}{c}
+\rn{Cyclic}
+\(
+\inferrule{
+  t : \tau \text{ inductive } 
+  \quad
+  p \in \ttpath{\Ec}{\ec{t}}{\ec{t}}
+}{
+  \bot
+}
+\)
+\\[3.7ex]
+\rn{Bisimilar}
+\(
+\inferrule{
+ t_1, t_2 : \tau \text{ co-inductive }
+  \quad
+ \exists \sigma. p \sigma \in \tpath{\Ec}{\ec{t_1}} \text{ for each } p \in \tpath{\Ec}{\ec{t_2}}
+}{
+ \Ec := \Ec, t_1 \teq t_2
+}
+\)
+\end{tabular}
+\caption{Rules for cyclicity and bisimilarity.
+}
+\label{fig:ab-rules}
+\end{figure}
+
+Before applying the rules in Figure~\ref{fig:ab-rules}, 
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}, that is,
-no non-redudant application of a rule can be applied to $\Ec$.
-In this case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
+no non-redudant application of one of its rules can be applied to $\Ec$.
+When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
 Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
 For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
 
@@ -525,37 +556,6 @@ for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\con
 after which the rule \rn{Conflict} may be applied.
 \end{example}
 
-
-\begin{figure}[t]
-\centering
-\begin{tabular}{c}
-\rn{Cyclic}
-\(
-\inferrule{
-  t : \tau \text{ inductive } 
-  \quad
-  p \in \ttpath{\Ec}{\ec{t}}{\ec{t}}
-}{
-  \bot
-}
-\)
-\\[3.7ex]
-\rn{Bisimilar}
-\(
-\inferrule{
- t_1, t_2 : \tau \text{ co-inductive }
-  \quad
- \exists \sigma. p \sigma \in \tpath{\Ec}{\ec{t_1}} \text{ for each } p \in \tpath{\Ec}{\ec{t_2}}
-}{
- \Ec := \Ec, t_1 \teq t_2
-}
-\)
-\end{tabular}
-\caption{Rules for cyclicity and bisimilarity.
-}
-\label{fig:ab-rules}
-\end{figure}
-
 \rem{Change notation for inductive/co-inductive.}
 
 \begin{figure}[t]
@@ -575,25 +575,48 @@ after which the rule \rn{Conflict} may be applied.
 \label{fig:split-rule}
 \end{figure}
 
-
-A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by a non-redundant application of a derivation rule to its parent node.
-A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
-A node is \emph{saturated} if no non-redundant application of a rule can be applied to it.
-  
+Finally, if neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
+we split on the constructor type for certain terms $t$.
+In particular, if there is a selector term applied to $t$, or if $t$ has a finite type, 
+then we require the equivalence class of $t$ to contain a constructor term, which is enforced by the rule \rn{Split}.
 
 \subsection{Correctness}
 
-\begin{lemma}[Refutation Soundness]
-If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
-\end{lemma}
-
-\begin{lemma}[Solution Soundness]
-If there exists a derivation tree containing a saturated node with root node $\Ec$, then $\Ec$ is satisfiable in $\thD$.
-\end{lemma}
+A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by 
+a non-redundant application of a derivation rule to its parent node.
+A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
+A node is \emph{saturated} if no non-redundant application of a rule can be applied to it.
 
 \begin{lemma}[Termination]
 All derivation trees are finite.
 \end{lemma}
+\begin{proof}
+Consider a derivation tree with root node $\Ec$.
+Let $S^0$ be the set of terms that are arguments of a selector application in $\tEc$.
+For $i \geq 0$, let $S^{i+1}$ $=$ $S_i \cup \{ s( t ) \mid t \in S^i, s \in sel( t ), t : \tau \text{ finite} \}$.
+Let $S^\ast$ be the fix point of this sequence, which is guarenteed to be finite 
+since $S^\ast \setminus S^0$ only includes selectors applied to terms having finite type.
+Now, let $\tcEc$ be the set all subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_j}_i( t ) ) \mid t \in S^\ast, C_i \in cons( t ) \}$.
+In a derivation tree with root node $\Ec$, 
+it can be shown by case analysis on the rules of the calculus that each non-root node is 
+obtained as a result of adding an equality between two terms from $\tcEc$ to its parent node.
+Thus, the maximum depth of a branch in a derivation tree with root node $\Ec$ is $\mid \tcEc \mid^2$,
+which is finite since $\tcEc$ is finite.
+\end{proof}
+
+\begin{lemma}[Refutation Soundness]
+If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}[Solution Soundness]
+If there exists a derivation tree containing a saturated node with root node $\Ec$, then $\Ec$ is satisfiable in $\thD$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
 
 \rem{Thus, sound and complete.}
   
