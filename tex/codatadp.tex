@@ -34,6 +34,8 @@
 \DeclareMathAlphabet{\mathcal}{OT1}{pzc}{m}{it}
 
 
+\newcommand\jPrime{j\vthinspace'\negvthinspace}
+
 \newcommand\Sig{\mathrm{\Sigma}}
 
 \newcommand\keyw[1]{\textbf{#1}}
@@ -234,12 +236,15 @@ set of function symbols $\Funcs$. Types are simply atomic sorts, with no
 structure, and interpreted by nonempty domains. The set $\Types$ must contain a
 distinguished type \ty{bool} interpreted as the set of truth
 values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-Predicates are simply functions that return $\ty{bool}$.
+The only predicate is $\teq$, and it is treated as a logical symbol,
+just like the connectives and quantifiers of first-order logic.
+Other predicates can be represented as functions that return $\ty{bool}$.
 The metavariables $\delta, \tau$ range over types, with $\delta$ reserved
-for (co)datatypes.
+for datatypes and codatatypes.
 
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
-distinguish them from variables (e.g., $x$, $y$). With each function symbol \const{f}
+distinguish them from variables (e.g., $x$, $y$). Upper case names (e.g., $\const{C}$,
+$\const{Nil}$) are reserved for constructors. With each function symbol \const{f}
 is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
 and a return type $\tau$. This connection can be expressed compactly as
 $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$
@@ -250,6 +255,8 @@ applying the $n$-ary function symbol
 \const{f} to $n$ well-typed arguments $t_1 : \tau_1$, \ldots, $t_n :
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
+%
+Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
@@ -321,12 +328,42 @@ genuinely interesting cases missing are mixed nested (co)recursion
 (as in the \ty{tree} example above) as well as (co)recursion through a
 non-(co)datatype (both of which make sense \cite{blanchette-et-al-2014-codata}).
 
-Axiomatization:
+Because the types are inhabited (nonempty), a datatype specification is
+admissible only if a ground term can be exhibited that belongs to that datatype.
+This rules out ill-founded specifications such as
+%
+\[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\,\ty{fstream})\]
+%
+For codatatypes, no such check is necessary. Given the specification
+%
+\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\,\ty{stream})\]
+%
+the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
+nonemptiness.
 
-  * axiomatically
-    * injectivity
-      distinctness
-      exhaustiveness
+Datatypes and codatatypes can be characterized axiomatically. They share basic
+properties of constructors and selectors. All properties below range over all
+$i$, $j$, $\jPrime$, and $k$ within bounds and to all possible splits of the
+$n$-ary constructor $\const{C}_{i\negvthinspace j}$'s argument list into $\bar x,
+y, \bar z$:
+%
+\[
+\begin{aligned}[t]
+\text{Distinctness:}\quad
+  & \forall \bar x, \bar y.\;\, \const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \qquad\text{if $j \not= \jPrime$}
+  \\
+\text{Injectivity:}\quad
+  & \forall \bar x, y, \bar z.\;\, \const{C}_{i\negvthinspace j}(\bar x, y, \bar z) \teq \const{C}_{i\negvthinspace j}(\bar x, y', \bar z) \longrightarrow y \teq y'
+  \\
+\text{Exhaustiveness:}\quad
+  &
+  \\
+\text{Selection:}\quad
+  &
+\end{aligned}
+\]
+
+
     * datatypes:
       * induction axiom (schema)
         * consequence: no infinite objects (in particular, no cyclic objects)
@@ -359,19 +396,6 @@ specifies the
 
 
 
-Because the types are inhabited (nonempty), a datatype specification is
-admissible only if a ground term can be exhibited that belongs to that datatype.
-This rules out ill-founded specifications such as
-%
-\[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\,\ty{fstream})\]
-%
-For codatatypes, no such check is necessary. Given the specification
-%
-\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\,\ty{stream})\]
-%
-the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
-nonemptiness.
-
 Datatypes can be defined semantically as the initial model of an equational
 specification of the selector--constructor equations. This is the view followed
 by Barrett et al.\ \cite{barrett-et-al-2010}. A disadvantage with this approach
@@ -380,7 +404,7 @@ constructors. Barrett et al.\ address this by parameterizing the construction by
 default values, but these give rise to spurious equalities between unrelated
 terms---for example, $\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$.
 This could be corrected, but the added
-compexity seems to suggest that selectors are better specified axiomatically.
+complexity seems to suggest that selectors are better specified axiomatically.
 
 A related semantic view of datatypes is as initial algebra. Codatatypes are then
 defined dually as a final coalgebra. The datatypes are generated by their
