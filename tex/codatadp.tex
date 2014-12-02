@@ -214,7 +214,7 @@ Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
     as the set of truth values, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
 
 * although nothing prevents composing the decision procedure with theories
-  providing polymorphic types (parametric sorts), such as for arrays (e.g., \ty{array}(\alpha,\beta))
+  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
 
 * in keeping with SMT conventions, there are no separate predicate symbols;
   predicates are modeled as functions that return $\ty{Bool}$
@@ -239,15 +239,19 @@ $t_n : \tau_n$.
 \label{sec:theory-of-co-datatypes}
 
 We assume a signature $\Sigma = (\mathcal{T}, \mathcal{F})$.
+
 Furthermore, a partition of the types:
   $\mathcal{T} = \mathcal{I} \uplus \mathcal{C} \uplus \mathcal{N}$
 with
-  * $\mathcal{I}$: datatypes
+  * $\mathcal{D}$: datatypes
   * $\mathcal{C}$: codatatypes
   * $\mathcal{N}$: non-(co)datatypes
 
+And a partition of the functions:
+  * $\mathcal{C}$
 
-
+for each datatype or codatatype $\delta$:
+  * 
 
 
 
