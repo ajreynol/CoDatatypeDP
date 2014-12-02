@@ -59,7 +59,7 @@
    a4paper,
    pdftex,
    pdftitle={A Decision Procedure for (Co)datatypes in SMT Solvers},
-   pdfauthor={Andrew J. Reynolds and Jasmin Christian Blanchette},
+   pdfauthor={Andrew Reynolds and Jasmin Christian Blanchette},
    pdfkeywords={},
    pdfborder={0 0 0},
    draft=false,
@@ -88,8 +88,8 @@
 
 \title{A Decision Procedure for (Co)datatypes in SMT Solvers}
 
-\author {Andrew J. Reynolds\inst{1} \and Jasmin Christian Blanchette\inst{2,3}}
-\authorrunning {A. J. Reynolds \and J. C. Blanchette}
+\author {Andrew Reynolds\inst{1} \and Jasmin Christian Blanchette\inst{2,3}}
+\authorrunning {A. Reynolds \and J. C. Blanchette}
 \institute{
 \'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), Switzerland
 \and
@@ -205,11 +205,19 @@ Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 
 \paragraph{Conventions.}
 
+* monomorphic (or many-sorted) first-order logic
+* Signature: $\Sigma = (\mathcal{T}, \mathcal{F})$
+
 * types are simply atomic sorts, with no structure, and interpreted by nonempty
   domains
+  * set of types must contain the distinguished \ty{bool} type of Booleans, interpreted
+    as the set of truth values, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
 
 * although nothing prevents composing the decision procedure with theories
-  providing polymorphic types (parametric sorts), such as the theory of arrays
+  providing polymorphic types (parametric sorts), such as for arrays (e.g., \ty{array}(\alpha,\beta))
+
+* in keeping with SMT conventions, there are no separate predicate symbols;
+  predicates are modeled as functions that return $\ty{Bool}$
 
 * $\tau$ range over types---whether (co)datatypes or uninterpreted types
 * $\delta$ range over (co)datatypes
@@ -226,17 +234,36 @@ $t_n : \tau_n$.
   following tradition, we simply write $\const{c} : \tau$ for the type signature 
   and $\const{c}$ rather than $\const{c}()$.
 
-* in keeping with SMT conventions, predicate symbols are simply functions that
-  return $\ty{Bool}$
 
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
-A signature consists of:
-  * set of plain types, which can be interpreted or uninterpreted
-    * must contain the distinguished \ty{bool} type of Booleans
-  * set of function symbols with argument and return types
-  * list of codatatype specifications, described below
+We assume a signature $\Sigma = (\mathcal{T}, \mathcal{F})$.
+Furthermore, a partition of the types:
+  $\mathcal{T} = \mathcal{I} \uplus \mathcal{C} \uplus \mathcal{N}$
+with
+  * $\mathcal{I}$: datatypes
+  * $\mathcal{C}$: codatatypes
+  * $\mathcal{N}$: non-(co)datatypes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+In practice, e.g. in an SMT problem, we'd have:
+  * declaration of uninterpreted types (in any order)
+  * specification of mutual groups of (co)datatypes, in a correct order
+
 
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Each datatype $\delta$ is equipped by
