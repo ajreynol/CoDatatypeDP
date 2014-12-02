@@ -54,6 +54,19 @@
 % change?
 \newcommand{\thD}{T_{D}}
 
+%\newcommand\Types{\mathcal{T}}
+\newcommand\Types{\mathcal{Y}}
+\newcommand\Funcs{\mathcal{F}}
+
+\newcommand\Data{\Types_{\mathrm{dt}}}
+\newcommand\Codata{\Types_{\mathrm{codt}}}
+\newcommand\Nondata{\Types_{\mathrm{other}}}
+
+\newcommand\Ctr{\Funcs_{\mathrm{ctr}}}
+\newcommand\Sel{\Funcs_{\mathrm{sel}}}
+%\newcommand\Plainfuncs{\Funcs_{\mathrm{other}}}
+
+
 %%% For final version as well?
 \usepackage[
    a4paper,
@@ -206,7 +219,7 @@ Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 \paragraph{Conventions.}
 
 * monomorphic (or many-sorted) first-order logic
-* Signature: $\Sigma = (\mathcal{T}, \mathcal{F})$
+* Signature: $\Sigma = (\Types, \Funcs)$
 
 * types are simply atomic sorts, with no structure, and interpreted by nonempty
   domains
@@ -238,36 +251,27 @@ $t_n : \tau_n$.
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
-We assume a signature $\Sigma = (\mathcal{T}, \mathcal{F})$.
+We assume a signature $\Sigma = (\Types, \Funcs)$.
 
 Furthermore, a partition of the types:
-  $\mathcal{T} = \mathcal{I} \uplus \mathcal{C} \uplus \mathcal{N}$
+  $\Types = \Data \uplus \Codata \uplus \Nondata$
 with
-  * $\mathcal{D}$: datatypes
-  * $\mathcal{C}$: codatatypes
-  * $\mathcal{N}$: non-(co)datatypes
+  * $\Data$: datatypes
+  * $\Codata$: codatatypes
+  * $\Nondata$: non-(co)datatypes
 
 And a partition of the functions:
-  * $\mathcal{C}$
+  $\Funcs = \Ctr \uplus \Sel$
+with
+  * $\Ctr$: constructors
+  * $\Sel$: selectors
 
-for each datatype or codatatype $\delta$:
-  * 
-
-
-
-
-
-
-
-
-
-
-
+(Do not need to consider other function symbols, because they would be
+abstracted away as variables in the context of theory combination.)
 
 In practice, e.g. in an SMT problem, we'd have:
   * declaration of uninterpreted types (in any order)
-  * specification of mutual groups of (co)datatypes, in a correct order
-
+  * list of specifications of mutually (co)recursive groups of (co)datatypes
 
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Each datatype $\delta$ is equipped by
