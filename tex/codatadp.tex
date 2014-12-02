@@ -33,6 +33,9 @@
 
 \DeclareMathAlphabet{\mathcal}{OT1}{pzc}{m}{it}
 
+
+\newcommand\Sig{\mathrm{\Sigma}}
+
 \newcommand\keyw[1]{\textbf{#1}}
 \newcommand\const[1]{\textsf{#1}}
 \newcommand\ty[1]{\textit{#1}}
@@ -159,6 +162,11 @@ Blah.
   * codatatypes: from a theoretical and implementational point of view, like
       datatypes but:
     * codatatypes are never empty (e.g. finite streams are rejected)
+
+\[
+      \keyw{codatatype}\; \,\ty{llist} \,=\, \const{LNil} \,\mid\, \const{LCons}(\ty{int},\, \ty{llist})
+\]
+
     * no acyclicity (e.g. xs = lcons(0, xs) is satisfiable)
     * instead: bisimilarity check
     * (also: ``enumeration'', e.g. of streams)
@@ -219,7 +227,7 @@ Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 \paragraph{Conventions.}
 
 * monomorphic (or many-sorted) first-order logic
-* Signature: $\Sigma = (\Types, \Funcs)$
+* Signature: $\Sig = (\Types, \Funcs)$
 
 * types are simply atomic sorts, with no structure, and interpreted by nonempty
   domains
@@ -251,7 +259,7 @@ $t_n : \tau_n$.
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
-We assume a signature $\Sigma = (\Types, \Funcs)$.
+We assume a signature $\Sig = (\Types, \Funcs)$.
 
 Furthermore, a partition of the types:
   $\Types = \Data \uplus \Codata \uplus \Nondata$
@@ -285,7 +293,7 @@ introduced ones. Schematically:
 \[
 \begin{aligned}[t]
 (\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}=\, \const{C}_{11}(\bigl[\const{s}_{111}{:}\bigr]\; \tau_{111}, \,\ldots,\, \bigl[\const{s}_{11n_{11}}{:}\bigr]\; \tau_{11n_{11}}) & \\
+  \delta_1 & {}=\, \const{C}_{1}\rlap{${}_{1}$}\phantom{{}_{m}}(\bigl[\const{s}_{111}{:}\bigr]\; \tau_{111}, \,\ldots,\, \bigl[\const{s}_{11n_{11}}{:}\bigr]\; \tau_{11n_{11}}) & \\
            & {}\;\phantom{=\,}\;{} \smash{\,\,\,\vdots} \\[-\jot] % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
            & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \const{C}_{1m}(\bigl[\const{s}_{1m1}{:}\bigr]\; \tau_{1m1}, \,\ldots,\, \big[\const{s}_{1mn_{1m}}{:}\big]\; \tau_{1mn_{1m}}) \\[-1\jot]
    \smash{\vdots\,\,\,} \\[-1\jot]
@@ -307,8 +315,8 @@ outside this fragment. For example, the specification
 \]
 is supported, whereas
 \[\begin{aligned}[t]
-      \keyw{codatatype}\; \,\ty{llist}(\alpha) & \,=\, \const{LNil} \,\mid\, \const{LCons}(\alpha,\, \ty{llist}(\alpha)) \\[-.5\jot]
-      \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{llist}(\ty{tree}))
+      \keyw{codatatype}\; \,\ty{pllist}(\alpha) & \,=\, \const{PLNil} \,\mid\, \const{PLCons}(\alpha,\, \ty{pllist}(\alpha)) \\[-.5\jot]
+      \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{pllist}(\ty{tree}))
 \end{aligned}
 \]
 is beyond the fragment considered here. In principle, rank-1 (top-level)
@@ -377,13 +385,13 @@ non-(co)datatype (both of which make sense \cite{blanchette-et-al-2014-codata}).
 
   * Correctness
 
-\rem{Discuss signature $\Sigma$, theory $\thD$}
+\rem{Discuss signature $\Sig$, theory $\thD$}
 This section presents a calculus for determining the satisfiability of conjunctions of $\thD$-constraints.
 
-Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sigma$-terms.
-We will write $\tEc$ to denote the set of $\Sigma$-terms occurring in $\Ec$.
+Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sig$-terms.
+We will write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
-We assume that all $\Sigma$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( \const{C}_j( \vec t ) )$
+We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( \const{C}_j( \vec t ) )$
 are replaced by $t_i$, and moreover assume that all additional constraints added to $\Ec$ are normalized in this manner.
 
 \begin{figure}[t]
