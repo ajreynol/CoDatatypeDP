@@ -421,6 +421,15 @@ We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as 
 We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( \const{C}_j( \vec t ) )$
 are replaced by $t_i$, and moreover assume that all additional constraints added to $\Ec$ are normalized in this manner.
 
+We present the calculus in three sections, shown in Figures~\ref{fig:cc-rules},~\ref{fig:ab-rules}, and~\ref{fig:split-rule}.
+Following the conventions from~\cite{}, 
+the derivation rules of our calculus are given in \emph{guarded assignment form},
+where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
+The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{non-terminal}),
+or is $\bot$ (in which case we will call an application of it to be \emph{terminal}).
+A rule may have multiple conclusions separated by $\parallel$, which denotes a non-deterministic branching.
+An application of a rule is \emph{redundant} if it is non-terminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
+
 \begin{figure}[t]
 \centering
 \begin{tabular}{c}
@@ -492,16 +501,7 @@ are replaced by $t_i$, and moreover assume that all additional constraints added
 \label{fig:cc-rules}
 \end{figure}
 
-We present the calculus in three sections, shown in Figures~\ref{fig:cc-rules},~\ref{fig:ab-rules}, and~\ref{fig:split-rule}.
-Following the conventions from~\cite{}, 
-the derivation rules of our calculus are given in \emph{guarded assignment form},
-where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
-The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{non-terminal}),
-or is $\bot$ (in which case we will call an application of it to be \emph{terminal}).
-A rule may have multiple conclusions separated by $\parallel$, which denotes a non-deterministic branching.
-An application of a rule is \emph{redundant} if it is non-terminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
-
-First, Figure~\ref{fig:cc-rules} gives the rules for constructing the bidirectional closure of $\Ec$.
+Figure~\ref{fig:cc-rules} gives the rules for constructing the bidirectional closure of $\Ec$.
 The rules \rn{Refl}, \rn{Symm}, \rn{Trans}, and \rn{Cong} together compute the (upwards) congruence closure,
 after which a conflict may be recognized by \rn{Conflict} when an inconsistency is found.
 The rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downwards) unification,
@@ -514,7 +514,7 @@ and failures to unify equivalent terms are recognized by \rn{Unify$_2$}.
 \rn{Cyclic}
 \(
 \inferrule{
-  t : \tau \text{ inductive } 
+  t : \tau, \tau \in \Data
   \quad
   p \in \ttpath{\Ec}{\ec{t}}{\ec{t}}
 }{
@@ -525,7 +525,7 @@ and failures to unify equivalent terms are recognized by \rn{Unify$_2$}.
 \rn{Bisimilar}
 \(
 \inferrule{
- t_1, t_2 : \tau \text{ co-inductive }
+ t_1, t_2 : \tau, \tau \in \Codata
   \quad
  \exists \sigma. p \sigma \in \tpath{\Ec}{\ec{t_1}} \text{ for each } p \in \tpath{\Ec}{\ec{t_2}}
 }{
@@ -591,8 +591,6 @@ for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\con
 after which the rule \rn{Conflict} may be applied.
 \end{example}
 
-\rem{Change notation for inductive/co-inductive.}
-
 \begin{figure}[t]
 \centering
 \begin{tabular}{c}
@@ -630,8 +628,8 @@ Consider a derivation tree with root node $\Ec$.
 Let $S^0$ be the set of terms that are arguments of a selector application in $\tEc$.
 For $i \geq 0$, let $S^{i+1}$ $=$ $S_i \cup \{ s( t ) \mid t \in S^i, s \in sel( t ), t : \tau \text{ finite} \}$.
 Let $S^\ast$ be the fix point of this sequence, which is guarenteed to be finite 
-since $S^\ast \setminus S^0$ only includes selectors applied to terms having finite type.
-Now, let $\tcEc$ be the set all subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_j}_i( t ) ) \mid t \in S^\ast, C_i \in cons( t ) \}$.
+since $S^i \setminus S^0$ only includes selectors applied to terms having finite type.
+Now, let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_j}_i( t ) ) \mid t \in S^\ast, C_i \in cons( t ) \}$.
 In a derivation tree with root node $\Ec$, 
 it can be shown by case analysis on the rules of the calculus that each non-root node is 
 obtained as a result of adding an equality between two terms from $\tcEc$ to its parent node.
@@ -643,7 +641,7 @@ which is finite since $\tcEc$ is finite.
 If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
-TODO
+%We show that if a derivation tree with $\Ec$ has a model $\M$, 
 \end{proof}
 
 \begin{lemma}[Solution Soundness]
