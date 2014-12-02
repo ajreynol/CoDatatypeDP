@@ -100,12 +100,12 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 Codatatypes naturally capture potentially infinite data structures and
 processes. We introduce a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
-bisimilarity rule that identifies observationally equal, possibly cyclic
-values. The procedure is compatible with the Nelson--Oppen method
-and is useful for both proving and model finding. It has been implemented in the
-latest version of CVC4, a modern SMT solver. An evaluation based on problems
-generated from Isabelle/HOL theories demonstrates the potential of the procedure
-in a proving context.
+bisimilarity rule that identifies observationally equal, possibly cyclic values.
+The procedure is complete for the universal fragment and is compatible with the
+Nelson--Oppen method. It has been implemented in the latest version of CVC4, a
+modern SMT solver. An evaluation based on problems generated from Isabelle
+theories demonstrates the potential of the procedure for both proving and model
+finding.
 \end{abstract}
 
 %% The institutions above shouldn't count as footnotes
@@ -117,11 +117,12 @@ in a proving context.
 Blah.
 
   * briefly: datatypes and why they are useful
-    (terminology: freely-generated, inductive, algebraic, ..., sometimes
-    with different meanings; we'll clarify below)
     * Hoare's recursive data structures
     * comparatively easy to reason about and automate
     * common in practice, esp. in computer science applications
+
+    (terminology: freely-generated, inductive, algebraic, ..., sometimes
+    with different meanings; we'll clarify below what we use)
 
   * less briefly: codatatypes and why they are useful
     * in Agda, Coq, Matita -- recently also in Isabelle/HOL
@@ -183,9 +184,6 @@ Blah.
 
 Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 
-\paragraph{Notations.}
-Blah
-
 \paragraph{Related Work.}
 
     * point to Barrett et al. for SMT datatypes
@@ -201,28 +199,54 @@ Blah
 
     * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
 
+\paragraph{Conventions.}
+
+* types are simply atomic sorts, with no structure, and interpreted by nonempty
+  domains
+
+* although nothing prevents composing the decision procedure with theories
+  providing polymorphic types (parametric sorts), such as the theory of arrays
+
+* $\sigma, \tau$ range over types---whether (co)datatypes or uninterpreted types
+* $\delta$ range over (co)datatypes
+
+* use sans-serif for function symbols (e.g., $\const{f}$) to distinguish them
+from variables (e.g., $x$).
+
+* function symbols are accompanied by a type signature, e.g. $\const{f} : \sigma_1 \times \cdots \times \sigma_n \to
+\sigma$ indicates
+
+* don't distinguish between constants and function symbols
+  a constant is merely the case $n = 0$ of a function $f : 
+
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
 \newcommand\keyw[1]{\textbf{#1}}
 \newcommand\const[1]{\textsf{#1}}
-\newcommand\ty[1]{\mathit{#1}}
+\newcommand\ty[1]{\textit{#1}}
 
-For the purposes of this paper, a (co)datatype specification consists of
-$l$~mutually recursive types which are either all datatypes or all codatatypes.
-Each datatype $\delta$ is equipped by $m \ge 1$ constructors, and each
-constructor for $\delta$ takes $n \ge 0$ arguments, each associated with a
-selector, and returns a $\delta$ value. The argument types must be either
-already existing types or be one of the newly introduced (co)datatypes. The
-introduced names for the (co)datatypes, the constructors, and the selectors must
-be distinct with already introduced ones and among themselves. Schematically:
+A signature consists of:
+  * set of plain types, which can be interpreted or uninterpreted
+    * must contain the distinguished \ty{bool} type of Booleans
+  * set of function symbols with argument and return types
+  * list of codatatype specifications, described below
+
+A (co)datatype specification consists of $l$~mutually recursive types which are
+either all datatypes or all codatatypes. Each datatype $\delta$ is equipped by
+$m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
+arguments and returns a $\delta$ value. The argument types must be either
+plain, be or be one of the newly introduced (co)datatypes. To every
+argument corresponds a selector. The introduced names for the (co)datatypes, the
+constructors, and the selectors must be distinct and different from already
+introduced ones. Schematically:
 %
 \[
 \begin{aligned}[t]
 (\keyw{co})\keyw{datatype}\;\,
   \delta_1 & {}=\, \const{C}_{11}(\bigl[\const{s}_{111}{:}\bigr]\; \sigma_{111}, \,\ldots,\, \bigl[\const{s}_{11n_{11}}{:}\bigr]\; \sigma_{11n_{11}}) & \\
-           & {}\;\phantom{=\,}\;{} \smash{\,\,\vdots} \\ % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
-           & {}\;\phantom{=\,}\llap{\ensuremath{\mid}}\; \const{C}_{1m}(\bigl[\const{s}_{1m1}{:}\bigr]\; \sigma_{1m1}, \,\ldots,\, \big[\const{s}_{1mn_{1m}}{:}\big]\; \sigma_{1mn_{1m}}) \\[-1\jot]
+           & {}\;\phantom{=\,}\;{} \smash{\,\,\,\vdots} \\[-\jot] % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
+           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \const{C}_{1m}(\bigl[\const{s}_{1m1}{:}\bigr]\; \sigma_{1m1}, \,\ldots,\, \big[\const{s}_{1mn_{1m}}{:}\big]\; \sigma_{1mn_{1m}}) \\[-1\jot]
    \smash{\vdots\,\,\,} \\[-1\jot]
   \keyw{and}\; \,\delta_l & =\, \ldots
 \end{aligned}
@@ -230,24 +254,28 @@ be distinct with already introduced ones and among themselves. Schematically:
 %
 with
 $\const{C}_{ij} : \sigma_{ij1}\times\cdots\times\sigma_{ijk_{ij}} \to \delta_i$
-and $\const{s}_{ijk} : \delta_i \to \sigma_{ijk}$. The selector names are often
-omitted in our examples, in which case default names are generated.
+and $\const{s}_{ijk} : \delta_i \to \sigma_{ijk}$. Defaults are assumed for
+the selector names if they are omitted.
 
 Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 outside this fragment. For example, the specification
 \[\begin{aligned}[t]
       \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{forest}) \\[-\jot]
-      \keyw{and}\;\, \ty{forest} & \,=\, \const{FNil} \mid \const{FCons}(\ty{tree},\, \ty{forest})
+      \keyw{and}\;\, \ty{forest} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree},\, \ty{forest})
 \end{aligned}
 \]
 is supported, whereas
 \[\begin{aligned}[t]
-      \keyw{codatatype}\; \,\ty{llist}(\alpha) & \,=\, \const{LNil} \mid \const{LCons}(\alpha,\, \ty{llist}(\alpha)) \\
+      \keyw{codatatype}\; \,\ty{llist}(\alpha) & \,=\, \const{LNil} \,\mid\, \const{LCons}(\alpha,\, \ty{llist}(\alpha)) \\[-.5\jot]
       \keyw{datatype}\;\, \ty{tree} & \,=\, \const{Node}(\ty{int},\, \ty{llist}(\ty{tree}))
 \end{aligned}
 \]
-is beyond the fragment considered here.
-% (although it makes sense and is supported by Isabelle \cite{xxx}).
+is beyond the fragment considered here. In principle, rank-1 (top-level)
+polymorphism would be easy to support; nesting datatypes inside datatypes,
+and likewise for codatatypes, can be reduced to the mutual case. So the only
+genuinely interesting cases missing are mixed nested (co)recursion
+(as in the \ty{tree} example above) as well as (co)recursion through a
+non-(co)datatype (both of which do make sense \cite{blanchette-et-al-2014-codata}).
 
 
   * initial algebra
@@ -516,7 +544,11 @@ All derivation trees are finite.
 \label{sec:experimental-results}
 
   * Constructed examples
+    * proving
+    * model finding?
+
   * Isabelle benchmarks
+
 
 \section{Conclusion}
 \label{sec:conclusion}
