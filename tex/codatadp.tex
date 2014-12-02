@@ -147,7 +147,7 @@ Blah.
 
   * less briefly: codatatypes and why they are useful
     * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
-    * but not in SMT-LIB 2 \cite{xxx}
+    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
   * single decision procedure for datatypes and codatatypes
   * datatypes are implementation following the lines of Barrett et al.
@@ -246,8 +246,8 @@ For a term $t$, the notation $t : \tau$ indicates that $t$ has type $\tau$.
 Functions are applied the standard way, with $\const{f}(t_1,\ldots,t_n)$
 applying the $n$-ary function symbol
 \const{f} to $n$ well-typed arguments $t_1 : \tau_1$, \ldots, $t_n :
-\tau_n$. Nullary function symbols are called constants and can appear as is in
-terms, without parentheses.
+\tau_n$. Nullary function symbols are called constants and can appear without
+parentheses in terms.
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
