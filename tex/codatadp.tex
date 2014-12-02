@@ -218,10 +218,16 @@ Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 from variables (e.g., $x$).
 
 * function symbols are accompanied by a type signature, e.g. $\const{f} : \tau_1 \times \cdots \times \tau_n \to
-\tau$ indicates
+\tau$ indicates takes $n \ge 0$ arguments of types $\tau_1,\ldots,\tau_n$ and returns a value of type $\tau$;
+* applied as $\const{f}(t_1,\ldots,t_n)$ to well-typed arguments $t_1 : \tau_1$, \ldots,
+$t_n : \tau_n$.
 
-* don't distinguish between constants and function symbols
-  a constant is merely the case $n = 0$ of a function $f : $
+* nullary function symbols are called constants;
+  following tradition, we simply write $\const{c} : \tau$ for the type signature 
+  and $\const{c}$ rather than $\const{c}()$.
+
+* in keeping with SMT conventions, predicate symbols are simply functions that
+  return $\ty{Bool}$
 
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
@@ -275,7 +281,7 @@ polymorphism would be easy to support; nesting datatypes inside datatypes,
 and likewise for codatatypes, can be reduced to the mutual case. So the only
 genuinely interesting cases missing are mixed nested (co)recursion
 (as in the \ty{tree} example above) as well as (co)recursion through a
-non-(co)datatype (both of which do make sense \cite{blanchette-et-al-2014-codata}).
+non-(co)datatype (both of which make sense \cite{blanchette-et-al-2014-codata}).
 
 
   * initial algebra
@@ -556,8 +562,11 @@ All derivation trees are finite.
 Future work:
 
   * more evaluation
+    * use it in a new Nitpick-like tool
   * recursive and corecursive functions
     (and rewriting)
+  * extensions, perhaps straightforward, to polymorphism and nested
+    (co)recursion
 
 \def\ackname{Acknowledgment}
 \paragraph{\ackname.}
