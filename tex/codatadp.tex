@@ -51,7 +51,8 @@
 \newcommand{\teq}{\approx}
 \newcommand{\tneq}{\not\teq}
 \newcommand{\rem}[1]{\textcolor{red}{[#1]}}
-\newcommand{\tester}[1]{is\text{-} #1}
+%\newcommand{\is}[1]{is\text{-} #1}
+\newcommand{\is}[1]{\const{is#1}}
 \newcommand{\ror}{\quad \parallel \quad}
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
@@ -341,28 +342,41 @@ For codatatypes, no such check is necessary. Given the specification
 the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 nonemptiness.
 
+discriminators go here
+
 Datatypes and codatatypes can be characterized axiomatically. They share basic
-properties of constructors and selectors. All properties below range over all
-$i$, $j$, $\jPrime$, and $k$ within bounds and to all possible splits of the
-$n$-ary constructor $\const{C}_{i\negvthinspace j}$'s argument list into $\bar x,
-y, \bar z$:
+properties of constructors and selectors. All properties below are implicitly
+universally quantified and range over all
+$i$, $j$, $\jPrime$, and $k$ within bounds:
+% and to all possible splits of the
+%$n$-ary constructor $\const{C}_{i\negvthinspace j}$'s argument list into $\bar x,
+%y, \bar z$:
 %
 \[
 \begin{aligned}[t]
 \text{Distinctness:}\quad
-  & \forall \bar x, \bar y.\;\, \const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \qquad\text{if $j \not= \jPrime$}
+  & %\forall \bar x, \bar y.\;\,
+    \const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \qquad\text{if $j \not= \jPrime$}
   \\
 \text{Injectivity:}\quad
-  & \forall \bar x, y, \bar z.\;\, \const{C}_{i\negvthinspace j}(\bar x, y, \bar z) \teq \const{C}_{i\negvthinspace j}(\bar x, y', \bar z) \longrightarrow y \teq y'
+  & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
+    \const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(x_1,\ldots,x_{k-1},y,x_{k+1},\ldots,x_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y
   \\
 \text{Exhaustiveness:}\quad
-  &
+  & \is{C}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \is{C}_{im_i}(x)
   \\
 \text{Selection:}\quad
-  &
+  & s_{ij}^k(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k
 \end{aligned}
 \]
+%
+Expressed in the algebraic jargon,
+exhaustiveness ensures that ``no junk'' arises, whereas
+distinctness and injectivity ensure that ``no confusion'' occur,
+whereas 
 
+%Sometimes, the requirements on constructors are stipulated as ``no junk, no
+%confusion.''
 
     * datatypes:
       * induction axiom (schema)
@@ -380,12 +394,8 @@ y, \bar z$:
       * again: when looking at the universal ground (?) theory, enough to
         consider bisimilarity/bisimulation
 
-discriminators go here
-
-
 specifies the 
 
-    * ``no junk, no confusion''
 
 
   * how to deal with "wrong" selectors, e.g.
