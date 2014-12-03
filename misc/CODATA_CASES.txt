@@ -24,10 +24,10 @@ Degenerate Codatatypes
 
     Consider
 
-      codatatype x = X(x)
+      codatatype a = A(a)
 
     This is a finite codatatype, with a single value, which is infinite:
-    $\mu x. X(x)$
+    $\mu a. A(a)$
     
     This type is an issue because:
 
@@ -47,16 +47,79 @@ Degenerate Codatatypes
       * 
     Qed
 
-    An immediate consequence by the distinctness axiom is that 
-
-    Syntactic criterion:
+    An immediate consequence by the distinctness axiom is that these types have
+    necessarly one constructor, and that all arguments are of types of
+    cardinality 1.
 
     Easy case: $k$ mutually recursive codatatypes, each equipped with one
     constructor, all of which take each other in arguments in various
-    combinations, e.g.
+    combinations, with potential other types that are known to have cardinality
+    1. e.g.
 
-      codatatype a = A b a b
+      codatatype b = B b c b
+             and c = C c b c
+
+    Medium case: like above, but some of the arguments are other types not
+    participating in the corecursion that are known to have cardinality 1, e.g.
+
+      codatatype d = D unit d d unit
+
+    where "unit" is a datatype with the single constructor "Unity : unit".
+
+    Though case: like above, but with any other types where it's not clear
+    whether it could have cardinality one or not.
+
+      type e
+      codatatype f = F e f f unit
+
+    For cases i and ii, a decision can be made statically, and once we've
+    identified that the codatatype has cardinality 1, we can activate the
+    special inference rule that does E := E, X = Y.
+
+    For case iii, if ground problem, we can safely assume it doesn't have
+    cardinality one without loss of generality (because there's no way to
+    express an upper bound on cardinality without variables, typically $X = c$
+    or $X = Y$). Otherwise, we don't care too much about completeness, but
+    we still want to avoid needless incompleteness; so we encode the
+    constraint
+
+      (ALL X X' : x_1. X = X') & ... & (ALL X X' : x_n. X = X') -->
+      (ALL X X' : y. X = X')
+
+    or rather its skolemized variant
+
+      k1 ~= k1' | ... | kn ~= kn' | Y = Y'
+
+    with a bias for the first cases.
+
+    In general, the best we can do, because the "= 1, > 1" problem is
+    undecidable. (Need a quick proof here.)
+
+    Above, we've assumed we can determine cardinality constraits (= 1, > 1, =?
+    1). Here's the calculus (TODO):
+
+      uninterpreted x
+      ---------------
+      |x| =? 1
+
+      |Ctrs(x)| > 1
+      ---------------
+      |x| > 1
+
+      Ctrs(x) = {C}   ...
+      ----------------------------------
       
+
+
+
+
+
+    Syntactic criterion:
+
+
+    
+
+
 
 
 
