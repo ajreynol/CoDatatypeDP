@@ -1,0 +1,67 @@
+Theory of (Co)datatypes
+
+    (co)datatypes can be declared together as mutually (co)recursive even if
+    they are not actually (co)recursive
+
+    semantically, $k$ types are mutually (co)recursive if their dependency graph
+    (x -> y if x is the type of an argument to one of y's constructors) is
+    strongly connected
+
+    this latter semantic notion is more interesting and the one we will focus on
+    in the sequel
+
+    Also, nothing forbids specifications with no (co)recursion, e.g.
+
+      datatype enat = Nat(nat) | Infty
+      codatatype complex = Complex(re: real, im: real)
+
+    In this case, it makes no difference whether the type is introduced as a
+    datatype or as a codatatype. Without loss of generality, we assume from the
+    rest of this paper that such types are declared as datatypes.
+
+
+Degenerate Codatatypes
+
+    Consider
+
+      codatatype x = X(x)
+
+    This is a finite codatatype, with a single value, which is infinite:
+    $\mu x. X(x)$
+    
+    This type is an issue because:
+
+      1. for unsat, need splitting---but splitting is a priori a datatype rule;
+         adding it to codatatypes causes trouble.
+
+      2. for sat, divergence.
+
+    We need to detect those finite codatatypes. They are easy to
+    characterize semantically.
+
+    Lemma D.1. The only possible finite cardinality for the domain interpreting
+    a (corecursive) codatatype is 1.
+
+    Proof.
+      * 
+      * 
+    Qed
+
+    An immediate consequence by the distinctness axiom is that 
+
+    Syntactic criterion:
+
+    Easy case: $k$ mutually recursive codatatypes, each equipped with one
+    constructor, all of which take each other in arguments in various
+    combinations, e.g.
+
+      codatatype a = A b a b
+      
+
+
+
+
+Implementation
+
+  * specs preprocessed to avoid spurious mutual dependencies and
+    noncorecursive codatatypes (in keeping with this paper)
