@@ -67,7 +67,7 @@
 
 \newcommand\Data{\Types_{\mathrm{dt}}}
 \newcommand\Codata{\Types_{\mathrm{cdt}}}
-\newcommand\Nondata{\Types_{\mathrm{oth}}}
+\newcommand\Nondata{\Types_{\mathrm{pln}}}
 
 \newcommand\Ctr{\Funcs_{\mathrm{ctr}}}
 \newcommand\Sel{\Funcs_{\mathrm{sel}}}
@@ -238,7 +238,7 @@ set of function symbols $\Funcs$. Types are simply atomic sorts, with no
 structure, and interpreted by nonempty domains. The set $\Types$ must contain a
 distinguished type \ty{bool} interpreted as the set of truth
 values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-The only predicate is $\teq$, and it is treated as a logical symbol,
+The only predicate is equality ($\teq$), and it is treated as a logical symbol,
 just like the connectives and quantifiers of first-order logic.
 Other predicates can be represented as functions that return $\ty{bool}$.
 The metavariables $\delta, \tau$ range over types, with $\delta$ reserved
@@ -266,18 +266,18 @@ Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
-We assume a signature $\Sig = (\Types, \Funcs)$. The types are partioned into
+We fix a signature $\Sig = (\Types, \Funcs)$. The types are partioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
-datatypes, $\Codata$ are the codatatypes, and $\Nondata$ are the remaining
-types. The functions are partitioned into $\Funcs = \Ctr \mathrel{\uplus} \Sel$, where
+datatypes, $\Codata$ are the codatatypes, and $\Nondata$ are the remaining,
+plain types. The functions are partitioned into $\Funcs = \Ctr \mathrel{\uplus} \Sel$, where
 $\Ctr$ are the constructors and $\Sel$ are the selectors. (There is no need to
 consider other function symbols, because they can be abstracted away as
 variables when combining theories.)
 
-In practice (e.g., in an SMT problem), the signature is given by specifying the
-uninterpreted types first (in any order), then the (co)datatypes with their
-constructors and selectors in groups of mutually (co)recursive groups of
-(co)datatypes, and finally any other function symbols.
+In an SMT problem, the signature is given by specifying the uninterpreted types
+first (in any order), then the (co)datatypes with their constructors and
+selectors in groups of mutually (co)recursive groups of (co)datatypes, and
+finally any other function symbols.
 
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Each datatype $\delta$ is equipped by
@@ -287,10 +287,10 @@ plain, be or be one of the newly introduced (co)datatypes. To every
 argument corresponds a selector. The introduced names for the (co)datatypes, the
 constructors, and the selectors must be distinct and different from already
 introduced ones.%
-\footnote{In practice, it can be useful to specify the same selector
-for several constructors of the same (co)datatype,
-as long as the argument types coincide \cite[Section~3]{blanchette-et-al-2014-codata}.
-However, this is not allowed by SMT-LIB 2.}
+\footnote{It can be convenient to specify the same selector
+for several constructors associated with the same (co)data\-type,
+as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
+However, this is disallowed by SMT-LIB 2, so we do not consider it here.}
 Schematically, using a syntax similar to Standard ML, Haskell,
 or SMT-LIB:
 %
@@ -310,6 +310,14 @@ $\const{C}_{i\negvthinspace j} : \tau_{i\negvthinspace j}^1\times\cdots\times\ta
 and $\const{s}_{i\negvthinspace j}^{\,k} : \delta_i \to \tau_{i\negvthinspace j}^{\,k}$. Defaults are assumed for
 the selector names if they are omitted.
 
+For types with several constructors, it is customary to provide discriminators
+$\const{d} : \const{s}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
+they are not strictly necessary:
+To simplify the presentation of the decision procedure, we treat $\const{d}_{i\negvthinspace
+j}(x)$ as an abbreviation for
+$x = \const{C}_{i\negvthinspace j}(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x))$
+instead of extending the signature.
+
 Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 outside this fragment. For example, the specification
 \[\begin{aligned}[t]
@@ -324,11 +332,12 @@ is supported, whereas
 \end{aligned}
 \]
 is beyond the fragment considered here. In principle, rank-1 (top-level)
-polymorphism would be easy to support; nesting datatypes inside datatypes,
-and likewise for codatatypes, can be reduced to the mutual case. So the only
-genuinely interesting cases missing are mixed nested (co)recursion
-(as in the \ty{tree} example above) as well as (co)recursion through a
-non-(co)datatype (both of which make sense \cite{blanchette-et-al-2014-codata}).
+polymorphism would be easy to support; nesting datatypes inside datatypes, and
+likewise for codatatypes, can be reduced to the mutual case
+\cite{gunter-1993-not}. So the only genuinely interesting cases missing are
+mixed nested (co)recursion (as in the \ty{tree} example above) as well as
+(co)recursion through a non-(co)datatype (both of which make sense
+\cite{blanchette-et-al-2014-codata}).
 
 Because the types are inhabited (nonempty), a datatype specification is
 admissible only if a ground term can be exhibited that belongs to that datatype.
@@ -342,8 +351,6 @@ For codatatypes, no such check is necessary. Given the specification
 %
 the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 nonemptiness.
-
-discriminators go here
 
 Datatypes and codatatypes can be characterized axiomatically. They share basic
 properties of constructors and selectors. All properties below are implicitly
@@ -371,13 +378,39 @@ $i$, $j$, $\jPrime$, and $k$ within bounds:
 \end{aligned}
 \]
 %
-Expressed in the algebraic jargon,
-exhaustiveness ensures that ``no junk'' arises, whereas
-distinctness and injectivity ensure that ``no confusion'' occur,
-whereas 
+Expressed in the algebraic jargon, exhaustiveness ensures that ``no junk''
+exists, whereas distinctness and injectivity ensure that ``no confusion''
+arises.
 
-%Sometimes, the requirements on constructors are stipulated as ``no junk, no
-%confusion.''
+Datatypes are additionally characterized by an induction axiom schema:
+%
+\[
+\begin{aligned}[t]
+\text{Induction:}\quad
+for each i, j: (\forall \bar x. IH_{ij}[\bar x] --> P_i(C_{ij}(\bar x)))
+---------------------------
+P_1[x_1] \& ... \& P_l[x_l]
+\end{aligned}
+\]
+%
+Ensures that we get the smallest model. E.g. for natural numbers, this rules out
+nonstandard models, which could contain cyclic elements (e.g., n such that
+n = Suc n) or even infinite acyclic elements $Suc (Suc \ldots)$.
+
+For codatatype, the dual notion is that of a coinduction principle that
+depends on witnesses $R$ that are required to be bisimulations:
+%
+\[
+\begin{aligned}[t]
+\text{Conduction:}\quad
+for each i: R_i[x_i, y_i]
+for each i: (\forall x y. R_i[x, y] --> \bigwedge_k s_{ij}^k(x) \sim s_{ij}^k(y))
+---------------------------------
+x_1 \teq y_1 & ... & x_l \teq y_l
+\end{aligned}
+\]
+
+For codatatypes
 
     * datatypes:
       * induction axiom (schema)
@@ -793,6 +826,7 @@ TODO
 
   * Strategies
   * Implementation
+    * mention that discriminators are their own function symbols
     * what is an SMT theory solver
     * cooperation with Nelson-Oppen / integration into SMT solver
     * "mu" stuff
