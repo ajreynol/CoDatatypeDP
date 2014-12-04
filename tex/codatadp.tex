@@ -424,6 +424,74 @@ constructors, whereas the codatatypes are viewed through their selectors
 emphasizes the commonality between datatypes and codatatypes, while sacrificing
 a theoretically fruitful notion of duality.
 
+
+    semantically, $k$ types are mutually (co)recursive if their dependency graph
+    (x -> y if x is the type of an argument to one of y's constructors) is
+    strongly connected
+
+    (co)datatypes can be declared together as mutually (co)recursive even if
+    they are not actually (co)recursive
+
+    the semantic notion is more fruitful and the one we will focus on in the
+    sequel
+
+    Also, nothing forbids specifications with no (co)recursion, e.g.
+
+      datatype enat = Nat(nat) | Infty
+      codatatype complex = Complex(re: real, im: real)
+
+    In this case, it makes no difference whether the type is introduced as a
+    datatype or as a codatatype. Without loss of generality, we consider that
+    these types are datatypes instead of codatatypes.
+
+
+Degenerate Codatatypes
+
+    Consider
+
+      codatatype a = A(a)
+
+    This is a finite codatatype, with a single value, which is infinite:
+    $\mu a. A(a)$
+    
+    We need to detect those finite codatatypes. They are easy to
+    characterize semantically.
+
+    Lemma D.1. The only possible finite cardinality for the domain interpreting
+    a (corecursive) codatatype is 1.
+
+    Proof.
+      Assume you have at least 2 different values of a codatatype.
+      They differ at one point.
+      * 
+    Qed
+
+    An immediate consequence by the distinctness axiom is that these types have
+    necessarly one constructor, and that all arguments are of types of
+    cardinality 1.
+
+    Easy case: $k$ mutually recursive codatatypes, each equipped with one
+    constructor, all of which take each other in arguments in various
+    combinations, with potential other types that are known to have cardinality
+    1. e.g.
+
+      codatatype b = B b c b
+             and c = C c b c
+
+    Medium case: like above, but some of the arguments are other types not
+    participating in the corecursion that are known to have cardinality 1, e.g.
+
+      codatatype d = D unit d d unit
+
+    where "unit" is a datatype with the single constructor "Unity : unit".
+
+    Though case: like above, but with any other types where it's not clear
+    whether it could have cardinality one or not.
+
+      type e
+      codatatype f = F e f f unit
+
+
 \section{The Calculus}
 \label{sec:the-calculus}
 
