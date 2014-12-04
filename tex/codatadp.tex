@@ -266,7 +266,8 @@ applying the $n$-ary function symbol
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
 %
-Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
+Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$,
+and $\bigwedge_i \varphi_i$ abbeviates a conjunction $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
@@ -422,7 +423,7 @@ depends on witnesses $R$ that are required to be bisimulations:
   \mathrel\land
   \const{d}_j(v) \longrightarrow \bigwedge_k \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
 \end{gathered}$}
-\UIC{\strut$v_1 \teq w_1 \mathrel\land \cdots \mathrel\land v_l \teq w_l$}
+\UIC{\strut$\bigwedge_i v_i \teq w_i$}
 \DP
 \end{aligned}
 \]
