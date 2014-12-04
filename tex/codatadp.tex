@@ -39,7 +39,7 @@
 
 \DeclareMathAlphabet{\mathcal}{OT1}{pzc}{m}{it}
 
-
+\newcommand\iPrime{i\vthinspace'\negvthinspace}
 \newcommand\jPrime{j\vthinspace'\negvthinspace}
 
 \newcommand\Sig{\mathrm{\Sigma}}
@@ -401,12 +401,14 @@ Datatypes are additionally characterized by an induction axiom schema:
 \end{aligned}
 \]
 where the induction hypothesis $\mathit{IH}_{ij}^k(x)$
-denotes either $P_{i'}(x)$ for some $i$ such that this is type
+denotes either $P_{\iPrime}(x)$ if there exists some $i$ such that this is type
 correct or else $\top$.
 %
-Ensures that we get the smallest model. E.g. for natural numbers, this rules out
-nonstandard models, which could contain cyclic elements (e.g., n such that
-n = Suc n) or even infinite acyclic elements $Suc (Suc \ldots)$.
+The axiom schema ensures that we get a smallest model. For example,
+for a datatype of natural numbers constructed from $\const{Z}$ and $\const{S}$,
+this rules out nonstandard models, which could contain cyclic values (e.g.,
+an $n$ such that $n \teq \const{S}(n)$) or even infinite acyclic values
+$\const{S}(\const{S}(\ldots))$.
 
 For codatatype, the dual notion is that of a coinduction principle that
 depends on witnesses $R$ that are required to be bisimulations:
