@@ -1,14 +1,14 @@
 Theory of (Co)datatypes
 
-    (co)datatypes can be declared together as mutually (co)recursive even if
-    they are not actually (co)recursive
-
     semantically, $k$ types are mutually (co)recursive if their dependency graph
     (x -> y if x is the type of an argument to one of y's constructors) is
     strongly connected
 
-    this latter semantic notion is more interesting and the one we will focus on
-    in the sequel
+    (co)datatypes can be declared together as mutually (co)recursive even if
+    they are not actually (co)recursive
+
+    the semantic notion is more fruitful and the one we will focus on in the
+    sequel
 
     Also, nothing forbids specifications with no (co)recursion, e.g.
 
@@ -16,8 +16,8 @@ Theory of (Co)datatypes
       codatatype complex = Complex(re: real, im: real)
 
     In this case, it makes no difference whether the type is introduced as a
-    datatype or as a codatatype. Without loss of generality, we assume from the
-    rest of this paper that such types are declared as datatypes.
+    datatype or as a codatatype. Without loss of generality, we consider that
+    these types are datatypes instead of codatatypes.
 
 
 Degenerate Codatatypes
@@ -29,7 +29,7 @@ Degenerate Codatatypes
     This is a finite codatatype, with a single value, which is infinite:
     $\mu a. A(a)$
     
-    This type is an issue because:
+    This type is problematic because:
 
       1. for unsat, need splitting---but splitting is a priori a datatype rule;
          adding it to codatatypes causes trouble.
@@ -43,7 +43,8 @@ Degenerate Codatatypes
     a (corecursive) codatatype is 1.
 
     Proof.
-      * 
+      Assume you have at least 2 different values of a codatatype.
+      They differ at one point.
       * 
     Qed
 
@@ -90,34 +91,43 @@ Degenerate Codatatypes
 
       k1 ~= k1' | ... | kn ~= kn' | Y = Y'
 
-    with a bias for the first cases.
+    (for fresh k's) with a bias for the first cases.
 
     In general, the best we can do, because the "= 1, > 1" problem is
-    undecidable. (Need a quick proof here.)
+    undecidable. (Easy to see, because validity of a FOL formula $\varphi$ is undecidable, and we
+    can encode a cardinality constraint such as $\varphi \longleftrightarrow (\forall x y. x \teq y)$.)
 
-    Above, we've assumed we can determine cardinality constraits (= 1, > 1, =?
-    1). Here's the calculus (TODO):
-
-      uninterpreted x
-      ---------------
-      |x| =? 1
+    More formally, we need a calculus to determine cardinality constraits (= 1,
+    > 1, neither). Here's the calculus (TODO):
 
       |Ctrs(x)| > 1
-      ---------------
+      --------------- ManyCtrs
       |x| > 1
 
-      Ctrs(x) = {C}   ...
-      ----------------------------------
+      Ctrs(x) = {C}   C : \tau_1 ... \tau_n -> \delta   |\tau_i| > 1
+      -------------------------------------------------------------- NonUnitArg
+      |x| > 1
       
+      x : T_other   problem is ground
+      ------------------------------- GroundProb
+      |x| > 1
 
 
+      x : DT   Ctrs(x) = {C}   C : \tau_1 ... \tau_n -> \delta   forall i: |\tau_i| = 1
+      ---------------------------------------------------------------------------------- DTUnitArgs
+      |x| = 1
+
+      X @ {x1,...,xk} : mutually recursive CDTs   forall i: Ctrs(x_i) = {C_i}   forall i: C_i : \tau_1 ... \tau_n -> \delta   forall i: \tau_i \notin X --> |\tau_i| = 1
+      ---------------------------------------------------------------------------------- CoDTUnitArgs
+      |x_i| = 1
+
+    GroundProb could be strengthened e.g. by inferring monotonicity of x.
 
 
+    If |x| = 1 for codatatype, enable the "singleton" rule. If neither |x| = 1
+    nor |x| > 1 is derivable for codatatype, generate the extra constraint as an
+    additional axiom.
 
-    Syntactic criterion:
-
-
-    
 
 
 
