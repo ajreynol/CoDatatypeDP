@@ -245,7 +245,7 @@ A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are simply atomic sorts, with no
 structure, and interpreted by nonempty domains. The set $\Types$ must contain a
 distinguished type \ty{bool} interpreted as the set of truth
-values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
+values $\{\bot, \top\}$. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
 The only predicate is equality ($\teq$), and it is treated as a logical symbol,
 just like the connectives and quantifiers of first-order logic.
 Other predicates can be represented as functions that return $\ty{bool}$.
@@ -395,11 +395,14 @@ Datatypes are additionally characterized by an induction axiom schema:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{for each i, j: $(\forall \bar x. IH_{ij}[\bar x] --> P_i(C_{ij}(\bar x)))$}
-\UIC{$P_1[x_1] \& ... \& P_l[x_l]$}
+\AXC{$\forall x_1 \ldots \vthinspace x_{n_{ij}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{ij}^k[\bar x_k]\bigr) \longrightarrow P_i[C_{ij}(\bar x)]$\quad\text{for each $i,j$}}
+\UIC{$P_1[v_1] \mathrel\land \cdots \mathrel\land P_l[v_l]$}
 \DP
 \end{aligned}
 \]
+where the induction hypothesis $\mathit{IH}_{ij}^k(x)$
+denotes either $P_{i'}(x)$ for some $i$ such that this is type
+correct or else $\top$.
 %
 Ensures that we get the smallest model. E.g. for natural numbers, this rules out
 nonstandard models, which could contain cyclic elements (e.g., n such that
@@ -412,7 +415,7 @@ depends on witnesses $R$ that are required to be bisimulations:
 \begin{aligned}[t]
 \text{Conduction:}\quad
 \AXC{for each i: $R_i[x_i, y_i]$}
-\AXC{for each i: $(\forall x y. R_i[x, y] --> \bigwedge_k s_{ij}^k(x) \sim s_{ij}^k(y))$}
+\AXC{for each i: $(\forall x y. R_i[x, y] \longrightarrow \bigwedge_k s_{ij}^k(x) \sim s_{ij}^k(y))$}
 \BIC{$x_1 \teq y_1 \& ... \& x_l \teq y_l$}
 \DP
 \end{aligned}
