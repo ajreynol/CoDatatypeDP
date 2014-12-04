@@ -729,9 +729,8 @@ for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\con
 \rn{Singleton}
 \(
 \inferrule{
-  t, u \in \tEc
+  t, u : \tau \in \tEc
   \quad
-  t, u : \tau,
   \tau \in \Codata,
   \mid \tau \mid = 1
 }{
@@ -742,7 +741,11 @@ for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\con
 \rn{Split} 
 \(
 \inferrule{
-  s^i_j( t ) \in \tEc \quad \text{ or } \quad t : \tau, \tau \in \Data, \tau \text{ finite }
+  t : \tau \in \tEc 
+  \quad 
+  ( s( t ) \in \tEc, s \in \Sel^\tau ) 
+  \text{ or } 
+  ( \tau \in \Data, \tau \text{ finite } )
 }{
   \Ec := \Ec, t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \ldots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ) 
 }
@@ -760,9 +763,10 @@ for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\con
 Finally, if neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
 the rules from Figure~\ref{fig:split-rule} are applied.
 The rule \rn{Singleton} handles the degenerate case when there are two terms from $\tEc$ having a singleton codatatype type,
-in which case we can infer they are equal.
+in which case they must be equivalent.
 Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type, 
-then we require the equivalence class of $t$ to contain a constructor term, which is enforced by the rule \rn{Split}.
+then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
+which is enforced by the rule \rn{Split}.
 
 \subsection{Correctness}
 
@@ -776,14 +780,16 @@ All derivation trees are finite.
 \end{lemma}
 \begin{proof}
 Consider a derivation tree with root node $\Ec$.
-Let $S^0$ be the set of terms that are arguments of a selector application in $\tEc$.
-For $i \geq 0$, let $S^{i+1}$ $=$ $S_i \cup \{ s( t ) \mid t \in S^i, t : \tau, \tau \in \Data, \tau \in  \text{ finite}, s \in \Sel^\tau  \}$.
-Let $S^\ast$ be the fixed point of this sequence, which is guarenteed to be a finite set 
-since $S^i \setminus S^0$ only includes selectors applied to terms having finite datatype type.
-Now, let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t \in S^\ast, t : \tau, C_i \in \Ctr^\tau \}$.
+Let $S$ be the set of terms occurring as the argument of a selector in $\tEc$.
+For each term $t \in \tEc$ of finite datatype type $\tau$,
+let $S^0_t$ be the set $\{ t \}$,
+and for $i \geq 0$ let $S^{i+1}_t =$ $S^i_t \cup \{ s( u ) \mid u : \upsilon \in S^i, \upsilon \in \Data, \upsilon \text{ finite}, s \in \Sel^{\upsilon}  \}$.
+Let $S^\ast_t$ be the fixed point of this sequence for all $t$, which we know is finite since the values of $\tau$ are of finite size.
+Let $S^\ast$ be the union of $S^\ast_t$ for all such $t$,
+and let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \cup S^\ast, C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$, 
-it can be shown by case analysis on the rules of the calculus that each non-root node is 
-the result of adding an equality between two terms from $\tcEc$ to its parent node.
+it can be shown by case analysis on the rules of the calculus that each non-root node $\Ec'$ is such that 
+$\mathcal{T}(\Ec') \subseteq \tcEc $, and moreover thus is the result of adding an equality between two terms from $\tcEc$ to its parent node.
 Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\mid \tcEc \mid^2$,
 which is finite since $\tcEc$ is finite.
 \qed
@@ -801,7 +807,7 @@ If the children of $\Ec$ are closed derivation trees
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
 then by the induction hypothesis $\Ec \cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
 for each $C_i \in \Ctr^\tau$.
-Since all models of $\thD$ entail exactly one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
+Since all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is unsatisfiable in $\thD$.
 Otherwise, the child of $\Ec$ is a closed derivation tree 
 whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, \rn{Unify$_1$}, \rn{Bisimilar}, or \rn{Singleton}.
