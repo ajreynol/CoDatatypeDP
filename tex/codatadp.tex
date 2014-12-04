@@ -27,6 +27,12 @@
 \usepackage{version}
 \usepackage[all]{xy}
 
+% for "bussproofs" package
+\EnableBpAbbreviations
+\def\ScoreOverhang{1.5pt}
+\def\proofSkipAmount{\vskip 0pt}
+\def\defaultHypSeparation{\hskip0.75em}
+
 \DeclareFontFamily{OT1}{pzc}{}
 \DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
 \DeclareMathAlphabet{\mathscr}{OT1}{pzc}{m}{it}
@@ -216,6 +222,8 @@ Blah.
 
 Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
 
+The proofs are part of a report.
+
 \paragraph{Related Work.}
 
     * point to Barrett et al. for SMT datatypes
@@ -387,9 +395,9 @@ Datatypes are additionally characterized by an induction axiom schema:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-for each i, j: (\forall \bar x. IH_{ij}[\bar x] --> P_i(C_{ij}(\bar x)))
----------------------------
-P_1[x_1] \& ... \& P_l[x_l]
+\AXC{for each i, j: $(\forall \bar x. IH_{ij}[\bar x] --> P_i(C_{ij}(\bar x)))$}
+\UIC{$P_1[x_1] \& ... \& P_l[x_l]$}
+\DP
 \end{aligned}
 \]
 %
@@ -403,10 +411,10 @@ depends on witnesses $R$ that are required to be bisimulations:
 \[
 \begin{aligned}[t]
 \text{Conduction:}\quad
-for each i: R_i[x_i, y_i]
-for each i: (\forall x y. R_i[x, y] --> \bigwedge_k s_{ij}^k(x) \sim s_{ij}^k(y))
----------------------------------
-x_1 \teq y_1 & ... & x_l \teq y_l
+\AXC{for each i: $R_i[x_i, y_i]$}
+\AXC{for each i: $(\forall x y. R_i[x, y] --> \bigwedge_k s_{ij}^k(x) \sim s_{ij}^k(y))$}
+\BIC{$x_1 \teq y_1 \& ... \& x_l \teq y_l$}
+\DP
 \end{aligned}
 \]
 
