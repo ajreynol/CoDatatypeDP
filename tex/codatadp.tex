@@ -395,8 +395,8 @@ Datatypes are additionally characterized by an induction axiom schema:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{\strut$\forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[\bar x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(\bar x)]$\quad\text{for each $i,j$}}
-\UIC{\strut$P_1[v_1] \mathrel\land \cdots \mathrel\land P_l[v_l]$}
+\AXC{\strut$\bigwedge_{i,j} \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
+\UIC{\strut$\bigwedge_{i} P_i[v_i]$}
 \DP
 \end{aligned}
 \]
@@ -416,14 +416,12 @@ depends on witnesses $R$ that are required to be bisimulations:
 \[
 \begin{aligned}[t]
 \text{Coinduction:}\quad
-\AXC{\strut$R_1[v_1, w_1] \mathrel\land \cdots \mathrel\land R_l[v_l, w_l]$}
-\noLine
-\UIC{\strut$\forall v\; w.\;\, R_i[v, w] \longrightarrow
+\AXC{\strut$\begin{gathered}\textstyle \bigwedge_i R_i[v_i, w_i] \\[-\jot]\textstyle
+\bigwedge_i \forall v\; w.\;\, R_i[v, w] \longrightarrow
   \bigwedge_j \const{d}_j(v) \teq \const{d}_j(w)
   \mathrel\land
-  \const{d}_j(v) \longrightarrow \bigwedge_k \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)$}
-\noLine
-\UIC{\strut\quad for each $i$}
+  \const{d}_j(v) \longrightarrow \bigwedge_k \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
+\end{gathered}$}
 \UIC{\strut$v_1 \teq w_1 \mathrel\land \cdots \mathrel\land v_l \teq w_l$}
 \DP
 \end{aligned}
