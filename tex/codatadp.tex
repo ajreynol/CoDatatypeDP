@@ -382,7 +382,7 @@ $i$, $j$, $\jPrime$, and $k$ within bounds:
   & \is{C}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \is{C}_{im_i}(x)
   \\
 \text{Selection:}\quad
-  & s_{ij}^k(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k
+  & s_{i\negvthinspace j}^k(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k
 \end{aligned}
 \]
 %
@@ -395,12 +395,12 @@ Datatypes are additionally characterized by an induction axiom schema:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{$\forall x_1 \ldots \vthinspace x_{n_{ij}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{ij}^k[\bar x_k]\bigr) \longrightarrow P_i[C_{ij}(\bar x)]$\quad\text{for each $i,j$}}
+\AXC{$\forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[\bar x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(\bar x)]$\quad\text{for each $i,j$}}
 \UIC{$P_1[v_1] \mathrel\land \cdots \mathrel\land P_l[v_l]$}
 \DP
 \end{aligned}
 \]
-where the induction hypothesis $\mathit{IH}_{ij}^k(x)$
+where the induction hypothesis $\mathit{IH}_{i\negvthinspace j}^k(x)$
 denotes either $P_{\iPrime}(x)$ if there exists some $i$ such that this is type
 correct or else $\top$.
 %
@@ -417,7 +417,7 @@ depends on witnesses $R$ that are required to be bisimulations:
 \begin{aligned}[t]
 \text{Conduction:}\quad
 \AXC{for each i: $R_i[x_i, y_i]$}
-\AXC{for each i: $(\forall x y. R_i[x, y] \longrightarrow \bigwedge_k s_{ij}^k(x) \sim s_{ij}^k(y))$}
+\AXC{for each i: $(\forall x y. R_i[x, y] \longrightarrow \bigwedge_k s_{i\negvthinspace j}^k(x) \sim s_{i\negvthinspace j}^k(y))$}
 \BIC{$x_1 \teq y_1 \& ... \& x_l \teq y_l$}
 \DP
 \end{aligned}
@@ -847,6 +847,7 @@ TODO
   * Implementation
     * mention that discriminators are their own function symbols
     * what is an SMT theory solver
+    * sharing is caring (and other "refinements" on calculus)
     * cooperation with Nelson-Oppen / integration into SMT solver
     * "mu" stuff
     * no "internal search"
