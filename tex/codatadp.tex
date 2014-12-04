@@ -475,7 +475,7 @@ An application of a rule is \emph{redundant} if it is non-terminal and at least 
 \rn{Conflict}
 \(
 \inferrule{
-  t \teq u, t \tneq u \in \Ec
+  t_1 \teq t_2, t_1 \tneq t_2 \in \Ec
 }{
   \bot
 }
@@ -522,12 +522,12 @@ An application of a rule is \emph{redundant} if it is non-terminal and at least 
 \label{fig:cc-rules}
 \end{figure}
 
-Figure~\ref{fig:cc-rules} gives the rules for constructing the bidirectional closure of $\Ec$.
-The rules \rn{Refl}, \rn{Symm}, \rn{Trans}, and \rn{Cong} together compute the (upwards) congruence closure,
-after which a conflict may be recognized by \rn{Conflict} when an inconsistency is found.
-The rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downwards) unification,
-where additional equalities are inferred based on the injectivity of constructors by \rn{Unify$_1$},
-and failures to unify equivalent terms are recognized by \rn{Unify$_2$}.
+Figure~\ref{fig:cc-rules} gives the basic rules of our calculus.
+Together with the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, the rule \rn{Cong} computes the (upwards) congruence closure,
+while the rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downwards) unification.
+In the unification rules, additional equalities are inferred based on the injectivity of constructors by \rn{Unify$_1$},
+and failures to unify equated terms are recognized by \rn{Unify$_2$}.
+The rule \rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
 
 \begin{figure}[t]
 \centering
@@ -582,7 +582,8 @@ We say that path $p$ is \emph{induced by $\Ec$} if and only if each of its edges
 Notice that since $\Ec$ contains a finite set of equivalence classes, all paths induced by $\Ec$ have finite length.
 We call the \emph{source} of a path is the source of its first edge, and the \emph{destination} of a path is the destination of its last edge.
 We say a path $p$ is \emph{maximal} if its destination $\ec{t}$ is either
-the source of an edge in $p$ or does not contain an application of a constructor (including the case when $t$ is not of datatype/codatatype type).
+the source of an edge in $p$, 
+or does not contain an application of a constructor (including the case when $t$ is not of datatype/codatatype type).
 The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all maximal paths with source $\ec{t_1}$ and destination $\ec{t_2}$ that are induced by $\Ec$.
 The set $\tpath{\Ec}{\ec{t_1}}$ is the union of $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ for all $t_2 \in \tEc$.
 We will write, for instance, $\ec{t_1} \rightarrow^{C_1}_{n_1} \ec{t_2} \rightarrow^{C_2}_{n_2} \ec{t_3}$ 
@@ -623,23 +624,42 @@ for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\con
 \begin{figure}[t]
 \centering
 \begin{tabular}{c}
+\rn{Singleton}
+\(
+\inferrule{
+  t, u \in \tEc
+  \quad
+  t, u : \tau,
+  \tau \in \Codata,
+  \mid \tau \mid = 1
+}{
+  \Ec := \Ec, t \teq u
+}
+\)
+\\[3.7ex]
 \rn{Split} 
 \(
 \inferrule{
-  s^i_j( t ) \in \tEc, \text{ or } t : \tau \text{ finite }
+  s^i_j( t ) \in \tEc \quad \text{ or } \quad t : \tau, \tau \in \Data, \tau \text{ finite }
 }{
   \Ec := \Ec, t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \ldots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ) 
 }
 \)
 \end{tabular}
-\caption{Rule for splitting.  We split on the constructor for $t$ if there is a selector applied to $t$ or if its type is finite.
+\caption{Rules for splitting.  
+%All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
+%Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
 }
 \label{fig:split-rule}
 \end{figure}
 
+\rem{Require : all co-datatypes either have infinite cardinality, or have cardinality 1.}
+
 Finally, if neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
-we split on the constructor type for certain terms $t$.
-In particular, if there is a selector term applied to $t$, or if $t$ has a finite type, 
+the rules from Figure~\ref{fig:split-rule} are applied.
+The rule \rn{Singleton} handles the degenerate case when there are two terms from $\tEc$ having a singleton codatatype type,
+in which case we can infer they are equal.
+Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type, 
 then we require the equivalence class of $t$ to contain a constructor term, which is enforced by the rule \rn{Split}.
 
 \subsection{Correctness}
@@ -655,9 +675,9 @@ All derivation trees are finite.
 \begin{proof}
 Consider a derivation tree with root node $\Ec$.
 Let $S^0$ be the set of terms that are arguments of a selector application in $\tEc$.
-For $i \geq 0$, let $S^{i+1}$ $=$ $S_i \cup \{ s( t ) \mid t \in S^i, t : \tau \text{ finite}, s \in \Sel^\tau  \}$.
+For $i \geq 0$, let $S^{i+1}$ $=$ $S_i \cup \{ s( t ) \mid t \in S^i, t : \tau, \tau \in \Data, \tau \in  \text{ finite}, s \in \Sel^\tau  \}$.
 Let $S^\ast$ be the fixed point of this sequence, which is guarenteed to be a finite set 
-since $S^i \setminus S^0$ only includes selectors applied to terms having finite type.
+since $S^i \setminus S^0$ only includes selectors applied to terms having finite datatype type.
 Now, let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t \in S^\ast, t : \tau, C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$, 
 it can be shown by case analysis on the rules of the calculus that each non-root node is 
@@ -674,7 +694,7 @@ If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is uns
 We prove this by structural induction on the (closed) derivation tree with root node $\Ec$.
 First, if the derivation tree is an application of \rn{Conflict}, \rn{Unify$_2$}, or \rn{Cyclic},
 then $\Ec$ is unsatisfiable in $\thD$.
-\rem{Elaborate on cyclic}
+\rem{Elaborate on cyclic?}
 If the children of $\Ec$ are closed derivation trees 
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
 then by the induction hypothesis $\Ec \cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
@@ -682,9 +702,9 @@ for each $C_i \in \Ctr^\tau$.
 Since all models of $\thD$ entail exactly one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is unsatisfiable in $\thD$.
 Otherwise, the child of $\Ec$ is a closed derivation tree 
-whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, \rn{Unify$_1$}, or \rn{Bisimilar}.
+whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, \rn{Unify$_1$}, \rn{Bisimilar}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
-\rem{Elaborate on Bisimilar}
+\rem{Elaborate on Bisimilar?}
 By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is unsatisfiable in $\thD$, 
 and thus $\Ec$ is unsatisfiable in $\thD$.
 \qed
