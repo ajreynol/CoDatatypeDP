@@ -372,7 +372,7 @@ $i$, $j$, $\jPrime$, and $k$ within bounds:
 \begin{aligned}[t]
 \text{Distinctness:}\quad
   & %\forall \bar x, \bar y.\;\,
-    \const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \qquad\text{if $j \not= \jPrime$}
+    \const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \quad\text{if $j \not= \jPrime$}
   \\
 \text{Injectivity:}\quad
   & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
@@ -395,8 +395,8 @@ Datatypes are additionally characterized by an induction axiom schema:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{$\forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[\bar x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(\bar x)]$\quad\text{for each $i,j$}}
-\UIC{$P_1[v_1] \mathrel\land \cdots \mathrel\land P_l[v_l]$}
+\AXC{\strut$\forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[\bar x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(\bar x)]$\quad\text{for each $i,j$}}
+\UIC{\strut$P_1[v_1] \mathrel\land \cdots \mathrel\land P_l[v_l]$}
 \DP
 \end{aligned}
 \]
@@ -415,10 +415,10 @@ depends on witnesses $R$ that are required to be bisimulations:
 %
 \[
 \begin{aligned}[t]
-\text{Conduction:}\quad
-\AXC{for each i: $R_i[x_i, y_i]$}
-\AXC{for each i: $(\forall x y. R_i[x, y] \longrightarrow \bigwedge_k s_{i\negvthinspace j}^k(x) \sim s_{i\negvthinspace j}^k(y))$}
-\BIC{$x_1 \teq y_1 \& ... \& x_l \teq y_l$}
+\text{Coinduction:}\quad
+\AXC{\strut$R_i[v_i, w_i]$}
+  \AXC{\strut$\forall v\; w.\;\, R_i[v, w] \longrightarrow \bigwedge_k \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)$\quad for each $i$}
+\BIC{\strut$v_1 \teq w_1 \mathrel\land \cdots \mathrel\land v_l \teq w_l$}
 \DP
 \end{aligned}
 \]
