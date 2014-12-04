@@ -29,13 +29,6 @@ Degenerate Codatatypes
     This is a finite codatatype, with a single value, which is infinite:
     $\mu a. A(a)$
     
-    This type is problematic because:
-
-      1. for unsat, need splitting---but splitting is a priori a datatype rule;
-         adding it to codatatypes causes trouble.
-
-      2. for sat, divergence.
-
     We need to detect those finite codatatypes. They are easy to
     characterize semantically.
 
@@ -73,6 +66,27 @@ Degenerate Codatatypes
       type e
       codatatype f = F e f f unit
 
+
+
+
+
+
+
+
+
+
+
+
+    This type is problematic because:
+
+      1. for unsat, need splitting---but splitting is a priori a datatype rule;
+         adding it to codatatypes causes trouble.
+
+      2. for sat, divergence.
+
+
+
+
     For cases i and ii, a decision can be made statically, and once we've
     identified that the codatatype has cardinality 1, we can activate the
     special inference rule that does E := E, X = Y.
@@ -100,6 +114,10 @@ Degenerate Codatatypes
     More formally, we need a calculus to determine cardinality constraits (= 1,
     > 1, neither). Here's the calculus (TODO):
 
+      x : T_other   problem is ground
+      ------------------------------- GroundProb
+      |x| > 1
+
       |Ctrs(x)| > 1
       --------------- ManyCtrs
       |x| > 1
@@ -107,19 +125,27 @@ Degenerate Codatatypes
       Ctrs(x) = {C}   C : \tau_1 ... \tau_n -> \delta   |\tau_i| > 1
       -------------------------------------------------------------- NonUnitArg
       |x| > 1
-      
-      x : T_other   problem is ground
-      ------------------------------- GroundProb
-      |x| > 1
 
 
       x : DT   Ctrs(x) = {C}   C : \tau_1 ... \tau_n -> \delta   forall i: |\tau_i| = 1
       ---------------------------------------------------------------------------------- DTUnitArgs
       |x| = 1
 
-      X @ {x1,...,xk} : mutually recursive CDTs   forall i: Ctrs(x_i) = {C_i}   forall i: C_i : \tau_1 ... \tau_n -> \delta   forall i: \tau_i \notin X --> |\tau_i| = 1
+      X @ {x1,...,xk} : mutually corecursive CDTs   forall i: Ctrs(x_i) = {C_i}   forall i: C_i : \tau_1 ... \tau_n -> \delta   forall i: \tau_i \in X \mathrl\lor |\tau_i| = 1
       ---------------------------------------------------------------------------------- CoDTUnitArgs
       |x_i| = 1
+
+
+    Soundness theorem goes here.
+
+    Theorem (Completeness). If problem ground, then assign a = 1 or > 1 constraint
+    to all pathological types.
+
+    Proof.
+    Generalize to all types. Induction on the rules.
+    Qed.
+
+
 
     GroundProb could be strengthened e.g. by inferring monotonicity of x.
 
@@ -138,3 +164,6 @@ Implementation
 
   * specs preprocessed to avoid spurious mutual dependencies and
     noncorecursive codatatypes (in keeping with this paper)
+
+  * card constraint calculus easily implemented as a recursive function that
+    returns "= 1", "> 1", or donno.
