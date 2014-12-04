@@ -416,12 +416,14 @@ depends on witnesses $R$ that are required to be bisimulations:
 \[
 \begin{aligned}[t]
 \text{Coinduction:}\quad
-\AXC{\strut$R_i[v_i, w_i]$\quad for each $i$}
+\AXC{\strut$R_1[v_1, w_1] \mathrel\land \cdots \mathrel\land R_l[v_l, w_l]$}
 \noLine
 \UIC{\strut$\forall v\; w.\;\, R_i[v, w] \longrightarrow
-  \bigwedge_j \const{d}_j(v) \longleftrightarrow \const{d}_j(w)
+  \bigwedge_j \const{d}_j(v) \teq \const{d}_j(w)
   \mathrel\land
-  \const{d}_j(v) \longrightarrow \bigwedge_k \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)$\quad for each $i,j$}
+  \const{d}_j(v) \longrightarrow \bigwedge_k \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)$}
+\noLine
+\UIC{\strut\quad for each $i$}
 \UIC{\strut$v_1 \teq w_1 \mathrel\land \cdots \mathrel\land v_l \teq w_l$}
 \DP
 \end{aligned}
