@@ -200,7 +200,7 @@ codatatypes. The procedure is described abstractly as a calculus
 (Section~\ref{sec:the-calculus}). To our knowledge, this is the first decision
 procedure for codatatypes. For the datatype case, it roughly follows the lines
 of Barrett et al.\ \cite{barrett-et-al-2007}. Because datatypes and codatatypes
-share many of the same properties, it is sensible to consider them together.
+share many of the same properties, it makes sense to consider them together.
 
 %  * codatatypes were added later, motivated by the use of SMT solvers as
 %    backends to proof assistants (more specifically, CVC4 to Isabelle/HOL)
@@ -619,6 +619,8 @@ Degenerate Codatatypes
 
   * SMT background
 
+\subsection{The Ground Case}
+
   * Rewriter
   * Actual calculus
 
@@ -857,7 +859,7 @@ Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
 which is enforced by the rule \rn{Split}.
 
-\subsection{Correctness}
+\paragraph{Correctness.}
 
 A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by 
 a non-redundant application of a derivation rule to its parent node.
@@ -915,7 +917,11 @@ TODO
 \end{proof}
 
 \rem{Thus, sound and complete.}
-  
+
+\subsection{Extension to Quantified Formulas}
+
+Blah.
+
 \section{The Theory Solver}
 \label{sec:the-theory-solver}
 
