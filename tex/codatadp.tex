@@ -417,8 +417,16 @@ finally any other function symbols.
 
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Polymorphic types, nested
-(co)recursion, and datatype--codatatype mixtures fall outside this fragment. In
-the presentation, we allow ourselves some metalevel parameterization
+(co)recursion, and datatype--codatatype mixtures fall outside this fragment.%
+\footnote{%
+In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
+would be easy to support; nesting datatypes inside datatypes, and
+likewise for codatatypes, can be reduced to the mutual case
+\cite{gunter-1993-not}. So the only genuinely interesting cases missing are
+mixed nested (co)recursion (as in the \ty{tree} example above) as well as
+(co)recursion through a non-(co)datatype (both of which make sense
+\cite{blanchette-et-al-2014-codata}).}
+In the presentation, we allow ourselves some metalevel parameterization
 % at the metalevel
 by using subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
 family of ground types $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
@@ -461,7 +469,6 @@ To simplify the presentation of the decision procedure, we treat $\const{d}_{i\n
 j}(x)$ as an abbreviation for
 $x = \const{C}_{i\negvthinspace j}(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x))$
 instead of extending the signature.
-
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
@@ -1005,50 +1012,39 @@ Blah.
 \section{Experimental Results}
 \label{sec:experimental-results}
 
-  * Constructed examples
-    * proving
-    * model finding?
-
-  * Isabelle benchmarks
-
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-  * presented a decision procedure for datatypes and codatatypes
+We presented a decision procedure for datatypes and codatatypes and implemented
+it in the SMT solver CVC4. Our main theoretical contribution has been the
+extension of the procedure with codatatypes. Codatatypes are not very difficult
+per se, but there are tricky corner cases to take care of if we care about
+completeness (which we do). On the practical side, we obtained interesting
+results on Isabelle benchmarks, including some rather
+%mind-boggling
+puzzling bisimulation proofs.
 
-  * part of our program to reduce the gap between automatic and interactive
-    theorem proving
-  * and to enrich provers with more high-level features that can be implemented
-    efficiently
-
-Future work:
-
-  * more evaluation
-    * use it in a new Nitpick-like tool
-  * recursive and corecursive functions
-    (and rewriting)
-  * extensions, perhaps straightforward, to polymorphism and nested
-    (co)recursion
-
-In principle, rank-1 (top-level)
-polymorphism would be easy to support; nesting datatypes inside datatypes, and
-likewise for codatatypes, can be reduced to the mutual case
-\cite{gunter-1993-not}. So the only genuinely interesting cases missing are
-mixed nested (co)recursion (as in the \ty{tree} example above) as well as
-(co)recursion through a non-(co)datatype (both of which make sense
-\cite{blanchette-et-al-2014-codata}).
-
-  * quantifiers?
+This work is part of a larger program that aims at enriching automatic
+provers with more high-level features and reducing the gap between automatic and
+interactive theorem proving. As future work, we want to try out CVC4 and its
+(co)datatypes for higher-order model finding in Isabelle, as an
+alternative to the counterexample generator Nitpick
+\cite{blanchette-nipkow-2010}. We also see some opportunities to enrich CVC4
+with recursive and corecursive functions. Finally, it might be possible to go
+further in terms of supporting nested and mixed (co)recursion and quantified
+formulas over (co)datatypes in SMT solvers.
 
 \def\ackname{Acknowledgment}
 \paragraph{\ackname.}
-
-Clark Barrett and Cesare Tinelli.
-
-Bosses: Viktor Kuncak, Stephan Merz, Tobias Nipkow, and Christoph Weidenbach.
-
-The research was partially supported by the Deutsche
+We owe a great debt to Clark Barrett and Cesare Tinelli for datatype case blah
+blah blah.
+%
+Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
+Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
+codatatype or at least tolerated it, both of which we are thankful for.
+%
+Blanchette's research was partially supported by the Deutsche
 Forschungs\-gemein\-schaft (DFG) project
 \relax{Hardening the Hammer} (grant Ni\,491\slash 14-1).
 
