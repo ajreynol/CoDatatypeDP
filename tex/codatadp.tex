@@ -209,7 +209,7 @@ using the Nelson--Oppen method \cite{nelson-oppen-1979}. To our knowledge, this
 is the first such decision procedure for codatatypes. For the datatype case, it
 roughly follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 
-\newcommand\cheat{\vskip.75\smallskipamount} %% TYPESETTING
+\newcommand\cheat{\vskip\smallskipamount} %% TYPESETTING
 
 Datatypes and codatatypes share many of the same properties, so it makes sense
 to consider them together. The main differences are as follows:
@@ -236,7 +236,8 @@ $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
 
 \cheat
 \item
-Normal forms are needed and must be enumeratable. For finite model finding, requires a $\mu$ notation,
+\emph{It must be possible to express cyclic values as closed terms and
+to enumerate them.} For finite model finding, requires a $\mu$ notation,
 e.g., $\const{SCons}(3,\, \mu s.\; \const{SCons}(1,\, \const{SCons}(4,\, s)))$
 represents the lasso-shaped sequence $3, 1, 4, 1, 4, \ldots$\kern0.1em. %%% TYPESETTING: kern
 \end{itemize}
