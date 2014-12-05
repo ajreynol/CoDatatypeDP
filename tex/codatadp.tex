@@ -146,15 +146,42 @@ finding.
 \section{Introduction}
 \label{sec:introduction}
 
-Blah.
+Freely generated datatypes are widely used both in functional programs and in
+logical specifications. They can be implemented efficiently and enjoy nice
+properties that can be exploited in automated reasoners. Although they have
+their uses in mathematics, they are especially prominent in computer science
+applications.
 
-  * briefly: datatypes and why they are useful
-    * Hoare's recursive data structures
-    * comparatively easy to reason about and automate
-    * common in practice, esp. in computer science applications
+However, because datatype values correspond to ground terms, they can only
+represent finite objects. For example, the datatype of natural numbers
+constructed by $\const{Z} : \ty{nat}$ and $\const{S} : \ty{nat} \to \ty{nat}$
+only allow values of the form $\const{S}(\ldots(\const{S}(\const{Z}))\ldots)$.
+To represent infinite values such as $\const{S}(\const{S}(\ldots))$, the natural
+choice is to turn to codatatypes, the coinductive dual of datatypes.
 
-    (terminology: freely-generated, inductive, algebraic, ..., sometimes
-    with different meanings; we'll clarify below what we use)
+  * are sometimes perceived as esoteric
+  * but they have their uses where they are nearly irreplacable
+  * for example, CompCert and JinjaThreads
+
+  * codatatype approach unifies the finite and infinite case; it is often more
+    convenient to have
+      codatatype enat = EZ | ES enat
+    than
+      datatype enat = EZ | ES enat | EI
+    with $\infty$ represented by $ES(ES(\ldots))$. Notice that adding
+    $\infty$, as expected
+
+
+  * also can be understood very easily:
+    intuitively, they consist of all ground constructor terms, finite and infinite
+    and only those
+  * one implication is that if $m$ equals $ES(n)$ and $n$ equals $ES(m)$, necessarily
+    $m$ and $n$ must be equal.
+
+  * perhaps the most commonly used codatatype is that of lazy lists or sequences.
+    using a syntax similar to Standard ML, Haskell, or SMT-LIB
+
+$\mu$ notation
 
   * less briefly: codatatypes and why they are useful
     * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
@@ -275,6 +302,9 @@ and $\bigwedge_i \varphi_i$ abbeviates a conjunction $\varphi_1 \mathrel\land \c
 \section{Theory of (Co)datatypes}
 \label{sec:theory-of-co-datatypes}
 
+%    (terminology: freely-generated, inductive, algebraic, ..., sometimes
+%    with different meanings; we'll clarify below what we use)
+
 We fix a signature $\Sig = (\Types, \Funcs)$. The types are partioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
 datatypes, $\Codata$ are the codatatypes, and $\Nondata$ are the remaining,
@@ -300,8 +330,7 @@ introduced ones.%
 for several constructors associated with the same (co)data\-type,
 as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
 However, this is disallowed by SMT-LIB 2, so we do not consider it here.}
-Schematically, using a syntax similar to Standard ML, Haskell,
-or SMT-LIB:
+Schematically:
 %
 \[
 \begin{aligned}[t]
