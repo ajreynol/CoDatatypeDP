@@ -27,6 +27,16 @@
 \usepackage{version}
 \usepackage[all]{xy}
 
+\excludeversion{report}
+\includeversion{paper}
+
+\def\thewordpaper{paper}
+
+\begin{report}
+\def\thewordpaper{report}
+\end{report}
+
+
 % for "bussproofs" package
 \EnableBpAbbreviations
 \def\ScoreOverhang{1.5pt}
@@ -140,8 +150,7 @@ bisimilarity rule that identifies equal values, also in the presence of cycles.
 The procedure is complete for universal problems and is compatible with the
 Nelson--Oppen method. It has been implemented in the latest version of CVC4, a
 state-of-the-art SMT solver. An evaluation based on problems generated from
-Isabelle theories demonstrates the potential of the procedure for both proving
-and model finding.
+Isabelle theories demonstrates the potential of the procedure.
 \end{abstract}
 
 %% The institutions above shouldn't count as footnotes
@@ -202,10 +211,10 @@ for datatypes. The SMT-LIB~2 \cite{barrett-et-al-2010} syntax, implemented by
 most SMT (satisfiability modulo theories) solvers, includes a theory of
 datatypes.
 
-In this paper, we introduce a unified decision procedure for ground problems
-involving both datatypes and codatatypes. The procedure is described abstractly
-as a calculus (Section~\ref{sec:the-calculus}) and is designed to be composable
-via the Nelson--Oppen method \cite{nelson-oppen-1979}.
+In this \thewordpaper, we introduce a unified decision procedure for ground and
+universal problems involving both datatypes and codatatypes. The procedure is
+described abstractly as a calculus (Section~\ref{sec:the-calculus}) and is
+designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 For the datatype case, it
 roughly follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 To our knowledge, ours is the first decision procedure for codatatypes. 
@@ -213,7 +222,7 @@ To our knowledge, ours is the first decision procedure for codatatypes.
 \newcommand\cheat{\vskip\smallskipamount} %% TYPESETTING
 
 Datatypes and codatatypes share many of the same properties, so it makes sense
-to consider them together. There are, however, a number of important
+to consider them together. There are, however, at least three important
 differences:
 %
 \begin{itemize}
@@ -261,8 +270,10 @@ widely recognized that decision procedures are more efficient than
 axiomatizations.
 %axiom.
 
-The proofs or soundness and completeness are included in the technical report
+\begin{paper}
+The proofs of soundness and completeness are included in the technical report
 associated with this paper \cite{our-report}.
+\end{paper}%
 The procedure is implemented in the SMT solver CVC4 as rewriting and a theory solver
 (Section~\ref{sec:the-theory-solver}).
 It consists of about 2000 lines of \cpp{} code, among which 1600 are
