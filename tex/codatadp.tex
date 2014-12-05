@@ -427,24 +427,25 @@ depends on witnesses $R$ that are required to be bisimulations:
 \DP
 \end{aligned}
 \]
-where
+where $x \sim y$ denotes either $R_i[x, y]$ if there exists some $i$ such that
+this is type correct or $x \teq y$ otherwise.
 
-This axiom schema may look intimidating, but what it
+FIXME: Find out what ensures that codatatypes have infinite values.
 
-For codatatypes
+This axiom schema captures the idea that two values that yield the same
+observations must be equal, where the observations are made by using the
+selectors and discriminators.
 
-    * datatypes:
-      * induction axiom (schema)
-        * consequence: no infinite objects (in particular, no cyclic objects)
 
-      * when looking at the universal ground (?) theory:
-        enough to consider acyclicity -- no way to specify infinite objects
-        otherwise
+% TODO: where does this go?
+%      * when looking at the universal ground (?) theory:
+%        enough to consider acyclicity -- no way to specify infinite objects
+%        otherwise
 
-    * codatatypes:
-      * coinduction axiom (schema)
-        * consequence: infinite objects are allowed, but
-          two objects yielding the same observations must be equal
+%    * codatatypes:
+%      * coinduction axiom (schema)
+%        * consequence: infinite objects are allowed, but
+%          two objects yielding the same observations must be equal
 
       * again: when looking at the universal ground (?) theory, enough to
         consider bisimilarity/bisimulation
@@ -888,6 +889,7 @@ Future work:
     (and rewriting)
   * extensions, perhaps straightforward, to polymorphism and nested
     (co)recursion
+  * quantifiers?
 
 \def\ackname{Acknowledgment}
 \paragraph{\ackname.}
