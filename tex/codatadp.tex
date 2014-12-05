@@ -237,8 +237,10 @@ $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
 \cheat
 \item
 \emph{It must be possible to express cyclic values as closed terms and
-to enumerate them.} For finite model finding, requires a $\mu$ notation,
-e.g., $\const{SCons}(3,\, \mu s.\; \const{SCons}(1,\, \const{SCons}(4,\, s)))$
+to enumerate them.} This is necessary both for finite model finding (modulo theories)
+and for theory combinations. The $\mu$ notation is used to represent cyclic ($\omega$-regular)
+values. For example,
+$\const{SCons}(3,\, \mu s.\; \const{SCons}(1,\, \const{SCons}(4,\, s)))$
 represents the lasso-shaped sequence $3, 1, 4, 1, 4, \ldots$\kern0.1em. %%% TYPESETTING: kern
 \end{itemize}
 
@@ -258,14 +260,14 @@ The proofs or soundness and completeness are included in the technical report
 associated with this paper.
 
 The procedure is implemented in the SMT solver CVC4 as rewriting and a theory solver
-(Section~\ref{sec:the-theory-solver}). It implements a precise strategy for applying
-inferences. It consists of about 2000 lines of \cpp{} code, among which 1600 are
+(Section~\ref{sec:the-theory-solver}).
+It consists of about 2000 lines of \cpp{} code, among which 1600 are
 shared between datatypes and codatatypes. The code is integrated in the
 development version of the solver and is expected to be part of the 1.5 release.
 %
-The decision procedure is evaluated on %hand-crafted examples and on
+An evaluation on %hand-crafted examples and on
 problems generated from Isabelle theories using Isabelle's Sledgehammer tool
-(Section~\ref{sec:experimental-results}).
+demonstrates the usefulness of the approach (Section~\ref{sec:experimental-results}).
 
 
 %  * useful both for proving and for model finding
