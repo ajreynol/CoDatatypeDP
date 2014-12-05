@@ -64,6 +64,7 @@
 
 \renewcommand{\vec}[1]{\boldsymbol{#1}}
 \newcommand{\Ec}{\mathsf{E}}
+\newcommand{\Fc}{\mathsf{F}}
 \newcommand{\tEc}{\mathcal{T}(\Ec)}
 \newcommand{\tcEc}{\mathcal{T}^\ast(\Ec)}
 \newcommand{\rn}[1]{\textsf{\small #1}}
@@ -77,9 +78,13 @@
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
 \newcommand{\ec}[1]{ [ #1 ] }
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\Val}{\mathcal{A}}
+
 
 % change?
-\newcommand{\thD}{T_{D}}
+\newcommand{\thO}{T_{o}}
+\newcommand{\thD}{T_{d}}
 
 %\newcommand\Types{\mathcal{T}}
 \newcommand\Types{\mathcal{Y}}
@@ -695,6 +700,7 @@ Degenerate Codatatypes
   * Correctness
 
 \rem{Discuss signature $\Sig$, theory $\thD$}
+\rem{DPLL(T) : we can restrict ourselves to conjunctions.}
 This section presents a calculus for determining the satisfiability of conjunctions of $\thD$-constraints.
 
 Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sig$-terms.
@@ -844,7 +850,7 @@ Notice that since $\Ec$ contains a finite set of equivalence classes, all paths 
 We call the \emph{source} of a path is the source of its first edge, and the \emph{destination} of a path is the destination of its last edge.
 We say a path $p$ is \emph{maximal} if its destination $\ec{t}$ is either
 the source of an edge in $p$, 
-or does not contain an application of a constructor (including the case when $t$ is not of datatype/codatatype type).
+or does not contain an application of a non-nullary constructor (including the case when $t$ is not of datatype/codatatype type).
 The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all maximal paths with source $\ec{t_1}$ and destination $\ec{t_2}$ that are induced by $\Ec$.
 The set $\tpath{\Ec}{\ec{t_1}}$ is the union of $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ for all $t_2 \in \tEc$.
 We will write, for instance, $\ec{t_1} \rightarrow^{C_1}_{n_1} \ec{t_2} \rightarrow^{C_2}_{n_2} \ec{t_3}$ 
@@ -940,15 +946,17 @@ All derivation trees are finite.
 \begin{proof}
 Consider a derivation tree with root node $\Ec$.
 Let $S$ be the set of terms occurring as the argument of a selector in $\tEc$.
-For each term $t \in \tEc$ of finite datatype type $\tau$,
+Let $T$ be the set of terms in $\tEc$ of finite datatype type.
+For each term $t \in T$,
 let $S^0_t$ be the set $\{ t \}$,
-and for $i \geq 0$ let $S^{i+1}_t =$ $S^i_t \cup \{ s( u ) \mid u : \upsilon \in S^i, \upsilon \in \Data, \upsilon \text{ finite}, s \in \Sel^{\upsilon}  \}$.
-Let $S^\ast_t$ be the fixed point of this sequence for all $t$, which we know is finite since the values of $\tau$ are of finite size.
-Let $S^\ast$ be the union of $S^\ast_t$ for all such $t$,
+for $i \geq 0$ let $S^{i+1}_t =$ $S^i_t \cup \{ s( u ) \mid u : \upsilon \in S^i, \upsilon \in \Data, \upsilon \text{ finite}, s \in \Sel^{\upsilon}  \}$,
+and let $S^\ast_t$ be the fixed point of this sequence.
+We know this is a finite set for each $t$ since the values of $t$'s type are of finite size.
+Let $S^\ast$ be the union of $S^\ast_t$ for all $t \in T$,
 and let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \cup S^\ast, C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$, 
-it can be shown by case analysis on the rules of the calculus that each non-root node $\Ec'$ is such that 
-$\mathcal{T}(\Ec') \subseteq \tcEc $, and moreover thus is the result of adding an equality between two terms from $\tcEc$ to its parent node.
+it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that 
+$\mathcal{T}(\Fc) \subseteq \tcEc $, and moreover thus contains an equality between two terms from $\tcEc$ not occurring in its parent node.
 Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\mid \tcEc \mid^2$,
 which is finite since $\tcEc$ is finite.
 \qed
@@ -978,10 +986,17 @@ and thus $\Ec$ is unsatisfiable in $\thD$.
 \end{proof}
 
 \begin{lemma}[Solution Soundness]
-If there exists a derivation tree containing a saturated node with root node $\Ec$, then $\Ec$ is satisfiable in $\thD$.
+If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
-TODO
+Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
+%First, we construct a valuation $\Val$ as follows.
+Let $C$ be the set of variables occurring in the same equivalence class as a constructor term,
+and let $X$ be the set of variables occurring in $\mathcal{T}(\Fc)$ but not in $C$.
+
+
+
+\qed
 \end{proof}
 
 \rem{Thus, sound and complete.}
