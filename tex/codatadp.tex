@@ -1,4 +1,3 @@
-
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -29,9 +28,11 @@
 \includeversion{paper}
 
 \def\thewordpaper{paper}
+\newcommand\dotReportFootnote[1]{.}
 
 \begin{report}
 \def\thewordpaper{report}
+\newcommand\dotReportFootnote[1]{.\footnote{#1}}
 \end{report}
 
 \newcommand\afterLdots{\kern.1em} %% TYPESETTING
@@ -283,7 +284,6 @@ An evaluation on %hand-crafted examples and on
 problems generated from Isabelle theories using the Sledgehammer tool
 demonstrates the usefulness of the approach (Section~\ref{sec:experimental-results}).
 
-
 %  * useful both for proving and for model finding
 
 %\ref{sec:examples}
@@ -297,8 +297,6 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %      * but theory solver cooperates
 %    * still, universal conjectures fall into the ground fragment via negation
 %      and skolemization (or, alternatively, herbrandization)
-
-
 
 %  * codatatypes were added later, motivated by the use of SMT solvers as
 %    backends to proof assistants (more specifically, CVC4 to Isabelle/HOL)
@@ -318,21 +316,12 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %      \keyw{codatatype}\; \,\ty{llist} \,=\, \const{LNil} \,\mid\, \const{LCons}(\ty{int},\, \ty{llist})
 %\]
 
-
 %  * consider a natural fragment---datatypes as supported in modern SMT solvers
 %    and the SMT-LIB 2 standard, and codatatypes as their duals
 %    * mutual recursion, but no polymorphism, nested recursion
 %  * integrated with Nelson-Oppen
 
-
-
 % * SMT-Lib
-
-
-
-
-
-
 
 %  * one implication is that if $m$ equals $ES(n)$ and $n$ equals $ES(m)$, necessarily
 %    $m$ and $n$ must be equal.
@@ -344,8 +333,17 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
-% \paragraph{Related Work.}
-% 
+\paragraph{Related Work.}
+Although it was written several years ago, the account of related work in
+Barrett et al.\ \cite{barrett-et-al-2007} is still largely up to date.
+Since then, datatypes have been added to Z3 in unpublished work by Leonardo de
+Moura and to a SPASS-like prototype prover called Pirate by Daniel Wand.
+%\cite{wand-weidenbach-201x}.
+Closely related is the support for structural
+induction in CVC4 by Reynolds and Kuncak \cite{reynolds-kuncak-2015} and in
+Pirate by Wand and Weidenbach \cite{wand-weidenbach-201x}, which depends on a
+notion of datatype.
+
 %     * point to Barrett et al. for SMT datatypes
 %       * about their own work, they say: "our focus is on generality and
 %         efficiency rather than immediacy of implementation"
@@ -415,7 +413,7 @@ finally any other function symbols.
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Polymorphic types, nested
 (co)recursion, and datatype--codatatype mixtures fall outside this fragment.%
-\footnote{%
+\dotReportFootnote{%
 In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
 should not raise any special difficulties. Nesting datatypes inside datatypes,
 and likewise for codatatypes, can be reduced to the mutual case
@@ -438,8 +436,8 @@ introduced.
 %
 To every argument corresponds a selector. The introduced names for the (co)data\-types, the
 constructors, and the selectors must be distinct and different from already
-introduced ones.%
-\footnote{It can be convenient to specify the same selector
+introduced ones%
+\dotReportFootnote{It can be convenient to specify the same selector
 for several constructors associated with the same (co)data\-type,
 as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
 However, this is disallowed by SMT-LIB 2, so we do not consider it here.}
