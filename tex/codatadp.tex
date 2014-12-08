@@ -399,10 +399,10 @@ Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
 We fix a signature $\Sig = (\Types, \Funcs)$. The types are partioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
-datatypes, $\Codata$ are the codatatypes, and $\Nondata$ are the remaining
-\emph{ordinary} types. The functions are partitioned into $\Funcs = \Ctr
-\mathrel{\uplus} \Sel$, where $\Ctr$ are the constructors and $\Sel$ are the
-selectors. There is no need to consider other function symbols, because they can
+\emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the remaining
+\emph{ordinary types}. The functions are partitioned into $\Funcs = \Ctr
+\mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
+\emph{selectors}; there is no need to consider other function symbols, because they can
 be abstracted away as variables when combining theories.
 %
 In an SMT problem, the signature is normally given by specifying the
@@ -412,7 +412,7 @@ finally any other function symbols.
 
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Polymorphic types, nested
-(co)recursion, and datatype--codatatype mixtures fall outside this fragment.%
+(co)recursion, and datatype--codatatype mixtures fall outside this fragment%
 \dotReportFootnote{%
 In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
 should not raise any special difficulties. Nesting datatypes inside datatypes,
@@ -423,7 +423,7 @@ mixed nested (co)recursion as well as
 \cite{blanchette-et-al-2014-codata}).}
 In the presentation, we allow ourselves some metalevel parameterization
 % at the metalevel
-by using subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
+through subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
 family of ground types including
 $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
 and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.
@@ -460,12 +460,11 @@ and $\const{s}_{i\negvthinspace j}^{\,k} : \delta_i \to \tau_{i\negvthinspace j}
 the selector names if they are omitted.
 
 For types with several constructors, it is customary to provide discriminators
-$\const{d} : \const{s}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
-they are not strictly necessary:
-To simplify the presentation of the decision procedure, we treat $\const{d}_{i\negvthinspace
-j}(x)$ as an abbreviation for
-$x = \const{C}_{i\negvthinspace j}(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x))$
-instead of extending the signature.
+$\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
+it is not necessary to extend the signature:
+$\const{d}_{i\negvthinspace j}(x)$ can be seen as an abbreviation for
+$x = \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
+This will simplify the presentation of the decision procedure.
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
@@ -475,20 +474,15 @@ Here are a few examples of legal specifications of (co)datatype families:
 \end{aligned}
 \]
 
-
-
-
 Because the types are inhabited (nonempty), a datatype specification is
-admissible only if a ground term can be exhibited that belongs to that datatype.
-%This rules out ill-founded specifications such as
-%
-%\[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\,\ty{fstream})\]
-%
+admissible only if a ground constructor term can be exhibited that belongs to
+that datatype. This rules out ill-founded specifications such as
+\[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\,\ty{fstream})\]
 For codatatypes, no such check is necessary because there is always a term,
 finite or infinite, that witnesses nonemptiness.
 %Given the specification
 %
-\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\,\ty{stream})\]
+%\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\,\ty{stream})\]
 %
 %the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 %nonemptiness.
