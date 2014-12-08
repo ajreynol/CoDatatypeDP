@@ -91,7 +91,7 @@
 
 \newcommand\Data{\Types_{\mathrm{dt}}}
 \newcommand\Codata{\Types_{\mathrm{cdt}}}
-\newcommand\Nondata{\Types_{\mathrm{oth}}}
+\newcommand\Nondata{\Types_{\mathrm{ord}}}
 
 \newcommand\Ctr{\Funcs_{\mathrm{ctr}}}
 \newcommand\Sel{\Funcs_{\mathrm{sel}}}
@@ -410,15 +410,15 @@ Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
 We fix a signature $\Sig = (\Types, \Funcs)$. The types are partioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
-datatypes, $\Codata$ are the codatatypes, and $\Nondata$ are the remaining,
-plain types. The functions are partitioned into $\Funcs = \Ctr \mathrel{\uplus} \Sel$, where
-$\Ctr$ are the constructors and $\Sel$ are the selectors. (There is no need to
-consider other function symbols, because they can be abstracted away as
-variables when combining theories.)
-
-In an SMT problem, the signature is given by specifying the uninterpreted types
-first (in any order), then the (co)datatypes with their constructors and
-selectors in groups of mutually (co)recursive groups of (co)datatypes, and
+datatypes, $\Codata$ are the codatatypes, and $\Nondata$ are the remaining
+\emph{ordinary} types. The functions are partitioned into $\Funcs = \Ctr
+\mathrel{\uplus} \Sel$, where $\Ctr$ are the constructors and $\Sel$ are the
+selectors. There is no need to consider other function symbols, because they can
+be abstracted away as variables when combining theories.
+%
+In an SMT problem, the signature is normally given by specifying the
+uninterpreted types in any order, the (co)datatypes with their constructors
+and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
 finally any other function symbols.
 
 A (co)datatype specification consists of $l$~mutually recursive types which are
@@ -426,22 +426,24 @@ either all datatypes or all codatatypes. Polymorphic types, nested
 (co)recursion, and datatype--codatatype mixtures fall outside this fragment.%
 \footnote{%
 In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
-would be easy to support; nesting datatypes inside datatypes, and
-likewise for codatatypes, can be reduced to the mutual case
+should not raise any special difficulties. Nesting datatypes inside datatypes,
+and likewise for codatatypes, can be reduced to the mutual case
 \cite{gunter-1993-not}. So the only genuinely interesting cases missing are
-mixed nested (co)recursion (as in the \ty{tree} example above) as well as
+mixed nested (co)recursion as well as
 (co)recursion through a non-(co)datatype (both of which make sense
 \cite{blanchette-et-al-2014-codata}).}
 In the presentation, we allow ourselves some metalevel parameterization
 % at the metalevel
 by using subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
-family of ground types $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
-$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$, etc.
+family of ground types including
+$\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
+and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.
 
-Each datatype $\delta$ is equipped by
+Each datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
 arguments and returns a $\delta$ value. The argument types must be either
-plain, be or be one of the newly introduced (co)datatypes.
+ordinary, among the already know (co)datatypes, or among the (co)datatypes being
+introduced.
 %
 To every argument corresponds a selector. The introduced names for the (co)data\-types, the
 constructors, and the selectors must be distinct and different from already
