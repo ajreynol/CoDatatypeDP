@@ -224,15 +224,11 @@ For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-
 To our knowledge, our procedure is the first of its kind for the theory of
 codatatypes. 
 
-\newcommand\cheat{\vskip\smallskipamount} %% TYPESETTING
-
 Datatypes and codatatypes share many of the same properties, so it makes sense
 to consider them together. There are, however, at least three important
-differences:
-%
-\begin{itemize}
-\item
-\emph{Codatatypes need not be well-founded.}
+differences.
+
+First, \emph{codatatypes need not be well-founded.}
 For example, the type
 %
 \[\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\, \const{SCons}(\tau,\, \ty{stream}_{\,\tau})\]
@@ -240,9 +236,7 @@ For example, the type
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
 corresponding datatype would be rejected as non-well-founded.
 
-\cheat
-\item
-\emph{A bisimilarity rule takes the place of the cyclicity rule of datatypes.}
+Second, \emph{a bisimilarity rule takes the place of the cyclicity rule of datatypes.}
 Cyclic constraints such as
 $\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes but satisfiable for codatatypes.
@@ -250,15 +244,12 @@ The bisimilarity principle states that two values having the same (possibly
 infinite) expansion must be equal; from $\const{x} \teq \const{S}(\const{y})$ and
 $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
 
-\cheat
-\item
-\emph{It must be possible to express cyclic }(\emph{$\omega$-regular}) \emph{values as closed terms and
+Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \emph{values as closed terms and
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
 and for theory combinations. The $\mu$-binder notation is used to represent cyclic
 values internally. For example,
 the term $\const{SCons}(1,\, \mu s.\; \const{SCons}(0,\, \const{SCons}(9,\, s)))$
 denotes the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
-\end{itemize}
 
 %%% 1090909 is a prime number
 
