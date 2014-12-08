@@ -949,14 +949,16 @@ Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
 which is enforced by the rule \rn{Split}.
 
-\paragraph{Correctness.}
-
 A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by 
 a non-redundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
 A node is \emph{saturated} if no non-redundant application of a rule can be applied to it.
+If there exists a closed derivation tree with root node $\Ec$, then we conclude that $\Ec$ is $\thD$-unsatisfiable.
+If there exists a derivation tree with root node $\Ec$ that contains a saturated node, then we conclude that $\Ec$ is $\thD$-satisfiable. 
 
-\begin{lemma}[Termination]
+\paragraph{Correctness.}
+
+\begin{lemma}[Termination] \label{lem:t}
 All derivation trees are finite.
 \end{lemma}
 \begin{proof}
@@ -978,7 +980,7 @@ which is finite since $\tcEc$ is finite.
 \qed
 \end{proof}
 
-\begin{lemma}[Refutation Soundness]
+\begin{lemma}[Refutation Soundness] \label{lem:rs}
 If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
@@ -1080,7 +1082,7 @@ then $\Ec$ is satisfiable $\thD$.
 Given a set of disjoint paths $P$ where each $p \in P$
 we write $\interp{P}$ to denote the value
 
-\begin{lemma}[Solution Soundness]
+\begin{lemma}[Solution Soundness] \label{lem:ss}
 If there exists a derivation tree with root node $\Ec$ containing a saturated node $\Fc$, then $\Ec$ is satisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
@@ -1092,11 +1094,13 @@ We assume that:
 \item Each equivalence class $\ec{x}$ of $\Fc$ where $x : \tau$, $\tau \in \Data \cup \Codata$ contains a constructor term.
 \end{enumerate}
 The first statement comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability.
-The second statement can be assumed for $x : \tau$, since we know that $\tau$ is infinite.
+The second statement can be assumed for $x : \tau$, since $\tau$ is infinite.
+Hence, we can assign constants for each such equivalence class.
+Moreover, since $\Fc$ contains $\thD$-constraints only, these constants can be chosen arbitrarily.
 The third statement can be assumed by \rem{TODO}.
 
 We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
-interprets wrongly-applied selectors based on information in $\Fc$,
+interprets wrongly-applied selectors based on equality information in $\Fc$,
 interprets the variables and $x$ of $\Fc$ based on a valuation $\Val$, which is constructed as follows.
 For each equivalence class $e : \tau$, where $\tau \in \Nondata$ containing constant $c$,
 $\Val(x) = c$ for each $x \in e$.
@@ -1105,24 +1109,22 @@ $\Val(x) = C( \Val( \vec y ) )$ for each $x \in e$.
 Since \rn{Cyclic} does not apply, this definition is well-defined. 
 For each $e : \tau$, where $\tau \in \Codata$, 
 $\Val( x ) = \interp{ \tpath{\Fc}{e} }$ for each $x \in e$.
-
-Since \rn{Cong} does not apply, we have that:
+Since neither \rn{Cong} or \rn{Bisimilar} applies to $\Fc$, we have that for all variables $x$ and $y$:
 \begin{eqnarray} \label{eqn:m-bij-dt}
 \Val(x) = \Val(y) \text{ if and only if } \ec{x} = \ec{y}
 \end{eqnarray}
-
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 
 If $\tau \in \Nondata$, then $\M( t_1 ) = \M( t_2 )$ by construction.
 
 If $\tau \in \Data$, then assume the equivalence class of $t_1$ and $t_2$ contains variable $x$.
-We show that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
+By induction on the size of $\Val( x )$, we show that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
 In the case where $t$ is a variable, then $\M( t ) = \Val( x )$ since $t$ and $x$ are assigned identical values by construction.
 In the case where $t$ is a constructor term $C( \vec u )$, say our construction built a valuation for $x$ based on the constructor term $C'( \vec u' ) \in \ec{x}$.
 Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
 Since \rn{Unify$_1$} does not apply to $\Fc$, we have that $\ec{\vec u} = \ec{\vec u'}$.
-By structural induction, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = \M( C( \vec u ) ) = \M( C'( \vec u ' ) ) = \Val( x )$.
+By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val( x )$.
 In the case where $t$ is a selector term $s^j_k( u )$,
 then since \rn{Split} does not apply, 
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{a_i}_i( u ) )$ for some $i$.
@@ -1130,7 +1132,7 @@ Let $x_1, \ldots, x_n$ be the variables in equivalence classes $\ec{s^1_i( u )},
 By our construction, $\M( u ) = C_i( \Val( x_1 ), \ldots, \Val( x_{a_i} ) )$.
 If $i = k$, then $\M( t ) = \M( s^j_k( u ) ) = s^j_k( \M( u ) ) = \Val( x_j )$, which is $\Val( x )$ since $x_j \in \ec{s^j_i( u )} = \ec{x}$.
 If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$ and since $s^j_k( \M( u ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
-we interpret $s^j_k( \M( u ) )$ as $\Val( x )$.
+we may interpret $s^j_k( \M( u ) )$ as $\Val( x )$.
 
 If $\tau \in \Codata$, \rem{TODO}
 
@@ -1144,7 +1146,7 @@ and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 \qed
 \end{proof}
 
-\rem{Thus, sound and complete.}
+By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, our calculus is sound and complete for $\thD$.
 
 \subsection{Extension to Quantified Formulas}
 
