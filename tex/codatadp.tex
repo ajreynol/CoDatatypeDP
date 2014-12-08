@@ -81,6 +81,7 @@
 \newcommand{\ror}{\quad \parallel \quad}
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
+\newcommand{\interp}[1]{[\![ #1 ]\!]}
 \newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
 \newcommand{\ec}[1]{ [ #1 ] }
 \newcommand{\M}{\mathcal{M}}
@@ -1076,18 +1077,14 @@ then $\Ec$ is satisfiable $\thD$.
 %\begin{lemma}
 %\end{lemma}
 
-%Given a set of disjoint paths $P$ where each $p \in P$
-%we write $\interp{P}$ to denote the
+Given a set of disjoint paths $P$ where each $p \in P$
+we write $\interp{P}$ to denote the value
 
 \begin{lemma}[Solution Soundness]
 If there exists a derivation tree with root node $\Ec$ containing a saturated node $\Fc$, then $\Ec$ is satisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
 Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
-%First, we construct a valuation $\Val$ as follows.
-%Let $C$ be the set of variables occurring in the same equivalence class as a constructor term,
-%and let $X$ be the set of variables occurring in $\mathcal{T}(\Fc)$ but not in $C$.
-
 We assume that:
 \begin{enumerate}
 \item Each equivalence class of $\Fc$ contains at least one variable,
@@ -1100,19 +1097,27 @@ The third statement can be assumed by \rem{TODO}.
 
 We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
 interprets wrongly-applied selectors based on information in $\Fc$,
-interprets the variables and $x$ of $\Fc$ based on a valuation $\Val$ which construct as follows.
+interprets the variables and $x$ of $\Fc$ based on a valuation $\Val$, which is constructed as follows.
 For each equivalence class $e : \tau$, where $\tau \in \Nondata$ containing constant $c$,
 $\Val(x) = c$ for each $x \in e$.
 For each $e : \tau$, where $\tau \in \Data$ containing the constructor term $C( \vec u )$ where the equivalence classes $\ec{\vec u}$ contains the variables $\vec y$,
 $\Val(x) = C( \Val( \vec y ) )$ for each $x \in e$.
-Since \rn{Cyclic} does not apply, this definition is well-defined, and since \rn{Cong} does not apply, we have that $\Val{x} = \Val{y}$ if and only if $\ec{x} = \ec{y}$.
-For each $e : \tau$, where $\tau \in \Codata$,
-\rem{TODO}
+Since \rn{Cyclic} does not apply, this definition is well-defined. 
+For each $e : \tau$, where $\tau \in \Codata$, 
+$\Val( x ) = \interp{ \tpath{\Fc}{e} }$ for each $x \in e$.
 
-We show that all equalities and disequalities in $\Fc$ are satisfied by $\M$.
-Say $t_1 \teq t_2 \in \Fc$ where $t_1$ and $t_2$ have type $\tau$ where $\tau \not\in \Codata$,
-and assume that $\ec{t_1}$ contains the variable $x$.
-We show that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$.
+Since \rn{Cong} does not apply, we have that:
+\begin{eqnarray} \label{eqn:m-bij-dt}
+\Val(x) = \Val(y) \text{ if and only if } \ec{x} = \ec{y}
+\end{eqnarray}
+
+
+We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
+
+If $\tau \in \Nondata$, then $\M( t_1 ) = \M( t_2 )$ by construction.
+
+If $\tau \in \Data$, then assume the equivalence class of $t_1$ and $t_2$ contains variable $x$.
+We show that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
 In the case where $t$ is a variable, then $\M( t ) = \Val( x )$ since $t$ and $x$ are assigned identical values by construction.
 In the case where $t$ is a constructor term $C( \vec u )$, say our construction built a valuation for $x$ based on the constructor term $C'( \vec u' ) \in \ec{x}$.
 Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
@@ -1123,18 +1128,19 @@ then since \rn{Split} does not apply,
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{a_i}_i( u ) )$ for some $i$.
 Let $x_1, \ldots, x_n$ be the variables in equivalence classes $\ec{s^1_i( u )}, \ldots, \ec{s^{a_i}_i( u )}$.
 By our construction, $\M( u ) = C_i( \Val( x_1 ), \ldots, \Val( x_{a_i} ) )$.
-If $i = k$, then $\M( t ) = \M( s^j_k( u ) ) = \Val( x_j )$, which is $\Val( x )$ since $x_j \in \ec{s^j_i( u )} = \ec{x}$.
-If $i \neq k$, then $\thD$ does not constraint the value $\M( t )$, and thus we interpret $s^j_k( \M( u ) )$ as $\Val( x )$.
+If $i = k$, then $\M( t ) = \M( s^j_k( u ) ) = s^j_k( \M( u ) ) = \Val( x_j )$, which is $\Val( x )$ since $x_j \in \ec{s^j_i( u )} = \ec{x}$.
+If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$ and since $s^j_k( \M( u ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
+we interpret $s^j_k( \M( u ) )$ as $\Val( x )$.
 
-%If $t$ and $s$ are both variables, then this follows since $\ec{t} = \ec{s}$.
+If $\tau \in \Codata$, \rem{TODO}
 
-Let $t \tneq s \in \Fc$.
-Since \rn{Conflict} does not apply, we know $t \teq s \not\in \Fc$ and thus $\ec{t}$ and $\ec{s}$ are distinct.
-Since by above, $\M( t ) = \M( s )$ if and only if $\ec{t}=\ec{s}$, we have $\M( t ) \neq \M( s )$, and thus $\M \models t \tneq s$.
+We show that all disequalities in $\Fc$ are satisfied by $\M$.
+Say $t_1 \tneq t_2 \in \Fc$.
+Since \rn{Conflict} does not apply, we know $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
+By the previous paragraph and statement~\ref{eqn:m-bij-dt}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
-
-By these two, 
-%$\M \models_{\thD} \Fc$, and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
+Thus, $\M \models \Fc$
+and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 \qed
 \end{proof}
 
