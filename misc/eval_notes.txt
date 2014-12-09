@@ -1,0 +1,34 @@
+mkdir stern_brocot_bnf bird_bnf coinductive_list_prefix process stream coinductive_list coinductive_stream hamming_stream koenigslemma tllist abstract_completeness koenig stream_processor gram_lang parallel
+
+Lochbihler & Gammie:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/stern_brocot_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/SternBrocotBNF.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/bird_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/BirdBNF.thy
+
+Meaningful AFP/Isabelle:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/coinductive_list_prefix/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List_Prefix.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/process/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Process.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/stream/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/coinductive_list/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/coinductive_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/hamming_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Hamming_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/koenigslemma/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Koenigslemma.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/tllist/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/TLList.thy
+
+Semi-meaningful AFP/Isabelle:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/abstract_completeness/,fact_filter=mepo,max_facts=256]" $AFP/Abstract_Completeness/Abstract_Completeness.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/koenig/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Koenig.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/stream_processor/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Stream_Processor.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/gram_lang/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Gram_Lang.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/parallel/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Parallel.thy
+
+Not meaningful / failed:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/coinductive_language/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive_Languages/Coinductive_Language.thy
+
+Failed, for some reason:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/lmirror/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/LMirror.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/256/llist2/,fact_filter=mepo,max_facts=256]" $AFP/Lazy-Lists-II/LList2.thy
