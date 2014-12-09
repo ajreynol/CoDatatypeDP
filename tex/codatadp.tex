@@ -1160,7 +1160,7 @@ Then, $\Val$ is updated according to the following rules:
   %\quad
   %\tau \in \Codata
   %\quad
-  \ec{x} \mapsto v_{\ec{x}} \in \Val
+  v_{\ec{x}} \in FV( \Val )
   %\quad
   %\ec{x} \text{ ctr-free}
   \quad
@@ -1171,12 +1171,42 @@ Then, $\Val$ is updated according to the following rules:
 \)
 
 \rem{define $\sim$}
-We assume these rules are applied to completion in the order in which they are written,
-that is, \rn{Ind} is applied exhaustively before applying \rn{Base}.
+We assume that first \rn{Ind} is applied exhaustively, after which \rn{Base} is applied exhaustively.
 %the rule \rn{D-Ind} is applied to completion before applying \rn{D-Base}.
 In the rule \rn{Ind}, we write $FV( \Val )$ to denote the free variables occurring in $\Val$.
 Notice that this excludes variables beneath $\mu$-binders.
+
+As an example,
+say that $\Fc$ contains equivalence classes $\ec{x}$ and $\ec{y}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$, where $z$ and $w$ are variables of integer type.
+A possible application of the above rules, showing the state of $\Val$ after each application, is as follows:
+\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
+\hline
+\text{Rule} & \multicolumn{4}{c}{\Val} \ 
+\\
+\hline
+& \{ & \ec{x} \mapsto v_{\ec{x}}, & \ec{z} \mapsto v_{\ec{z}}, \\
+&    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\rn{Ind} \ec{x}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ), & \ec{z} \mapsto v_{\ec{z}}, \\
+&    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\rn{Ind} \ec{y}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
+&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\rn{Ind} \ec{x}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
+&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\rn{Base} \ec{z}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
+&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( \const{0}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\rn{Base} \ec{w}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( \const{1}, \mu v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
+&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( \const{0}, \mu v_{\ec{x}}. \const{C}( \const{1}, v_{\ec{y}} ) ), & \ec{w} \mapsto \const{1} & \} \\
+\end{array}\]
+
+
 It is clear that after applying these rules to completion, $\Val$ is a mapping from equivalence classes to ground values.
+
+
 
 
 \begin{eqnarray} \label{eqn:m-bij-dt}
