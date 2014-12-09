@@ -62,9 +62,13 @@
 \newcommand\const[1]{\textsf{#1}}
 \newcommand\ty[1]{\textit{#1}}
 
-\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\renewcommand{\vec}[1]{\mathbf{#1}}
 \newcommand{\Ec}{\mathsf{E}}
 \newcommand{\Fc}{\mathsf{F}}
+\newcommand{\Gc}{\mathsf{G}}
+\newcommand{\Ac}{\mathsf{A}}
+\newcommand{\Dc}{\mathsf{D}}
+\newcommand{\Rc}{\mathsf{R}}
 \newcommand{\tEc}{\mathcal{T}(\Ec)}
 \newcommand{\tcEc}{\mathcal{T}^\ast(\Ec)}
 \newcommand{\rn}[1]{\textsf{\small #1}}
@@ -77,9 +81,18 @@
 \newcommand{\ror}{\quad \parallel \quad}
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
+\newcommand{\interp}[1]{[\![ #1 ]\!]}
+\newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
 \newcommand{\ec}[1]{ [ #1 ] }
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\Val}{\mathcal{A}}
+
+\def\AIF{\qtab\keyword{if}\ }
+\def\ATHEN{\ \keyword{then}\ }
+\def\AELSE{\untab\qtab\keyword{else}\ }
+\def\AFI{\untab}
+\def\ARETURN{\keyword{return}\ }
+\def\AENDPROC{\untab}
 
 
 % change?
@@ -115,6 +128,7 @@
    bookmarksdepth=2,
    bookmarksopenlevel=2,
    bookmarksopen]{hyperref}
+%\usepackage{program}
 
 \urlstyle{ttstyle}
 
@@ -130,6 +144,7 @@
 \include{defs}
 
 \hyphenation{data-type data-types co-data-type co-data-types}
+
 
 \begin{document}
 
@@ -840,6 +855,7 @@ The set $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ is the smallest set containing all ma
 The set $\tpath{\Ec}{\ec{t_1}}$ is the union of $\ttpath{\Ec}{\ec{t_1}}{\ec{t_2}}$ for all $t_2 \in \tEc$.
 We will write, for instance, $\ec{t_1} \rightarrow^{C_1}_{n_1} \ec{t_2} \rightarrow^{C_2}_{n_2} \ec{t_3}$ 
 as shorthand for the path containing an edge from $\ec{t_1}$ to $\ec{t_2}$, followed by one from $\ec{t_2}$ to $\ec{t_3}$.
+%A set of paths is \emph{disjoint} if it does not contain two paths $p_1$ and $p_2$ such that $p_1 = p_2 \sigma$ for some $\sigma$.
 
 The rule \rn{Cyclic} recognizes when a path exists from an equivalence class $\ec{t}$ to itself, as indicated
 by the assumption $\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset$.
@@ -918,14 +934,16 @@ Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
 which is enforced by the rule \rn{Split}.
 
-\paragraph{Correctness.}
-
 A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by 
 a non-redundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
 A node is \emph{saturated} if no non-redundant application of a rule can be applied to it.
+If there exists a closed derivation tree with root node $\Ec$, then we conclude that $\Ec$ is $\thD$-unsatisfiable.
+If there exists a derivation tree with root node $\Ec$ that contains a saturated node, then we conclude that $\Ec$ is $\thD$-satisfiable. 
 
-\begin{lemma}[Termination]
+\paragraph{Correctness.}
+
+\begin{lemma}[Termination] \label{lem:t}
 All derivation trees are finite.
 \end{lemma}
 \begin{proof}
@@ -941,13 +959,13 @@ Let $S^\ast$ be the union of $S^\ast_t$ for all $t \in T$,
 and let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \cup S^\ast, C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$, 
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that 
-$\mathcal{T}(\Fc) \subseteq \tcEc $, and moreover thus contains an equality between two terms from $\tcEc$ not occurring in its parent node.
+$\mathcal{T}(\Fc) \subseteq \tcEc$, and moreover thus contains an equality between two terms from $\tcEc$ not occurring in its parent node.
 Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\mid \tcEc \mid^2$,
 which is finite since $\tcEc$ is finite.
 \qed
 \end{proof}
 
-\begin{lemma}[Refutation Soundness]
+\begin{lemma}[Refutation Soundness] \label{lem:rs}
 If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
@@ -970,21 +988,150 @@ and thus $\Ec$ is unsatisfiable in $\thD$.
 \qed
 \end{proof}
 
-\begin{lemma}[Solution Soundness]
-If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
+It remains to show the inverse of the previous lemma, that when a derivation tree with root node $\Ec$ contains a saturated node $\Fc$,
+then $\Ec$ is satisfiable $\thD$.
+
+%We first show that for any saturated node $\Fc$, 
+%additional equalities $\Gc$ can be added to $\Fc$ such that each codatatype/datatype equivalence class of $\Fc \cup \Gc$ has a constructor term.
+%For this purpose, we extend the calculus in this section.
+%For a subset of equivalence classes $S$ of $\Ec$, write $\dpath{\Ec}{C,n}{S}$ to denote the set
+%such that $e' \in \dpath{\Ec}{C,n}{S}$ if and only if there exists an $e \in S$ such that $e \rightarrow^{C}_n e'$ is induced by $\Ec$.
+
+\begin{comment}
+\begin{figure}[t]
+\centering
+\begin{tabular}{c}
+\rn{O-Finish}
+\(
+\inferrule{
+  \Ac := x
+  \quad
+  x : \tau
+  \quad
+  \tau \in \Nondata
+  \quad
+  c \not\in \tEc
+}{
+  \Ac := \emptyset \quad \Ec := \Ec \cup \{ x \teq c \}
+}
+\)
+\\[3.7ex]
+\rn{C-Finish}
+\(
+\inferrule{
+  \Ac := x
+  \quad
+  x : \tau
+  \quad
+  \tau \in \Codata
+  \quad
+  C_i \in \Ctr^\tau
+  \quad 
+  C_i \not\in \{ C_j \mid d \in \Dc, C_j( \vec t ) \in d \}
+}{
+  \Ac := \emptyset \quad \Ec := \Ec \cup \{ x \teq C_i( \vec y ) \} \quad \Rc := \Rc \cup \vec y
+}
+\)
+\\[3.7ex]
+\rn{C-Rec}
+\(
+\inferrule{
+  \Ac := x
+  \quad
+  x : \tau
+  \quad
+  \tau \in \Codata
+  \quad
+  C_i \in \Ctr^\tau
+  \quad
+  C_i \text{ infinite arg } j
+}{
+  \Ac := y_j \quad 
+  \Ec := \Ec \cup \{ x \teq C_i( \vec y ) \} \quad 
+  \Rc := \Rc \cup ( \vec y \setminus y_j ) \quad 
+  \Dc := \dpath{\Ec}{C_i,j}{\Dc}
+}
+\)
+\end{tabular}
+\caption{Rules for completion.
+}
+\label{fig:completion-rules}
+\end{figure}
+\end{comment}
+
+%and second show how to construct a valuation for the variables of $\Fc \cup \Gc$.
+
+%\begin{lemma}
+%\end{lemma}
+
+Given a set of disjoint paths $P$ where each $p \in P$
+we write $\interp{P}$ to denote the value
+
+\begin{lemma}[Solution Soundness] \label{lem:ss}
+If there exists a derivation tree with root node $\Ec$ containing a saturated node $\Fc$, then $\Ec$ is satisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
 Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
-%First, we construct a valuation $\Val$ as follows.
-Let $C$ be the set of variables occurring in the same equivalence class as a constructor term,
-and let $X$ be the set of variables occurring in $\mathcal{T}(\Fc)$ but not in $C$.
+We assume that:
+\begin{enumerate}
+\item Each equivalence class of $\Fc$ contains at least one variable,
+\item Each equivalence class $\ec{x}$ of $\Fc$ where $x : \tau$, $\tau \in \Nondata$ contains a constant,
+\item Each equivalence class $\ec{x}$ of $\Fc$ where $x : \tau$, $\tau \in \Data \cup \Codata$ contains a constructor term.
+\end{enumerate}
+The first statement comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability.
+The second statement can be assumed for $x : \tau$, since $\tau$ is infinite.
+Hence, we can assign constants for each such equivalence class.
+Moreover, since $\Fc$ contains $\thD$-constraints only, these constants can be chosen arbitrarily.
+The third statement can be assumed by \rem{TODO}.
 
+We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
+interprets wrongly-applied selectors based on equality information in $\Fc$,
+interprets the variables and $x$ of $\Fc$ based on a valuation $\Val$, which is constructed as follows.
+For each equivalence class $e : \tau$, where $\tau \in \Nondata$ containing constant $c$,
+$\Val(x) = c$ for each $x \in e$.
+For each $e : \tau$, where $\tau \in \Data$ containing the constructor term $C( \vec u )$ where the equivalence classes $\ec{\vec u}$ contains the variables $\vec y$,
+$\Val(x) = C( \Val( \vec y ) )$ for each $x \in e$.
+Since \rn{Cyclic} does not apply, this definition is well-defined. 
+For each $e : \tau$, where $\tau \in \Codata$, 
+$\Val( x ) = \interp{ \tpath{\Fc}{e} }$ for each $x \in e$.
+Since neither \rn{Cong} or \rn{Bisimilar} applies to $\Fc$, we have that for all variables $x$ and $y$:
+\begin{eqnarray} \label{eqn:m-bij-dt}
+\Val(x) = \Val(y) \text{ if and only if } \ec{x} = \ec{y}
+\end{eqnarray}
 
+We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 
+If $\tau \in \Nondata$, then $\M( t_1 ) = \M( t_2 )$ by construction.
+
+If $\tau \in \Data$, then assume the equivalence class of $t_1$ and $t_2$ contains variable $x$.
+By induction on the size of $\Val( x )$, we show that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
+In the case where $t$ is a variable, then $\M( t ) = \Val( x )$ since $t$ and $x$ are assigned identical values by construction.
+In the case where $t$ is a constructor term $C( \vec u )$, say our construction built a valuation for $x$ based on the constructor term $C'( \vec u' ) \in \ec{x}$.
+Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
+Since \rn{Unify$_1$} does not apply to $\Fc$, we have that $\ec{\vec u} = \ec{\vec u'}$.
+By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val( x )$.
+In the case where $t$ is a selector term $s^j_k( u )$,
+then since \rn{Split} does not apply, 
+$\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{a_i}_i( u ) )$ for some $i$.
+Let $x_1, \ldots, x_n$ be the variables in equivalence classes $\ec{s^1_i( u )}, \ldots, \ec{s^{a_i}_i( u )}$.
+By our construction, $\M( u ) = C_i( \Val( x_1 ), \ldots, \Val( x_{a_i} ) )$.
+If $i = k$, then $\M( t ) = \M( s^j_k( u ) ) = s^j_k( \M( u ) ) = \Val( x_j )$, which is $\Val( x )$ since $x_j \in \ec{s^j_i( u )} = \ec{x}$.
+If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$ and since $s^j_k( \M( u ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
+we may interpret $s^j_k( \M( u ) )$ as $\Val( x )$.
+
+If $\tau \in \Codata$, \rem{TODO}
+
+We show that all disequalities in $\Fc$ are satisfied by $\M$.
+Say $t_1 \tneq t_2 \in \Fc$.
+Since \rn{Conflict} does not apply, we know $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
+By the previous paragraph and statement~\ref{eqn:m-bij-dt}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
+
+Thus, $\M \models \Fc$
+and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 \qed
 \end{proof}
 
-\rem{Thus, sound and complete.}
+By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, our calculus is sound and complete for $\thD$.
 
 \subsection{Extension to Quantified Formulas}
 
