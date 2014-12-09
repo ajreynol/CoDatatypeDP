@@ -1081,9 +1081,12 @@ The latter also comes with no loss of generality since nested applications of se
 
 We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
 interprets wrongly-applied selectors based on equality information in $\Fc$,
-interprets the variables and $x$ of $\Fc$ based on a mapping $\Val$ from the equivalence classes of $\Fc$ to values, 
-which is constructed based on the following rules.
+interprets the variables and $x$ of $\Fc$ based on a mapping $\Val$ from the equivalence classes of $\Fc$ to values.
+Initially, $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$ for each equivalence class $\ec{x}$ of $\Fc$,
+where $v_{\ec{x}}$ is a fresh variable of the same type as $x$ not occurring in $\Fc$.
+Then, $\Val$ is updated according to the following rules:
 
+\begin{comment}
 \rn{Ord}
 \(
 \inferrule{
@@ -1132,10 +1135,48 @@ which is constructed based on the following rules.
   \Val := \Val \cup \ec{x} \mapsto c
 }
 \)
+\end{comment}
 
-We assume these rules are applied in the order in which they are written, for instance, 
-the rule \rn{D-Ind} is applied to completion before applying \rn{D-Base}.
+\rn{Ind}
+\(
+\inferrule{
+  %x : \tau
+  %\quad
+  %\tau \in \Codata
+  v_{\ec{x}} \in FV( \Val )
+  \quad
+  C( t_1, \ldots, t_n ) \in \ec{x}
+  \quad
+  C \in \Ctr
+}{
+  \Val := \Val \{ v_{\ec{x}} \mapsto \mu v_{\ec{x}}. C( v_{\ec{t_1}}, \ldots, v_{\ec{t_n}} ) \}
+}
+\)
 
+\rn{Base}
+\(
+\inferrule{
+  %x : \tau
+  %\quad
+  %\tau \in \Codata
+  %\quad
+  \ec{x} \mapsto v_{\ec{x}} \in \Val
+  %\quad
+  %\ec{x} \text{ ctr-free}
+  \quad
+  c \not\sim c' \text{ for all } c' \in \vrange(\Val)
+}{
+  \Val := \Val \{ v_{\ec{x}} \mapsto c \}
+}
+\)
+
+\rem{define $\sim$}
+We assume these rules are applied to completion in the order in which they are written,
+that is, \rn{Ind} is applied exhaustively before applying \rn{Base}.
+%the rule \rn{D-Ind} is applied to completion before applying \rn{D-Base}.
+In the rule \rn{Ind}, we write $FV( \Val )$ to denote the free variables occurring in $\Val$.
+Notice that this excludes variables beneath $\mu$-binders.
+It is clear that after applying these rules to completion, $\Val$ is a mapping from equivalence classes to ground values.
 
 
 \begin{eqnarray} \label{eqn:m-bij-dt}
@@ -1178,7 +1219,7 @@ we first show that $\M( t ) = \Val \ec{x}$ for all non-selector terms $t$ that o
 We show this by induction on the size of $\Val \ec{x}$.
 In the case where $t$ is a variable, then $\M( t ) = \Val \ec{ t } = \Val \ec{ x }$.
 In the case where $t$ is a constructor term $C( \vec u )$, 
-then $\Val \ec{x}$ must have been assigned by \rn{D-Ind} for some constructor term $C'( \vec u' ) \in \ec{x}$.
+then $\Val \ec{x}$ must have been assigned by \rn{Ind} for some constructor term $C'( \vec u' ) \in \ec{x}$.
 Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
 Since \rn{Unify$_1$} does not apply to $\Fc$, we have that $\ec{\vec u} = \ec{\vec u'}$.
 By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val \ec{ x }$.
