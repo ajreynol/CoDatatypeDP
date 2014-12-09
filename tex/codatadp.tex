@@ -70,6 +70,8 @@
 \newcommand{\Ac}{\mathsf{A}}
 \newcommand{\Dc}{\mathsf{D}}
 \newcommand{\Rc}{\mathsf{R}}
+\newcommand{\vrange}{\mathsf{range}}
+\newcommand{\vdom}{\mathsf{dom}}
 \newcommand{\tEc}{\mathcal{T}(\Ec)}
 \newcommand{\tcEc}{\mathcal{T}^\ast(\Ec)}
 \newcommand{\rn}[1]{\textsf{\small #1}}
@@ -87,13 +89,6 @@
 \newcommand{\ec}[1]{ [ #1 ] }
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\Val}{\mathcal{A}}
-
-\def\AIF{\qtab\keyword{if}\ }
-\def\ATHEN{\ \keyword{then}\ }
-\def\AELSE{\untab\qtab\keyword{else}\ }
-\def\AFI{\untab}
-\def\ARETURN{\keyword{return}\ }
-\def\AENDPROC{\untab}
 
 
 % change?
@@ -129,7 +124,6 @@
    bookmarksdepth=2,
    bookmarksopenlevel=2,
    bookmarksopen]{hyperref}
-%\usepackage{program}
 
 \urlstyle{ttstyle}
 
@@ -865,9 +859,9 @@ by the assumption $\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset$.
 In this case, $\Ec$ entails that $t$ contains itself as a (strict) subterm,
 and thus if $t$ is a datatype, $\Ec$ must be unsatisfiable.
 The rule \rn{Bisimilar} recognizes when two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ having co-datatype type are observationally equivalent.
-In particular, if there is a mapping $\sigma$ over equivalence classes such that all paths $p$ from $t_2$
-have a corresponding path $p \sigma$ from $t_1$,
-then $t_1$ must be equal to $t_2$.
+In this rule, $\sigma$ is a complete mapping over the equivalence classes that occur as sources in the edges of paths in $\tpath{\Ec}{\ec{t_2}}$.
+The rule applies if $\tpath{\Ec}{\ec{t_1}}$ is comprised of the paths $p \sigma$ for each (and only) the paths $p \in \tpath{\Ec}{\ec{t_2}}$,
+in which case $t_1$ must be equal to $t_2$.
 We demonstrate this rule concretely with the following example.
 \rem{ensure that \const{LCons} understood}
 
@@ -1080,6 +1074,70 @@ If there exists a derivation tree with root node $\Ec$ containing a saturated no
 \end{lemma}
 \begin{proof}
 Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
+We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
+interprets wrongly-applied selectors based on equality information in $\Fc$,
+interprets the variables and $x$ of $\Fc$ based on a mapping $\Val$ from the equivalence classes of $\Fc$ to values, 
+which is constructed based on the following rules.
+
+\rn{Ord}
+\(
+\inferrule{
+  \ec{x} \not\in \vdom(\Val)
+  \quad
+  x : \tau
+  \quad
+  \tau \in \Nondata
+  \quad
+  c \not\in \vrange(\Val)
+}{
+  \Val := \Val \cup \ec{x} \mapsto c
+}
+\)
+
+\rn{D-Ind}
+\(
+\inferrule{
+  \ec{x} \not\in \vdom(\Val)
+  \quad
+  x : \tau
+  \quad
+  \tau \in \Data
+  \quad
+  C( \vec t ) \in \ec{x}
+  \quad
+  \ec{\vec t} \in \vdom(\Val)
+}{
+  \Val := \Val \cup \ec{x} \mapsto C( \Val \ec{\vec t}  )
+}
+\)
+
+\rn{D-Base}
+\(
+\inferrule{
+  \ec{x} \not\in \vdom(\Val)
+  \quad
+  x : \tau
+  \quad
+  \tau \in \Data
+  \quad
+  \ec{x} \text{ ctr-free}
+  \quad
+  c \not\in \vrange(\Val)
+}{
+  \Val := \Val \cup \ec{x} \mapsto c
+}
+\)
+
+We assume these rules are applied in the order in which they are written, for instance, 
+the rule \rn{D-Ind} is applied to completion before applying \rn{D-Base}.
+
+
+
+\begin{eqnarray} \label{eqn:m-bij-dt}
+\Val \ec{x} = \Val \ec{y} \text{ if and only if } \ec{x} = \ec{y}
+\end{eqnarray}
+
+\begin{comment}
 We assume that:
 \begin{enumerate}
 \item Each equivalence class of $\Fc$ contains at least one variable,
@@ -1092,9 +1150,6 @@ Hence, we can assign constants for each such equivalence class.
 Moreover, since $\Fc$ contains $\thD$-constraints only, these constants can be chosen arbitrarily.
 The third statement can be assumed by \rem{TODO}.
 
-We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
-interprets wrongly-applied selectors based on equality information in $\Fc$,
-interprets the variables and $x$ of $\Fc$ based on a valuation $\Val$, which is constructed as follows.
 For each equivalence class $e : \tau$, where $\tau \in \Nondata$ containing constant $c$,
 $\Val(x) = c$ for each $x \in e$.
 For each $e : \tau$, where $\tau \in \Data$ containing the constructor term $C( \vec u )$ where the equivalence classes $\ec{\vec u}$ contains the variables $\vec y$,
@@ -1106,26 +1161,31 @@ Since neither \rn{Cong} or \rn{Bisimilar} applies to $\Fc$, we have that for all
 \begin{eqnarray} \label{eqn:m-bij-dt}
 \Val(x) = \Val(y) \text{ if and only if } \ec{x} = \ec{y}
 \end{eqnarray}
+\end{comment}
 
+Without loss of generality, we will assume in the following that all equivalence class of $\Fc$ contain at least one variable,
+which comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability.
+We let $\M( x ) = \Val \ec{x}$ for each variable $x$ in $\Fc$.
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 
-If $\tau \in \Nondata$, then $\M( t_1 ) = \M( t_2 )$ by construction.
+If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
 
 If $\tau \in \Data$, then assume the equivalence class of $t_1$ and $t_2$ contains variable $x$.
-We show by induction on the size of $\Val( x )$ that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
-In the case where $t$ is a variable, then $\M( t ) = \Val( x )$ since $t$ and $x$ are assigned identical values by construction.
-In the case where $t$ is a constructor term $C( \vec u )$, say our construction built a valuation for $x$ based on the constructor term $C'( \vec u' ) \in \ec{x}$.
+We show by induction on the size of $\Val \ec{ x }$ that $\M( t ) = \Val \ec{x}$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
+In the case where $t$ is a variable, then $\M( t ) = \Val \ec{ t } = \Val \ec{ x }$.
+In the case where $t$ is a constructor term $C( \vec u )$, 
+then $\Val \ec{x}$ must have been assigned by \rn{D-Ind} for some constructor term $C'( \vec u' ) \in \ec{x}$.
 Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
 Since \rn{Unify$_1$} does not apply to $\Fc$, we have that $\ec{\vec u} = \ec{\vec u'}$.
-By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val( x )$.
+By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val \ec{ x }$.
 In the case where $t$ is a selector term $s^j_k( u )$,
 then since \rn{Split} does not apply, 
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{a_i}_i( u ) )$ for some $i$.
 Let $x_1, \ldots, x_n$ be the variables in equivalence classes $\ec{s^1_i( u )}, \ldots, \ec{s^{a_i}_i( u )}$.
-By our construction, $\M( u ) = C_i( \Val( x_1 ), \ldots, \Val( x_{a_i} ) )$.
-If $i = k$, then $\M( t ) = \M( s^j_k( u ) ) = s^j_k( \M( u ) ) = \Val( x_j )$, which is $\Val( x )$ since $x_j \in \ec{s^j_i( u )} = \ec{x}$.
+By our construction, $\M( u ) = C_i( \Val \ec{ x_1 }, \ldots, \Val \ec{ x_{a_i} } )$.
+If $i = k$, then $\M( t ) = \M( s^j_k( u ) ) = s^j_k( \M( u ) ) = \Val \ec{x_j}$, which is $\Val( x )$ since $x_j \in \ec{s^j_i( u )} = \ec{x}$.
 If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$ and since $s^j_k( \M( u ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
-we may interpret $s^j_k( \M( u ) )$ as $\Val( x )$.
+we may interpret $s^j_k( \M( u ) )$ as $\Val \ec{ x }$.
 
 If $\tau \in \Codata$, \rem{TODO}
 
