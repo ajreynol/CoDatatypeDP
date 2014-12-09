@@ -1070,10 +1070,15 @@ Given a set of disjoint paths $P$ where each $p \in P$
 we write $\interp{P}$ to denote the value
 
 \begin{lemma}[Solution Soundness] \label{lem:ss}
-If there exists a derivation tree with root node $\Ec$ containing a saturated node $\Fc$, then $\Ec$ is satisfiable in $\thD$.
+If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
-Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
+Let $\Fc_0$ be a saturated node in a derivation tree with root node $\Ec$.
+We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where 
+all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
+The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
+The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
+
 We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
 interprets wrongly-applied selectors based on equality information in $\Fc$,
 interprets the variables and $x$ of $\Fc$ based on a mapping $\Val$ from the equivalence classes of $\Fc$ to values, 
@@ -1163,38 +1168,41 @@ Since neither \rn{Cong} or \rn{Bisimilar} applies to $\Fc$, we have that for all
 \end{eqnarray}
 \end{comment}
 
-Without loss of generality, we will assume in the following that all equivalence class of $\Fc$ contain at least one variable,
-which comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability.
-We let $\M( x ) = \Val \ec{x}$ for each variable $x$ in $\Fc$.
+Now, we let $\M( x ) = \Val \ec{x}$ for each variable $x$ in $\Fc$.
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 
 If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
 
-If $\tau \in \Data$, then assume the equivalence class of $t_1$ and $t_2$ contains variable $x$.
-We show by induction on the size of $\Val \ec{ x }$ that $\M( t ) = \Val \ec{x}$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
+If $\tau \in \Data$,
+we first show that $\M( t ) = \Val \ec{x}$ for all non-selector terms $t$ that occur in datatype equivalence classes $\ec{x}$.
+We show this by induction on the size of $\Val \ec{x}$.
 In the case where $t$ is a variable, then $\M( t ) = \Val \ec{ t } = \Val \ec{ x }$.
 In the case where $t$ is a constructor term $C( \vec u )$, 
 then $\Val \ec{x}$ must have been assigned by \rn{D-Ind} for some constructor term $C'( \vec u' ) \in \ec{x}$.
 Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
 Since \rn{Unify$_1$} does not apply to $\Fc$, we have that $\ec{\vec u} = \ec{\vec u'}$.
 By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val \ec{ x }$.
-In the case where $t$ is a selector term $s^j_k( u )$,
-then since \rn{Split} does not apply, 
-$\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{a_i}_i( u ) )$ for some $i$.
-Let $x_1, \ldots, x_n$ be the variables in equivalence classes $\ec{s^1_i( u )}, \ldots, \ec{s^{a_i}_i( u )}$.
-By our construction, $\M( u ) = C_i( \Val \ec{ x_1 }, \ldots, \Val \ec{ x_{a_i} } )$.
-If $i = k$, then $\M( t ) = \M( s^j_k( u ) ) = s^j_k( \M( u ) ) = \Val \ec{x_j}$, which is $\Val( x )$ since $x_j \in \ec{s^j_i( u )} = \ec{x}$.
-If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$ and since $s^j_k( \M( u ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
-we may interpret $s^j_k( \M( u ) )$ as $\Val \ec{ x }$.
+
+We now show that $\M( t ) = \Val \ec{x}$ for all selector terms $s^j_k( y )$ that occur in datatype equivalence classes $\ec{x}$.
+Since \rn{Split} does not apply, 
+$\ec{y}$ must contain a term of the form $C_i( s^1_i( y ), \ldots, s^{a_i}_i( y ) )$ for some $i$.
+Let $x_1, \ldots, x_n$ be variables in equivalence classes $\ec{s^1_i( y )}, \ldots, \ec{s^{a_i}_i( y )}$.
+By the previous paragraph, we have $\M( y ) = \M( C_i( s^1_i( y ), \ldots, s^{a_i}_i( y ) ) )$,
+which is $C_i( \Val \ec{ x_1 }, \ldots, \Val \ec{ x_{a_i} } )$.
+If $i = k$, then $\M( t ) = \M( s^j_k( y ) ) = s^j_k( \M( y ) ) = \Val \ec{x_j}$, which is $\Val \ec{ x }$ since $\ec{x_j} = \ec{s^j_i( y )} = \ec{x}$.
+If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$,
+and since $s^j_k( \M( y ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
+we may interpret $s^j_k( \M( y ) )$ as $\Val \ec{ x }$. 
+Thus, for all datatype equivalence classes $\ec{x}$, we have $\M( t ) = \Val \ec{x}$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
 
 If $\tau \in \Codata$, \rem{TODO}
 
-We show that all disequalities in $\Fc$ are satisfied by $\M$.
+We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, we know $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
 By the previous paragraph and statement~\ref{eqn:m-bij-dt}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
-Thus, $\M \models \Fc$
+Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 \qed
 \end{proof}
