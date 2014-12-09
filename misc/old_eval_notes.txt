@@ -1,0 +1,29 @@
+mkdir coinductive_list_prefix process stream coinductive_list coinductive_stream hamming_stream koenigslemma tllist abstract_completeness koenig stream_processor gram_lang parallel
+
+Meaningful:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/coinductive_list_prefix/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive/Coinductive_List_Prefix.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/process/,fact_filter=mepo,max_facts=64]" ~/isabelle/src/HOL/Datatype_Examples/Process.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/stream/,fact_filter=mepo,max_facts=64]" ~/isabelle/src/HOL/Datatype_Examples/Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/coinductive_list/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive/Coinductive_List.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/coinductive_stream/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive/Coinductive_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/hamming_stream/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive/Examples/Hamming_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/koenigslemma/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive/Examples/Koenigslemma.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/tllist/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive/TLList.thy
+
+Semi-meaningful:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/abstract_completeness/,fact_filter=mepo,max_facts=64]" $AFP/Abstract_Completeness/Abstract_Completeness.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/koenig/,fact_filter=mepo,max_facts=64]" ~/isabelle/src/HOL/Datatype_Examples/Koenig.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/stream_processor/,fact_filter=mepo,max_facts=64]" ~/isabelle/src/HOL/Datatype_Examples/Stream_Processor.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/gram_lang/,fact_filter=mepo,max_facts=64]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Gram_Lang.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/parallel/,fact_filter=mepo,max_facts=64]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Parallel.thy
+
+Not meaningful / failed:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/coinductive_language/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive_Languages/Coinductive_Language.thy
+
+Failed, for some reason:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/lmirror/,fact_filter=mepo,max_facts=64]" $AFP/Coinductive/Examples/LMirror.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench/64/llist2/,fact_filter=mepo,max_facts=64]" $AFP/Lazy-Lists-II/LList2.thy
