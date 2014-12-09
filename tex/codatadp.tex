@@ -62,7 +62,8 @@
 \newcommand\const[1]{\textsf{#1}}
 \newcommand\ty[1]{\textit{#1}}
 
-\renewcommand{\vec}[1]{\mathbf{#1}}
+%\renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\vec}[1]{\bar #1}
 \newcommand{\Ec}{\mathsf{E}}
 \newcommand{\Fc}{\mathsf{F}}
 \newcommand{\Gc}{\mathsf{G}}
@@ -232,8 +233,10 @@ for datatypes. The SMT-LIB~2 \cite{barrett-et-al-2010} syntax, implemented by
 most SMT (satisfiability modulo theories) solvers, includes a theory of
 datatypes.
 
-In this \thewordpaper, we introduce a unified decision procedure for ground and
-universal problems involving both datatypes and codatatypes. The procedure is
+In this \thewordpaper, we introduce a unified decision procedure for ground
+problems involving both datatypes and codatatypes, and discuss extensions 
+of the procedure when handling universal (non-ground) problems.
+The procedure is
 described abstractly as a calculus (Section~\ref{sec:the-calculus}) and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
@@ -705,7 +708,7 @@ This section presents a calculus for determining the satisfiability of conjuncti
 
 Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sig$-terms.
 We will write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
-We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
+%We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( \const{C}_j( \vec t ) )$
 are replaced by $t_i$, and moreover assume that all additional constraints added to $\Ec$ are normalized in this manner.
 
@@ -870,7 +873,7 @@ We demonstrate this rule concretely with the following example.
 
 \begin{example}
 Let $\Ec$ be the set $\{ x \teq \const{LCons}(y,\const{LCons}(y,x)) \}$.
-After taking the bidirectional closure of $\Ec$, we obtain equivalence classes 
+After applying the rules in Figure~\ref{fig:cc-rules} to completion, the equivalence classes of $\Ec$ are
 $\{ x, \const{LCons}(y,\const{LCons}(y,x)) \}$, $\{ \const{LCons}(y,x) \}$, and $\{ y \}$.
 The set $\tpath{\Ec}{\ec{x}}$ is:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
@@ -972,17 +975,22 @@ If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is uns
 We prove this by structural induction on the (closed) derivation tree with root node $\Ec$.
 First, if the derivation tree is an application of \rn{Conflict}, \rn{Unify$_2$}, or \rn{Cyclic},
 then $\Ec$ is unsatisfiable in $\thD$.
-\rem{Elaborate on cyclic?}
+For \rn{Conflict}, this is a consequence of equality reasoning.
+For \rn{Unify$_2$}, this is a consequence of distinctness.
+For \rn{Cyclic}, this is a consequence of induction. \rem{elaborate?}
 If the children of $\Ec$ are closed derivation trees 
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
 then by the induction hypothesis $\Ec \cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
 for each $C_i \in \Ctr^\tau$.
-Since all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
+Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is unsatisfiable in $\thD$.
 Otherwise, the child of $\Ec$ is a closed derivation tree 
 whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, \rn{Unify$_1$}, \rn{Bisimilar}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
-\rem{Elaborate on Bisimilar?}
+For \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
+For \rn{Unify$_1$}, this is a consequence of injectivity.
+For \rn{Bisimilar}, this is a consequence of co-induction. \rem{elaborate?}
+For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
 By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is unsatisfiable in $\thD$, 
 and thus $\Ec$ is unsatisfiable in $\thD$.
 \qed
@@ -1104,7 +1112,7 @@ We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_
 If $\tau \in \Nondata$, then $\M( t_1 ) = \M( t_2 )$ by construction.
 
 If $\tau \in \Data$, then assume the equivalence class of $t_1$ and $t_2$ contains variable $x$.
-By induction on the size of $\Val( x )$, we show that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
+We show by induction on the size of $\Val( x )$ that $\M( t ) = \Val( x )$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
 In the case where $t$ is a variable, then $\M( t ) = \Val( x )$ since $t$ and $x$ are assigned identical values by construction.
 In the case where $t$ is a constructor term $C( \vec u )$, say our construction built a valuation for $x$ based on the constructor term $C'( \vec u' ) \in \ec{x}$.
 Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
@@ -1131,7 +1139,7 @@ and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 \qed
 \end{proof}
 
-By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, our calculus is sound and complete for $\thD$.
+By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, the calculus described in this section is sound and complete for $\thD$.
 
 \subsection{Extension to Quantified Formulas}
 
