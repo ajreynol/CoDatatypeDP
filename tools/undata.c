@@ -46,7 +46,7 @@ int get_token(FILE *in, int *next_ch)
             return Tok_End;
         case ';':
             while (*next_ch != EOF &&
-                    *next_ch != ' ') {
+                    *next_ch != '\n') {
                 *next_ch = fgetc(in);
             }
             break;
@@ -132,10 +132,10 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    token tok;
     int next_ch = fgetc(in);
+    token tok = get_token(in, &next_ch);
 
-    while ((tok = get_token(in, &next_ch)) != Tok_End) {
+    while (tok != Tok_End) {
         if (tok == Tok_Left_Paren) {
             tok = get_token(in, &next_ch);
 
@@ -162,16 +162,19 @@ int main(int argc, char **argv)
                     } else if (tok == Tok_Right_Paren) {
                         --depth;
                     }
+                    tok = get_token(in, &next_ch);
                 }
 
                 fputc('\n', outNix);
                 fputc('\n', outData);
                 fputc('\n', outCodata);
             }
-        } else if (tok == Tok_Right_Paren) {
+        } else {
             print_token(outNix, tok);
             print_token(outData, tok);
             print_token(outCodata, tok);
+
+            tok = get_token(in, &next_ch);
         }
     }
 
