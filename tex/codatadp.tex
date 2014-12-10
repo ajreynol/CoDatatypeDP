@@ -886,7 +886,7 @@ is bounded by the number of equivalence classes of $\Ec$,
 and thus our construction of $\Val$ is terminating.
 
 \begin{example}
-Say that $\Ec$ contains equivalence classes $\ec{x}$ and $\ec{y}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$.
+Say that $\Ec$ contains (distinct) equivalence classes $\ec{x}$, $\ec{y}$, $\ec{z}$ and $\ec{w}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$.
 A possible sequence of applications of the above rule is shown below.
 In the first column, we show the equivalence class that was considered,
 and in the second column, we show the state of $\Val$.
@@ -908,21 +908,19 @@ and in the second column, we show the state of $\Val$.
 &    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
 \hline
 \end{array}\]
-In other words, the (class of) values for $v_{\ec{x}}$ in models of $\Ec$ 
-is $\const{C}( v_{\ec{w}}, \const{C}( v_{\ec{z}}, \ldots ))$, 
-and the class of values for $v_{\ec{y}}$ is $\const{C}( v_{\ec{z}}, \const{C}( v_{\ec{w}}, \ldots ))$,
-where $v_{\ec{z}}$ and $v_{\ec{w}}$ are free variables.
+Informally, this indicates that the values for $x$ (resp. $y$) in models of $\Ec$
+are of the form $\const{C}( w, \const{C}( z, \ldots ))$ (resp. $\const{C}( z, \const{C}( w, \ldots ))$) for some value of $w$ and $z$.
 $\Box$
 \end{example}
 
-Given $\Val$, the rules for cyclicity and bisimilar (shown in Figure~\ref{fig:ab-rules}) can be stated as follows.
+Given $\Val$, the rules for cyclicity and bisimilarity (shown in Figure~\ref{fig:ab-rules}) can be stated as follows.
 For cyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x. t'$ are cyclic,
 as indicated by the assumption $x \in FV( t' )$,
 then we can conclude that $\Ec$ is unsatisfiable.
 For bisimilarity, if there are two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
 of co-datatype type whose classes of values $\Val \ec{t_1}$ and $\Val \ec{t_2}$ are equivalent modulo renaming of $\mu$-bound variables,
 then we can conclude $t_1 \teq t_2$.
-We demonstrate an application of the rule for bisimilarity concretely with the following example.
+We demonstrate the bisimilarity rule concretely with the following example.
 
 \begin{example}
 Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
@@ -1013,9 +1011,7 @@ We demonstrate an application of this rule concretely with the following example
 \end{figure}
 
 \paragraph{Step 3: Branching}
-\rem{Require : all co-datatypes either have infinite cardinality, or have cardinality 1.}
-
-Finally, if neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
+If neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
 the rules from Figure~\ref{fig:split-rule} are applied.
 The rule \rn{Singleton} handles the degenerate case when there are two terms from $\tEc$ having a singleton codatatype type,
 in which case they must be equivalent.
@@ -1158,7 +1154,7 @@ We first argue that $\Val$ contains only to ground values (which include closed 
 First, since \rn{Split} does not apply to $\Fc$,
 all equivalence classes of finite type contain constructor terms.
 Thus, all variables in $FV( \Val )$ have infinite type.
-
+%\rem{Require : all co-datatypes either have infinite cardinality, or have cardinality 1.}
 
 
 
