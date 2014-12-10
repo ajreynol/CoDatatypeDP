@@ -707,7 +707,10 @@ We will write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( \const{C}_j( \vec t ) )$
 are replaced by $t_i$, and moreover assume that all additional constraints added to $\Ec$ are normalized in this manner.
 
-We present the calculus in three sections, shown in Figures~\ref{fig:cc-rules},~\ref{fig:ab-rules}, and~\ref{fig:split-rule}.
+We present the calculus in three parts.
+In the first part we compute the bidirectional closure of $\Ec$,
+in the second part we make inferences based on cyclicity and bisimilarity,
+and in the third part we (when necessary) split on the constructor type for various terms in $\tEc$.
 Following the conventions from~\cite{}, 
 the derivation rules of our calculus are given in \emph{guarded assignment form},
 where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
@@ -787,6 +790,7 @@ An application of a rule is \emph{redundant} if it is non-terminal and at least 
 \label{fig:cc-rules}
 \end{figure}
 
+\paragraph{Step 1: Compute Birectional Closure}
 Figure~\ref{fig:cc-rules} gives the basic rules of our calculus.
 Together with the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, the rule \rn{Cong} computes the (upwards) congruence closure,
 while the rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downwards) unification.
@@ -804,7 +808,10 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
   \quad
   \tau \in \Data
   \quad
-  \ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
+  %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
+  \Val \ec{t} = \mu x. t'
+  \quad
+  x \in FV( t' )
 }{
   \bot
 }
@@ -814,10 +821,11 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \(
 \inferrule{
  t_1, t_2 : \tau
-  \quad
+ \quad
  \tau \in \Codata
-  \quad
- \tpath{\Ec}{\ec{t_1}} = \tpath{\Ec}{\ec{t_2}}\sigma \neq \emptyset
+ \quad
+ %\tpath{\Ec}{\ec{t_1}} = \tpath{\Ec}{\ec{t_2}}\sigma \neq \emptyset
+ \Val \ec{t_1} \vsim \Val \ec{t_2}
 }{
  \Ec := \Ec, t_1 \teq t_2
 }
@@ -828,13 +836,114 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \label{fig:ab-rules}
 \end{figure}
 
-Before applying the rules in Figure~\ref{fig:ab-rules}, 
+\paragraph{Step 2: Apply cyclicity and bisimilarity.}
+In this step,
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}, that is,
 no non-redudant application of one of its rules can be applied to $\Ec$.
 When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
 Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
 For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
 
+Recall that the $\mu$-notation can be used to represent (possibly cyclic) terms and values,
+for instance, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
+Formally, we recursively define a $\mu$-term is either of the form
+$\mu x. \const{C}( \vec t )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$, 
+or a variable $x$.
+We assume all $\mu$-terms are \emph{well-typed}, which we defined recursively:
+if the type of $\const{C}$ is $\vec \tau \rightarrow \upsilon$, 
+then if $\vec v$ are well-type $\mu$-terms under the assumption that $x$ has type $\upsilon$,
+then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
+We say a $\mu$-term is \emph{closed} if it contains no free variables.
+We write $t \vsim s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent modulo renaming of $\mu$-bound variables.
+For convienience, we will use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
+where in the latter case, a $\mu$-term with a bound variable denotes an invalid term.
+%where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
+
+At the beginning of this step, 
+we compute a mapping $\Val$ from equivalence classes to $\mu$-terms.
+Informally, the terms mapped to by $\Val$ describe the (class of) values that terms in each equivalence class can take in the models of $\Ec$. 
+For each equivalence class $\ec{x}$ of $\Ec$, we associate a fresh variable $v_{\ec{x}}$ of the same type as $x$ not occurring in $\tEc$,
+and initially say that $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$ for each equivalence class $\ec{x}$ of $\Ec$ 
+(in other words, there are initially no constraints on the values for terms).
+Then, $\Val$ is updated by applying the following rule exhaustively:
+
+\(
+\inferrule{
+  v_{\ec{x}} \in FV( \Val )
+  \quad
+  C( t_1, \ldots, t_n ) \in \ec{x}
+  \quad
+  C \in \Ctr
+}{
+  \Val := \Val \{ v_{\ec{x}} \mapsto \mu v_{\ec{x}}. C( v_{\ec{t_1}}, \ldots, v_{\ec{t_n}} ) \}
+}
+\)
+
+Here, we write $FV( \Val )$ to denote the free variables occurring in $\Val$, which
+excludes variables that occur beneath $\mu$-binders.
+It is straightforward to show that the height of terms produced as a result of this rule
+is bounded by the number of equivalence classes of $\Ec$,
+our construction of $\Val$ is terminating.
+
+\begin{example}
+Say that $\Ec$ contains equivalence classes $\ec{x}$ and $\ec{y}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$.
+A possible sequence of applications of the above rule is shown below.
+In the first column, we show the equivalence class that was considered,
+and in the second column, we show the state of $\Val$.
+\[\begin{array}{|l|@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l|}
+\hline
+\text{Eqc} & \multicolumn{3}{c}{\Val} & \ 
+\\
+\hline
+& \{ & \ec{x} \mapsto v_{\ec{x}}, & \ec{z} \mapsto v_{\ec{z}}, & \\
+&    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\ec{x}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ), & \ec{z} \mapsto v_{\ec{z}}, & \\
+&    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\ec{y}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, & \\
+&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\ec{x}
+& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, & \\
+&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+\hline
+\end{array}\]
+In other words, the (class of) values for $v_{\ec{x}}$ in models of $\Ec$ 
+is $\const{C}( v_{\ec{w}}, \const{C}( v_{\ec{z}}, \ldots ))$, 
+and the class of values for $v_{\ec{y}}$ is $\const{C}( v_{\ec{z}}, \const{C}( v_{\ec{w}}, \ldots ))$,
+where $v_{\ec{z}}$ and $v_{\ec{w}}$ are free variables.
+$\Box$
+\end{example}
+
+Given $\Val$, the rules for cyclicity and bisimilar can be stated as follows, and are shown in Figure~\ref{fig:ab-rules}.
+For cyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose possible values $\mu x. t'$ are cyclic 
+(as indicated by the assumption $x \in FV( t' )$),
+then we can conclude that $\Ec$ is unsatisfiable.
+For bisimilarity, if there are two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
+of co-datatype type whose possible values $\Val \ec{t_1}$ and $\Val \ec{t_2}$ are equivalent modulo renaming of $\mu$-bound variables,
+then we can conclude $t_1 \teq t_2$.
+We demonstrate an application of this rule concretely with the following example.
+
+\begin{example}
+Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
+and let $\Ec$ be the set $\{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
+After applying the rules in Figure~\ref{fig:cc-rules} to completion, the equivalence classes of $\Ec$ are
+$\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
+Our construction of $\Val$ gives us:
+\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l}
+\Val \ec{x} & = & 
+\mu v_{\ec{x}}. \const{C}( v_{\ec{y}}, \mu v_{\ec{\const{C}(y,x)}}. \const{C}( v_{\ec{y}}, v_{\ec{x}} ) ) \\
+\Val \ec{\const{C}(y,x)} & = & 
+\mu v_{\ec{\const{C}(y,x)}}. \const{C}( v_{\ec{y}}, \mu v_{\ec{x}}. \const{C}( v_{\ec{y}}, v_{\ec{\const{C}(y,x)}} ) )
+\end{array}\]
+Notice that $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are syntactically equivalent for the renaming
+$\{ v_{\ec{x}} \mapsto v_{\ec{\const{C}(y,x)}}, v_{\ec{\const{C}(y,x)}} \mapsto v_{\ec{x}} \}$,
+and thus our calculus may infer the equality $x \teq \const{C}(y,x)$.
+\qed
+\end{example}
+
+
+\begin{comment}
 To explain the rules in Figure~\ref{fig:ab-rules}, we introduce the following notions.
 First, an edge $\ec{t_1} \rightarrow^{C}_n \ec{t_2}$ is a transition between two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
 (which we will call its \emph{source} and \emph{destination} respectively),
@@ -864,26 +973,8 @@ In this rule, $\sigma$ is a complete mapping over the equivalence classes that o
 The rule applies if $\tpath{\Ec}{\ec{t_1}}$ is comprised of the paths $p \sigma$ for each (and only) the paths $p \in \tpath{\Ec}{\ec{t_2}}$,
 in which case $t_1$ must be equal to $t_2$.
 We demonstrate an application of this rule concretely with the following example.
+\end{comment}
 
-\begin{example}
-Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
-and let $\Ec$ be the set $\{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
-After applying the rules in Figure~\ref{fig:cc-rules} to completion, the equivalence classes of $\Ec$ are
-$\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
-The sets $\tpath{\Ec}{\ec{x}}$ and $\tpath{\Ec}{\ec{\const{C}(y,x)}}$ are:
-\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-\{ & \ec{x} \rightarrow^{\const{C}}_1 & \ec{y}, & & & 
-\{ & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_1 & \ec{y}, & & \\ 
-   & \ec{x} \rightarrow^{\const{C}}_2 & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_1 & \ec{y},&  &
-   & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_2 & \ec{x} \rightarrow^{\const{C}}_1 & \ec{y},& \\
-   & \ec{x} \rightarrow^{\const{C}}_2 & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_2 & \ec{x} & \} &
-   & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_2 & \ec{x} \rightarrow^{\const{C}}_2 & \ec{\const{C}(y,x)} & \}.
-\end{array}\]
-Thus, by the rule \rn{Bisimilar}
-for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{C}(y,x)}, \ec{\const{C}(y,x)} \mapsto \ec{x} \}$,
-we may infer $x \teq \const{C}(y,x)$.
-\qed
-\end{example}
 
 \begin{figure}[t]
 \centering
@@ -920,6 +1011,7 @@ we may infer $x \teq \const{C}(y,x)$.
 \label{fig:split-rule}
 \end{figure}
 
+\paragraph{Step 3: Branching}
 \rem{Require : all co-datatypes either have infinite cardinality, or have cardinality 1.}
 
 Finally, if neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
@@ -1068,7 +1160,7 @@ then $\Ec$ is satisfiable $\thD$.
 %Given a set of disjoint paths $P$ where each $p \in P$
 %we write $\interp{P}$ to denote the value
 
-
+\rem{Revise : now $\Val$ is constructed by calculus.}
 Recall that the $\mu$-notation can be used to represent (possibly cyclic) values taken from an initial algebra, \rem{elaborate?} 
 e.g. $\mu x. \const{C}( \const{0}, x )$ represents the infinite sequence $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
 In this setting, a value can be viewed as a term-like structure where all subterms 
