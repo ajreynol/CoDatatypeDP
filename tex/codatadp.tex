@@ -89,7 +89,8 @@
 \newcommand{\ec}[1]{ [ #1 ] }
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\Val}{\mathcal{A}}
-
+\newcommand{\nf}[1]{{#1}\!\!\downarrow}
+\newcommand{\vsim}{\sim}
 
 % change?
 \newcommand{\thO}{T_{o}}
@@ -1073,26 +1074,27 @@ e.g. $\mu x. \const{C}( \const{0}, x )$ represents the infinite sequence $\const
 In this setting, a value can be viewed as a term-like structure where all subterms 
 (which we will refer to as \emph{subvalues}) are either 
 $\mu x. \const{C}( \vec v )$ for some constructor $\const{C}$ and subvalues $\vec v$
-\footnote{We assume all such values are well-typed.}, or a variable $x$.
+\footnote{We assume all values are well-typed. 
+Here, the type of $\mu x. \const{C}( \vec v )$ and $x$ is the return type of $\const{C}$.}, or a variable $x$.
 We will refer to values of this form as \emph{$\mu$-values}.
 We say a $\mu$-value is \emph{closed} if it contains no free variables.
 For convienience, we will represent the values of both datatypes and co-datatypes as closed $\mu$-values,
 where the case of datatypes adds the restriction that none of its subvalues are variables.
 
-To reason about the uniqueness of $\mu$-values, we introduce the following notions.
-First, the \emph{interpretation of subvalue $u$ in $v$} is the value $v\interp{u}^\emptyset$ returned by the following,
+We introduce the following notions concerning $\mu$-values.
+First, we write $v \vsim u$ if $\mu$-values $v$ and $u$ are equivalent modulo renaming of $\mu$-bound variables.
+The \emph{interpretation of subvalue $u$ in $v$} is the value $v\interp{u}^\emptyset$ returned by the following recursive procedure,
 where $x \mapsto \mu x. C( \vec t ) \in v$ indicates that $\mu x. C( \vec t )$ is the subvalue of $v$ that binds this occurrence of variable $x$.
-
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-v\interp{x}^M & = & x & x \in M \\
 v\interp{x}^M & = & v\interp{\mu x. C( \vec t )}^M & x \not\in M, x \mapsto \mu x. C( \vec t ) \in v  \\
-v\interp{\mu x. C( \vec t )}^M & = & x & x \in M \\
-v\interp{\mu x. C( \vec t )}^M & = & \mu x. C( v\interp{ \vec t }^{M \cup \{ x \}} ) & x \not\in M
+v\interp{x}^M & = & x & \text{otherwise} \\
+v\interp{\mu x. C( \vec t )}^M & = & \mu x. C( v\interp{ \vec t }^{M \cup \{ x \}} ) & x \not\in M \\
+v\interp{\mu x. C( \vec t )}^M & = & x & \text{otherwise}
 \end{array}\]
-
-We say a (closed) $\mu$-value $v$ of the form $\mu x. \const{C}( \vec w )$ is \emph{normal} if and only if 
-$v\interp{u}^\emptyset$ is not equivalent to $v$ modulo renaming for all of its strict subvalues $u$,
-and all of its strict closed subvalues are normal.
+Given a $\mu$-value $v$ of the form $\mu x. C( \vec w )$, 
+a subvalue $u$ of $v$ is a \emph{bisimilar subvalue} if and only if $v\interp{u}^\emptyset \sim v$.
+We say $v$ is \emph{normal} if and only if all of its bisimilar subvalues are $x$,
+and all of its strict subvalues that do not contain $v$ are also normal.
 For instance, the value $v$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is not normal, 
 since 
 $v\interp{\mu y. \const{S}( x )}^\emptyset =$ 
@@ -1101,7 +1103,12 @@ $\mu y. \const{S}( v\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} 
 $\mu y. \const{S}( \mu x. \const{S}( v\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
 $\mu y. \const{S}( \mu x. \const{S}( y ) )$,
 which is equivalent to $v$ modulo the renaming $\{ x \mapsto y, y \mapsto x \}$.
-
+For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
+(which we will call the \emph{normal form for $v$})
+that is observationally equivalent to $v$.
+We construct $\nf{v}$ by replacing all of the bisimilar subvalues of $v$ with $x$,
+and by replacing all of the non-normal closed subvalues of $v$ with their corresponding normal forms.
+For instance, $\nf{(\mu x. \const{S}( \mu y. \const{S}( x ) ))} = \mu x. \const{S}( x )$.
 
 
 \begin{lemma}[Solution Soundness] \label{lem:ss}
