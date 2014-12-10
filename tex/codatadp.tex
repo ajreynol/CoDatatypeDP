@@ -862,27 +862,25 @@ The rule \rn{Bisimilar} recognizes when two equivalence classes $\ec{t_1}$ and $
 In this rule, $\sigma$ is a complete mapping over the equivalence classes that occur as sources in the edges of paths in $\tpath{\Ec}{\ec{t_2}}$.
 The rule applies if $\tpath{\Ec}{\ec{t_1}}$ is comprised of the paths $p \sigma$ for each (and only) the paths $p \in \tpath{\Ec}{\ec{t_2}}$,
 in which case $t_1$ must be equal to $t_2$.
-We demonstrate this rule concretely with the following example.
-\rem{ensure that \const{LCons} understood}
+We demonstrate an application of this rule concretely with the following example.
 
 \begin{example}
-Let $\Ec$ be the set $\{ x \teq \const{LCons}(y,\const{LCons}(y,x)) \}$.
+Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
+and let $\Ec$ be the set $\{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
 After applying the rules in Figure~\ref{fig:cc-rules} to completion, the equivalence classes of $\Ec$ are
-$\{ x, \const{LCons}(y,\const{LCons}(y,x)) \}$, $\{ \const{LCons}(y,x) \}$, and $\{ y \}$.
-The set $\tpath{\Ec}{\ec{x}}$ is:
-\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-\{ & \ec{x} \rightarrow^{\const{LCons}}_1 & \ec{y}, & & \\ 
-   & \ec{x} \rightarrow^{\const{LCons}}_2 & \ec{\const{LCons}(y,x)} \rightarrow^{\const{LCons}}_1 & \ec{y},& \\
-   & \ec{x} \rightarrow^{\const{LCons}}_2 & \ec{\const{LCons}(y,x)} \rightarrow^{\const{LCons}}_2 & \ec{x} & \}.
+$\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
+The sets $\tpath{\Ec}{\ec{x}}$ and $\tpath{\Ec}{\ec{\const{C}(y,x)}}$ are:
+\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
+\{ & \ec{x} \rightarrow^{\const{C}}_1 & \ec{y}, & & & 
+\{ & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_1 & \ec{y}, & & \\ 
+   & \ec{x} \rightarrow^{\const{C}}_2 & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_1 & \ec{y},&  &
+   & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_2 & \ec{x} \rightarrow^{\const{C}}_1 & \ec{y},& \\
+   & \ec{x} \rightarrow^{\const{C}}_2 & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_2 & \ec{x} & \} &
+   & \ec{\const{C}(y,x)} \rightarrow^{\const{C}}_2 & \ec{x} \rightarrow^{\const{C}}_2 & \ec{\const{C}(y,x)} & \}.
 \end{array}\]
-The set $\tpath{\Ec}{\ec{\const{LCons}(y,x)}}$ is:
-\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-\{ & \ec{\const{LCons}(y,x)} \rightarrow^{\const{LCons}}_1 & \ec{y}, & & \\ 
-   & \ec{\const{LCons}(y,x)} \rightarrow^{\const{LCons}}_2 & \ec{x} \rightarrow^{\const{LCons}}_1 & \ec{y},& \\
-   & \ec{\const{LCons}(y,x)} \rightarrow^{\const{LCons}}_2 & \ec{x} \rightarrow^{\const{LCons}}_2 & \ec{\const{LCons}(y,x)} & \}.
-\end{array}\]
-Thus, we may infer $x \teq \const{LCons}(y,x)$ by the rule \rn{Bisimilar}
-for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{LCons}(y,x)}, \ec{\const{LCons}(y,x)} \mapsto \ec{x} \}$.
+Thus, by the rule \rn{Bisimilar}
+for the mapping $\sigma :=$ $\{ \ec{x} \mapsto \ec{\const{C}(y,x)}, \ec{\const{C}(y,x)} \mapsto \ec{x} \}$,
+we may infer $x \teq \const{C}(y,x)$.
 \qed
 \end{example}
 
@@ -1066,8 +1064,45 @@ then $\Ec$ is satisfiable $\thD$.
 %\begin{lemma}
 %\end{lemma}
 
-Given a set of disjoint paths $P$ where each $p \in P$
-we write $\interp{P}$ to denote the value
+%Given a set of disjoint paths $P$ where each $p \in P$
+%we write $\interp{P}$ to denote the value
+
+
+Recall that the $\mu$-notation can be used to represent (possibly cyclic) values taken from an initial algebra, \rem{elaborate?} 
+e.g. $\mu x. \const{C}( \const{0}, x )$ represents the infinite sequence $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
+In this setting, a value can be viewed as a term-like structure where all subterms 
+(which we will refer to as \emph{subvalues}) are either 
+$\mu x. \const{C}( \vec v )$ for some constructor $\const{C}$ and subvalues $\vec v$
+\footnote{We assume all such values are well-typed.}, or a variable $x$.
+We will refer to values of this form as \emph{$\mu$-values}.
+We say a $\mu$-value is \emph{closed} if it contains no free variables.
+For convienience, we will represent the values of both datatypes and co-datatypes as closed $\mu$-values,
+where the case of datatypes adds the restriction that none of its subvalues are variables.
+
+To reason about the uniqueness of $\mu$-values, we introduce the following notions.
+First, the \emph{interpretation of subvalue $u$ in $v$} is the value $v\interp{u}^\emptyset$ returned by the following,
+where $x \mapsto \mu x. C( \vec t ) \in v$ indicates that $\mu x. C( \vec t )$ is the subvalue of $v$ that binds this occurrence of variable $x$.
+
+\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
+v\interp{x}^M & = & x & x \in M \\
+v\interp{x}^M & = & v\interp{\mu x. C( \vec t )}^M & x \not\in M, x \mapsto \mu x. C( \vec t ) \in v  \\
+v\interp{\mu x. C( \vec t )}^M & = & x & x \in M \\
+v\interp{\mu x. C( \vec t )}^M & = & \mu x. C( v\interp{ \vec t }^{M \cup \{ x \}} ) & x \not\in M
+\end{array}\]
+
+We say a (closed) $\mu$-value $v$ of the form $\mu x. \const{C}( \vec w )$ is \emph{normal} if and only if 
+$v\interp{u}^\emptyset$ is not equivalent to $v$ modulo renaming for all of its strict subvalues $u$,
+and all of its strict closed subvalues are normal.
+For instance, the value $v$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is not normal, 
+since 
+$v\interp{\mu y. \const{S}( x )}^\emptyset =$ 
+$\mu y. \const{S}( v\interp{x}^{\{y\}} ) =$ 
+$\mu y. \const{S}( v\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} ) =$ 
+$\mu y. \const{S}( \mu x. \const{S}( v\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
+$\mu y. \const{S}( \mu x. \const{S}( y ) )$,
+which is equivalent to $v$ modulo the renaming $\{ x \mapsto y, y \mapsto x \}$.
+
+
 
 \begin{lemma}[Solution Soundness] \label{lem:ss}
 If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
@@ -1086,63 +1121,9 @@ Initially, $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$ for each equivalence clas
 where $v_{\ec{x}}$ is a fresh variable of the same type as $x$ not occurring in $\Fc$.
 Then, $\Val$ is updated according to the following rules:
 
-\begin{comment}
-\rn{Ord}
-\(
-\inferrule{
-  \ec{x} \not\in \vdom(\Val)
-  \quad
-  x : \tau
-  \quad
-  \tau \in \Nondata
-  \quad
-  c \not\in \vrange(\Val)
-}{
-  \Val := \Val \cup \ec{x} \mapsto c
-}
-\)
-
-\rn{D-Ind}
-\(
-\inferrule{
-  \ec{x} \not\in \vdom(\Val)
-  \quad
-  x : \tau
-  \quad
-  \tau \in \Data
-  \quad
-  C( \vec t ) \in \ec{x}
-  \quad
-  \ec{\vec t} \in \vdom(\Val)
-}{
-  \Val := \Val \cup \ec{x} \mapsto C( \Val \ec{\vec t}  )
-}
-\)
-
-\rn{D-Base}
-\(
-\inferrule{
-  \ec{x} \not\in \vdom(\Val)
-  \quad
-  x : \tau
-  \quad
-  \tau \in \Data
-  \quad
-  \ec{x} \text{ ctr-free}
-  \quad
-  c \not\in \vrange(\Val)
-}{
-  \Val := \Val \cup \ec{x} \mapsto c
-}
-\)
-\end{comment}
-
 \rn{Ind}
 \(
 \inferrule{
-  %x : \tau
-  %\quad
-  %\tau \in \Codata
   v_{\ec{x}} \in FV( \Val )
   \quad
   C( t_1, \ldots, t_n ) \in \ec{x}
@@ -1156,13 +1137,7 @@ Then, $\Val$ is updated according to the following rules:
 \rn{Base}
 \(
 \inferrule{
-  %x : \tau
-  %\quad
-  %\tau \in \Codata
-  %\quad
   v_{\ec{x}} \in FV( \Val )
-  %\quad
-  %\ec{x} \text{ ctr-free}
   \quad
   c \not\sim c' \text{ for all } c' \in \vrange(\Val)
 }{
@@ -1171,11 +1146,9 @@ Then, $\Val$ is updated according to the following rules:
 \)
 
 \rem{define $\sim$}
-We assume that first \rn{Ind} is applied exhaustively, after which \rn{Base} is applied exhaustively.
-%the rule \rn{D-Ind} is applied to completion before applying \rn{D-Base}.
+
 In the rule \rn{Ind}, we write $FV( \Val )$ to denote the free variables occurring in $\Val$.
 Notice that this excludes variables beneath $\mu$-binders.
-
 As an example,
 say that $\Fc$ contains equivalence classes $\ec{x}$ and $\ec{y}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$, where $z$ and $w$ are variables of integer type.
 A possible application of the above rules, showing the state of $\Val$ after each application, is as follows:
@@ -1203,11 +1176,23 @@ A possible application of the above rules, showing the state of $\Val$ after eac
 &    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( \const{0}, \mu v_{\ec{x}}. \const{C}( \const{1}, v_{\ec{y}} ) ), & \ec{w} \mapsto \const{1} & \} \\
 \end{array}\]
 
+In our construction, the rule \rn{Ind} is first applied exhaustively.
+Since the height of any value mapped to by $\Val$ is bounded by the number of equivalence classes of $\Fc$,
+the rule \rn{Ind} can be applied only a finite number of times.
+Second, \rn{Base} is applied exhaustively.
+Since \rn{Base} removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
+the rule \rn{Base} can only be applied a finite number of times and does not trigger any new applications of \rn{Ind}.
 
-It is clear that after applying these rules to completion, $\Val$ is a mapping from equivalence classes to ground values.
+We first argue that $\Val$ contains only ground values.
+First, since \rn{Split} does not apply to $\Fc$,
+all equivalence classes of finite type contain constructor terms.
+Thus, after applying \rn{Ind} exhaustively, the free variables of $\Val$ all have infinite type.
 
 
 
+
+
+%It is clear that after applying these rules to completion, $\Val$ is a mapping from equivalence classes to ground values.
 
 \begin{eqnarray} \label{eqn:m-bij-dt}
 \Val \ec{x} = \Val \ec{y} \text{ if and only if } \ec{x} = \ec{y}
