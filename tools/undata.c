@@ -12,9 +12,11 @@ typedef enum {
 
 const int BIG_NUM = 65536;
 
+int next_ch;
+token tok;
 char tok_str[BIG_NUM];
 
-void print_token(FILE *out, token tok)
+void print_token(FILE *out)
 {
     switch (tok) {
     case Tok_Left_Paren:
@@ -38,23 +40,23 @@ void print_token(FILE *out, token tok)
     }
 }
 
-int get_token(FILE *in, int *next_ch)
+int get_token(FILE *in)
 {
     for (;;) {
-        switch (*next_ch) {
+        switch (next_ch) {
         case EOF:
             return Tok_End;
         case ';':
-            while (*next_ch != EOF &&
-                    *next_ch != '\n') {
-                *next_ch = fgetc(in);
+            while (next_ch != EOF &&
+                    next_ch != '\n') {
+                next_ch = fgetc(in);
             }
             break;
         case '(':
-            *next_ch = fgetc(in);
+            next_ch = fgetc(in);
             return Tok_Left_Paren;
         case ')':
-            *next_ch = fgetc(in);
+            next_ch = fgetc(in);
             return Tok_Right_Paren;
         case ' ':
         case '\a':
@@ -62,24 +64,24 @@ int get_token(FILE *in, int *next_ch)
         case '\r':
         case '\t':
         case '\v':
-            *next_ch = fgetc(in);
+            next_ch = fgetc(in);
             break;
         default:
             {
                 int i = 0;
 
-                while (*next_ch != EOF &&
-                        *next_ch != '(' &&
-                        *next_ch != ')' &&
-                        *next_ch != ';' &&
-                        *next_ch != ' ' &&
-                        *next_ch != '\a' &&
-                        *next_ch != '\n' &&
-                        *next_ch != '\r' &&
-                        *next_ch != '\t' &&
-                        *next_ch != '\v') {
-                    tok_str[i++] = *next_ch;
-                    *next_ch = fgetc(in);
+                while (next_ch != EOF &&
+                        next_ch != '(' &&
+                        next_ch != ')' &&
+                        next_ch != ';' &&
+                        next_ch != ' ' &&
+                        next_ch != '\a' &&
+                        next_ch != '\n' &&
+                        next_ch != '\r' &&
+                        next_ch != '\t' &&
+                        next_ch != '\v') {
+                    tok_str[i++] = next_ch;
+                    next_ch = fgetc(in);
                 }
                 tok_str[i] = '\0';
                 if (strcmp(tok_str, "declare-datatypes") == 0) {
@@ -94,8 +96,125 @@ int get_token(FILE *in, int *next_ch)
     }
 }
 
-void parse_co_datatypes(FILE *in, int *next_ch)
+int eliminate_co_datatype(FILE *in)
 {
+    char typeName[BIG_NUM];
+
+    strcpy(typeName, tok_str);
+
+    if (tok != Tok_Left_Paren) {
+        return 1;
+    }
+
+    tok = get_token(in);
+    if (tok != Tok_Left_Paren) {
+        return 1;
+    }
+
+    while (tok != Tok_Right_Paren) {
+        tok = get_token(in);
+    }
+    tok = get_token(in);
+
+    return 0;
+}
+
+int eliminate_co_datatypes(FILE *in)
+{
+    token tok = get_token(in);
+    if (tok != Tok_Left_Paren) {
+        return 1;
+    }
+
+    tok = get_token(in);
+    if (tok != Tok_Right_Paren) {
+        return 1;
+    }
+
+    tok = get_token(in);
+    if (tok != Tok_Left_Paren) {
+        return 1;
+    }
+
+    eliminate_co_datatype(in);
+
+    while (tok != Tok_Right_Paren) {
+        tok = get_token(in);
+    }
+    tok = get_token(in);
+    return 0;
+}
+
+int generate_one_file(const char *inName, int keep_data, int keep_codata)
+{
+    FILE *in = fopen(inName, "r");
+    if (in == 0) {
+        fprintf(stderr, "Cannot open \"%s\"\n", inName);
+        return 1;
+    }
+
+    char outName[BIG_NUM];
+
+    strcpy(outName, inName);
+
+    if (keep_data) {
+        if (keep_codata) {
+            strcat(outName, ".all");
+        } else {
+            strcat(outName, ".data");
+        }
+    } else {
+        if (keep_codata) {
+            strcat(outName, ".codata");
+        } else {
+            strcat(outName, ".nix");
+        }
+    }
+
+    FILE *out = fopen(outName, "w");
+
+    if (out == 0) {
+        fprintf(stderr, "Cannot open output file \"%s\"\n", outName);
+        return 1;
+    }
+
+    next_ch = fgetc(in);
+    tok = get_token(in);
+
+    while (tok != Tok_End) {
+        if (tok == Tok_Left_Paren) {
+            tok = get_token(in);
+
+            if (tok == Tok_Declare_Datatypes && !keep_data) {
+                eliminate_co_datatypes(in);
+            } else if (tok == Tok_Declare_Codatatypes && !keep_codata) {
+                eliminate_co_datatypes(in);
+            } else {
+                int depth = 1;
+
+                fputc('(', out);
+
+                while (depth != 0 && tok != Tok_End) {
+                    print_token(out);
+
+                    if (tok == Tok_Left_Paren) {
+                        ++depth;
+                    } else if (tok == Tok_Right_Paren) {
+                        --depth;
+                    }
+                    tok = get_token(in);
+                }
+
+                fputc('\n', out);
+            }
+        } else {
+            print_token(out);
+
+            tok = get_token(in);
+        }
+    }
+
+    return 0;
 }
 
 int main(int argc, char **argv)
@@ -105,78 +224,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    FILE *in = fopen(argv[1], "r");
-    if (in == 0) {
-        fprintf(stderr, "Cannot open \"%s\"\n", argv[1]);
-        return 1;
-    }
-
-    char outNixName[BIG_NUM];
-    char outDataName[BIG_NUM];
-    char outCodataName[BIG_NUM];
-
-    strcpy(outNixName, argv[1]);
-    strcpy(outDataName, argv[1]);
-    strcpy(outCodataName, argv[1]);
-
-    strcat(outNixName, ".nix");
-    strcat(outDataName, ".data");
-    strcat(outCodataName, ".codata");
-
-    FILE *outNix = fopen(outNixName, "w");
-    FILE *outData = fopen(outDataName, "w");
-    FILE *outCodata = fopen(outCodataName, "w");
-
-    if (outNix == 0 || outData == 0 || outCodata == 0) {
-        fprintf(stderr, "Cannot open output files");
-        return 1;
-    }
-
-    int next_ch = fgetc(in);
-    token tok = get_token(in, &next_ch);
-
-    while (tok != Tok_End) {
-        if (tok == Tok_Left_Paren) {
-            tok = get_token(in, &next_ch);
-
-            if (tok == Tok_Declare_Datatypes) {
-                tok = get_token(in, &next_ch);
-                parse_co_datatypes(in, &next_ch);
-            } else if (tok == Tok_Declare_Codatatypes) {
-                tok = get_token(in, &next_ch);
-                parse_co_datatypes(in, &next_ch);
-            } else {
-                int depth = 1;
-
-                print_token(outNix, Tok_Left_Paren);
-                print_token(outData, Tok_Left_Paren);
-                print_token(outCodata, Tok_Left_Paren);
-
-                while (depth != 0 && tok != Tok_End) {
-                    print_token(outNix, tok);
-                    print_token(outData, tok);
-                    print_token(outCodata, tok);
-
-                    if (tok == Tok_Left_Paren) {
-                        ++depth;
-                    } else if (tok == Tok_Right_Paren) {
-                        --depth;
-                    }
-                    tok = get_token(in, &next_ch);
-                }
-
-                fputc('\n', outNix);
-                fputc('\n', outData);
-                fputc('\n', outCodata);
-            }
-        } else {
-            print_token(outNix, tok);
-            print_token(outData, tok);
-            print_token(outCodata, tok);
-
-            tok = get_token(in, &next_ch);
-        }
-    }
-
-    return 0;
+    return generate_one_file(argv[1], 0, 0)
+            && generate_one_file(argv[1], 0, 1)
+            && generate_one_file(argv[1], 1, 0);
 }
