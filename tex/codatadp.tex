@@ -710,7 +710,7 @@ are replaced by $t_i$, and moreover assume that all additional constraints added
 We present the calculus in three parts.
 In the first part we compute the bidirectional closure of $\Ec$,
 in the second part we make inferences based on cyclicity and bisimilarity,
-and in the third part we (when necessary) split on the constructor type for various terms in $\tEc$.
+and in the third part (when necessary) we branch on constructor types for various terms in $\tEc$.
 Following the conventions from~\cite{}, 
 the derivation rules of our calculus are given in \emph{guarded assignment form},
 where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
@@ -849,7 +849,7 @@ for instance, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\c
 Formally, we recursively define a $\mu$-term is either of the form
 $\mu x. \const{C}( \vec t )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$, 
 or a variable $x$.
-We assume all $\mu$-terms are \emph{well-typed}, which we defined recursively:
+We consider only $\mu$-terms that are \emph{well-typed}, which we define recursively:
 if the type of $\const{C}$ is $\vec \tau \rightarrow \upsilon$, 
 then if $\vec v$ are well-type $\mu$-terms under the assumption that $x$ has type $\upsilon$,
 then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
@@ -864,7 +864,7 @@ we compute a mapping $\Val$ from equivalence classes to $\mu$-terms.
 Informally, the terms mapped to by $\Val$ describe the (class of) values that terms in each equivalence class can take in the models of $\Ec$. 
 For each equivalence class $\ec{x}$ of $\Ec$, we associate a fresh variable $v_{\ec{x}}$ of the same type as $x$ not occurring in $\tEc$,
 and initially say that $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$ for each equivalence class $\ec{x}$ of $\Ec$ 
-(in other words, there are initially no constraints on the values for terms).
+(in other words, there are initially no constraints on the values for any equivalence class).
 Then, $\Val$ is updated by applying the following rule exhaustively:
 
 \(
@@ -883,7 +883,7 @@ Here, we write $FV( \Val )$ to denote the free variables occurring in $\Val$, wh
 excludes variables that occur beneath $\mu$-binders.
 It is straightforward to show that the height of terms produced as a result of this rule
 is bounded by the number of equivalence classes of $\Ec$,
-our construction of $\Val$ is terminating.
+and thus our construction of $\Val$ is terminating.
 
 \begin{example}
 Say that $\Ec$ contains equivalence classes $\ec{x}$ and $\ec{y}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$.
@@ -915,30 +915,31 @@ where $v_{\ec{z}}$ and $v_{\ec{w}}$ are free variables.
 $\Box$
 \end{example}
 
-Given $\Val$, the rules for cyclicity and bisimilar can be stated as follows, and are shown in Figure~\ref{fig:ab-rules}.
-For cyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose possible values $\mu x. t'$ are cyclic 
-(as indicated by the assumption $x \in FV( t' )$),
+Given $\Val$, the rules for cyclicity and bisimilar (shown in Figure~\ref{fig:ab-rules}) can be stated as follows.
+For cyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x. t'$ are cyclic,
+as indicated by the assumption $x \in FV( t' )$,
 then we can conclude that $\Ec$ is unsatisfiable.
 For bisimilarity, if there are two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
-of co-datatype type whose possible values $\Val \ec{t_1}$ and $\Val \ec{t_2}$ are equivalent modulo renaming of $\mu$-bound variables,
+of co-datatype type whose classes of values $\Val \ec{t_1}$ and $\Val \ec{t_2}$ are equivalent modulo renaming of $\mu$-bound variables,
 then we can conclude $t_1 \teq t_2$.
-We demonstrate an application of this rule concretely with the following example.
+We demonstrate an application of the rule for bisimilarity concretely with the following example.
 
 \begin{example}
 Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
 and let $\Ec$ be the set $\{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
 After applying the rules in Figure~\ref{fig:cc-rules} to completion, the equivalence classes of $\Ec$ are
 $\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
-Our construction of $\Val$ gives us:
-\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l}
+We then construct $\Val$ using the aforementioned steps, after which we obtain:
+\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l}
 \Val \ec{x} & = & 
-\mu v_{\ec{x}}. \const{C}( v_{\ec{y}}, \mu v_{\ec{\const{C}(y,x)}}. \const{C}( v_{\ec{y}}, v_{\ec{x}} ) ) \\
+\mu v_{\ec{x}}. & \const{C}( v_{\ec{y}}, & \mu v_{\ec{\const{C}(y,x)}}. & \const{C}( v_{\ec{y}}, v_{\ec{x}} ) ) \\
 \Val \ec{\const{C}(y,x)} & = & 
-\mu v_{\ec{\const{C}(y,x)}}. \const{C}( v_{\ec{y}}, \mu v_{\ec{x}}. \const{C}( v_{\ec{y}}, v_{\ec{\const{C}(y,x)}} ) )
+\mu v_{\ec{\const{C}(y,x)}}. & \const{C}( v_{\ec{y}}, & \mu v_{\ec{x}}. & \const{C}( v_{\ec{y}}, v_{\ec{\const{C}(y,x)}} ) )
 \end{array}\]
 Notice that $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are syntactically equivalent for the renaming
 $\{ v_{\ec{x}} \mapsto v_{\ec{\const{C}(y,x)}}, v_{\ec{\const{C}(y,x)}} \mapsto v_{\ec{x}} \}$,
-and thus our calculus may infer the equality $x \teq \const{C}(y,x)$.
+and thus our calculus may infer $x \teq \const{C}(y,x)$.
+Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$ are observationally equivalent for any value of $y$.
 \qed
 \end{example}
 
@@ -1084,74 +1085,6 @@ and thus $\Ec$ is unsatisfiable in $\thD$.
 It remains to show the inverse of the previous lemma, that when a derivation tree with root node $\Ec$ contains a saturated node $\Fc$,
 then $\Ec$ is satisfiable $\thD$.
 
-%We first show that for any saturated node $\Fc$, 
-%additional equalities $\Gc$ can be added to $\Fc$ such that each codatatype/datatype equivalence class of $\Fc \cup \Gc$ has a constructor term.
-%For this purpose, we extend the calculus in this section.
-%For a subset of equivalence classes $S$ of $\Ec$, write $\dpath{\Ec}{C,n}{S}$ to denote the set
-%such that $e' \in \dpath{\Ec}{C,n}{S}$ if and only if there exists an $e \in S$ such that $e \rightarrow^{C}_n e'$ is induced by $\Ec$.
-
-\begin{comment}
-\begin{figure}[t]
-\centering
-\begin{tabular}{c}
-\rn{O-Finish}
-\(
-\inferrule{
-  \Ac := x
-  \quad
-  x : \tau
-  \quad
-  \tau \in \Nondata
-  \quad
-  c \not\in \tEc
-}{
-  \Ac := \emptyset \quad \Ec := \Ec \cup \{ x \teq c \}
-}
-\)
-\\[3.7ex]
-\rn{C-Finish}
-\(
-\inferrule{
-  \Ac := x
-  \quad
-  x : \tau
-  \quad
-  \tau \in \Codata
-  \quad
-  C_i \in \Ctr^\tau
-  \quad 
-  C_i \not\in \{ C_j \mid d \in \Dc, C_j( \vec t ) \in d \}
-}{
-  \Ac := \emptyset \quad \Ec := \Ec \cup \{ x \teq C_i( \vec y ) \} \quad \Rc := \Rc \cup \vec y
-}
-\)
-\\[3.7ex]
-\rn{C-Rec}
-\(
-\inferrule{
-  \Ac := x
-  \quad
-  x : \tau
-  \quad
-  \tau \in \Codata
-  \quad
-  C_i \in \Ctr^\tau
-  \quad
-  C_i \text{ infinite arg } j
-}{
-  \Ac := y_j \quad 
-  \Ec := \Ec \cup \{ x \teq C_i( \vec y ) \} \quad 
-  \Rc := \Rc \cup ( \vec y \setminus y_j ) \quad 
-  \Dc := \dpath{\Ec}{C_i,j}{\Dc}
-}
-\)
-\end{tabular}
-\caption{Rules for completion.
-}
-\label{fig:completion-rules}
-\end{figure}
-\end{comment}
-
 %and second show how to construct a valuation for the variables of $\Fc \cup \Gc$.
 
 %\begin{lemma}
@@ -1161,20 +1094,8 @@ then $\Ec$ is satisfiable $\thD$.
 %we write $\interp{P}$ to denote the value
 
 \rem{Revise : now $\Val$ is constructed by calculus.}
-Recall that the $\mu$-notation can be used to represent (possibly cyclic) values taken from an initial algebra, \rem{elaborate?} 
-e.g. $\mu x. \const{C}( \const{0}, x )$ represents the infinite sequence $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
-In this setting, a value can be viewed as a term-like structure where all subterms 
-(which we will refer to as \emph{subvalues}) are either 
-$\mu x. \const{C}( \vec v )$ for some constructor $\const{C}$ and subvalues $\vec v$
-\footnote{We assume all values are well-typed. 
-Here, the type of $\mu x. \const{C}( \vec v )$ and $x$ is the return type of $\const{C}$.}, or a variable $x$.
-We will refer to values of this form as \emph{$\mu$-values}.
-We say a $\mu$-value is \emph{closed} if it contains no free variables.
-For convienience, we will represent the values of both datatypes and co-datatypes as closed $\mu$-values,
-where the case of datatypes adds the restriction that none of its subvalues are variables.
 
-We introduce the following notions concerning $\mu$-values.
-First, we write $v \vsim u$ if $\mu$-values $v$ and $u$ are equivalent modulo renaming of $\mu$-bound variables.
+First, we require additional terminology concerning $\mu$-terms.
 The \emph{interpretation of subvalue $u$ in $v$} is the value $v\interp{u}^\emptyset$ returned by the following recursive procedure,
 where $x \mapsto \mu x. C( \vec t ) \in v$ indicates that $\mu x. C( \vec t )$ is the subvalue of $v$ that binds this occurrence of variable $x$.
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
@@ -1215,25 +1136,12 @@ The latter also comes with no loss of generality since nested applications of se
 
 We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
 interprets wrongly-applied selectors based on equality information in $\Fc$,
-interprets the variables and $x$ of $\Fc$ based on a mapping $\Val$ from the equivalence classes of $\Fc$ to values.
-Initially, $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$ for each equivalence class $\ec{x}$ of $\Fc$,
-where $v_{\ec{x}}$ is a fresh variable of the same type as $x$ not occurring in $\Fc$.
-Then, $\Val$ is updated according to the following rules:
+interprets the variables and $x$ of $\Fc$ based on the valuation $\Val$ which we constructed in step two of our calculus.
 
-\rn{Ind}
-\(
-\inferrule{
-  v_{\ec{x}} \in FV( \Val )
-  \quad
-  C( t_1, \ldots, t_n ) \in \ec{x}
-  \quad
-  C \in \Ctr
-}{
-  \Val := \Val \{ v_{\ec{x}} \mapsto \mu v_{\ec{x}}. C( v_{\ec{t_1}}, \ldots, v_{\ec{t_n}} ) \}
-}
-\)
+Recall that $\Val$ was constructed as a mapping from the equivalence classes of $\Fc$ to $\mu$-terms.
+We must first \emph{complete} $\Val$ so that it maps equivalence classes only to closed $\mu$-terms, that is, terms containing no free variables.
+This is done by exhaustively applying of the following rule:
 
-\rn{Base}
 \(
 \inferrule{
   v_{\ec{x}} \in FV( \Val )
@@ -1243,49 +1151,14 @@ Then, $\Val$ is updated according to the following rules:
   \Val := \Val \{ v_{\ec{x}} \mapsto c \}
 }
 \)
+Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
+it can only be applied a finite number of times.
 
-\rem{define $\sim$}
-
-In the rule \rn{Ind}, we write $FV( \Val )$ to denote the free variables occurring in $\Val$.
-Notice that this excludes variables beneath $\mu$-binders.
-As an example,
-say that $\Fc$ contains equivalence classes $\ec{x}$ and $\ec{y}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$, where $z$ and $w$ are variables of integer type.
-A possible application of the above rules, showing the state of $\Val$ after each application, is as follows:
-\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-\hline
-\text{Rule} & \multicolumn{4}{c}{\Val} \ 
-\\
-\hline
-& \{ & \ec{x} \mapsto v_{\ec{x}}, & \ec{z} \mapsto v_{\ec{z}}, \\
-&    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
-\rn{Ind} \ec{x}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ), & \ec{z} \mapsto v_{\ec{z}}, \\
-&    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
-\rn{Ind} \ec{y}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
-\rn{Ind} \ec{x}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
-\rn{Base} \ec{z}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( \const{0}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
-\rn{Base} \ec{w}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( \const{1}, \mu v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( \const{0}, \mu v_{\ec{x}}. \const{C}( \const{1}, v_{\ec{y}} ) ), & \ec{w} \mapsto \const{1} & \} \\
-\end{array}\]
-
-In our construction, the rule \rn{Ind} is first applied exhaustively.
-Since the height of any value mapped to by $\Val$ is bounded by the number of equivalence classes of $\Fc$,
-the rule \rn{Ind} can be applied only a finite number of times.
-Second, \rn{Base} is applied exhaustively.
-Since \rn{Base} removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
-the rule \rn{Base} can only be applied a finite number of times and does not trigger any new applications of \rn{Ind}.
-
-We first argue that $\Val$ contains only ground values.
+We first argue that $\Val$ contains only to ground values (which include closed $\mu$-terms), in other words, $FV( \Val ) = \emptyset$.
 First, since \rn{Split} does not apply to $\Fc$,
 all equivalence classes of finite type contain constructor terms.
-Thus, after applying \rn{Ind} exhaustively, the free variables of $\Val$ all have infinite type.
+Thus, all variables in $FV( \Val )$ have infinite type.
+
 
 
 
