@@ -857,8 +857,10 @@ We consider only $\mu$-terms that are \emph{well-typed}, which we define recursi
 if the type of $\const{C}$ is $\vec \tau \rightarrow \upsilon$
 and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
 then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
-We say a $\mu$-term is \emph{closed} if it contains no free variables.
-We write $t \vsim s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent for some renaming of $\mu$-bound variables.
+We say a $\mu$-term is \emph{closed} if and only if it contains no free variables.
+A $\mu$-term is \emph{cyclic} if and only if it contains a bound variable.
+We write $t \vsim s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent for some renaming of $\mu$-bound variables,
+in which case we will commonly say $t$ and $s$ are \emph{bisimilar}.
 %For convienience, we will use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
@@ -1090,7 +1092,7 @@ and thus $\Ec$ is unsatisfiable in $\thD$.
 It remains to show the inverse of the previous lemma, that when a derivation tree with root node $\Ec$ contains a saturated node $\Fc$,
 then $\Ec$ is satisfiable $\thD$.
 First, we require additional terminology concerning $\mu$-terms.
-If $u$ is a subterm of $v$, then the \emph{interpretation of $u$ in $v$} is the term $v\interp{u}^\emptyset$ returned by the following recursive procedure,
+If $u$ is a subterm of $\mu$-term $v$, then the \emph{interpretation of $u$ in $v$} is the $\mu$-term $v\interp{u}^\emptyset$ as returned by the following recursive procedure,
 where $x \mapsto \mu x. C( \vec t ) \in v$ indicates that $\mu x. C( \vec t )$ is the subterm of $v$ that binds this occurrence of variable $x$.
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
 v\interp{x}^M & = & v\interp{\mu x. C( \vec t )}^M & x \not\in M, x \mapsto \mu x. C( \vec t ) \in v  \\
@@ -1098,10 +1100,11 @@ v\interp{x}^M & = & x & \text{otherwise} \\
 v\interp{\mu x. C( \vec t )}^M & = & \mu x. C( v\interp{ \vec t }^{M \cup \{ x \}} ) & x \not\in M \\
 v\interp{\mu x. C( \vec t )}^M & = & x & \text{otherwise}
 \end{array}\]
-Given a $\mu$-term $v$ of the form $\mu x. C( \vec w )$, 
-a subterm $u$ of $v$ is a \emph{bisimilar subterm} if and only if $v\interp{u}^\emptyset \vsim v$.
+We will write $v\interp{u}$ as shorthand for $v\interp{u}^\emptyset$.
+Given a $\mu$-term $v$ of the form $\mu x. C( \vec t )$, 
+we say $u$ is a \emph{bisimilar subterm} of $v$ if and only if $v\interp{u} \vsim v$.
 We say $v$ is \emph{normal} if and only if all of its bisimilar subterms are $x$,
-and all of its strict subterms that do not contain $v$ are also normal.
+and all of its strict subterms that do not contain $x$ are normal.
 For instance, the $\mu$-term $v$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is not normal, 
 since 
 $v\interp{\mu y. \const{S}( x )}^\emptyset =$ 
@@ -1110,7 +1113,6 @@ $\mu y. \const{S}( v\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} 
 $\mu y. \const{S}( \mu x. \const{S}( v\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
 $\mu y. \const{S}( \mu x. \const{S}( y ) )$,
 which is syntactically equivalent to $v$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
-
 
 %\begin{lemma}
 %\end{lemma}
@@ -1133,30 +1135,40 @@ all equivalence classes of $\Fc$ contain at least one variable, and all selector
 The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
 
-We construct a model $\M$ of $\thD$ that interprets constructors and correctly-applied selectors in the obvious way,
+We construct a model $\M$ of $\thD$ that interprets each type $\tau$
+as a maximal set of closed normal $\mu$-terms of that type that are 
+(1) unique up to renaming of $\mu$-bound variables,
+(2) acyclic when $\tau \not\in \Codata$.
+We assume $\M$ interprets constructors and correctly-applied selectors in the obvious way
+\footnote{
+To interpret a correctly-applied selector, if $v = \mu x. C_i( \vec t )$, then $\M( s^j_i( v ) )$ is the value in $\M( \tau )$ that is a renaming of $v\interp{t_j}$,
+where $t_j$ has type $\tau$.
+},
 interprets wrongly-applied selectors based on equality information in $\Fc$,
-interprets the variables and $x$ of $\Fc$ based on the valuation $\Val$ which we constructed in step two of our calculus.
+interprets the variables of $\Fc$ based on the valuation $\Val$ which was constructed in step two of our calculus.
 
-Recall that $\Val$ was constructed as a mapping from the equivalence classes of $\Fc$ to $\mu$-terms.
-We must first \emph{complete} $\Val$ so that it maps equivalence classes only to closed $\mu$-terms, that is, terms containing no free variables.
-This is done by exhaustively applying of the following rule:
+Recall that $\Val$ is a mapping from the equivalence classes of $\Fc$ to $\mu$-terms.
+We first \emph{complete} $\Val$ so that it maps equivalence classes only to closed $\mu$-terms, that is, terms containing no free variables.
+This is done by exhaustively applying the following rule:
 
+\rn{Complete}
 \(
 \inferrule{
   v_{\ec{x}} \in FV( \Val )
   \quad
-  c \text{ normal}  
+  c_1 \text{ closed normal}  
   \quad
-  c \not\sim c' \text{ for all } c' \in \vrange(\Val)
+  c_1 \not\sim c_2 \text{ for all } c_2 \in \mathcal{T}(\Val)
 }{
-  \Val := \Val \{ v_{\ec{x}} \mapsto c \}
+  \Val := \Val \{ v_{\ec{x}} \mapsto c_1 \}
 }
 \)
 
+We write $\mathcal{T}(\Val)$ to denote the smallest set containing $v\interp{u}$ for each subterm $u$ of $v$ in the range of $\Val$.
 Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
 
-Let $\Val^\ast$ be the result of applying the above rule to completion on $\Val$.
+Let $\Val^\ast$ be the result of applying the above rule to completion on the $\Val$ we constructed during step 2 of our calculus.
 We first argue that $FV( \Val^\ast ) = \emptyset$.
 Since \rn{Split} does not apply to $\Fc$,
 all equivalence classes of $\Fc$ finite datatype type contain constructor terms, 
@@ -1165,79 +1177,65 @@ For each equivalence classes of $\Fc$ with finite co-datatype $\tau$,
 we know $\tau$ must have cardinality one, due to \rem{reference}.
 Since \rn{Singleton} does not apply to $\Fc$, 
 there is only one equivalence class of type $\tau$, call it $\ec{x}$.
-If $\Val \ec{x} = v_{\ec{x}}$, then we may apply the above rule for the (single) value $c$ of type $\tau$, 
+%It cannot be the case that $v_{\ec{x}} \in FV(\Val^\ast \ec{x})$, then we may apply \rn{Complete} for the (single) value $c$ of type $\tau$, 
+%for which the second premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
+If it were the case that $v_{\ec{x}} \in FV(\Val^\ast )$,
+then \rn{Complete} would apply for the (single) value $c$ of type $\tau$, 
 for which the second premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
-Thus, all variables in $FV( \Val )$ have infinite type.
-
-
-
-
-
-%It is clear that after applying these rules to completion, $\Val$ is a mapping from equivalence classes to ground values.
-
-\begin{eqnarray} \label{eqn:m-bij-dt}
-\Val \ec{x} = \Val \ec{y} \text{ if and only if } \ec{x} = \ec{y}
+Since all $\tau \in \Nondata$ are infinite, all variables in $FV( \Val^\ast )$ have infinite type.
+For any infinite type $\tau$,
+there exists a closed normal $\mu$-term $c_1$ that is not bisimilar to any $c_2 \in \mathcal{T}(\Val^\ast)$, since $\mathcal{T}(\Val^\ast)$ is a finite set. \rem{elaborate?}
+Thus, $FV( \Val^\ast )$ contains no variables of infinite type,
+and consequently $\Val^\ast$ is a mapping from the equivalence classes of $\Fc$ to closed $\mu$-terms.
+We now argue that:
+\begin{eqnarray}
+\label{eqn:m-normal} 
+\Val^\ast \text{ maps to normal $\mu$-terms only},  \\
+\label{eqn:m-bij} 
+\Val^\ast \ec{x} \sim \Val^\ast \ec{y} \text{ if and only if } \ec{x} = \ec{y}
 \end{eqnarray}
+We show this by induction on the number of applications of the rule \rn{Complete}.
+For the base case, note that since \rn{Bisimilar} does not apply to $\Fc$,
+we have that $\Val$ satisfies both~\ref{eqn:m-normal} and~\ref{eqn:m-bij}.
+It satisfies the former since if a $\mu$-term $\mu v_{\ec{x}}. t_1$ had a bisimilar subterm $\mu v_{\ec{y}}. t_2$,
+then the rule \rn{Bisimilar} would have applied to $x$ and $y$. \rem{elaborate?}
+For the inductive case, say that we apply \rn{Complete} to $\Val$ for the substitution $\sigma := \{ v_{\ec{x}} \mapsto c_1 \}$.
+\rem{TODO}
 
-\begin{comment}
-We assume that:
-\begin{enumerate}
-\item Each equivalence class of $\Fc$ contains at least one variable,
-\item Each equivalence class $\ec{x}$ of $\Fc$ where $x : \tau$, $\tau \in \Nondata$ contains a constant,
-\item Each equivalence class $\ec{x}$ of $\Fc$ where $x : \tau$, $\tau \in \Data \cup \Codata$ contains a constructor term.
-\end{enumerate}
-The first statement comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability.
-The second statement can be assumed for $x : \tau$, since $\tau$ is infinite.
-Hence, we can assign constants for each such equivalence class.
-Moreover, since $\Fc$ contains $\thD$-constraints only, these constants can be chosen arbitrarily.
-The third statement can be assumed by \rem{TODO}.
 
-For each equivalence class $e : \tau$, where $\tau \in \Nondata$ containing constant $c$,
-$\Val(x) = c$ for each $x \in e$.
-For each $e : \tau$, where $\tau \in \Data$ containing the constructor term $C( \vec u )$ where the equivalence classes $\ec{\vec u}$ contains the variables $\vec y$,
-$\Val(x) = C( \Val( \vec y ) )$ for each $x \in e$.
-Since \rn{Cyclic} does not apply, this definition is well-defined. 
-For each $e : \tau$, where $\tau \in \Codata$, 
-$\Val( x ) = \interp{ \tpath{\Fc}{e} }$ for each $x \in e$.
-Since neither \rn{Cong} or \rn{Bisimilar} applies to $\Fc$, we have that for all variables $x$ and $y$:
-\begin{eqnarray} \label{eqn:m-bij-dt}
-\Val(x) = \Val(y) \text{ if and only if } \ec{x} = \ec{y}
-\end{eqnarray}
-\end{comment}
-
-Now, we let $\M( x ) = \Val \ec{x}$ for each variable $x$ in $\Fc$.
+Now, we let $\M( x ) = \Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 
 If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
 
 If $\tau \in \Data$,
-we first show that $\M( t ) = \Val \ec{x}$ for all non-selector terms $t$ that occur in datatype equivalence classes $\ec{x}$.
-We show this by induction on the size of $\Val \ec{x}$.
-In the case where $t$ is a variable, then $\M( t ) = \Val \ec{ t } = \Val \ec{ x }$.
+we first show that $\M( t ) = \Val^\ast \ec{x}$ for all non-selector terms $t$ that occur in datatype equivalence classes $\ec{x}$.
+We show this by induction on the size of $\Val^\ast \ec{x}$.
+In the case where $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t } = \Val^\ast \ec{ x }$.
 In the case where $t$ is a constructor term $C( \vec u )$, 
-then $\Val \ec{x}$ must have been assigned by \rn{Ind} for some constructor term $C'( \vec u' ) \in \ec{x}$.
+then $\Val^\ast \ec{x}$ must have been assigned by \rn{Ind} for some constructor term $C'( \vec u' ) \in \ec{x}$.
 Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
 Since \rn{Unify$_1$} does not apply to $\Fc$, we have that $\ec{\vec u} = \ec{\vec u'}$.
-By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val \ec{ x }$.
+By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val^\ast \ec{ x }$.
 
-We now show that $\M( t ) = \Val \ec{x}$ for all selector terms $s^j_k( y )$ that occur in datatype equivalence classes $\ec{x}$.
+We now show that $\M( t ) = \Val^\ast \ec{x}$ for all selector terms $s^j_k( y )$ that occur in datatype equivalence classes $\ec{x}$.
 Since \rn{Split} does not apply, 
 $\ec{y}$ must contain a term of the form $C_i( s^1_i( y ), \ldots, s^{a_i}_i( y ) )$ for some $i$.
 Let $x_1, \ldots, x_n$ be variables in equivalence classes $\ec{s^1_i( y )}, \ldots, \ec{s^{a_i}_i( y )}$.
 By the previous paragraph, we have $\M( y ) = \M( C_i( s^1_i( y ), \ldots, s^{a_i}_i( y ) ) )$,
-which is $C_i( \Val \ec{ x_1 }, \ldots, \Val \ec{ x_{a_i} } )$.
-If $i = k$, then $\M( t ) = \M( s^j_k( y ) ) = s^j_k( \M( y ) ) = \Val \ec{x_j}$, which is $\Val \ec{ x }$ since $\ec{x_j} = \ec{s^j_i( y )} = \ec{x}$.
+which is $C_i( \Val^\ast \ec{ x_1 }, \ldots, \Val^\ast \ec{ x_{a_i} } )$.
+If $i = k$, then $\M( t ) = \M( s^j_k( y ) ) = s^j_k( \M( y ) ) = \Val^\ast \ec{x_j}$, which is $\Val^\ast \ec{ x }$ since $\ec{x_j} = \ec{s^j_i( y )} = \ec{x}$.
 If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$,
 and since $s^j_k( \M( y ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
-we may interpret $s^j_k( \M( y ) )$ as $\Val \ec{ x }$. 
-Thus, for all datatype equivalence classes $\ec{x}$, we have $\M( t ) = \Val \ec{x}$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
+we may interpret $s^j_k( \M( y ) )$ as $\Val^\ast \ec{ x }$. 
+Thus, for all datatype equivalence classes $\ec{x}$, we have $\M( t ) = \Val^\ast \ec{x}$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
 
 If $\tau \in \Codata$, \rem{TODO}
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, we know $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
-By the previous paragraph and statement~\ref{eqn:m-bij-dt}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
+By the previous paragraph and statement~\ref{eqn:m-bij}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
