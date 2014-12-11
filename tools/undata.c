@@ -323,6 +323,8 @@ int generate_one_file(const char *in_name, int keep_data, int keep_codata)
         }
     }
 
+    fclose(in);
+    fclose(out);
     return 0;
 }
 
