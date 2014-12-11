@@ -1167,14 +1167,14 @@ This is done by exhaustively applying the following rule:
   \quad
   c \in \M
   \quad
-  c \not\sim t \sigma \text{ for all } \sigma, t \in \vrange(\Val)
+  c \not\sim (\mu y. t) \sigma \text{ for all } \sigma, (\mu y. t) \in \mathcal{T}(\Val)
 }{
   \Val := \Val \{ v_{\ec{x}} \mapsto c \}
 }
 \)
 
-%We write $\mathcal{T}(\Val)$ to denote the smallest set containing $v\interp{u}$ for each subterm $u$ of $v$ in the range of $\Val$.
-We write $\vrange(\Val)$ to denote the set of $\mu$-terms mapped to by $\Val$.
+We write $\mathcal{T}(\Val)$ to denote the smallest set containing $\nf{(v\interp{u})}$ for each non-variable subterm $u$ of $v$ in the range of $\Val$.
+%We write $\vrange(\Val)$ to denote the set of $\mu$-terms mapped to by $\Val$.
 Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
 
@@ -1191,42 +1191,57 @@ there is only one equivalence class of type $\tau$, call it $\ec{x}$.
 %for which the second premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
 If it were the case that $v_{\ec{x}} \in FV(\Val^\ast )$,
 then \rn{Complete} would apply for the (single) value $c$ of type $\tau$, 
-for which the second premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
+for which the third premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
 Since all $\tau \in \Nondata$ are infinite, all variables in $FV( \Val^\ast )$ have infinite type.
 For any infinite type $\tau$,
 there exists a closed normal $\mu$-term $c_1$ that is not bisimilar to any instance of a term in $t \in \mathcal{T}(\Val^\ast)$.
-To argue this is the case, notice that either $\tau$ is a recursive type, or contains an infinite subfield of type $\upsilon$.
-In the former case, we choose a value $c_1$ whose depth is greater than any term in $\vrange(\Val)$.
-In the latter case, we choose a value $c_1$ containing a subterm of type $\upsilon$ not yet occurring in $\Val$.
+To argue this is the case, notice that either $\tau \in \Nondata$,
+$\tau$ is a recursive type, or contains an infinite subfield of type $\upsilon$.
+In the first case, we may choose an arbitrary constant for $c_1$ not yet occurring in $\vrange(\Val)$.
+In the second case, we choose a value $c_1$ whose depth is greater than any term in $\vrange(\Val)$.
+In the third case, we choose a value $c_1$ containing a subterm of type $\upsilon$ that is not bisimilar to any instance of a term $\mathcal{T}(\Val^\ast)$, 
+which is guarenteed to exist by applying this argument inductively.
 %since $\mathcal{T}(\Val^\ast)$ is a finite set. \rem{elaborate} % (noting that a closed $\mu$-term is only bisimilar to other closed $\mu$-terms).
 Thus, $FV( \Val^\ast )$ contains no variables of infinite type,
 and consequently $\Val^\ast$ is a mapping from the equivalence classes of $\Fc$ to closed $\mu$-terms.
-We now argue the following invariant is maintained by applications of \rn{Complete}:% for all $\ec{x}, \ec{y}$:
+We further argue that $\Val^\ast$ has the following properties:
+%the following invariants are maintained by applications of \rn{Complete}:% for all $\ec{x}, \ec{y}$:
 \begin{eqnarray}
-%\label{eqn:m-normal} 
-%\Val \text{ maps to normal $\mu$-terms only } \\
+\label{eqn:m-normal} 
+\Val^\ast \text{ maps to normal $\mu$-terms only } \\
 %\text{If } \Val \ec{x} \text{ is not closed and has subterm $u$, then } \Val \ec{x} \interp{ u } = \Val \ec{y} \text{ for some } \ec{y} \\
 %\Val \ec{x} = \Val \ec{y}\interp{u} \text{ for some $\ec{x}$, for all non-closed subterms } u \text{ of } \Val \ec{y},  \\
 %\Val \ec{x} = v\interp{u} \text{ for some } \ec{x}, \text{ for all non-closed } u \in \mathcal{T}( \Val ) \\
 %\Val \ec{x} \interp{\mu v_{\ec{y}}. t} = \Val \ec{y} \\
 \label{eqn:m-bij} 
-\Val \ec{x} \sim \Val \ec{y} \text{ if and only if } \ec{x} = \ec{y}
+\Val^\ast \ec{x} \sim \Val^\ast \ec{y} \text{ if and only if } \ec{x} = \ec{y}
 \end{eqnarray}
-Initially, since \rn{Bisimilar} does not apply to $\Fc$,
+We show this by induction on the number of applications of \rn{Complete}.
+We additionally show that applications of \rn{Complete} maintain the invariant 
+for all subterms $\mu v_{\ec{x}}. t$ occurring in the range of $\Val$ for some $\ec{y}$:
+%\begin{eqnarray}
+%\label{eqn:m-inv}
+%\Val \ec{y} \interp{ \mu v_{\ec{x}}. t } = \Val \ec{x}
+%\end{eqnarray}
+For the base case, since \rn{Bisimilar} does not apply to $\Fc$,
 we have that $\Val \ec{x} \not\vsim \Val \ec{y}$ for all distinct $\ec{x}$ and $\ec{y}$,
-and thus~\ref{eqn:m-bij} holds.
+and thus~\ref{eqn:m-bij} holds for $\Val$.
+\rem{todo 1}
+%Due to our construction of $\Val$ in step 2 of our calculus, 
+%statement~\ref{eqn:m-inv} holds, which together with~\ref{eqn:m-bij} implies~\ref{eqn:m-normal}.
 %Moreover, since an equivalence class $\ec{u}$ exists for all subterms $u$ of all terms $t \in \mathcal{T}(\Fc)$,
 %we have that $t\interp{u} = \Val \ec{u}$ for all such terms $u$ and $t$. \rem{elaborate?}
-Now, we assume $\Val$ satisfies~\ref{eqn:m-bij},
-and show that $\Val \sigma$ does as well, where $\sigma := \{ v_{\ec{x}} \mapsto c_1 \}$ is a substitution applied by \rn{Complete}.
-By contradiction, assume that $\Val \sigma \ec{y} \sim \Val \sigma \ec{z}$ for some distinct $\ec{y}$ and $\ec{z}$.
-Then it must have been the case that $\Val \ec{y}$ and $\Val \ec{z}$ contain a position $p$
-where, w.l.o.g., say $\Val \ec{y} \mid_p$ is $v_{\ec{x}}$ and $\Val \ec{z} \mid_p$ is a closed $\mu$-term $c_2$ where $c_1 \sim c_2$.
-%Since $\Val$ satisfies invariant~\ref{eqn:m-bij},
-%we have that $\Val \ec{w} \sim c_1$ for some $\ec{w}$, 
-However, this contradicts the premise of \rn{Complete} that $c_1$ is not bisimilar to any $c_2 \in \mathcal{T}( \Val )$.
-Thus, by induction on the number of applications of \rn{Complete}, statement~\ref{eqn:m-bij} holds for $\Val^\ast$.
-
+For the inductive case, we assume an arbitrary $\Val_i$ satisfies~\ref{eqn:m-normal} and~\ref{eqn:m-bij},
+and show that $\Val_i \sigma_x$ does as well, where $\sigma_x := \{ v_{\ec{x}} \mapsto c_1 \}$ is a substitution applied by \rn{Complete}.
+By contradiction, assume that $\Val_i \sigma_x \ec{y} \sim \Val_i \sigma_x \ec{z}$ for some distinct $\ec{y}$ and $\ec{z}$.
+Then it must have been the case that $\Val_i \ec{y}$ and $\Val_i \ec{z}$ have a position $p$
+where, w.l.o.g., say $\Val_i \ec{y} \mid_p$ is $v_{\ec{x}}$ and $\Val_i \ec{z} \mid_p$ is a term of the form $\mu v_{\ec{w}}. t$ 
+and $c_1 \sim (\mu v_{\ec{w}}. t) \sigma_x$.
+%Since $\Val_i$ satisfies invariant~\ref{eqn:m-bij},
+%we have that $\Val_i \ec{w} \sim c_1$ for some $\ec{w}$, 
+However, this contradicts the premise of \rn{Complete} that $c_1$ is not bisimilar to any $t \sigma \in \mathcal{T}( \Val_i )$ for any $\sigma$.
+%Thus, by induction on the number of applications of \rn{Complete}, statements~\ref{eqn:m-normal} and~\ref{eqn:m-bij} hold for $\Val^\ast$.
+Thus, statements~\ref{eqn:m-normal} and~\ref{eqn:m-bij} hold for $\Val^\ast$.
 
 %we have that $\Val$ satisfies both~\ref{eqn:m-normal} and~\ref{eqn:m-bij}.
 %It satisfies the former since if a $\mu$-term $\mu v_{\ec{x}}. t_1$ had a bisimilar subterm $\mu v_{\ec{y}}. t_2$,
@@ -1239,12 +1254,14 @@ Thus, by induction on the number of applications of \rn{Complete}, statement~\re
 %Let $u$ be the (strict) subterm of $\Val \ec{y}$ such that $(\Val \ec{y} \sigma ) \interp{u \sigma } \sim (\Val \ec{y} \sigma)$. 
 %Since $\Val$ maps only to normal $\mu$-terms, we have $x \in FV( u )$.
 
-Now, we let $\M( x )$ be the value in $\M$ that is a renaming of$\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$,
-which are guarenteed to be distinct values due to statement~\ref{eqn:m-bij} and our construction of $\M$.
+Now, let $\M( x )$ be the value in $\M$ that is a renaming of$\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$,
+each of which are guarenteed to exist in $\M$ due to statement~\ref{eqn:m-normal} and our construction of $\M$,
+and moreover are guarenteed to be distinct in $\M$ due to statement~\ref{eqn:m-bij}.
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 
 If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
 
+\rem{revise for co-datatype}
 If $\tau \in \Data \cup \Codata$,
 we first show that $\M( t ) = \Val^\ast \ec{x}$ for all non-selector terms $t$ that occur in equivalence classes $\ec{x}$.
 We show this by induction on the size of $\Val^\ast \ec{x}$.
