@@ -96,6 +96,56 @@ int get_token(FILE *in)
     }
 }
 
+int eliminate_constructor_argument(const char *typeName, const char *ctorName,
+        FILE *in, FILE *out)
+{
+    char selName[BIG_NUM];
+    char selSort[BIG_NUM];
+
+    if (tok != Tok_Left_Paren) {
+        return 1;
+    }
+
+    tok = get_token(in);
+    strcpy(selName, tok_str);
+
+    tok = get_token(in);
+    strcpy(selSort, tok_str);
+
+    tok = get_token(in);
+    if (tok != Tok_Right_Paren) {
+        return 1;
+    }
+
+    tok = get_token(in);
+    return 0;
+}
+
+int eliminate_constructor(const char *typeName, FILE *in, FILE *out)
+{
+    char ctorName[BIG_NUM];
+
+    if (tok != Tok_Left_Paren) {
+        return 1;
+    }
+
+    tok = get_token(in);
+    strcpy(ctorName, tok_str);
+
+    tok = get_token(in);
+
+    while (tok == Tok_Left_Paren) {
+        eliminate_constructor_argument(typeName, ctorName, in, out);
+    }
+
+    if (tok != Tok_Right_Paren) {
+        return 1;
+    }
+
+    tok = get_token(in);
+    return 0;
+}
+
 int eliminate_co_datatype(FILE *in, FILE *out)
 {
     char typeName[BIG_NUM];
@@ -107,21 +157,16 @@ int eliminate_co_datatype(FILE *in, FILE *out)
     }
 
     tok = get_token(in);
-    if (tok != Tok_Left_Paren) {
+
+    while (tok == Tok_Left_Paren) {
+        eliminate_constructor(typeName, in, out);
+    }
+
+    if (tok != Tok_Right_Paren) {
         return 1;
     }
 
-    int depth = 1;
-
-    while (depth != 0 && tok != Tok_End) {
-        if (tok == Tok_Left_Paren) {
-            ++depth;
-        } else if (tok == Tok_Right_Paren) {
-            --depth;
-        }
-        tok = get_token(in);
-    }
-
+    tok = get_token(in);
     return 0;
 }
 
@@ -144,7 +189,7 @@ int eliminate_co_datatypes(FILE *in, FILE *out)
 
     eliminate_co_datatype(in, out);
 
-    while (tok != Tok_Right_Paren) {
+    while (tok != Tok_End && tok != Tok_Right_Paren) {
         tok = get_token(in);
     }
     tok = get_token(in);
@@ -200,7 +245,7 @@ int generate_one_file(const char *inName, int keep_data, int keep_codata)
 
                 fputc('(', out);
 
-                while (depth != 0 && tok != Tok_End) {
+                while (tok != Tok_End && depth != 0) {
                     print_token(out);
 
                     if (tok == Tok_Left_Paren) {
