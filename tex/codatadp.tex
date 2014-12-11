@@ -100,7 +100,7 @@
 \newcommand\Funcs{\mathcal{F}}
 
 \newcommand\Data{\Types_{\mathrm{dt}}}
-\newcommand\Codata{\Types_{\mathrm{cdt}}}
+\newcommand\Codata{\Types_{\mathrm{codt}}}
 \newcommand\Nondata{\Types_{\mathrm{ord}}}
 
 \newcommand\Ctr{\Funcs_{\mathrm{ctr}}}
@@ -174,7 +174,7 @@ Isabelle theories demonstrates the potential of the procedure.
 \section{Introduction}
 \label{sec:introduction}
 
-Freely generated datatypes are ubiquitous in functional programs and
+Freely generated inductive datatypes are ubiquitous in functional programs and
 logical specifications. They are especially
 useful to represent finite data structures in computer science applications but
 also arise in mathematical formalizations.
@@ -188,11 +188,11 @@ properties that can be exploited in automated reasoners.
 %only allow values of the form $\const{S}(\ldots(\const{S}(\const{Z}))\ldots)$.
 
 To represent infinite values, % such as $\const{S}(\const{S}(\const{S}(\ldots))$,
-a natural choice is to turn to codatatypes (or coinductive datatypes), the
-non-well-founded dual of (inductive) datatypes.
+a natural choice is to turn to \emph{codatatypes} (or coinductive datatypes), the
+non-well-founded dual of (inductive) \relax{datatypes}.
 %
 Although they are sometimes perceived as esoteric, codatatypes have an important
-role to play in computer science. For example, the verified C compiler CompCert
+role to play in computer science. The verified C compiler CompCert
 \cite{leroy-2009}, the verified Java compiler Jinja\-Threads
 \cite{lochbihler-2010-jinja}, and the formalized Java memory model
 \cite{lochbihler-2014-jmm} all depend on codatatypes to capture infinite
@@ -212,13 +212,15 @@ models the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\cons
 using Peano notation but extended with an
 infinity value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$. Compared
 with the more conventional, inductive definition
-\[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Inf}\]
+\[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
 %
-the codatatype eliminates one case by unifying the finite and infinite cases.
+the codatatype avoids one case by unifying the finite and infinite nonzero cases.
 Moreover, equations such as $\const{S}(\infty) \teq \infty$ hold without additional
 work, because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
-codatatype value $\infty$.
+value $\infty$.
+
+\nopagebreak
 
 Datatypes and codatatypes are an integral part of most popular proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, some
@@ -228,8 +230,8 @@ most SMT (satisfiability modulo theories) solvers, includes a theory of
 datatypes.
 
 In this \thewordpaper, we introduce a unified decision procedure for ground
-problems involving both datatypes and codatatypes, and discuss extensions 
-of the procedure when handling universal (non-ground) problems.
+problems involving datatypes and codatatypes in combination and discuss extensions 
+of the procedure for handling universal (non-ground) problems.
 The procedure is
 described abstractly as a calculus (Section~\ref{sec:the-calculus}) and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
@@ -244,7 +246,7 @@ differences.
 First, \emph{codatatypes need not be well-founded.}
 For example, the type
 %
-\[\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\, \const{SCons}(\tau,\, \ty{stream}_{\,\tau})\]
+\[\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\, \const{SCons}(\tau,\: \ty{stream}_{\,\tau})\]
 %
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
 corresponding datatype would be rejected as non-well-founded.
@@ -261,7 +263,7 @@ Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \e
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
 and for theory combinations. The $\mu$-binder notation is used to represent cyclic
 values internally. For example,
-the term $\const{SCons}(1,\, \mu s.\; \const{SCons}(0,\, \const{SCons}(9,\, s)))$
+the term $\const{SCons}(1,\: \mu s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
 denotes the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
 
 %%% 1090909 is a prime number
@@ -282,7 +284,7 @@ axiomatizations.
 %axiom.
 
 \begin{paper}
-The proofs of soundness and completeness are included in the technical report
+Detailed proofs of soundness and completeness are included in the technical report
 associated with this paper \cite{our-report}.
 \end{paper}%
 The procedure is implemented in the SMT solver CVC4 as a combination
@@ -325,7 +327,7 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * codatatypes are never empty (e.g. finite streams are rejected)
 
 %\[
-%      \keyw{codatatype}\; \,\ty{llist} \,=\, \const{LNil} \,\mid\, \const{LCons}(\ty{int},\, \ty{llist})
+%      \keyw{codatatype}\; \,\ty{llist} \,=\, \const{LNil} \,\mid\, \const{LCons}(\ty{int},\: \ty{llist})
 %\]
 
 %  * consider a natural fragment---datatypes as supported in modern SMT solvers
@@ -347,7 +349,7 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 
 \paragraph{Related Work.}
 Although it was written several years ago, the account of related work in
-Barrett et al.\ \cite{barrett-et-al-2007} is still largely up to date.
+Barrett et al.\ \cite{barrett-et-al-2007} is still a good reference.
 Since then, datatypes have been added to Z3 in unpublished work by Leonardo de
 Moura and to a SPASS-like prototype prover called Pirate by Daniel Wand.
 %\cite{wand-weidenbach-201x}.
@@ -377,9 +379,9 @@ set of function symbols $\Funcs$. Types are simply atomic sorts, with no
 structure, and interpreted by nonempty domains. The set~$\Types$ must contain a
 distinguished type \ty{bool} interpreted as the set of truth
 values $\{\bot, \top\}$. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-The only predicate is equality ($\teq$) and is considered a logical symbol.
+The only predicate is equality ($\teq$) and belongs to the logical symbols.
 Other predicates can be represented as functions that return $\ty{bool}$.
-The metavariables $\delta, \tau$ range over types, with $\delta$ reserved
+The metavariables $\delta,\: \tau$ range over types, with $\delta$ reserved
 for datatypes and codatatypes.
 
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
@@ -390,10 +392,10 @@ is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
 and a return type $\tau$. This connection can be expressed compactly as
 $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$,
 which collapses to $\const{f} : \tau$ if $n = 0$.
-For a term $t$, the notation $t : \tau$ indicates that $t$ has type $\tau$.
+For a term $t$, the notation $t : \tau$ indicates that it has type $\tau$.
 Functions are invoked in the standard way, with $\const{f}(t_1,\ldots,t_n)$
 applying the $n$-ary function symbol
-\const{f} to $n$ well-typed arguments $t_1 : \tau_1$, \ldots, $t_n :
+\const{f} to $n$ well-typed arguments $t_1 :\nobreak \tau_1$, \ldots, $t_n :
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
 %
@@ -414,7 +416,7 @@ $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Dat
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the remaining
 \emph{ordinary types}. The functions are partitioned into $\Funcs = \Ctr
 \mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
-\emph{selectors}; there is no need to consider other function symbols, because they can
+\emph{selectors}; there is no need to consider other function symbols because they can
 be abstracted away as variables when combining theories.
 %
 In an SMT problem, the signature is normally given by specifying the
@@ -443,10 +445,10 @@ and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.
 Each datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
 arguments and returns a $\delta$ value. The argument types must be either
-ordinary, among the already know (co)datatypes, or among the (co)datatypes being
-introduced.
+ordinary, among the already known (co)datatypes, or among the (co)datatypes
+being introduced.
 %
-To every argument corresponds a selector. The introduced names for the (co)data\-types, the
+To every argument corresponds a selector. The names for the (co)data\-types, the
 constructors, and the selectors must be distinct and different from already
 introduced ones%
 \dotReportFootnote{It can be convenient to specify the same selector
@@ -458,9 +460,9 @@ Schematically:
 \[
 \begin{aligned}[t]
 (\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}=\, \const{C}_{1}\rlap{${}_{1}$}\phantom{{}_{m}}(\bigl[\const{s}_{11}^1{:}\bigr]\; \tau_{11}^1, \,\ldots,\, \bigl[\const{s}_{11}^{n_{11}}{:}\bigr]\; \tau_{11}^{n_{11}}) & \\
+  \delta_1 & {}=\, \smash{\const{C}_{11}(\bigl[\const{s}_{11}^1{:}\bigr]\; \tau_{11}^1, \,\ldots,\, \bigl[\const{s}_{11}^{n_{11}}{:}\bigr]\; \tau_{11}^{n_{11}})} & \\
            & {}\;\phantom{=\,}\;{} \smash{\,\,\,\vdots} \\[-\jot] % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
-           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \const{C}_{1m}(\bigl[\const{s}_{1m}^1{:}\bigr]\; \tau_{1m}^1, \,\ldots,\, \big[\const{s}_{1m}^{n_{1m}}{:}\big]\; \tau_{1m}^{n_{1m}}) \\[-1\jot]
+           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \smash{\const{C}_{1m}(\bigl[\const{s}_{1m}^1{:}\bigr]\; \tau_{1m}^1, \,\ldots,\, \big[\const{s}_{1m}^{n_{1m}}{:}\big]\; \tau_{1m}^{n_{1m}})} \\[-1\jot]
    \smash{\vdots\,\,\,} \\[-1\jot]
   \keyw{and}\; \,\delta_l & =\, \ldots
 \end{aligned}
@@ -476,25 +478,25 @@ $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
 it is not necessary to extend the signature:
 $\const{d}_{i\negvthinspace j}(x)$ can be seen as an abbreviation for
 $x = \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
-This will simplify the presentation of the decision procedure.
+This will simplify the presentation. % of the decision procedure.
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
-      \keyw{datatype}\;\, \ty{tree}_{\,\tau} & \,=\, \const{Node}(\tau,\, \ty{forest}_{\,\tau}) \\[-\jot]
-      \keyw{and}\;\, \ty{forest}_{\,\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\,\tau},\, \ty{forest}_{\,\tau}) \\%[-.5\jot]
-      \keyw{codatatype}\; \,\ty{llist}_{\,\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(\tau,\, \ty{llist}_{\,\tau})
+      \keyw{datatype}\;\, \ty{tree}_{\,\tau} & \,=\, \const{Node}(\tau,\: \ty{forest}_{\,\tau}) \\[-\jot]
+      \keyw{and}\;\, \ty{forest}_{\,\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\,\tau},\:\, \ty{forest}_{\,\tau}) \\%[-.5\jot]
+      \keyw{codatatype}\; \,\ty{llist}_{\,\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(\const{lhead}{:}\; \tau,\; \const{ltail}{:}\;\ty{llist}_{\,\tau})
 \end{aligned}
 \]
 
 Because the types are inhabited (nonempty), a datatype specification is
 admissible only if a ground constructor term can be exhibited that belongs to
 that datatype. This rules out ill-founded specifications such as
-\[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\,\ty{fstream})\]
+\[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\:\, \ty{fstream})\]
 For codatatypes, no such check is necessary because there is always a term,
 finite or infinite, that witnesses nonemptiness.
 %Given the specification
 %
-%\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\,\ty{stream})\]
+%\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\:\ty{stream})\]
 %
 %the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 %nonemptiness.
@@ -520,13 +522,19 @@ over all $i$, $j$, $\jPrime$, and $k$ within bounds:
   & \is{C}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \is{C}_{im_i}(x)
   \\
 \text{Selection:}\quad
-  & s_{i\negvthinspace j}^k(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k
+  & s_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k
 \end{aligned}
 \]
 %
 Expressed in the algebraic jargon, exhaustiveness ensures that ``no junk''
 exists, whereas distinctness and injectivity ensure that ``no confusion''
-arises.
+arises. The result of selectors applied to the wrong constructor is left
+completely unspecified.
+
+%  * how to deal with "wrong" selectors, e.g.
+%        hd(nil1) = hd(nil2)?
+%      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
+%        and not in other models
 
 Datatypes are additionally characterized by an induction axiom schema:
 %
@@ -544,8 +552,8 @@ correct or else $\top$.
 %
 The axiom schema ensures that we get a smallest model. For example,
 for a datatype of natural numbers constructed from $\const{Z}$ and $\const{S}$,
-this rules out nonstandard models, which could contain cyclic values (e.g.,
-an $n$ such that $n \teq \const{S}(n)$) or even infinite acyclic values
+this rules out nonstandard models, which could contain cyclic values---e.g.,
+an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
 
 For codatatype, the dual notion is that of a coinduction principle that
@@ -566,12 +574,16 @@ depends on witnesses $R$ that are required to be bisimulations:
 \]
 where $x \sim y$ denotes either $R_i[x, y]$ if there exists some $i$ such that
 this is type correct or $x \teq y$ otherwise.
-
-FIXME: Find out what ensures that codatatypes have infinite values.
-
 This axiom schema captures the idea that two values that yield the same
 observations must be equal, where the observations are made by using the
 selectors and discriminators.
+
+In addition, codatatypes are guaranteed to contain all values corresponding to
+infinite ground constructor terms. This cannot be capture by a first-order
+axiomatization, since there may be uncountably many of them. For example,
+$\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable function space
+$\ty{nat} \to \ty{int}$.
+
 
 
 % TODO: where does this go?
@@ -584,20 +596,10 @@ selectors and discriminators.
 %        * consequence: infinite objects are allowed, but
 %          two objects yielding the same observations must be equal
 
-      * again: when looking at the universal ground (?) theory, enough to
-        consider bisimilarity/bisimulation
+%      * again: when looking at the universal ground (?) theory, enough to
+%        consider bisimilarity/bisimulation
 
-specifies the 
-
-
-
-  * how to deal with "wrong" selectors, e.g.
-        hd(nil1) = hd(nil2)?
-      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
-        and not in other models
-
-
-
+% specifies the 
 
 Datatypes can be defined semantically as the initial model of an equational
 specification of the selector--constructor equations. This is the view followed
