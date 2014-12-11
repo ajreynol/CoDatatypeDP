@@ -804,14 +804,14 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \rn{Cyclic}
 \(
 \inferrule{
-  t : \tau
+  t_1 : \tau
   \quad
   \tau \in \Data
   \quad
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
-  \Val \ec{t} = \mu x. t'
+  \Val \ec{t_1} = \mu x. t_2
   \quad
-  x \in FV( t' )
+  x \in FV( t_2 )
 }{
   \bot
 }
@@ -844,24 +844,31 @@ When this is the case, it is easy to see that $\Ec$ induces an equivalence relat
 Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
 For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
 
-Recall that the $\mu$-notation can be used to represent (possibly cyclic) terms and values,
+%For presentation of the rules in this step, we rely on a representation of terms in the $\mu$-notation.
+The rules of this step contain premises that involve terms containing $\mu$-bindings.
+Recall that these bindings can be used for representing (possibly cyclic) values,
 for instance, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
-Formally, we recursively define a $\mu$-term is either of the form
+Formally, we recursively define a $\mu$-term as a term-like structure either of the form
 $\mu x. \const{C}( \vec t )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$, 
 or a variable $x$.
+For consistency, we will also consider $\mu x. \const{c}$ to be a $\mu$-term
+in the case where $c$ is a constant of type $\tau \in \Nondata$.
 We consider only $\mu$-terms that are \emph{well-typed}, which we define recursively:
-if the type of $\const{C}$ is $\vec \tau \rightarrow \upsilon$, 
-then if $\vec v$ are well-type $\mu$-terms under the assumption that $x$ has type $\upsilon$,
+if the type of $\const{C}$ is $\vec \tau \rightarrow \upsilon$
+and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
 then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
 We say a $\mu$-term is \emph{closed} if it contains no free variables.
-We write $t \vsim s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent modulo renaming of $\mu$-bound variables.
-For convienience, we will use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
-where in the latter case, a $\mu$-term with a bound variable denotes an invalid term.
+We write $t \vsim s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent for some renaming of $\mu$-bound variables.
+%For convienience, we will use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
+%where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
+Intuitively, a $\mu$-term $t$ of type $\tau$ describes a class of values of $\tau$, 
+either in the case when $\tau$ is a co-datatype or datatype type,
+where in the latter case, such a $t$ containing a bound variable describes an infeasible class of values.
 At the beginning of this step, 
-we compute a mapping $\Val$ from equivalence classes to $\mu$-terms.
-Informally, the terms mapped to by $\Val$ describe the (class of) values that terms in each equivalence class can take in the models of $\Ec$. 
+we compute a mapping $\Val$ from equivalence classes to $\mu$-terms 
+that describe the class of values that terms in that equivalence class can take in the models of $\Ec$. 
 For each equivalence class $\ec{x}$ of $\Ec$, we associate a fresh variable $v_{\ec{x}}$ of the same type as $x$ not occurring in $\tEc$,
 and initially say that $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$ for each equivalence class $\ec{x}$ of $\Ec$ 
 (in other words, there are initially no constraints on the values for any equivalence class).
@@ -879,9 +886,9 @@ Then, $\Val$ is updated by applying the following rule exhaustively:
 }
 \)
 
-Here, we write $FV( \Val )$ to denote the free variables occurring in $\Val$, which
+Here, we write $FV( \Val )$ to denote the \emph{free variables} occurring in $\Val$, which
 excludes variables that occur beneath $\mu$-binders.
-It is straightforward to show that the height of terms produced as a result of this rule
+It is straightforward to see that the height of terms produced as a result of this rule
 is bounded by the number of equivalence classes of $\Ec$,
 and thus our construction of $\Val$ is terminating.
 
@@ -889,7 +896,7 @@ and thus our construction of $\Val$ is terminating.
 Say that $\Ec$ contains (distinct) equivalence classes $\ec{x}$, $\ec{y}$, $\ec{z}$ and $\ec{w}$ where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$.
 A possible sequence of applications of the above rule is shown below.
 In the first column, we show the equivalence class that was considered,
-and in the second column, we show the state of $\Val$.
+and in the second column, we show the content of $\Val$.
 \[\begin{array}{|l|@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l|}
 \hline
 \text{Eqc} & \multicolumn{3}{c}{\Val} & \ 
@@ -909,13 +916,14 @@ and in the second column, we show the state of $\Val$.
 \hline
 \end{array}\]
 Informally, this indicates that the values for $x$ (resp. $y$) in models of $\Ec$
-are of the form $\const{C}( w, \const{C}( z, \ldots ))$ (resp. $\const{C}( z, \const{C}( w, \ldots ))$) for some value of $w$ and $z$.
+are of the form $\const{C}( v_{\ec{w}}, \const{C}( v_{\ec{z}}, \ldots ))$ (resp. $\const{C}( v_{\ec{z}}, \const{C}( v_{\ec{w}}, \ldots ))$) 
+for some value of $v_{\ec{w}}$ and $v_{\ec{z}}$.
 $\Box$
 \end{example}
 
 Given $\Val$, the rules for cyclicity and bisimilarity (shown in Figure~\ref{fig:ab-rules}) can be stated as follows.
-For cyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x. t'$ are cyclic,
-as indicated by the assumption $x \in FV( t' )$,
+For cyclicity, if there is an equivalence class $\ec{t_1}$ of datatype type whose class of values $\Val \ec{t_1} = \mu x. t_2$ are cyclic,
+as indicated by the assumption $x \in FV( t_2 )$,
 then we can conclude that $\Ec$ is unsatisfiable.
 For bisimilarity, if there are two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
 of co-datatype type whose classes of values $\Val \ec{t_1}$ and $\Val \ec{t_2}$ are equivalent modulo renaming of $\mu$-bound variables,
@@ -937,7 +945,7 @@ We then construct $\Val$ using the aforementioned steps, after which we obtain:
 Notice that $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are syntactically equivalent for the renaming
 $\{ v_{\ec{x}} \mapsto v_{\ec{\const{C}(y,x)}}, v_{\ec{\const{C}(y,x)}} \mapsto v_{\ec{x}} \}$,
 and thus our calculus may infer $x \teq \const{C}(y,x)$.
-Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$ are observationally equivalent for any value of $y$.
+Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$ are observationally equivalent for any value of $v_{\ec{y}}$.
 \qed
 \end{example}
 
@@ -1059,7 +1067,8 @@ First, if the derivation tree is an application of \rn{Conflict}, \rn{Unify$_2$}
 then $\Ec$ is unsatisfiable in $\thD$.
 For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Unify$_2$}, this is a consequence of distinctness.
-For \rn{Cyclic}, this is a consequence of induction. \rem{elaborate?}
+For \rn{Cyclic}, our construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
+and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees 
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
 then by the induction hypothesis $\Ec \cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
@@ -1071,7 +1080,7 @@ whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
 For \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Unify$_1$}, this is a consequence of injectivity.
-For \rn{Bisimilar}, this is a consequence of co-induction. \rem{elaborate?}
+For \rn{Bisimilar}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are observationally equivalent in all models of $\Ec$.
 For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
 By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is unsatisfiable in $\thD$, 
 and thus $\Ec$ is unsatisfiable in $\thD$.
@@ -1080,44 +1089,38 @@ and thus $\Ec$ is unsatisfiable in $\thD$.
 
 It remains to show the inverse of the previous lemma, that when a derivation tree with root node $\Ec$ contains a saturated node $\Fc$,
 then $\Ec$ is satisfiable $\thD$.
-
-%and second show how to construct a valuation for the variables of $\Fc \cup \Gc$.
-
-%\begin{lemma}
-%\end{lemma}
-
-%Given a set of disjoint paths $P$ where each $p \in P$
-%we write $\interp{P}$ to denote the value
-
-\rem{Revise : now $\Val$ is constructed by calculus.}
-
 First, we require additional terminology concerning $\mu$-terms.
-The \emph{interpretation of subvalue $u$ in $v$} is the value $v\interp{u}^\emptyset$ returned by the following recursive procedure,
-where $x \mapsto \mu x. C( \vec t ) \in v$ indicates that $\mu x. C( \vec t )$ is the subvalue of $v$ that binds this occurrence of variable $x$.
+If $u$ is a subterm of $v$, then the \emph{interpretation of $u$ in $v$} is the term $v\interp{u}^\emptyset$ returned by the following recursive procedure,
+where $x \mapsto \mu x. C( \vec t ) \in v$ indicates that $\mu x. C( \vec t )$ is the subterm of $v$ that binds this occurrence of variable $x$.
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
 v\interp{x}^M & = & v\interp{\mu x. C( \vec t )}^M & x \not\in M, x \mapsto \mu x. C( \vec t ) \in v  \\
 v\interp{x}^M & = & x & \text{otherwise} \\
 v\interp{\mu x. C( \vec t )}^M & = & \mu x. C( v\interp{ \vec t }^{M \cup \{ x \}} ) & x \not\in M \\
 v\interp{\mu x. C( \vec t )}^M & = & x & \text{otherwise}
 \end{array}\]
-Given a $\mu$-value $v$ of the form $\mu x. C( \vec w )$, 
-a subvalue $u$ of $v$ is a \emph{bisimilar subvalue} if and only if $v\interp{u}^\emptyset \sim v$.
-We say $v$ is \emph{normal} if and only if all of its bisimilar subvalues are $x$,
-and all of its strict subvalues that do not contain $v$ are also normal.
-For instance, the value $v$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is not normal, 
+Given a $\mu$-term $v$ of the form $\mu x. C( \vec w )$, 
+a subterm $u$ of $v$ is a \emph{bisimilar subterm} if and only if $v\interp{u}^\emptyset \vsim v$.
+We say $v$ is \emph{normal} if and only if all of its bisimilar subterms are $x$,
+and all of its strict subterms that do not contain $v$ are also normal.
+For instance, the $\mu$-term $v$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is not normal, 
 since 
 $v\interp{\mu y. \const{S}( x )}^\emptyset =$ 
 $\mu y. \const{S}( v\interp{x}^{\{y\}} ) =$ 
 $\mu y. \const{S}( v\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} ) =$ 
 $\mu y. \const{S}( \mu x. \const{S}( v\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
 $\mu y. \const{S}( \mu x. \const{S}( y ) )$,
-which is equivalent to $v$ modulo the renaming $\{ x \mapsto y, y \mapsto x \}$.
-For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
-(which we will call the \emph{normal form for $v$})
-that is observationally equivalent to $v$.
-We construct $\nf{v}$ by replacing all of the bisimilar subvalues of $v$ with $x$,
-and by replacing all of the non-normal closed subvalues of $v$ with their corresponding normal forms.
-For instance, $\nf{(\mu x. \const{S}( \mu y. \const{S}( x ) ))} = \mu x. \const{S}( x )$.
+which is syntactically equivalent to $v$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
+
+
+%\begin{lemma}
+%\end{lemma}
+
+%For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
+%(which we will call the \emph{normal form for $v$})
+%that is observationally equivalent to $v$.
+%We construct $\nf{v}$ by replacing all of the bisimilar subvalues of $v$ with $x$,
+%and by replacing all of the non-normal closed subvalues of $v$ with their corresponding normal forms.
+%For instance, $\nf{(\mu x. \const{S}( \mu y. \const{S}( x ) ))} = \mu x. \const{S}( x )$.
 
 
 \begin{lemma}[Solution Soundness] \label{lem:ss}
@@ -1142,19 +1145,29 @@ This is done by exhaustively applying of the following rule:
 \inferrule{
   v_{\ec{x}} \in FV( \Val )
   \quad
+  c \text{ normal}  
+  \quad
   c \not\sim c' \text{ for all } c' \in \vrange(\Val)
 }{
   \Val := \Val \{ v_{\ec{x}} \mapsto c \}
 }
 \)
+
 Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
 
-We first argue that $\Val$ contains only to ground values (which include closed $\mu$-terms), in other words, $FV( \Val ) = \emptyset$.
-First, since \rn{Split} does not apply to $\Fc$,
-all equivalence classes of finite type contain constructor terms.
+Let $\Val^\ast$ be the result of applying the above rule to completion on $\Val$.
+We first argue that $FV( \Val^\ast ) = \emptyset$.
+Since \rn{Split} does not apply to $\Fc$,
+all equivalence classes of $\Fc$ finite datatype type contain constructor terms, 
+and thus $FV( \Val )$ contains no variables of finite datatype type.
+For each equivalence classes of $\Fc$ with finite co-datatype $\tau$, 
+we know $\tau$ must have cardinality one, due to \rem{reference}.
+Since \rn{Singleton} does not apply to $\Fc$, 
+there is only one equivalence class of type $\tau$, call it $\ec{x}$.
+If $\Val \ec{x} = v_{\ec{x}}$, then we may apply the above rule for the (single) value $c$ of type $\tau$, 
+for which the second premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
 Thus, all variables in $FV( \Val )$ have infinite type.
-%\rem{Require : all co-datatypes either have infinite cardinality, or have cardinality 1.}
 
 
 
