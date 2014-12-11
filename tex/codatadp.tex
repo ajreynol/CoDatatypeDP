@@ -1345,71 +1345,55 @@ Blah.
       tree structures
     * the theory files were chosen before running the experiments
 
+  * how many problems
+  * how many problems have some codatatypes, how many have datatypes (including
+    XXX that have both)
+
   * for each goal, select 256 lemmas as axioms, before monomorphization
     (after monomorphization, typically more formulas due to duplicates),
     and encode with the goal
 
   * then ran CVC4 for XXX seconds on the StarExec cluster \cite{xxx}
 
+  * wanted to evaluate both the impact of datatypes and codatatypes
+  * datatypes are known to be very useful on SMT-LIB, e.g. blah
+  * but we wanted to see how much they make a difference in Isabelle
+
+  * ran all problems four times, to try all four combinations of datatypes and
+    codatatypes enabled or disabled
+
+  * lemmas/axioms often include basic properties of constructor and selectors,
+    which are tautologies and ignored if (co)datatypes are enabled
+  * allows a fair comparison: how much do (co)datatype support brings as
+    opposed to just letting Sledgehammer do what it would normally do
+
+  * experience with such features is not extremely high -- e.g. arithmetic,
+    a most useful theory on lots of benchmarks, increases Sledgehammer's
+    success rate by 2 percentage points, or 4\%, with Z3 in earlier work \cite{xxx}
+
+  * so when analyzing statistics of this kind, with highly varied problems,
+    we must not overestimate the importance of a single trick
+  * on the other hand: every percentage point counts! cite Tom Hales
+
+
 {\footnotesize
 \begin{verbatim}
-For the evaluation of Section 5, I'm playing with various ideas. I certainly
-would like to keep it short and not waste too much of our time on it. We
-discussed earlier having (1) hand-crafted problems and (2) actual benchmarks
-(like those you already have). I suggest we drop (1); I never did hand-crafted
-before and this always looks suspicious anyway. For (2), I see three or four
-possible benchmark sets:
-
-1. without (co)datatype theories
-2. with datatypes
-(3. with codatatypes)
-4. with both
-
-The benchmark problems would be identical except for the declarations at the
-top ("declare-sort" and "declare-fun" vs. "declare-(co)datatype").
-Irrespective of whether interpreted (co)datatypes are used, Sledgehammer will
-typically include some (co)datatype axioms (i.e. tautologies if (co)datatypes
-are enabled). Hence the tests are a good indication of whether native
-(co)datatypes are useful to Sledgehammer. I assume the results will follow
-common sense, i.e. 4 > {3, 2} > 1
-
-As for the actual Isabelle theory files to use, for codatatypes there is not
-much question: We just use all I could get my hands on. But perhaps we should
-have a second benchmark set, ideally something a bit standard like, say, the
-Judgment Day (JD) suite. Or I can make some arbitrary a priori (before
-evaluation) decisions, but that always looks a bit fishy unless it can be
-justified easily. The trouble is, we have about 1000 datatypes lying around in
-Isabelle and the Archive of Formal Proofs (AFP). These would have no
-codatatypes in them, so we could only do 1 and 2 of the evaluation. We could
-at least try the "list" library, which is extremely developed and would have
-1600 goals already, and perhaps a few really basic types ("option", "string"),
-or perhaps red-black trees (about 450 goals).
-
 So we can show the success rates, in a table like this:
 
-                 Codatatype-oriented suite      Datatype (or JD) suite
-                      (2345 goals)                   (1240 goals)
+                 Datatype suite     Mixed suite        Codatatype suite
+                (2345 problems)    (XXX problems)       (1240 problems)
 
-   w/o (co)data        1255                            699
-   w data              1268                            712
-   w codata            1270
-   w both              1273
-
-I can write the usual warning that an increase of a couple of percentage
-points in success rate in a general tool like Sledgehammer and general
-benchmark suites means a lot etc. Putting the datatype evaluations (i.e. 2 and
-4) in there offers the advantage that it will give some measure of how much to
-expect from the codatatypes. I.e. if the success rate doesn't go up by 50% for
-datatypes, nobody will expect this to happen for codatatypes. A priori, I
-would expect a similar gain, but I'm looking forward to see the experimental
-data.
-
-In addition to success rate (or number of solved goals), we should have other
-statistics, like how often do we get proofs that contain the cyclicity and
-bisimilarity rules. And finally, we look in more detail at one or two such
-proofs, by presenting it and explaining it (and, before that, understanding
-it).
+   w/o (co)data        800           1255                699
+   w data              815           1268                
+   w codata                          1270                712
+   w both                            1273
 \end{verbatim}}
+
+* statistics, like how often do we get proofs that contain the cyclicity and
+  bisimilarity rules
+
+* and finally, we look in more detail at one or two such proofs, by presenting
+  it and explaining it (and, before that, understanding it)
 
 \section{Conclusion}
 \label{sec:conclusion}
