@@ -405,8 +405,8 @@ Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
 
-\section{Theory of (Co)datatypes}
-\label{sec:theory-of-co-datatypes}
+\section{The Theory of (Co)datatypes}
+\label{sec:the-theory-of-co-datatypes}
 
 %    (terminology: freely-generated, inductive, algebraic, ..., sometimes
 %    with different meanings; we'll clarify below what we use)
@@ -653,26 +653,55 @@ infinite: $\mu\vthinspace a.\; A(a)$. Other specimens are
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$. We call such types \emph{corecursive singletons}.
 For the decision procedure, it will be important to detect those finite
-codatatypes.
+codatatypes. Sometimes, a type might be a corecursive singleton only in some
+models. For example, if \ty{unit} is an uninterpreted type, \ty{b} and \ty{c}
+will be singleton types precisely in the models that interpret \ty{unit} as a
+singleton.
 
 % In other words, all finite corecursive codatatypes are corecursive singletons.
 
 \begin{lemma}
-If the domain interpreting a corecursive codatatype is finite, it must be $1$.
+If the domain interpreting a corecursive codatatype is finite, it must be a
+singleton. Furthermore, such a type has necessarly a single constructor and
+all its arguments have types that are interpreted by singletons.
 \end{lemma}
 
 \begin{proof}
-TODO.
+  * if two (either directly or indirectly) corecursive constructors
+    $\const{C}$ and $\const{D}$, it is
+    possible to encode infinitely many alternation patterns,
+    e.g. $\const{C}(\const{D}(\const{C}(\const{C}(\ldots))))$;
+    hence no finite models
+
+  * if one corecursive and one noncorecursive, then possibility to create
+    objects of arbitrary depths, e.g. $\const{C}(\ldots(\const{C}(\const{D}))\ldots)$,
+    and hence no finite models
+
+  * leaves us with the case of a single corecursive constructor
+
+  * if any of the noncorecursive arguments has cardinality greater than one,
+    then it is possible to encode alternation patterns using it,
+    e.g. $\const{C}(0,\: \const{C}(1,\: \const{C}(0,\: \const{C}(0,\: \ldots))))$.
+
+  * otherwise, by the coinduction principle, there is only one value that can
+    exist
+
+%  * assume for simplicity no indirect recursion, but this does not radically
+%    change the argument
+%  * assume there are at least two values built with C.
+%    they must be different at some point, e.g.
+%    C(0, C(1, C(0, ...))) and C(0, C(1, C(1, ...)))
+%    can use that to create infinitely alternation patterns
+%  * leaves us with the case of a single constructor
+% * since we are looking at a specific model, we can assume all ordinary
+%   types are finite datatypes with nullary constructors corresponding to their
+%   elements
+% * if two
+% * either there is only one ``path'' from ctr to itself
+%   or at least two;
 \qed
 \end{proof}
 
-An immediate consequence by the distinctness axiom is that these types have
-necessarly one constructor and that all arguments have types of cardinality 1.
-%
-Sometimes, a type might be a corecursive singleton only in some models. For
-example, if \ty{unit} is an uninterpreted type, \ty{b} and \ty{c} will be
-singleton types precisely in the models that interpret \ty{unit} as a
-singleton.
 
 \section{The Calculus}
 \label{sec:the-calculus}
@@ -1302,9 +1331,11 @@ Blah.
 
 We introduced a decision procedure for the ground theory of datatypes and
 codatatypes and implemented it in the SMT solver CVC4. Our main theoretical
-contribution has been the addition of codatatypes. These are not very
+contribution has been the support for codatatypes. These are not very
 difficult per se, but there are tricky corner cases to take care of if we care
-about completeness (which we do). On the practical side, we obtained
+about completeness (which we do).
+%% alliteration
+On the practical side, we obtained
 interesting results on benchmarks generated from Isabelle theories, including
 some rather
 %mind-boggling
@@ -1315,23 +1346,27 @@ provers with more high-level features and reducing the gap between automatic and
 interactive theorem proving. As future work, we want to try out CVC4 and its
 (co)datatypes for higher-order model finding in Isabelle, as an
 alternative to the counterexample generator Nitpick
-\cite{blanchette-nipkow-2010}. We also see some opportunities to enrich CVC4
-with recursive and corecursive functions. Finally, it might be possible to go
-further in terms of supporting nested and mixed (co)recursion and quantified
-formulas over (co)datatypes in SMT solvers.
+\cite{blanchette-nipkow-2010}. We also see some opportunities to enrich
+SMT solvers with recursive and corecursive functions. Finally, it might be
+possible to go further in terms of supporting nested and mixed (co)recursion
+and quantified formulas over (co)datatypes in solvers.
 
 \def\ackname{Acknowledgment}
 \paragraph{\ackname.}
 We owe a great debt to Clark Barrett and Cesare Tinelli for datatype case blah
-blah blah.
+blah blah. \textbf{TODO FIXME}
 %
 Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
 Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
-codatatype or at least tolerated it, both of which we are thankful for.
+codatatype or at least endured
+%tolerated?
+it, both of which we are thankful for.
 %
-Andrei Popescu helped clarify our thoughts about axiomatizing codatatypes.
-Andreas Lochbihler and Peter Gammie shared their private codatatype-based
+Andreas Lochbihler and Peter Gammie shared their private
 theories with us so we could include them in the benchmarks.
+Andrei Popescu helped clarify our thoughts regarding the axiomatization of
+codatatypes. Dmitriy Traytel took part in discussions about special
+cases.
 %
 Blanchette's research was partially supported by the Deutsche
 Forschungs\-gemein\-schaft (DFG) project
