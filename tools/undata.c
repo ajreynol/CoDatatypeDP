@@ -10,11 +10,11 @@ typedef enum {
     Tok_End
 } token;
 
-const int BIG_NUM = 1024;
+const int Big_Num = 1024;
 
 int next_ch;
 token tok;
-char tok_str[BIG_NUM];
+char tok_str[Big_Num];
 
 void print_token(FILE *out)
 {
@@ -96,21 +96,30 @@ int get_token(FILE *in)
     }
 }
 
-int eliminate_constructor_argument(const char *typeName, const char *ctorName,
-        FILE *in, FILE *out)
+int eliminate_constructor_argument(const char *sort_name,
+        const char *ctor_name, char (*funs)[Big_Num], int *num_funs,
+        char (*args)[Big_Num], int *num_args, FILE *in, FILE *out)
 {
-    char selName[BIG_NUM];
-    char selSort[BIG_NUM];
+    char sel_name[Big_Num];
+    char arg_sort[Big_Num];
 
     if (tok != Tok_Left_Paren) {
         return 1;
     }
 
     tok = get_token(in);
-    strcpy(selName, tok_str);
+    strcpy(sel_name, tok_str);
 
     tok = get_token(in);
-    strcpy(selSort, tok_str);
+    strcpy(arg_sort, tok_str);
+    fprintf(stderr, "%d %s %s %s %s\n", (int)tok, sort_name, ctor_name,
+            sel_name, arg_sort);
+
+    strcpy(*args++, arg_sort);
+
+    char sel_sig[Big_Num];
+    sprintf(sel_sig, "%s (%s)%s", sel_name, sort_name, arg_sort);
+    strcpy(funs[(*num_funs)++], sel_sig);
 
     tok = get_token(in);
     if (tok != Tok_Right_Paren) {
@@ -121,21 +130,38 @@ int eliminate_constructor_argument(const char *typeName, const char *ctorName,
     return 0;
 }
 
-int eliminate_constructor(const char *typeName, FILE *in, FILE *out)
+int eliminate_constructor(const char *sort_name, char (*funs)[Big_Num],
+        int *num_funs, FILE *in, FILE *out)
 {
-    char ctorName[BIG_NUM];
+    char ctor_name[Big_Num];
+    char args[Big_Num][Big_Num];
+    int num_args = 0;
 
     if (tok != Tok_Left_Paren) {
         return 1;
     }
 
     tok = get_token(in);
-    strcpy(ctorName, tok_str);
+    strcpy(ctor_name, tok_str);
+    fprintf(stderr, "%d %s %s\n", (int)tok, sort_name, tok_str);
+
+    char arg_sorts[Big_Num];
+    for (int i = 0; i < num_args; i++) {
+        strcat(arg_sorts, args[i]);
+        if (i > 0) {
+            strcat(arg_sorts, " ");
+        }
+    }
+
+    char ctor_sig[Big_Num];
+    sprintf(ctor_sig, "%s (%s)%s", ctor_name, arg_sorts, sort_name);
+    strcpy(funs[(*num_funs)++], ctor_sig);
 
     tok = get_token(in);
 
     while (tok == Tok_Left_Paren) {
-        eliminate_constructor_argument(typeName, ctorName, in, out);
+        eliminate_constructor_argument(sort_name, ctor_name, funs, num_funs,
+            args, &num_args, in, out);
     }
 
     if (tok != Tok_Right_Paren) {
@@ -146,11 +172,10 @@ int eliminate_constructor(const char *typeName, FILE *in, FILE *out)
     return 0;
 }
 
-int eliminate_co_datatype(FILE *in, FILE *out)
+int eliminate_co_datatype(char (*funs)[Big_Num], FILE *in, FILE *out)
 {
-    char typeName[BIG_NUM];
-
-    strcpy(typeName, tok_str);
+    char sort_name[Big_Num];
+    int num_funs = 0;
 
     if (tok != Tok_Left_Paren) {
         return 1;
@@ -158,8 +183,14 @@ int eliminate_co_datatype(FILE *in, FILE *out)
 
     tok = get_token(in);
 
+    strcpy(sort_name, tok_str);
+    fprintf(stderr, "%d %s\n", (int)tok, sort_name);
+    tok = get_token(in);
+
+    fprintf(out, "(declare-sort %s 0)\n", sort_name);
+
     while (tok == Tok_Left_Paren) {
-        eliminate_constructor(typeName, in, out);
+        eliminate_constructor(sort_name, funs, &num_funs, in, out);
     }
 
     if (tok != Tok_Right_Paren) {
@@ -187,45 +218,58 @@ int eliminate_co_datatypes(FILE *in, FILE *out)
         return 1;
     }
 
-    eliminate_co_datatype(in, out);
+    tok = get_token(in);
+
+    char funs[Big_Num][Big_Num];
+
+    for (int i = 0; i < Big_Num; i++) {
+        funs[i][0] = '\0';
+    }
 
     while (tok != Tok_End && tok != Tok_Right_Paren) {
-        tok = get_token(in);
+        eliminate_co_datatype(funs, in, out);
     }
+
+    for (int i = 0; i < Big_Num; i++) {
+        if (funs[i][0] != '\0') {
+            fprintf(out, "(declare-fun %s)\n", funs[i]);
+        }
+    }
+
     tok = get_token(in);
     return 0;
 }
 
-int generate_one_file(const char *inName, int keep_data, int keep_codata)
+int generate_one_file(const char *in_name, int keep_data, int keep_codata)
 {
-    FILE *in = fopen(inName, "r");
+    FILE *in = fopen(in_name, "r");
     if (in == 0) {
-        fprintf(stderr, "Cannot open \"%s\"\n", inName);
+        fprintf(stderr, "Cannot open \"%s\"\n", in_name);
         return 1;
     }
 
-    char outName[BIG_NUM];
+    char out_name[Big_Num];
 
-    strcpy(outName, inName);
+    strcpy(out_name, in_name);
 
     if (keep_data) {
         if (keep_codata) {
-            strcat(outName, ".all");
+            strcat(out_name, ".all");
         } else {
-            strcat(outName, ".data");
+            strcat(out_name, ".data");
         }
     } else {
         if (keep_codata) {
-            strcat(outName, ".codata");
+            strcat(out_name, ".codata");
         } else {
-            strcat(outName, ".nix");
+            strcat(out_name, ".nix");
         }
     }
 
-    FILE *out = fopen(outName, "w");
+    FILE *out = fopen(out_name, "w");
 
     if (out == 0) {
-        fprintf(stderr, "Cannot open output file \"%s\"\n", outName);
+        fprintf(stderr, "Cannot open output file \"%s\"\n", out_name);
         return 1;
     }
 
@@ -238,8 +282,18 @@ int generate_one_file(const char *inName, int keep_data, int keep_codata)
 
             if (tok == Tok_Declare_Datatypes && !keep_data) {
                 eliminate_co_datatypes(in, out);
+                if (tok == Tok_Right_Paren) {
+                    tok = get_token(in);
+                } else {
+                    return 1;
+                }
             } else if (tok == Tok_Declare_Codatatypes && !keep_codata) {
                 eliminate_co_datatypes(in, out);
+                if (tok == Tok_Right_Paren) {
+                    tok = get_token(in);
+                } else {
+                    return 1;
+                }
             } else {
                 int depth = 1;
 
