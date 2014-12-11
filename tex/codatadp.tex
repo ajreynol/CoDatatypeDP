@@ -401,7 +401,7 @@ applying the $n$-ary function symbol
 parentheses in terms.
 %
 Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$
-and $\bigwedge_{\,i} \varphi_i$ abbeviates a conjunction
+and $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
 
 %* although nothing prevents composing the decision procedure with theories
@@ -418,15 +418,15 @@ $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Dat
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the remaining
 \emph{ordinary types}. The functions are partitioned into $\Funcs = \Ctr
 \mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
-\emph{selectors}; there is no need to consider other function symbols because they can
-be abstracted away as variables when combining theories.
-%
+\emph{selectors}; there is no need to consider further function symbols
+because they can be abstracted away as variables when combining theories.
+
+\paragraph{Specifications.}
 In an SMT problem, the signature is normally given by specifying the
 uninterpreted types in any order, the (co)datatypes with their constructors
 and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
 finally any other function symbols.
-
-\paragraph{Specifications.}
+%
 A (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Polymorphic types, nested
 (co)recursion, and datatype--codatatype mixtures fall outside this fragment%
@@ -481,13 +481,15 @@ $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
 it is not necessary to extend the signature:
 The discriminator term $\const{d}_{i\negvthinspace j}(x)$ can be seen as an abbreviation for
 $x = \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
-This will simplify the presentation later. % of the decision procedure.
+%This will simplify the presentation. % of the decision procedure.
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
       \keyw{datatype}\;\, \ty{tree}_{\,\tau} & \,=\, \const{Node}(\tau,\: \ty{forest}_{\,\tau}) \\[-\jot]
       \keyw{and}\;\, \ty{forest}_{\,\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\,\tau},\:\, \ty{forest}_{\,\tau}) \\%[-.5\jot]
-      \keyw{codatatype}\; \,\ty{llist}_{\,\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(\const{lhead}{:}\; \tau,\; \const{ltail}{:}\;\ty{llist}_{\,\tau})
+      \keyw{codatatype}\; \,\ty{llist}_{\,\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(%\const{lhead}{:}\;
+      \tau,\: %\const{ltail}{:}\;
+      \ty{llist}_{\,\tau})
 \end{aligned}
 \]
 
@@ -530,10 +532,10 @@ quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
 \end{aligned}
 \]
 %
-Expressed in the algebraic jargon, exhaustiveness ensures that ``no junk''
-exists, whereas distinctness and injectivity ensure that ``no confusion''
-arises. The result of selectors applied to the wrong constructor is left
-completely unspecified.
+Expressed in the algebraic jargon, exhaustiveness helps ensure that ``no
+junk'' exists, whereas distinctness and injectivity guarantee that ``no
+confusion'' can arise. The result of selectors applied to the wrong
+constructor is left completely unspecified.
 
 %  * how to deal with "wrong" selectors, e.g.
 %        hd(nil1) = hd(nil2)?
@@ -545,8 +547,8 @@ Datatypes are additionally characterized by an induction axiom schema:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{\strut$\bigwedge_{\,i,j} \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
-\UIC{\strut$\bigwedge_{\,i} P_i[v_i]$}
+\AXC{\strut$\bigwedge_{\,i,j}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k}\, \mathit{IH}_{i\negvthinspace j}^k[x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
+\UIC{\strut$\bigwedge_{\,i}\, P_i[v_i]$}
 \DP
 \end{aligned}
 \]
@@ -555,25 +557,25 @@ denotes either $P_{\iPrime}(x)$ if there exists some $\iPrime$ such that
 the formula is type-correct or else $\top$.
 %
 The axiom schema ensures that the interpretation of datatypes
-is a smallest model. For example,
+is a standard model. For example,
 for a datatype of natural numbers constructed from $\const{Z}$ and $\const{S}$,
 induction rules out nonstandard models, which could contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
 
 For codatatypes, the dual notion is called coinduction. It depends on
-witnesses $R$ that are required to be bisimulations:
+witnesses $R_i$ that are required to be bisimulations:
 %
 \[
 \begin{aligned}[t]
-\text{Coinduction:}\quad
-\AXC{\strut$\begin{gathered}\textstyle \bigwedge_{\,i} R_i[v_i, w_i] \\[-\jot]\textstyle
-\bigwedge_{\,i} \forall v\; w.\;\, R_i[v, w] \longrightarrow
-  \bigwedge_{\,j} \const{d}_j(v) \teq \const{d}_j(w)
+\text{Coinduction:}\kern.8em %%% TYPESETTING: should be \quad
+\AXC{\strut$\begin{gathered}\textstyle \bigwedge_{\,i}\, R_i[v_i, w_i] \\[-\jot]\textstyle
+\bigwedge_{\,i}\, \forall v\; w.\;\, R_i[v, w] \longrightarrow
+  \bigwedge_{\,j}\, \const{d}_j(v) \teq \const{d}_j(w)
   \mathrel\land
-  \const{d}_j(v) \longrightarrow \bigwedge_{\,k} \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
+  \const{d}_j(v) \longrightarrow \bigwedge_{\,k}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
 \end{gathered}$}
-\UIC{\strut$\bigwedge_{\,i} v_i \teq w_i$}
+\UIC{\strut$\bigwedge_{\,i}\, v_i \teq w_i$}
 \DP
 \end{aligned}
 \]
@@ -612,10 +614,10 @@ selector--constructor equations. This is the view followed by Barrett et al.\
 \cite{barrett-et-al-2010}. A drawback of this approach is that it does
 not naturally account for selectors applied to wrong constructors. Barrett et
 al.\ address this by parameterizing the construction by default values, but
-these give rise to spurious equalities between unrelated terms---e.g.,
-$\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$. This could be
-corrected, but the added complexity seems to suggest that selectors are better
-characterized axiomatically.
+this gives rise to spurious equalities between unrelated terms---e.g.,
+$\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$. This flaw
+could be corrected, but the added complexity seems to suggest that selectors
+are better characterized axiomatically.
 
 A related semantic view of datatypes is as initial algebras \cite{xxx}.
 Codatatypes are then defined dually as final coalgebras \cite{xxx}. The
@@ -655,20 +657,22 @@ infinite: \,$\mu\vthinspace a.\; A(a)$. Other specimens are
 \end{aligned}
 \]
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
-\ty{unit}$. We call such types \emph{corecursive singletons}. For the decision
-procedure, it will be important to detect these types. A type may also be a
-corecursive singleton only in some models. For example, if \ty{unit} is an
-uninterpreted type, \ty{b} and \ty{c} will be singleton types precisely in the
-models that interpret \ty{unit} as a singleton. Fortunately, given some
-cardinalities for the ordinary types, it is easy to characterize this
-degenerate case:
+\ty{unit}$, as well as $\ty{stream}_{\,\ty{unit}\,}$. We call such types
+\emph{corecursive singletons}. For the decision procedure, it will be
+important to detect these types, even if they occur rarely in practice. A type
+may also be a corecursive singleton only in some models. For example, if
+\ty{unit} is an uninterpreted type, \ty{b} and \ty{c} will be singleton types
+precisely in the models that interpret \ty{unit} as a singleton. Fortunately,
+given some cardinalities for the ordinary types, it is easy to characterize
+this degenerate case:
 
 % In other words, all finite corecursive codatatypes are corecursive singletons.
 
 \begin{lemma}
-If the domain interpreting a corecursive codatatype is finite, it must be a
-singleton. Furthermore, such a codatatype has necessarly a single constructor,
-and all its arguments have types that are interpreted by singletons.
+Let $\delta$ be a corecursive codatatype. If the domain interpreting $\delta$
+is finite, it must be a singleton. Furthermore, $\delta$ has necessarily a
+single constructor, whose arguments have types that are interpreted by
+singletons.
 \end{lemma}
 
 \begin{proof}
@@ -1327,6 +1331,85 @@ Blah.
 \section{Experimental Results}
 \label{sec:experimental-results}
 
+  * to evaluate procedure, we generated problems from Isabelle theories using
+    Sledgehammer
+
+  * chose a selection of theory files:
+    * pretty much every theory file from Isabelle distribution and AFP that
+      defines a codatatype
+    * also included two private theories by Andreas Lochbihler and Peter Gammie
+    * (codatatypes being a recent addition to Isabelle \cite{itp},
+       they are not yet widely used)
+    * and included a number of theories on datatypes
+    * aimed at a good mixture between linear structures (lists, streams) and
+      tree structures
+    * the theory files were chosen before running the experiments
+
+  * for each goal, select 256 lemmas as axioms, before monomorphization
+    (after monomorphization, typically more formulas due to duplicates),
+    and encode with the goal
+
+  * then ran CVC4 for XXX seconds on the StarExec cluster \cite{xxx}
+
+{\footnotesize
+\begin{verbatim}
+For the evaluation of Section 5, I'm playing with various ideas. I certainly
+would like to keep it short and not waste too much of our time on it. We
+discussed earlier having (1) hand-crafted problems and (2) actual benchmarks
+(like those you already have). I suggest we drop (1); I never did hand-crafted
+before and this always looks suspicious anyway. For (2), I see three or four
+possible benchmark sets:
+
+1. without (co)datatype theories
+2. with datatypes
+(3. with codatatypes)
+4. with both
+
+The benchmark problems would be identical except for the declarations at the
+top ("declare-sort" and "declare-fun" vs. "declare-(co)datatype").
+Irrespective of whether interpreted (co)datatypes are used, Sledgehammer will
+typically include some (co)datatype axioms (i.e. tautologies if (co)datatypes
+are enabled). Hence the tests are a good indication of whether native
+(co)datatypes are useful to Sledgehammer. I assume the results will follow
+common sense, i.e. 4 > {3, 2} > 1
+
+As for the actual Isabelle theory files to use, for codatatypes there is not
+much question: We just use all I could get my hands on. But perhaps we should
+have a second benchmark set, ideally something a bit standard like, say, the
+Judgment Day (JD) suite. Or I can make some arbitrary a priori (before
+evaluation) decisions, but that always looks a bit fishy unless it can be
+justified easily. The trouble is, we have about 1000 datatypes lying around in
+Isabelle and the Archive of Formal Proofs (AFP). These would have no
+codatatypes in them, so we could only do 1 and 2 of the evaluation. We could
+at least try the "list" library, which is extremely developed and would have
+1600 goals already, and perhaps a few really basic types ("option", "string"),
+or perhaps red-black trees (about 450 goals).
+
+So we can show the success rates, in a table like this:
+
+                 Codatatype-oriented suite      Datatype (or JD) suite
+                      (2345 goals)                   (1240 goals)
+
+   w/o (co)data        1255                            699
+   w data              1268                            712
+   w codata            1270
+   w both              1273
+
+I can write the usual warning that an increase of a couple of percentage
+points in success rate in a general tool like Sledgehammer and general
+benchmark suites means a lot etc. Putting the datatype evaluations (i.e. 2 and
+4) in there offers the advantage that it will give some measure of how much to
+expect from the codatatypes. I.e. if the success rate doesn't go up by 50% for
+datatypes, nobody will expect this to happen for codatatypes. A priori, I
+would expect a similar gain, but I'm looking forward to see the experimental
+data.
+
+In addition to success rate (or number of solved goals), we should have other
+statistics, like how often do we get proofs that contain the cyclicity and
+bisimilarity rules. And finally, we look in more detail at one or two such
+proofs, by presenting it and explaining it (and, before that, understanding
+it).
+\end{verbatim}}
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -1344,7 +1427,7 @@ some rather
 puzzling bisimulation proofs.
 
 This work is part of a larger program that aims at enriching automatic
-provers with more high-level features and reducing the gap between automatic and
+provers with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, we want to try out CVC4 and its
 (co)datatypes for higher-order model finding in Isabelle, as an
 alternative to the counterexample generator Nitpick
