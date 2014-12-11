@@ -263,7 +263,7 @@ Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \e
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
 and for theory combinations. The $\mu$-binder notation is used to represent cyclic
 values internally. For example,
-the term $\const{SCons}(1,\: \mu s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
+the term $\const{SCons}(1,\: \mu\vthinspace s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
 denotes the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
 
 %%% 1090909 is a prime number
@@ -627,7 +627,7 @@ type of an argument to one of $\delta$'s constructors. Semantically, a set of
 types is mutually (co)recursive if and only if the associated dependency graph
 is strongly connected. Types can be declared together as mutually
 (co)recursive even if they are not actually (co)recursive; however, the
-semantic notion is more fruitful and is the one we focus on.
+semantic notion is more fruitful and is the one that interests us.
 
 Furthermore, nothing forbids specifications with no (co)recursion, such as
 \[\begin{aligned}[t]
@@ -640,53 +640,39 @@ datatypes or as codatatypes.
 %Without loss of generality, we consider that these types are datatypes
 %instead of codatatypes.
 
+Finally, some codatatypes are so degenerate that they have infinite values
+even though they are finite. The simplest example is
+\[\keyw{datatype}\;\, \ty{a} \,=\, \const{A}(\ty{a})\]
+This is a finite codatatype, of cardinality one, whose single value is
+infinite: $\mu\vthinspace a.\; A(a)$. Other specimens are
+\[\begin{aligned}[t]
+      \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-\jot]
+             \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{unit},\: \ty{c},\: \ty{b},\: \ty{c})
+\end{aligned}
+\]
+where \ty{unit} is a datatype with the single constructor $\const{Unity} :
+\ty{unit}$. We call such types \emph{corecursive singletons}.
+For the decision procedure, it will be important to detect those finite
+codatatypes.
 
-Degenerate Codatatypes
+% In other words, all finite corecursive codatatypes are corecursive singletons.
 
-    Consider
+\begin{lemma}
+If the domain interpreting a corecursive codatatype is finite, it must be $1$.
+\end{lemma}
 
-      codatatype a = A(a)
+\begin{proof}
+TODO.
+\qed
+\end{proof}
 
-    This is a finite codatatype, with a single value, which is infinite:
-    $\mu a. A(a)$
-    
-    We need to detect those finite codatatypes. They are easy to
-    characterize semantically.
-
-    Lemma D.1. The only possible finite cardinality for the domain interpreting
-    a (corecursive) codatatype is 1.
-
-    Proof.
-      Assume you have at least 2 different values of a codatatype.
-      They differ at one point.
-      * 
-    Qed
-
-    An immediate consequence by the distinctness axiom is that these types have
-    necessarly one constructor, and that all arguments are of types of
-    cardinality 1.
-
-    Easy case: $k$ mutually recursive codatatypes, each equipped with one
-    constructor, all of which take each other in arguments in various
-    combinations, with potential other types that are known to have cardinality
-    1. e.g.
-
-      codatatype b = B b c b
-             and c = C c b c
-
-    Medium case: like above, but some of the arguments are other types not
-    participating in the corecursion that are known to have cardinality 1, e.g.
-
-      codatatype d = D unit d d unit
-
-    where "unit" is a datatype with the single constructor "Unity : unit".
-
-    Though case: like above, but with any other types where it's not clear
-    whether it could have cardinality one or not.
-
-      type e
-      codatatype f = F e f f unit
-
+An immediate consequence by the distinctness axiom is that these types have
+necessarly one constructor and that all arguments have types of cardinality 1.
+%
+Sometimes, a type might be a corecursive singleton only in some models. For
+example, if \ty{unit} is an uninterpreted type, \ty{b} and \ty{c} will be
+singleton types precisely in the models that interpret \ty{unit} as a
+singleton.
 
 \section{The Calculus}
 \label{sec:the-calculus}
@@ -1153,7 +1139,7 @@ Then, $\Val$ is updated according to the following rules:
   \quad
   C \in \Ctr
 }{
-  \Val := \Val \{ v_{\ec{x}} \mapsto \mu v_{\ec{x}}. C( v_{\ec{t_1}}, \ldots, v_{\ec{t_n}} ) \}
+  \Val := \Val \{ v_{\ec{x}} \mapsto \mu\vthinspace v_{\ec{x}}. C( v_{\ec{t_1}}, \ldots, v_{\ec{t_n}} ) \}
 }
 \)
 
@@ -1191,20 +1177,20 @@ A possible application of the above rules, showing the state of $\Val$ after eac
 & \{ & \ec{x} \mapsto v_{\ec{x}}, & \ec{z} \mapsto v_{\ec{z}}, \\
 &    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
 \rn{Ind} \ec{x}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ), & \ec{z} \mapsto v_{\ec{z}}, \\
+& \{ & \ec{x} \mapsto \mu\vthinspace v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ), & \ec{z} \mapsto v_{\ec{z}}, \\
 &    & \ec{y} \mapsto v_{\ec{y}}, & \ec{w} \mapsto v_{\ec{w}} & \} \\
 \rn{Ind} \ec{y}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+& \{ & \ec{x} \mapsto \mu\vthinspace v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu\vthinspace v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
+&    & \ec{y} \mapsto \mu\vthinspace v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
 \rn{Ind} \ec{x}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( v_{\ec{z}}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+& \{ & \ec{x} \mapsto \mu\vthinspace v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu\vthinspace v_{\ec{y}}. \const{C}( v_{\ec{z}}, v_{\ec{x}} ) ), & \ec{z} \mapsto v_{\ec{z}}, \\
+&    & \ec{y} \mapsto \mu\vthinspace v_{\ec{y}}. \const{C}( v_{\ec{z}}, \mu\vthinspace v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
 \rn{Base} \ec{z}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( \const{0}, \mu v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
+& \{ & \ec{x} \mapsto \mu\vthinspace v_{\ec{x}}. \const{C}( v_{\ec{w}}, \mu\vthinspace v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
+&    & \ec{y} \mapsto \mu\vthinspace v_{\ec{y}}. \const{C}( \const{0}, \mu\vthinspace v_{\ec{x}}. \const{C}( v_{\ec{w}}, v_{\ec{y}} ) ), & \ec{w} \mapsto v_{\ec{w}} & \} \\
 \rn{Base} \ec{w}
-& \{ & \ec{x} \mapsto \mu v_{\ec{x}}. \const{C}( \const{1}, \mu v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
-&    & \ec{y} \mapsto \mu v_{\ec{y}}. \const{C}( \const{0}, \mu v_{\ec{x}}. \const{C}( \const{1}, v_{\ec{y}} ) ), & \ec{w} \mapsto \const{1} & \} \\
+& \{ & \ec{x} \mapsto \mu\vthinspace v_{\ec{x}}. \const{C}( \const{1}, \mu\vthinspace v_{\ec{y}}. \const{C}( \const{0}, v_{\ec{x}} ) ), & \ec{z} \mapsto \const{0}, \\
+&    & \ec{y} \mapsto \mu\vthinspace v_{\ec{y}}. \const{C}( \const{0}, \mu\vthinspace v_{\ec{x}}. \const{C}( \const{1}, v_{\ec{y}} ) ), & \ec{w} \mapsto \const{1} & \} \\
 \end{array}\]
 
 
