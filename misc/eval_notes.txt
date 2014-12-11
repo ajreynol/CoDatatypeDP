@@ -23,7 +23,7 @@ isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep
 
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/coinductive_list_prefix/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List_Prefix.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/process/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Process.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/stream/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/stream/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Library/Stream.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/coinductive_list/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/coinductive_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_Stream.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v4/hamming_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Hamming_Stream.thy
