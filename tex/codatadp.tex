@@ -485,18 +485,18 @@ $x = \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldo
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
-      \keyw{datatype}\;\, \ty{tree}_{\,\tau} & \,=\, \const{Node}(\tau,\: \ty{forest}_{\,\tau}) \\[-\jot]
-      \keyw{and}\;\, \ty{forest}_{\,\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\,\tau},\:\, \ty{forest}_{\,\tau}) \\%[-.5\jot]
       \keyw{codatatype}\; \,\ty{llist}_{\,\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(%\const{lhead}{:}\;
       \tau,\: %\const{ltail}{:}\;
-      \ty{llist}_{\,\tau})
+      \ty{llist}_{\,\tau}) \\%[-.5\jot]
+      \keyw{datatype}\;\, \ty{tree}_{\,\tau} & \,=\, \const{Node}(\tau,\:\, \ty{forest}_{\,\tau}) \\[-\jot]
+      \keyw{and}\;\,\, \ty{forest}_{\,\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\,\tau},\:\, \ty{forest}_{\,\tau})
 \end{aligned}
 \]
 
 Because the types are inhabited (nonempty), a datatype specification is
 admissible only if a ground constructor term can be exhibited that belongs to
 the datatype. This rules out non-well-founded specifications such as
-\[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\:\, \ty{fstream})\]
+\[\keyw{datatype}\;\, \ty{fstream}_{\,\tau} \,=\, \const{FSCons}(\tau,\:\, \ty{fstream}_{\,\tau})\]
 For codatatypes, no admissibility check is necessary because there is always a term,
 finite or infinite, that witnesses nonemptiness.
 %Given the specification
@@ -668,9 +668,10 @@ this degenerate case:
 
 % In other words, all finite corecursive codatatypes are corecursive singletons.
 
-\begin{lemma}
-Let $\delta$ be a corecursive codatatype. If the domain interpreting $\delta$
-is finite, it must be a singleton. Furthermore, $\delta$ has necessarily a
+\begin{lemma}[Corecursive Singletons]%
+\label{lem:corecursive-singletons}%
+Let $\delta$ be a corecursive codatatype. The domain interpreting $\delta$ is
+either infinite or a singleton. In the latter case, $\delta$ has necessarily a
 single constructor, whose arguments have types that are interpreted by
 singletons.
 \end{lemma}
