@@ -667,24 +667,24 @@ all its arguments have types that are interpreted by singletons.
 \end{lemma}
 
 \begin{proof}
-  * if two (either directly or indirectly) corecursive constructors
-    $\const{C}$ and $\const{D}$, it is
-    possible to encode infinitely many alternation patterns,
-    e.g. $\const{C}(\const{D}(\const{C}(\const{C}(\ldots))))$;
-    hence no finite models
+By definition, the type is equipped with at least one (directly or indirectly)
+corecursive constructor $\const{C}$. If it additional has second
+corecursive constructor $\const{D}$, it is possible to encode infinitely many
+alternation patterns---e.g.,
+$\const{C}(\const{D}(\const{C}(\const{C}(\ldots))))$---all of which correspond
+to distinct values. If the type has a noncorecursive constructor
+$\const{E}$, it is possible to create terms of arbitrary depths---e.g.,
+$\const{C}(\ldots(\const{C}(\const{E}))\ldots)$. In both cases, there can be
+no finite models.
 
-  * if one corecursive and one noncorecursive, then possibility to create
-    objects of arbitrary depths, e.g. $\const{C}(\ldots(\const{C}(\const{D}))\ldots)$,
-    and hence no finite models
-
-  * leaves us with the case of a single corecursive constructor
-
-  * if any of the noncorecursive arguments has cardinality greater than one,
-    then it is possible to encode alternation patterns using it,
-    e.g. $\const{C}(0,\: \const{C}(1,\: \const{C}(0,\: \const{C}(0,\: \ldots))))$.
-
-  * otherwise, by the coinduction principle, there is only one value that can
-    exist
+Therefore, $\const{C}$ must be the only constructor.
+If any of its noncorecursive arguments has a cardinality greater than 1,
+it is possible to encode alternation patterns using it---e.g.,
+$\const{C}(0,\: \const{C}(1,\: \const{C}(0,\: \const{C}(0,\: \ldots))))$---which
+again excludes finite models. Otherwise, the coinduction principle ensures
+that there can be only one value.
+\qed
+\end{proof}
 
 %  * assume for simplicity no indirect recursion, but this does not radically
 %    change the argument
@@ -699,9 +699,6 @@ all its arguments have types that are interpreted by singletons.
 % * if two
 % * either there is only one ``path'' from ctr to itself
 %   or at least two;
-\qed
-\end{proof}
-
 
 \section{The Calculus}
 \label{sec:the-calculus}
