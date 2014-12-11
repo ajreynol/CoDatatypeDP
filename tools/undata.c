@@ -112,8 +112,8 @@ int eliminate_constructor_argument(const char *sort_name,
 
     tok = get_token(in);
     strcpy(arg_sort, tok_str);
-    fprintf(stderr, "%d %s %s %s %s\n", (int)tok, sort_name, ctor_name,
-            sel_name, arg_sort);
+//    fprintf(stderr, "%d %s %s %s %s\n", (int)tok, sort_name, ctor_name,
+//            sel_name, arg_sort);
 
     strcpy(*args++, arg_sort);
 
@@ -143,7 +143,7 @@ int eliminate_constructor(const char *sort_name, char (*funs)[Big_Num],
 
     tok = get_token(in);
     strcpy(ctor_name, tok_str);
-    fprintf(stderr, "%d %s %s\n", (int)tok, sort_name, tok_str);
+//    fprintf(stderr, "%d %s %s\n", (int)tok, sort_name, tok_str);
 
     char arg_sorts[Big_Num];
     for (int i = 0; i < num_args; i++) {
@@ -184,7 +184,7 @@ int eliminate_co_datatype(char (*funs)[Big_Num], FILE *in, FILE *out)
     tok = get_token(in);
 
     strcpy(sort_name, tok_str);
-    fprintf(stderr, "%d %s\n", (int)tok, sort_name);
+//    fprintf(stderr, "%d %s\n", (int)tok, sort_name);
     tok = get_token(in);
 
     fprintf(out, "(declare-sort %s 0)\n", sort_name);
