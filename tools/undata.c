@@ -10,7 +10,7 @@ typedef enum {
     Tok_End
 } token;
 
-const int Big_Num = 1024;
+const int Big_Num = 16384;
 
 int next_ch;
 token tok;
@@ -80,6 +80,10 @@ int get_token(FILE *in)
                         next_ch != '\r' &&
                         next_ch != '\t' &&
                         next_ch != '\v') {
+                    if (i >= Big_Num - 1) {
+                        fprintf(stderr, "Token too long\n");
+                        return Tok_End;
+                    }
                     tok_str[i++] = next_ch;
                     next_ch = fgetc(in);
                 }
@@ -134,7 +138,7 @@ int eliminate_constructor(const char *sort_name, char (*funs)[Big_Num],
         int *num_funs, FILE *in, FILE *out)
 {
     char ctor_name[Big_Num];
-    char args[Big_Num][Big_Num];
+    static char args[Big_Num][Big_Num];
     int num_args = 0;
 
     if (tok != Tok_Left_Paren) {
@@ -219,7 +223,7 @@ int eliminate_co_datatypes(FILE *in, FILE *out)
 
     tok = get_token(in);
 
-    char funs[Big_Num][Big_Num];
+    static char funs[Big_Num][Big_Num];
     int num_funs = 0;
 
     for (int i = 0; i < Big_Num; i++) {
@@ -324,12 +328,16 @@ int generate_one_file(const char *in_name, int keep_data, int keep_codata)
 
 int main(int argc, char **argv)
 {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: undata FILE\n");
+    if (argc < 2) {
+        fprintf(stderr, "Usage: undata FILE...\n");
         return 1;
     }
 
-    return generate_one_file(argv[1], 0, 0)
-            + generate_one_file(argv[1], 0, 1)
-            + generate_one_file(argv[1], 1, 0);
+    for (int i = 1; i < argc; i++) {
+        fprintf(stderr, "%s\n", argv[i]);
+        generate_one_file(argv[i], 0, 0);
+        generate_one_file(argv[i], 0, 1);
+        generate_one_file(argv[i], 1, 0);
+    }
+    return 0;
 }
