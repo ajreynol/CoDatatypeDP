@@ -115,7 +115,7 @@ int eliminate_constructor_argument(const char *sort_name,
 //    fprintf(stderr, "%d %s %s %s %s\n", (int)tok, sort_name, ctor_name,
 //            sel_name, arg_sort);
 
-    strcpy(*args++, arg_sort);
+    strcpy(args[(*num_args)++], arg_sort);
 
     char sel_sig[Big_Num];
     sprintf(sel_sig, "%s (%s)%s", sel_name, sort_name, arg_sort);
@@ -145,24 +145,23 @@ int eliminate_constructor(const char *sort_name, char (*funs)[Big_Num],
     strcpy(ctor_name, tok_str);
 //    fprintf(stderr, "%d %s %s\n", (int)tok, sort_name, tok_str);
 
-    char arg_sorts[Big_Num];
-    for (int i = 0; i < num_args; i++) {
-        strcat(arg_sorts, args[i]);
-        if (i > 0) {
-            strcat(arg_sorts, " ");
-        }
-    }
-
-    char ctor_sig[Big_Num];
-    sprintf(ctor_sig, "%s (%s)%s", ctor_name, arg_sorts, sort_name);
-    strcpy(funs[(*num_funs)++], ctor_sig);
-
     tok = get_token(in);
 
     while (tok == Tok_Left_Paren) {
         eliminate_constructor_argument(sort_name, ctor_name, funs, num_funs,
             args, &num_args, in, out);
     }
+
+    char arg_sorts[Big_Num];
+    arg_sorts[0] = '\0';
+    for (int i = 0; i < num_args; i++) {
+        strcat(arg_sorts, args[i]);
+        strcat(arg_sorts, " ");
+    }
+
+    char ctor_sig[Big_Num];
+    sprintf(ctor_sig, "%s (%s)%s", ctor_name, arg_sorts, sort_name);
+    strcpy(funs[(*num_funs)++], ctor_sig);
 
     if (tok != Tok_Right_Paren) {
         return 1;
@@ -172,10 +171,10 @@ int eliminate_constructor(const char *sort_name, char (*funs)[Big_Num],
     return 0;
 }
 
-int eliminate_co_datatype(char (*funs)[Big_Num], FILE *in, FILE *out)
+int eliminate_co_datatype(char (*funs)[Big_Num], int *num_funs, FILE *in,
+        FILE *out)
 {
     char sort_name[Big_Num];
-    int num_funs = 0;
 
     if (tok != Tok_Left_Paren) {
         return 1;
@@ -190,7 +189,7 @@ int eliminate_co_datatype(char (*funs)[Big_Num], FILE *in, FILE *out)
     fprintf(out, "(declare-sort %s 0)\n", sort_name);
 
     while (tok == Tok_Left_Paren) {
-        eliminate_constructor(sort_name, funs, &num_funs, in, out);
+        eliminate_constructor(sort_name, funs, num_funs, in, out);
     }
 
     if (tok != Tok_Right_Paren) {
@@ -221,13 +220,14 @@ int eliminate_co_datatypes(FILE *in, FILE *out)
     tok = get_token(in);
 
     char funs[Big_Num][Big_Num];
+    int num_funs = 0;
 
     for (int i = 0; i < Big_Num; i++) {
         funs[i][0] = '\0';
     }
 
     while (tok != Tok_End && tok != Tok_Right_Paren) {
-        eliminate_co_datatype(funs, in, out);
+        eliminate_co_datatype(funs, &num_funs, in, out);
     }
 
     for (int i = 0; i < Big_Num; i++) {
