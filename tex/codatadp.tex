@@ -646,9 +646,9 @@ datatypes or as codatatypes.
 
 Finally, some codatatypes are so degenerate as to have infinite values
 even though they are finite. The simplest example is
-\[\keyw{datatype}\;\, \ty{a} \,=\, \const{A}(\ty{a})\]
+\[\keyw{codatatype}\;\, \ty{a} \,=\, \const{A}(\ty{a})\]
 This is a finite codatatype, of cardinality one, whose single value is
-infinite: $\mu\vthinspace a.\; A(a)$. Other specimens are
+infinite: \,$\mu\vthinspace a.\; A(a)$. Other specimens are
 \[\begin{aligned}[t]
       \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-\jot]
              \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})
