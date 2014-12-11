@@ -861,6 +861,7 @@ We say a $\mu$-term is \emph{closed} if and only if it contains no free variable
 A $\mu$-term is \emph{cyclic} if and only if it contains a bound variable.
 We write $t \vsim s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent for some renaming of $\mu$-bound variables,
 in which case we will commonly say $t$ and $s$ are \emph{bisimilar}.
+%, or informally are \emph{observationally equivalent}.
 %For convienience, we will use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
@@ -1104,7 +1105,7 @@ We will write $v\interp{u}$ as shorthand for $v\interp{u}^\emptyset$.
 Given a $\mu$-term $v$ of the form $\mu x. C( \vec t )$, 
 we say $u$ is a \emph{bisimilar subterm} of $v$ if and only if $v\interp{u} \vsim v$.
 We say $v$ is \emph{normal} if and only if all of its bisimilar subterms are $x$,
-and all of its strict subterms that do not contain $x$ are normal.
+and all of its strict subterms are also normal.
 For instance, the $\mu$-term $v$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is not normal, 
 since 
 $v\interp{\mu y. \const{S}( x )}^\emptyset =$ 
@@ -1113,17 +1114,11 @@ $\mu y. \const{S}( v\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} 
 $\mu y. \const{S}( \mu x. \const{S}( v\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
 $\mu y. \const{S}( \mu x. \const{S}( y ) )$,
 which is syntactically equivalent to $v$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
-
-%\begin{lemma}
-%\end{lemma}
-
-%For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
-%(which we will call the \emph{normal form for $v$})
-%that is observationally equivalent to $v$.
-%We construct $\nf{v}$ by replacing all of the bisimilar subvalues of $v$ with $x$,
-%and by replacing all of the non-normal closed subvalues of $v$ with their corresponding normal forms.
-%For instance, $\nf{(\mu x. \const{S}( \mu y. \const{S}( x ) ))} = \mu x. \const{S}( x )$.
-
+For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
+(which we will call the \emph{normal form} of $v$)
+that is a renaming of $v$ by replacing all of the bisimilar subvalues of $v$ with $x$,
+and by replacing all of the non-normal subterms of $v$ with their corresponding normal forms.
+For instance, $\nf{(\mu x. \const{S}( \mu y. \const{S}( x ) ))} = \mu x. \const{S}( x )$.
 
 \begin{lemma}[Solution Soundness] \label{lem:ss}
 If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
@@ -1137,15 +1132,29 @@ The latter also comes with no loss of generality since nested applications of se
 
 We construct a model $\M$ of $\thD$ that interprets each type $\tau$
 as a maximal set of closed normal $\mu$-terms of that type that are 
-(1) unique up to renaming of $\mu$-bound variables,
-(2) acyclic when $\tau \not\in \Codata$.
-We assume $\M$ interprets constructors and correctly-applied selectors in the obvious way
-\footnote{
-To interpret a correctly-applied selector, if $v = \mu x. C_i( \vec t )$, then $\M( s^j_i( v ) )$ is the value in $\M( \tau )$ that is a renaming of $v\interp{t_j}$,
-where $t_j$ has type $\tau$.
-},
-interprets wrongly-applied selectors based on equality information in $\Fc$,
-interprets the variables of $\Fc$ based on the valuation $\Val$ which was constructed in step two of our calculus.
+unique up to renaming of $\mu$-bound variables,
+and acyclic when $\tau \not\in \Codata$.
+The interpretation of constructor terms
+$\M( C( \vec t ) )$ for $C \in \Ctr$ is the value in $\M( \tau )$ that is a renaming of $\nf{(\mu x. C( \M( \vec t ) ))}$ where $x \not\in FV( \vec t )$.
+The interpretation of (correctly-applied) selector terms
+$\M( s^j_i( t ) )$ for $s^j_i \in \Sel$ is the value in $\M( \tau )$ that is a renaming of $\M( t )\interp{u_j}$
+where $\M( t )$ is of the form $\mu x. C_i( \vec u )$ for some $\vec u$.
+For instance, if $\M( t ) = \mu x. \const{C}_1( x )$ (call this term $v$), 
+then $\M( s_1^1( t ) )$ is a renaming of
+$v\interp{x} =$ 
+$v\interp{\mu x. \const{C}_1( x )}^\emptyset =$
+$\mu x. \const{C}_1( v\interp{x}^{\{x\}} ) =$
+$\mu x. \const{C}_1( x )$.
+%To interpret a correctly-applied selector in $\M$, if $v = \mu x. C_i( \vec t )$, then $\M( s^j_i( v ) )$ is the value in $\M( \tau )$ that is a renaming of $v\interp{t_j}$,
+%where $t_j$ has type $\tau$.
+%We assume $\M$ interprets constructors and correctly-applied selectors in the obvious way
+%\footnote{
+%The interpretation of $\M( C( \vec t ) )$ is the value in $\M( \tau )$ that is a renaming of $\nf{\mu x. C( \M( \vec t ) ) }$.
+%To interpret a correctly-applied selector, if $v = \mu x. C_i( \vec t )$, then $\M( s^j_i( v ) )$ is the value in $\M( \tau )$ that is a renaming of $v\interp{t_j}$,
+%where $t_j$ has type $\tau$.
+%},
+Additionally, $\M$ will interpret wrongly-applied selectors based on equality information in $\Fc$,
+and will interpret the variables of $\Fc$ based on the valuation $\Val$ which was constructed in step two of our calculus.
 
 Recall that $\Val$ is a mapping from the equivalence classes of $\Fc$ to $\mu$-terms.
 We first \emph{complete} $\Val$ so that it maps equivalence classes only to closed $\mu$-terms, that is, terms containing no free variables.
@@ -1184,7 +1193,8 @@ then \rn{Complete} would apply for the (single) value $c$ of type $\tau$,
 for which the second premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
 Since all $\tau \in \Nondata$ are infinite, all variables in $FV( \Val^\ast )$ have infinite type.
 For any infinite type $\tau$,
-there exists a closed normal $\mu$-term $c_1$ that is not bisimilar to any $c_2 \in \mathcal{T}(\Val^\ast)$, since $\mathcal{T}(\Val^\ast)$ is a finite set. \rem{elaborate?}
+there exists a closed normal $\mu$-term $c_1$ that is not bisimilar to any $c_2 \in \mathcal{T}(\Val^\ast)$, 
+since $\mathcal{T}(\Val^\ast)$ is a finite set (noting that a closed $\mu$-term is only bisimilar to other closed $\mu$-terms).
 Thus, $FV( \Val^\ast )$ contains no variables of infinite type,
 and consequently $\Val^\ast$ is a mapping from the equivalence classes of $\Fc$ to closed $\mu$-terms.
 We now argue that:
@@ -1199,7 +1209,13 @@ For the base case, note that since \rn{Bisimilar} does not apply to $\Fc$,
 we have that $\Val$ satisfies both~\ref{eqn:m-normal} and~\ref{eqn:m-bij}.
 It satisfies the former since if a $\mu$-term $\mu v_{\ec{x}}. t_1$ had a bisimilar subterm $\mu v_{\ec{y}}. t_2$,
 then the rule \rn{Bisimilar} would have applied to $x$ and $y$. \rem{elaborate?}
-For the inductive case, say that we apply \rn{Complete} to $\Val$ for the substitution $\sigma := \{ v_{\ec{x}} \mapsto c_1 \}$.
+For the inductive case, we assume $\Val$ satisfies ~\ref{eqn:m-normal} and~\ref{eqn:m-bij},
+and show that $\Val \sigma$ does as well where $\sigma := \{ v_{\ec{x}} \mapsto c_1 \}$ is a substitution applied by \rn{Complete}.
+By contradiction, assume that $\Val \sigma \ec{y}$ is a non-normal $\mu$-term for some $\ec{y}$.
+%Since $c_1$ is normal, we have $\ec{x} \neq \ec{y}$, 
+%and thus $\Val \ec{y}$ must have been of the form $\mu v_{\ec{y}}. t$ where $\ec{x} \in FV( t )$.
+Let $u$ be the (strict) subterm of $\Val \ec{y}$ such that $(\Val \ec{y} \sigma ) \interp{u \sigma } \sim (\Val \ec{y} \sigma)$. 
+Since $\Val$ maps only to normal $\mu$-terms, we have $x \in FV( u )$.
 \rem{TODO}
 
 
@@ -1208,8 +1224,8 @@ We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_
 
 If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
 
-If $\tau \in \Data$,
-we first show that $\M( t ) = \Val^\ast \ec{x}$ for all non-selector terms $t$ that occur in datatype equivalence classes $\ec{x}$.
+If $\tau \in \Data \cup \Codata$,
+we first show that $\M( t ) = \Val^\ast \ec{x}$ for all non-selector terms $t$ that occur in equivalence classes $\ec{x}$.
 We show this by induction on the size of $\Val^\ast \ec{x}$.
 In the case where $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t } = \Val^\ast \ec{ x }$.
 In the case where $t$ is a constructor term $C( \vec u )$, 
@@ -1229,8 +1245,6 @@ If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$,
 and since $s^j_k( \M( y ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
 we may interpret $s^j_k( \M( y ) )$ as $\Val^\ast \ec{ x }$. 
 Thus, for all datatype equivalence classes $\ec{x}$, we have $\M( t ) = \Val^\ast \ec{x}$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
-
-If $\tau \in \Codata$, \rem{TODO}
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
