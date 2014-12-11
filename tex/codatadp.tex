@@ -353,7 +353,7 @@ Barrett et al.\ \cite{barrett-et-al-2007} is still a good reference.
 Since then, datatypes have been added to Z3 in unpublished work by Leonardo de
 Moura and to a SPASS-like prototype prover called Pirate by Daniel Wand.
 %\cite{wand-weidenbach-201x}.
-Closely related is the support for structural
+Closely related is the automatic structural
 induction in CVC4 by Reynolds and Kuncak \cite{reynolds-kuncak-2015} and in
 Pirate by Wand and Weidenbach \cite{wand-weidenbach-201x}, which depends on a
 notion of datatype.
@@ -380,12 +380,13 @@ structure, and interpreted by nonempty domains. The set~$\Types$ must contain a
 distinguished type \ty{bool} interpreted as the set of truth
 values $\{\bot, \top\}$. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
 The only predicate is equality ($\teq$) and belongs to the logical symbols.
-Other predicates can be represented as functions that return $\ty{bool}$.
-The metavariables $\delta,\:\varepsilon,\:\tau$ range over types, with $\delta$ reserved
-for datatypes and codatatypes.
+Other predicates can be represented as functions that return $\ty{bool}$,
+with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
+The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
+whereas $\tau,\:\upsilon$ range over arbitrary types.
 
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
-distinguish them from variables (e.g., $x$, $y$). Names starting with an uppercase
+distinguish them from variables (e.g., $x$, $y$). Symbols starting with an uppercase
 letter (e.g.,
 $\const{S}$, $\const{SCons}$) are reserved for constructors. With each function symbol \const{f}
 is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
@@ -399,8 +400,9 @@ applying the $n$-ary function symbol
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
 %
-Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
-% and $\bigwedge_i \varphi_i$ abbeviates a conjunction $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
+Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$
+and $\bigwedge_{\,i} \varphi_i$ abbeviates a conjunction
+$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
@@ -450,8 +452,8 @@ ordinary, among the already known (co)datatypes, or among the (co)datatypes
 being introduced.
 %
 To every argument corresponds a selector. The names for the (co)data\-types, the
-constructors, and the selectors must be distinct and different from already
-introduced ones%
+constructors, and the selectors must be distinct and different from
+existing names%
 \dotReportFootnote{It can be convenient to specify the same selector
 for several constructors associated with the same (co)data\-type,
 as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
@@ -477,9 +479,9 @@ the selector names if they are omitted.
 For types with several constructors, it is customary to provide discriminators
 $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
 it is not necessary to extend the signature:
-$\const{d}_{i\negvthinspace j}(x)$ can be seen as an abbreviation for
+The discriminator term $\const{d}_{i\negvthinspace j}(x)$ can be seen as an abbreviation for
 $x = \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
-This will simplify the presentation. % of the decision procedure.
+This will simplify the presentation later. % of the decision procedure.
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
@@ -491,9 +493,9 @@ Here are a few examples of legal specifications of (co)datatype families:
 
 Because the types are inhabited (nonempty), a datatype specification is
 admissible only if a ground constructor term can be exhibited that belongs to
-that datatype. This rules out ill-founded specifications such as
+the datatype. This rules out non-well-founded specifications such as
 \[\keyw{datatype}\;\, \ty{fstream} \,=\, \const{FSCons}(\ty{int},\:\, \ty{fstream})\]
-For codatatypes, no such check is necessary because there is always a term,
+For codatatypes, no admissibility check is necessary because there is always a term,
 finite or infinite, that witnesses nonemptiness.
 %Given the specification
 %
@@ -503,9 +505,9 @@ finite or infinite, that witnesses nonemptiness.
 %nonemptiness.
 
 \paragraph{Properties.}
-Datatypes and codatatypes share basic properties pertaining to constructors and
-selectors. All properties below are implicitly universally quantified and range
-over all $i$, $j$, $\jPrime$, and $k$ within bounds:
+Datatypes and codatatypes share many basic properties pertaining to
+constructors and selectors. All properties below are implicitly universally
+quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
 % and to all possible splits of the
 %$n$-ary constructor $\const{C}_{i\negvthinspace j}$'s argument list into $\bar x,
 %y, \bar z$:
@@ -543,48 +545,49 @@ Datatypes are additionally characterized by an induction axiom schema:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{\strut$\bigwedge_{i,j} \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
-\UIC{\strut$\bigwedge_{i} P_i[v_i]$}
+\AXC{\strut$\bigwedge_{\,i,j} \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k\,} \mathit{IH}_{i\negvthinspace j}^k[x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
+\UIC{\strut$\bigwedge_{\,i} P_i[v_i]$}
 \DP
 \end{aligned}
 \]
 where the induction hypothesis $\mathit{IH}_{i\negvthinspace j}^k(x)$
-denotes either $P_{\iPrime}(x)$ if there exists some $i$ such that this is type
-correct or else $\top$.
+denotes either $P_{\iPrime}(x)$ if there exists some $\iPrime$ such that
+the formula is type-correct or else $\top$.
 %
-The axiom schema ensures that we get a smallest model. For example,
+The axiom schema ensures that the interpretation of datatypes
+is a smallest model. For example,
 for a datatype of natural numbers constructed from $\const{Z}$ and $\const{S}$,
-this rules out nonstandard models, which could contain cyclic values---e.g.,
+induction rules out nonstandard models, which could contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
 
-For codatatype, the dual notion is that of a coinduction principle that
-depends on witnesses $R$ that are required to be bisimulations:
+For codatatypes, the dual notion is called coinduction. It depends on
+witnesses $R$ that are required to be bisimulations:
 %
 \[
 \begin{aligned}[t]
 \text{Coinduction:}\quad
-\AXC{\strut$\begin{gathered}\textstyle \bigwedge_i R_i[v_i, w_i] \\[-\jot]\textstyle
-\bigwedge_i \forall v\; w.\;\, R_i[v, w] \longrightarrow
-  \bigwedge_j \const{d}_j(v) \teq \const{d}_j(w)
+\AXC{\strut$\begin{gathered}\textstyle \bigwedge_{\,i} R_i[v_i, w_i] \\[-\jot]\textstyle
+\bigwedge_{\,i} \forall v\; w.\;\, R_i[v, w] \longrightarrow
+  \bigwedge_{\,j} \const{d}_j(v) \teq \const{d}_j(w)
   \mathrel\land
-  \const{d}_j(v) \longrightarrow \bigwedge_k \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
+  \const{d}_j(v) \longrightarrow \bigwedge_{\,k} \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
 \end{gathered}$}
-\UIC{\strut$\bigwedge_i v_i \teq w_i$}
+\UIC{\strut$\bigwedge_{\,i} v_i \teq w_i$}
 \DP
 \end{aligned}
 \]
-where $x \sim y$ denotes either $R_i[x, y]$ if there exists some $i$ such that
-this is type correct or $x \teq y$ otherwise.
+where $x \sim y$ denotes either $R_{\iPrime}[x, y]$ if there exists some
+$\iPrime$ such that the formula is type-correct or $x \teq y$ otherwise.
 This axiom schema captures the idea that two values that yield the same
 observations must be equal, where the observations are made by using the
 selectors and discriminators.
 
 In addition, codatatypes are guaranteed to contain all values corresponding to
-infinite ground constructor terms. This cannot be capture by a first-order
-axiomatization, since there may be uncountably many of them. For example,
-$\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable function space
-$\ty{nat} \to \ty{int}$.
+infinite ground constructor terms. In general, this cannot be captured by a
+first-order axiomatization, since there may be uncountably many of them. For
+example, $\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable function
+space $\ty{nat} \to \ty{int}$.
 
 
 
@@ -604,22 +607,22 @@ $\ty{nat} \to \ty{int}$.
 % specifies the 
 
 \paragraph{Semantics.}
-Datatypes can be defined semantically as the initial model of an equational
-specification of the selector--constructor equations. This is the view followed
-by Barrett et al.\ \cite{barrett-et-al-2010}. A disadvantage with this approach
-is that it does not naturally account for selectors applied to wrong
-constructors. Barrett et al.\ address this by parameterizing the construction by
-default values, but these give rise to spurious equalities between unrelated
-terms---for example, $\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$.
-This could be corrected, but the added
-complexity seems to suggest that selectors are better specified axiomatically.
+Datatypes can be defined semantically as the initial model of the
+selector--constructor equations. This is the view followed by Barrett et al.\
+\cite{barrett-et-al-2010}. A drawback of this approach is that it does
+not naturally account for selectors applied to wrong constructors. Barrett et
+al.\ address this by parameterizing the construction by default values, but
+these give rise to spurious equalities between unrelated terms---e.g.,
+$\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$. This could be
+corrected, but the added complexity seems to suggest that selectors are better
+characterized axiomatically.
 
-A related semantic view of datatypes is as an initial algebra. Codatatypes are
-then defined dually as a final coalgebra. The datatypes are generated by their
-constructors, whereas the codatatypes are viewed through their selectors
-\cite{xxx}. By uniformly focusing on the constructors, the axiomatic approach
-emphasizes the commonality between datatypes and codatatypes, while
-sacrificing a theoretically fruitful notion of duality.
+A related semantic view of datatypes is as initial algebras \cite{xxx}.
+Codatatypes are then defined dually as final coalgebras \cite{xxx}. The
+datatypes are generated by their constructors, whereas the codatatypes are
+viewed through their selectors. By uniformly focusing on the constructors, the
+axiomatic approach emphasizes the commonality between datatypes and
+codatatypes, while sacrificing a theoretically fruitful notion of duality.
 
 \paragraph{Special Cases.}
 A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
@@ -627,43 +630,45 @@ type of an argument to one of $\delta$'s constructors. Semantically, a set of
 types is mutually (co)recursive if and only if the associated dependency graph
 is strongly connected. Types can be declared together as mutually
 (co)recursive even if they are not actually (co)recursive; however, the
-semantic notion is more fruitful and is the one that interests us.
+semantic notion is more precise and is the one that interests us.
 
-Furthermore, nothing forbids specifications with no (co)recursion, such as
+It is worth observing that nothing forbids non(co)recursive specifications
+such~as
 \[\begin{aligned}[t]
-      \keyw{datatype}\;\, \ty{enat} & \,=\, \const{Nat}(\ty{nat}) \,\mid\, \const{Infty} \\[-.5\jot]
+      \keyw{datatype}\;\, \ty{ext\_nat} & \,=\, \const{Nat}(\ty{nat}) \,\mid\, \const{Infty} \\[-.5\jot]
       \keyw{codatatype}\; \,\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
 \end{aligned}
 \]
-Semantically, it makes no difference whether the types are introduced as
+At the semantic level, it makes no difference whether the types are introduced as
 datatypes or as codatatypes.
 %Without loss of generality, we consider that these types are datatypes
 %instead of codatatypes.
 
-Finally, some codatatypes are so degenerate that they have infinite values
+Finally, some codatatypes are so degenerate as to have infinite values
 even though they are finite. The simplest example is
 \[\keyw{datatype}\;\, \ty{a} \,=\, \const{A}(\ty{a})\]
 This is a finite codatatype, of cardinality one, whose single value is
 infinite: $\mu\vthinspace a.\; A(a)$. Other specimens are
 \[\begin{aligned}[t]
       \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-\jot]
-             \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{unit},\: \ty{c},\: \ty{b},\: \ty{c})
+             \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})
 \end{aligned}
 \]
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
-\ty{unit}$. We call such types \emph{corecursive singletons}.
-For the decision procedure, it will be important to detect those finite
-codatatypes. Sometimes, a type might be a corecursive singleton only in some
-models. For example, if \ty{unit} is an uninterpreted type, \ty{b} and \ty{c}
-will be singleton types precisely in the models that interpret \ty{unit} as a
-singleton.
+\ty{unit}$. We call such types \emph{corecursive singletons}. For the decision
+procedure, it will be important to detect these types. A type may also be a
+corecursive singleton only in some models. For example, if \ty{unit} is an
+uninterpreted type, \ty{b} and \ty{c} will be singleton types precisely in the
+models that interpret \ty{unit} as a singleton. Fortunately, given some
+cardinalities for the ordinary types, it is easy to characterize this
+degenerate case:
 
 % In other words, all finite corecursive codatatypes are corecursive singletons.
 
 \begin{lemma}
 If the domain interpreting a corecursive codatatype is finite, it must be a
-singleton. Furthermore, such a type has necessarly a single constructor and
-all its arguments have types that are interpreted by singletons.
+singleton. Furthermore, such a codatatype has necessarly a single constructor,
+and all its arguments have types that are interpreted by singletons.
 \end{lemma}
 
 \begin{proof}
@@ -672,17 +677,17 @@ corecursive constructor $\const{C}$. If it additional has second
 corecursive constructor $\const{D}$, it is possible to encode infinitely many
 alternation patterns---e.g.,
 $\const{C}(\const{D}(\const{C}(\const{C}(\ldots))))$---all of which correspond
-to distinct values. If the type has a noncorecursive constructor
-$\const{E}$, it is possible to create terms of arbitrary depths---e.g.,
-$\const{C}(\ldots(\const{C}(\const{E}))\ldots)$. In both cases, there can be
-no finite models.
+to distinct values (by distinctness and injectivity). If the type has a
+noncorecursive constructor $\const{E}$, it is possible to create terms of
+arbitrary depths---e.g., $\const{C}(\ldots(\const{C}(\const{E}))\ldots)$. In
+both cases, there can be no finite models.
 
 Therefore, $\const{C}$ must be the only constructor.
 If any of its noncorecursive arguments has a cardinality greater than 1,
 it is possible to encode alternation patterns using it---e.g.,
 $\const{C}(0,\: \const{C}(1,\: \const{C}(0,\: \const{C}(0,\: \ldots))))$---which
 again excludes finite models. Otherwise, the coinduction principle ensures
-that there can be only one value.
+that the type has only one value.
 \qed
 \end{proof}
 
