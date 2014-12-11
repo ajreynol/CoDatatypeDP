@@ -10,7 +10,7 @@ typedef enum {
     Tok_End
 } token;
 
-const int BIG_NUM = 65536;
+const int BIG_NUM = 1024;
 
 int next_ch;
 token tok;
@@ -96,7 +96,7 @@ int get_token(FILE *in)
     }
 }
 
-int eliminate_co_datatype(FILE *in)
+int eliminate_co_datatype(FILE *in, FILE *out)
 {
     char typeName[BIG_NUM];
 
@@ -111,17 +111,23 @@ int eliminate_co_datatype(FILE *in)
         return 1;
     }
 
-    while (tok != Tok_Right_Paren) {
+    int depth = 1;
+
+    while (depth != 0 && tok != Tok_End) {
+        if (tok == Tok_Left_Paren) {
+            ++depth;
+        } else if (tok == Tok_Right_Paren) {
+            --depth;
+        }
         tok = get_token(in);
     }
-    tok = get_token(in);
 
     return 0;
 }
 
-int eliminate_co_datatypes(FILE *in)
+int eliminate_co_datatypes(FILE *in, FILE *out)
 {
-    token tok = get_token(in);
+    tok = get_token(in);
     if (tok != Tok_Left_Paren) {
         return 1;
     }
@@ -136,7 +142,7 @@ int eliminate_co_datatypes(FILE *in)
         return 1;
     }
 
-    eliminate_co_datatype(in);
+    eliminate_co_datatype(in, out);
 
     while (tok != Tok_Right_Paren) {
         tok = get_token(in);
@@ -186,9 +192,9 @@ int generate_one_file(const char *inName, int keep_data, int keep_codata)
             tok = get_token(in);
 
             if (tok == Tok_Declare_Datatypes && !keep_data) {
-                eliminate_co_datatypes(in);
+                eliminate_co_datatypes(in, out);
             } else if (tok == Tok_Declare_Codatatypes && !keep_codata) {
-                eliminate_co_datatypes(in);
+                eliminate_co_datatypes(in, out);
             } else {
                 int depth = 1;
 
@@ -225,6 +231,6 @@ int main(int argc, char **argv)
     }
 
     return generate_one_file(argv[1], 0, 0)
-            && generate_one_file(argv[1], 0, 1)
-            && generate_one_file(argv[1], 1, 0);
+            + generate_one_file(argv[1], 0, 1)
+            + generate_one_file(argv[1], 1, 0);
 }
