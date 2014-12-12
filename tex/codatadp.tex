@@ -711,12 +711,10 @@ that the type has only one value.
 % * either there is only one ``path'' from ctr to itself
 %   or at least two;
 
-\section{The Calculus}
+\section{A Ground Decision Procedure for (Co)-Datatypes}
 \label{sec:the-calculus}
 
   * SMT background
-
-\subsection{The Ground Case}
 
   * Rewriter
   * Actual calculus
@@ -743,7 +741,6 @@ where a rule can be applied to $\Ec$ if it meets all of the specified preconditi
 The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{non-terminal}),
 or is $\bot$ (in which case we will call an application of it to be \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$, which denotes a non-deterministic branching.
-An application of a rule is \emph{redundant} if it is non-terminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
 
 \begin{figure}[t]
 \centering
@@ -871,14 +868,14 @@ Thus, we will in the following consider $\Ec$ as a set of equivalence classes of
 For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
 
 %For presentation of the rules in this step, we rely on a representation of terms in the $\mu$-notation.
-The rules of this step contain premises that involve terms containing $\mu$-bindings.
-Recall that these bindings can be used for representing (possibly cyclic) values,
+The rules of this step contain premises that involve a mapping $\Val$ from equivalence classes to terms containing $\mu$-bindings.
+Recall that $\mu$-bindings can be used for representing (possibly cyclic) terms and values,
 for instance, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
 Formally, we recursively define a $\mu$-term as a term-like structure either of the form
 $\mu x. \const{C}( \vec t )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$, 
 or a variable $x$.
 For consistency, we will also consider $\mu x. \const{c}$ to be a $\mu$-term
-in the case where $c$ is a constant of type $\tau \in \Nondata$.
+in the case where $\const{c}$ is a constant of type $\tau \in \Nondata$.
 We consider only $\mu$-terms that are \emph{well-typed}, which we define recursively:
 if the type of $\const{C}$ is $\vec \tau \rightarrow \upsilon$
 and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
@@ -893,14 +890,14 @@ in which case we will commonly say $t$ and $s$ are \emph{bisimilar}.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
 Intuitively, a $\mu$-term $t$ of type $\tau$ describes a class of values of $\tau$, 
-either in the case when $\tau$ is a co-datatype or datatype type,
-where in the latter case, such a $t$ containing a bound variable describes an infeasible class of values.
+%either in the case when $\tau$ is a co-datatype or datatype type,
+where a cyclic term $t$ describes an infeasible class of values in the case that $\tau \not\in \Codata$.
 At the beginning of this step, 
 we compute a mapping $\Val$ from equivalence classes to $\mu$-terms 
 that describe the class of values that terms in that equivalence class can take in the models of $\Ec$. 
-For each equivalence class $\ec{x}$ of $\Ec$, we associate a fresh variable $v_{\ec{x}}$ of the same type as $x$ not occurring in $\tEc$,
-and initially say that $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$ for each equivalence class $\ec{x}$ of $\Ec$ 
-(in other words, there are initially no constraints on the values for any equivalence class).
+For each equivalence class $\ec{x}$, we associate a fresh variable $v_{\ec{x}}$ of the same type as $x$ not occurring in $\tEc$,
+and initially say that $\Val$ contains $\ec{x} \mapsto v_{\ec{x}}$,
+in other words, there are initially no constraints on the values for any equivalence class $\ec{x}$.
 Then, $\Val$ is updated by applying the following rule exhaustively:
 
 \(
@@ -974,7 +971,8 @@ We then construct $\Val$ using the aforementioned steps, after which we obtain:
 Notice that $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are syntactically equivalent for the renaming
 $\{ v_{\ec{x}} \mapsto v_{\ec{\const{C}(y,x)}}, v_{\ec{\const{C}(y,x)}} \mapsto v_{\ec{x}} \}$,
 and thus our calculus may infer $x \teq \const{C}(y,x)$.
-Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$ are observationally equivalent for any value of $v_{\ec{y}}$.
+Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$ 
+are equivalent for any value of $v_{\ec{y}}$.
 \qed
 \end{example}
 
@@ -1056,6 +1054,9 @@ Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
 which is enforced by the rule \rn{Split}.
 
+\ 
+
+An application of a rule is \emph{redundant} if it is non-terminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
 A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by 
 a non-redundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
@@ -1078,7 +1079,7 @@ For each term $t \in T$,
 let $S^0_t$ be the set $\{ t \}$,
 for $i \geq 0$ let $S^{i+1}_t =$ $S^i_t \cup \{ s( u ) \mid u : \upsilon \in S^i, \upsilon \in \Data, \upsilon \text{ finite}, s \in \Sel^{\upsilon}  \}$,
 and let $S^\ast_t$ be the fixed point of this sequence.
-We know this is a finite set for each $t$ since the values of $t$'s type are of finite size.
+We know this is a finite set for each $t$ since the values of the type of $t$ are of finite size.
 Let $S^\ast$ be the union of $S^\ast_t$ for all $t \in T$,
 and let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \cup S^\ast, C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$, 
@@ -1123,27 +1124,44 @@ and thus $\Ec$ is unsatisfiable in $\thD$.
 It remains to show the inverse of the previous lemma, that when a derivation tree with root node $\Ec$ contains a saturated node $\Fc$,
 then $\Ec$ is satisfiable $\thD$.
 First, we require additional terminology concerning $\mu$-terms.
-If $u$ is a subterm of $\mu$-term $v$, then the \emph{interpretation of $u$ in $v$} is the $\mu$-term $v\interp{u}^\emptyset$ as returned by the following recursive procedure,
-where $x \mapsto \mu x. C( \vec t ) \in v$ indicates that $\mu x. C( \vec t )$ is the subterm of $v$ that binds this occurrence of variable $x$.
+For a $\mu$-term $t_1$ with subterm $t_2$, 
+the \emph{interpretation of $t_2$ in $t_1$} is the $\mu$-term $t_1\interp{t_2}^\emptyset$ as returned by the following recursive procedure,
+where $x \mapsto \mu x. C( \vec u ) \in t_1$ indicates that $\mu x. C( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-v\interp{x}^M & = & v\interp{\mu x. C( \vec t )}^M & x \not\in M, x \mapsto \mu x. C( \vec t ) \in v  \\
-v\interp{x}^M & = & x & \text{otherwise} \\
-v\interp{\mu x. C( \vec t )}^M & = & \mu x. C( v\interp{ \vec t }^{M \cup \{ x \}} ) & x \not\in M \\
-v\interp{\mu x. C( \vec t )}^M & = & x & \text{otherwise}
+t_1\interp{x}^M & = & \mu x. C( t_1\interp{ \vec u}^{M \cup \{ x \}}) & x \not\in M, x \mapsto \mu x. C( \vec u ) \in t_1  \\
+t_1\interp{x}^M & = & x & \text{otherwise} \\
+t_1\interp{\mu x. C( \vec u )}^M & = & \mu x. C( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & x \not\in M \\
+t_1\interp{\mu x. C( \vec u )}^M & = & x & \text{otherwise}
 \end{array}\]
-We will write $v\interp{u}$ as shorthand for $v\interp{u}^\emptyset$.
-Given a $\mu$-term $v$ of the form $\mu x. C( \vec t )$, 
-we say $u$ is a \emph{bisimilar subterm} of $v$ if and only if $v\interp{u} \vsim v$.
-We say $v$ is \emph{normal} if and only if all of its bisimilar subterms are $x$,
+We will often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
+Given a $\mu$-term $t_1$ of the form $\mu x. C( u_1, \ldots, u_n )$ with subterm $t_2$,
+we say $t_2$ is a \emph{bisimilar subterm} of $t_1$ if and only if it is of the form
+$\mu y. C( v_1, \ldots, v_n )$ and $t_1\interp{ u_i } \sim t_1\interp{ v_i }$ for $i = 1,\ldots, n$.
+We say $t_1$ is \emph{normal} if and only if it does not contain a strict bisimilar subterm
 and all of its strict subterms are also normal.
-For instance, the $\mu$-term $v$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is not normal, 
-since 
-$v\interp{\mu y. \const{S}( x )}^\emptyset =$ 
-$\mu y. \const{S}( v\interp{x}^{\{y\}} ) =$ 
-$\mu y. \const{S}( v\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} ) =$ 
-$\mu y. \const{S}( \mu x. \const{S}( v\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
-$\mu y. \const{S}( \mu x. \const{S}( y ) )$,
-which is syntactically equivalent to $v$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
+For instance, the $\mu$-term $t_1$ of the form $\mu x. \const{S}( \mu y. \const{S}( y ) )$ is not normal, 
+since $\mu y. \const{S}( y )$ is a bisimilar subterm of $t_1$.
+In particular, note that their arguments have the same interpretation in $t_1$, 
+that is,
+$t_1\interp{\mu y. \const{S}( y )}^\emptyset =$ 
+$\mu y. \const{S}( t_1\interp{y}^{\{y\}} ) =$ 
+$\mu y. \const{S}( y )$ 
+is syntactically equivalent to
+$t_1\interp{y}^\emptyset =$ 
+$\mu y. \const{S}( t_1\interp{y}^{\{y\}} ) =$ 
+$\mu y. \const{S}( y )$.
+The $\mu$-term $t_1$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is also not normal, 
+since $\mu y. \const{S}( x )$ is a bisimilar subterm of $t_1$,
+noting that
+$t_1\interp{\mu y. \const{S}( x )}^\emptyset =$ 
+$\mu y. \const{S}( t_1\interp{x}^{\{y\}} ) =$ 
+$\mu y. \const{S}( t_1\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} ) =$ 
+$\mu y. \const{S}( \mu x. \const{S}( t_1\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
+$\mu y. \const{S}( \mu x. \const{S}( y ) )$
+is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
+
+
+
 For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
 (which we will call the \emph{normal form} of $v$)
 that is a renaming of $v$ by replacing all of the bisimilar subvalues of $v$ with $x$,
@@ -1328,11 +1346,11 @@ and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 
 By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, the calculus described in this section is sound and complete for $\thD$.
 
-\subsection{Extension to Quantified Formulas}
+\section{Extension to Quantified Formulas}
 
 Blah.
 
-\section{The Theory Solver}
+\section{Implementation}
 \label{sec:the-theory-solver}
 
   * Strategies
