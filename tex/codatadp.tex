@@ -24,11 +24,10 @@
 \usepackage{url}
 \usepackage[all]{xy}
 
-\excludeversion{report}
-\includeversion{paper}
-
 \def\thewordpaper{paper}
 \newcommand\dotReportFootnote[1]{.}
+
+\newcommand\afterDot{\;} %%% Too little space by default after "Lemma Foo."
 
 \begin{report}
 \def\thewordpaper{report}
@@ -671,8 +670,9 @@ this degenerate case:
 
 \begin{lemma}[Corecursive Singletons]%
 \label{lem:corecursive-singletons}%
+\afterDot
 Let $\delta$ be a corecursive codatatype. The domain interpreting $\delta$ is
-either infinite or a singleton. In the latter case, $\delta$ has necessarily a
+either infinite or a singleton. In the latter case, $\delta$ necessarily has a
 single constructor, whose arguments have types that are interpreted by
 singletons.
 \end{lemma}
@@ -1065,7 +1065,9 @@ If there exists a derivation tree with root node $\Ec$ that contains a saturated
 
 \paragraph{Correctness.}
 
-\begin{lemma}[Termination] \label{lem:t}
+\begin{lemma}[Termination]%
+\label{lem:t}%
+\afterDot
 All derivation trees are finite.
 \end{lemma}
 \begin{proof}
@@ -1087,7 +1089,9 @@ which is finite since $\tcEc$ is finite.
 \qed
 \end{proof}
 
-\begin{lemma}[Refutation Soundness] \label{lem:rs}
+\begin{lemma}[Refutation Soundness]%
+\label{lem:rs}%
+\afterDot
 If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
@@ -1146,7 +1150,9 @@ that is a renaming of $v$ by replacing all of the bisimilar subvalues of $v$ wit
 and by replacing all of the non-normal subterms of $v$ with their corresponding normal forms.
 For instance, $\nf{(\mu x. \const{S}( \mu y. \const{S}( x ) ))} = \mu x. \const{S}( x )$.
 
-\begin{lemma}[Solution Soundness] \label{lem:ss}
+\begin{lemma}[Solution Soundness]%
+\label{lem:ss}%
+\afterDot
 If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
