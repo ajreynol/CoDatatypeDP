@@ -92,6 +92,7 @@
 \newcommand{\vsim}{\sim}
 \newcommand{\vsimv}[1]{\vsim_{#1}}
 \newcommand{\tpos}[2]{#1\!\mid_{#2}}
+\newcommand{\muvar}{\mathcal{Var}}
 
 % change?
 \newcommand{\thO}{T_{o}}
@@ -1094,55 +1095,74 @@ and thus $\Ec$ is unsatisfiable in $\thD$.
 \qed
 \end{proof}
 
-It remains to show the inverse of the previous lemma, that when a derivation tree with root node $\Ec$ contains a saturated node $\Fc$,
+It remains to show the inverse of the previous lemma, that when a derivation tree with root node $\Ec$ contains a saturated node,
 then $\Ec$ is satisfiable $\thD$.
-We demonstrate a particular model $\M$ of $\thD$ that satisfies $\Ec$.
-Before doing so, we require additional terminology concerning $\mu$-terms.
+To do so, we demonstrate a particular model $\M$ of $\thD$ that satisfies $\Ec$,
+but first we require additional terminology concerning $\mu$-terms.
 
 For a $\mu$-term $t_1$ with subterm $t_2$, 
 the \emph{interpretation of $t_2$ in $t_1$} is the $\mu$-term $t_1\interp{t_2}^\emptyset$ as returned by the following recursive procedure,
-where $x \mapsto \mu x. C( \vec u ) \in t_1$ indicates that $\mu x. C( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
+where $x \mapsto \mu x. \const{C}( \vec u ) \in t_1$ indicates that $\mu x. \const{C}( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-t_1\interp{x}^M & = & \mu x. C( t_1\interp{ \vec u}^{M \cup \{ x \}}) & x \not\in M, x \mapsto \mu x. C( \vec u ) \in t_1  \\
+t_1\interp{x}^M & = & \mu x. \const{C}( t_1\interp{ \vec u}^{M \cup \{ x \}}) & x \not\in M, x \mapsto \mu x. \const{C}( \vec u ) \in t_1  \\
 t_1\interp{x}^M & = & x & \text{otherwise} \\
-t_1\interp{\mu x. C( \vec u )}^M & = & \mu x. C( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & x \not\in M \\
-t_1\interp{\mu x. C( \vec u )}^M & = & x & \text{otherwise}
+t_1\interp{\mu x. \const{C}( \vec u )}^M & = & \mu x. \const{C}( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & x \not\in M \\
+t_1\interp{\mu x. \const{C}( \vec u )}^M & = & x & \text{otherwise}
 \end{array}\]
 We will often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
 We will write $\mathcal{T}( t_1 )$ to denote the set consisting of $t_1\interp{t_2}$ for all subterms $t_2$ of $t_1$,
 and write $\mathcal{T}( S )$ to denote the union of $\mathcal{T}( t )$ for each $t \in S$ where $S$ is a set of terms.
 
-Given a $\mu$-term $t_1$ of the form $\mu x. C( u_1, \ldots, u_n )$ with subterm $t_2$,
+Given a $\mu$-term $t_1$ of the form $\mu x. \const{C}( u_1, \ldots, u_n )$ with subterm $t_2$,
 we say $t_2$ is a \emph{bisimilar subterm} of $t_1$ if and only if it is of the form
-$\mu y. C( v_1, \ldots, v_n )$ and $t_1\interp{ u_i } \sim t_1\interp{ v_i }$ for $i = 1,\ldots, n$.
+$\mu y. \const{C}( v_1, \ldots, v_n )$ and $t_1\interp{ u_i } \sim t_1\interp{ v_i }$ for $i = 1,\ldots, n$.
 We say $t_1$ is \emph{normal} if and only if it does not contain a strict bisimilar subterm
 and all of its strict subterms are also normal.
-For instance, the $\mu$-term $t_1$ of the form $\mu x. \const{S}( \mu y. \const{S}( y ) )$ is not normal, 
-since $\mu y. \const{S}( y )$ is a bisimilar subterm of $t_1$.
+For instance, the $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( y ) )$ is not normal, 
+since $\mu y. \const{C}( y )$ is a bisimilar subterm of $t_1$.
 In particular, note that their arguments have the same interpretation in $t_1$, 
 that is,
-$t_1\interp{\mu y. \const{S}( y )}^\emptyset =$ 
-$\mu y. \const{S}( t_1\interp{y}^{\{y\}} ) =$ 
-$\mu y. \const{S}( y )$ 
+$t_1\interp{\mu y. \const{C}( y )}^\emptyset =$ 
+$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$ 
+$\mu y. \const{C}( y )$ 
 is syntactically equivalent to
 $t_1\interp{y}^\emptyset =$ 
-$\mu y. \const{S}( t_1\interp{y}^{\{y\}} ) =$ 
-$\mu y. \const{S}( y )$.
-The $\mu$-term $t_1$ of the form $\mu x. \const{S}( \mu y. \const{S}( x ) )$ is also not normal, 
-since $\mu y. \const{S}( x )$ is a bisimilar subterm of $t_1$,
+$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$ 
+$\mu y. \const{C}( y )$.
+The $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( x ) )$ is also not normal, 
+since $\mu y. \const{C}( x )$ is a bisimilar subterm of $t_1$,
 noting that
-$t_1\interp{\mu y. \const{S}( x )}^\emptyset =$ 
-$\mu y. \const{S}( t_1\interp{x}^{\{y\}} ) =$ 
-$\mu y. \const{S}( t_1\interp{\mu x. \const{S}( \mu y. \const{S}( x ) ) }^{\{y\}} ) =$ 
-$\mu y. \const{S}( \mu x. \const{S}( t_1\interp{\mu y. \const{S}( x )}^{\{x,y\}} ) ) =$ 
-$\mu y. \const{S}( \mu x. \const{S}( y ) )$
+$t_1\interp{\mu y. \const{C}( x )}^\emptyset =$ 
+$\mu y. \const{C}( t_1\interp{x}^{\{y\}} ) =$ 
+$\mu y. \const{C}( t_1\interp{\mu x. \const{C}( \mu y. \const{C}( x ) ) }^{\{y\}} ) =$ 
+$\mu y. \const{C}( \mu x. \const{C}( t_1\interp{\mu y. \const{C}( x )}^{\{x,y\}} ) ) =$ 
+$\mu y. \const{C}( \mu x. \const{C}( y ) )$
 is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
 (which we will call the \emph{normal form} of $v$)
 that is a renaming of $v$ by replacing all of the bisimilar subterms of $v$ with $x$,
 and by replacing all of the non-normal subterms of $v$ with their corresponding normal forms.
-For instance, $\nf{(\mu x. \const{S}( \mu y. \const{S}( x ) ))} = \mu x. \const{S}( x )$.
+For instance, $\nf{(\mu x. \const{C}( \mu y. \const{C}( x ) ))} = \mu x. \const{C}( x )$.
+
+We say that $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
+for some renaming that avoids capturing variables besides $x$.
+For instance, 
+$\mu x. \const{D}( x ) \vsimv{y} \mu x. \const{D}( y )$,
+$\mu x. \const{C}( x, x ) \vsimv{x} \mu y. \const{C}( x, y )$ and
+$\mu x. \const{C}( z, x ) \vsimv{z} \mu y. \const{C}( z, y )$,
+but
+$\mu x. \const{D}( x ) \not\vsimv{x} \mu x. \const{D}( y )$ and
+$\mu x. \const{C}( x, x ) \not\vsimv{y} \mu y. \const{C}( x, y )$.
+
+%\begin{lemma}
+%If $t_1$ and $u$ are normal, and if $u \not\vsimv{x} t_1\interp{t_2}$ for all $t_2 \in \mathcal{T}( t_1 )$,
+%then $t_1 \{ x \mapsto u \}$ is normal.
+%\end{lemma}
+%\begin{proof}
+%\rem{TODO}
+%\end{proof}
+
 
 \begin{definition}[Normal Model] \label{def:norm-model}
 A model $\M$ is \emph{normal} if and only if:
@@ -1156,78 +1176,61 @@ and acyclic when $\tau \not\in \Codata$,
 for all constructor terms $\const{C}( \vec t )$ of type $\tau$,
 $\M( \const{C}( \vec t ) )$ is the value 
 in $\M( \tau )$ that is a renaming of 
-$\nf{(\mu x. \const{C}( \M( \vec t ) ))}$ where $x \not\in FV( \vec t )$, and
+$\nf{(\mu x. \const{C}( \M( \vec t ) ))}$ where $x$ is fresh, and
 \item 
-for all selector terms $s^j_i( t )$ of type $\tau$ where $\M( t )$ is of the form $\mu x. \const{C}_i( \vec u )$.% for some $\vec u$,
+for all selector terms $s^j_i( t )$ of type $\tau$,% for some $\vec u$,
 $\M( s^j_i( t ) )$ is the value
 in $\M( \tau )$ that is a renaming of 
-$\M( t )\interp{u_j}$.
+$\M( t )\interp{u_j}$
+when $\M( t )$ is of the form $\mu x. \const{C}_i( \vec u )$.
 \end{enumerate}
 \end{definition}
 
 In the following, we consider only normal models.
-Thus, when constructing any model $\M$,
-it remains only to define how wrong-applied selector terms and the free variables are interpreted.
+Thus, when constructing a model $\M$ for $\Ec$,
+it remains only to define how wrong-applied selector terms and variables in $\Ec$ are interpreted.
 For the latter, this will be based on the mapping $\Val$ constructed in step two of our calculus.
-We first state the following property of $\Val$, which amounts to saying that interpretation of an equivalence class is
-not sensisitive to the context in which it is interpretated.
-
-\begin{lemma}
-If $\Val$ is a mapping construced in step two of our calculus,
-then $t_1 \interp{ \mu v_{\ec{x}}. t_2 } = \Val \ec{x}$
-for all $t_1\interp{\mu v_{\ec{x}}. t_2} \in \mathcal{T}(\Val)$.
-\end{lemma}
-\begin{proof}
-\rem{TODO}
-\qed
-\end{proof}
-
-We say $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
-for some renaming that avoids capturing any variable besides $x$.
-For instance, for $t:= \mu x. \const{C}( x, y )$ and $u := \mu y. \const{C}( x, y )$,
-we have $t \not\vsim u$, but it is the case that both
-$t \vsimv{x} u$ and $t \vsimv{y} u$.
-
-The \emph{completion} of $\Val$, which we will write as $\Val^\ast$, 
+Given a normal model $\M$, the \emph{completion} of $\Val$, which we will write as $\Val^\ast$, 
 is the result of exhaustively applying the following update to $\Val$:
 
 \(
 \inferrule{
   x : \tau \in FV( \Val ) 
   \quad
-  c \in \M( \tau )
+  \mu x. t \sim v, v \in \M( \tau )
   \quad
-  c \not\sim_x t \text{ for all } t \in \mathcal{T}(\vrange(\Val))
+  (\mu x. t) \not\sim_x u \text{ for all } u \in \mathcal{T}(\vrange(\Val))
 }{
-  \Val := \Val \{ x \mapsto c \}
+  \Val := \Val \{ x \mapsto \mu x. t \}
 }
 \)
 
-\rem{revise from here on}
+Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
+it can only be applied a finite number of times.
+We first state the following properties of $\Val$, 
+where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
+%which amounts to saying that 
+%equivalence class are interpreted as values,
+%the interpretation of an equivalence class is not sensitive to the context in which it is interpreted,
+%and that each equivalence classes has a distinct interpretation.
 
-\begin{lemma} \label{lem:normal-subterm-bisim}
-If $t_1 \vsim t_2$, then $t_1\interp{\tpos{t_1}{p}} \vsim t_2\interp{\tpos{t_2}{p}}$.
+\begin{lemma} 
+\label{lem:model-completion}
+The following are true of $\Val^\ast$:
+\begin{enumerate}
+\item $\nf{(\Val^\ast \ec{x})} \in \M( \tau )$ for all $\ec{x} : \tau$ of $\Ec$,
+\item
+$t_1 \interp{ t_2 } = \nf{(\Val^\ast \ec{x})}$
+for all $t_1\interp{t_2} \in \mathcal{T}(\Val)$ where $\muvar(t_2)=v_{\ec{x}}$,
+\item 
+$\nf{(\Val^\ast \ec{x})} \vsim \nf{(\Val^\ast \ec{y})}$ if and only if $\ec{x} = \ec{y}$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-\end{proof}
-
-\begin{lemma} \label{lem:normal-subs}
-If $t_1$ and $t_2$ are normal $\mu$-terms where $t_1 \not\vsim t_2$,
-and if $u_1$ is a normal $\mu$-term such that $u_1 \not\vsim u_2 \sigma$ for all $\sigma$, $u_2 \in \mathcal{T}( t_1 ) \cup \mathcal{T}( t_2 )$,
-then $\nf{(t_1 \sigma_x)} \not\vsim \nf{(t_2 \sigma_x)}$ for $\sigma_x := \{ x \mapsto u_1 \}$.
-\end{lemma}
-\begin{proof}
-By contradiction assume that 
-$t_1 \not\vsim t_2$ and 
-$\nf{(t_1 \sigma)} \vsim \nf{(t_2 \sigma)}$
-for some $\sigma := \{ x \mapsto u_1 \}$
-where $u_1 \not\vsim u_2 \sigma$ for all $\sigma$, $u_2 \in \mathcal{T}( t_1 ) \cup \mathcal{T}( t_2 )$ 
-and $t_1, t_2, u_1$ are normal.
-Then it must be the case that there is a position where, say $t_1$, 
-is such that $\tpos{t_1}{p} = x$ and $\tpos{t_2}{p} = \mu y. u$,
-and by Lemma~\ref{lem:normal-subterm-bisim}, where $\tpos{\nf{(t_1 \sigma)}}{p} \vsim \tpos{\nf{(t_2 \sigma)}}{p}$.
-
-%Since $\nf{(t_2 \interp{\mu y. u})} \in \mathcal{T}( t_2 )$.
+To show 1, we must argue that $FV( \Val^\ast ) = \emptyset$, and that $\nf{(\Val^\ast \ec{x})}$ is not cyclic for
+$\ec{x} : \tau$ when $\tau \not\in \Codata$.
+\rem{TODO}
+\qed
 \end{proof}
 
 \begin{lemma}[Solution Soundness]%
@@ -1242,150 +1245,35 @@ all equivalence classes of $\Fc$ contain at least one variable, and all selector
 The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
 
-We construct a model $\M$ of $\thD$ that interprets each type $\tau$
-as a maximal set of closed normal $\mu$-terms of that type that are 
-unique up to renaming of $\mu$-bound variables,
-and acyclic when $\tau \not\in \Codata$.
-
-
-The interpretation of constructor terms
-$\M( C( \vec t ) )$ for $C \in \Ctr$ is the value in $\M$ that is a renaming of $\nf{(\mu x. C( \M( \vec t ) ))}$ where $x \not\in FV( \vec t )$.
-The interpretation of (correctly-applied) selector terms
-$\M( s^j_i( t ) )$ for $s^j_i \in \Sel$ is the value in $\M$ that is a renaming of $\M( t )\interp{u_j}$
-where $\M( t )$ is of the form $\mu x. C_i( \vec u )$ for some $\vec u$.
-For instance, if $\M( t ) = \mu x. \const{C}_1( x )$ (call this term $v$), 
-then $\M( s_1^1( t ) )$ is a renaming of
-$v\interp{x} =$ 
-$v\interp{\mu x. \const{C}_1( x )}^\emptyset =$
-$\mu x. \const{C}_1( v\interp{x}^{\{x\}} ) =$
-$\mu x. \const{C}_1( x )$.
-%To interpret a correctly-applied selector in $\M$, if $v = \mu x. C_i( \vec t )$, then $\M( s^j_i( v ) )$ is the value in $\M( \tau )$ that is a renaming of $v\interp{t_j}$,
-%where $t_j$ has type $\tau$.
-%We assume $\M$ interprets constructors and correctly-applied selectors in the obvious way
-%\footnote{
-%The interpretation of $\M( C( \vec t ) )$ is the value in $\M( \tau )$ that is a renaming of $\nf{\mu x. C( \M( \vec t ) ) }$.
-%To interpret a correctly-applied selector, if $v = \mu x. C_i( \vec t )$, then $\M( s^j_i( v ) )$ is the value in $\M( \tau )$ that is a renaming of $v\interp{t_j}$,
-%where $t_j$ has type $\tau$.
-%},
-Additionally, $\M$ will interpret wrongly-applied selectors based on equality information in $\Fc$,
-and will interpret the variables of $\Fc$ based on the valuation $\Val$ which was constructed in step two of our calculus.
-
-Recall that $\Val$ is a mapping from the equivalence classes of $\Fc$ to $\mu$-terms.
-We first \emph{complete} $\Val$ so that it maps equivalence classes only to closed $\mu$-terms, that is, terms containing no free variables.
-This is done by exhaustively applying the following rule:
-
-
-
-We write $\mathcal{T}(\Val)$ to denote the smallest set containing $\nf{(v\interp{u})}$ for each non-variable subterm $u$ of $v$ in the range of $\Val$.
-%We write $\vrange(\Val)$ to denote the set of $\mu$-terms mapped to by $\Val$.
-Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
-it can only be applied a finite number of times.
-
-Let $\Val^\ast$ be the result of applying the above rule to completion on the mapping $\Val$ we constructed during step 2 of our calculus.
-We first argue that $FV( \Val^\ast ) = \emptyset$.
-Since \rn{Split} does not apply to $\Fc$,
-all equivalence classes of $\Fc$ finite datatype type contain constructor terms, 
-and thus $FV( \Val )$ contains no variables of finite datatype type.
-For each equivalence classes of $\Fc$ with finite co-datatype $\tau$, 
-we know $\tau$ must have cardinality one, due to \rem{reference}.
-Since \rn{Singleton} does not apply to $\Fc$, 
-there is only one equivalence class of type $\tau$, call it $\ec{x}$.
-%It cannot be the case that $v_{\ec{x}} \in FV(\Val^\ast \ec{x})$, then we may apply \rn{Complete} for the (single) value $c$ of type $\tau$, 
-%for which the second premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
-If it were the case that $v_{\ec{x}} \in FV(\Val^\ast )$,
-then \rn{Complete} would apply for the (single) value $c$ of type $\tau$, 
-for which the third premise holds since $\ec{x}$ is the only equivalence class of type $\tau$.
-Since all $\tau \in \Nondata$ are infinite, all variables in $FV( \Val^\ast )$ have infinite type.
-For any infinite type $\tau$,
-there exists a closed normal $\mu$-term $c_1$ that is not bisimilar to any instance of a term in $t \in \mathcal{T}(\Val^\ast)$.
-To argue this is the case, notice that either $\tau \in \Nondata$,
-$\tau$ is a recursive type, or contains an infinite subfield of type $\upsilon$.
-In the first case, we may choose an arbitrary constant for $c_1$ not yet occurring in $\vrange(\Val)$.
-In the second case, we choose a value $c_1$ whose depth is greater than any term in $\vrange(\Val)$.
-In the third case, we choose a value $c_1$ containing a subterm of type $\upsilon$ that is not bisimilar to any instance of a term $\mathcal{T}(\Val^\ast)$, 
-which is guarenteed to exist by applying this argument inductively.
-%since $\mathcal{T}(\Val^\ast)$ is a finite set. \rem{elaborate} % (noting that a closed $\mu$-term is only bisimilar to other closed $\mu$-terms).
-Thus, $FV( \Val^\ast )$ contains no variables of infinite type,
-and consequently $\Val^\ast$ is a mapping from the equivalence classes of $\Fc$ to closed $\mu$-terms.
-We further argue that $\Val^\ast$ has the following properties:
-%the following invariants are maintained by applications of \rn{Complete}:% for all $\ec{x}, \ec{y}$:
+We consider a normal model $\M$ 
+that interprets wrongly-applied selectors based on equality information in $\Fc$,
+and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from step two of our calculus.
+For the latter, let $\M( x )$ be the value in $\M$ that is a renaming of $\nf{(\Val^\ast \ec{x})}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
+Notice that due to Lemma~\ref{lem:model-completion}.3, for variables $x, y \in FV( \Fc )$,
 \begin{eqnarray}
-\label{eqn:m-normal} 
-\Val^\ast \text{ maps to normal $\mu$-terms only } \\
-%\text{If } \Val \ec{x} \text{ is not closed and has subterm $u$, then } \Val \ec{x} \interp{ u } = \Val \ec{y} \text{ for some } \ec{y} \\
-%\Val \ec{x} = \Val \ec{y}\interp{u} \text{ for some $\ec{x}$, for all non-closed subterms } u \text{ of } \Val \ec{y},  \\
-%\Val \ec{x} = v\interp{u} \text{ for some } \ec{x}, \text{ for all non-closed } u \in \mathcal{T}( \Val ) \\
-%\Val \ec{x} \interp{\mu v_{\ec{y}}. t} = \Val \ec{y} \\
 \label{eqn:m-bij} 
-\Val^\ast \ec{x} \sim \Val^\ast \ec{y} \text{ if and only if } \ec{x} = \ec{y}
+\M( x ) = \M( y ) \text{ if and only if } \ec{x} = \ec{y}
 \end{eqnarray}
-We show this by induction on the number of applications of \rn{Complete}.
-We additionally show that applications of \rn{Complete} maintain the invariant 
-for all subterms $\mu v_{\ec{x}}. t$ occurring in the range of $\Val$ for some $\ec{y}$:
-%\begin{eqnarray}
-%\label{eqn:m-inv}
-%\Val \ec{y} \interp{ \mu v_{\ec{x}}. t } = \Val \ec{x}
-%\end{eqnarray}
-For the base case, since \rn{Bisimilar} does not apply to $\Fc$,
-we have that $\Val \ec{x} \not\vsim \Val \ec{y}$ for all distinct $\ec{x}$ and $\ec{y}$,
-and thus~\ref{eqn:m-bij} holds for $\Val$.
-\rem{todo 1}
-%Due to our construction of $\Val$ in step 2 of our calculus, 
-%statement~\ref{eqn:m-inv} holds, which together with~\ref{eqn:m-bij} implies~\ref{eqn:m-normal}.
-%Moreover, since an equivalence class $\ec{u}$ exists for all subterms $u$ of all terms $t \in \mathcal{T}(\Fc)$,
-%we have that $t\interp{u} = \Val \ec{u}$ for all such terms $u$ and $t$. \rem{elaborate?}
-For the inductive case, we assume an arbitrary $\Val_i$ satisfies~\ref{eqn:m-normal} and~\ref{eqn:m-bij},
-and show that $\Val_i \sigma_x$ does as well, where $\sigma_x := \{ v_{\ec{x}} \mapsto c_1 \}$ is a substitution applied by \rn{Complete}.
-By contradiction, assume that $\Val_i \sigma_x \ec{y} \sim \Val_i \sigma_x \ec{z}$ for some distinct $\ec{y}$ and $\ec{z}$.
-Then it must have been the case that $\Val_i \ec{y}$ and $\Val_i \ec{z}$ have a position $p$
-where, w.l.o.g., say $\Val_i \ec{y} \mid_p$ is $v_{\ec{x}}$ and $\Val_i \ec{z} \mid_p$ is a term of the form $\mu v_{\ec{w}}. t$ 
-and $c_1 \sim (\mu v_{\ec{w}}. t) \sigma_x$.
-%Since $\Val_i$ satisfies invariant~\ref{eqn:m-bij},
-%we have that $\Val_i \ec{w} \sim c_1$ for some $\ec{w}$, 
-However, this contradicts the premise of \rn{Complete} that $c_1$ is not bisimilar to any $t \sigma \in \mathcal{T}( \Val_i )$ for any $\sigma$.
-%Thus, by induction on the number of applications of \rn{Complete}, statements~\ref{eqn:m-normal} and~\ref{eqn:m-bij} hold for $\Val^\ast$.
-Thus, statements~\ref{eqn:m-normal} and~\ref{eqn:m-bij} hold for $\Val^\ast$.
 
-%we have that $\Val$ satisfies both~\ref{eqn:m-normal} and~\ref{eqn:m-bij}.
-%It satisfies the former since if a $\mu$-term $\mu v_{\ec{x}}. t_1$ had a bisimilar subterm $\mu v_{\ec{y}}. t_2$,
-%then the rule \rn{Bisimilar} would have applied to $x$ and $y$. \rem{elaborate?}
-%For the inductive case, we assume $\Val$ satisfies~\ref{eqn:m-normal} and~\ref{eqn:m-bij},
-%and show that $\Val \sigma$ does as well, where $\sigma := \{ v_{\ec{x}} \mapsto c_1 \}$ is a substitution applied by \rn{Complete}.
-%By contradiction, assume that $\Val \sigma \ec{y}$ is a non-normal $\mu$-term for some $\ec{y}$.
-%Since $c_1$ is normal, we have $\ec{x} \neq \ec{y}$, 
-%and thus $\Val \ec{y}$ must have been of the form $\mu v_{\ec{y}}. t$ where $\ec{x} \in FV( t )$.
-%Let $u$ be the (strict) subterm of $\Val \ec{y}$ such that $(\Val \ec{y} \sigma ) \interp{u \sigma } \sim (\Val \ec{y} \sigma)$. 
-%Since $\Val$ maps only to normal $\mu$-terms, we have $x \in FV( u )$.
-
-Now, let $\M( x )$ be the value in $\M$ that is a renaming of$\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$,
-each of which are guarenteed to exist in $\M$ due to statement~\ref{eqn:m-normal} and our construction of $\M$,
-and moreover are guarenteed to be distinct in $\M$ due to statement~\ref{eqn:m-bij}.
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
+We show that $\M( t ) = \Val^\ast \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$, which we show by induction on the size of $t$.
 
-If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
+If $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t }$ by construction.
+If $t$ is a constructor term $\const{C}( u_1, \ldots, u_n )$, 
+then since \rn{Unify$_2$} does not apply to $\Fc$,
+then $\Val^\ast \ec{t}$ must be a term of the form $\mu v_{\ec{t}}. \const{C}( w_1, \ldots, w_n )$,
+where say that $\muvar( w_i ) = v_{\ec{y_i}}$ for $i = 1, \ldots, n$.
+Since \rn{Unify$_1$} does not apply to $\Fc$, it must be that $\ec{u_i} = \ec{y_i}$ for $i = 1, \ldots, n $.
+%Due to Lemma~\ref{lem:model-completion}.2 and by induction
+\rem{TODO}
 
-\rem{revise for co-datatype}
-If $\tau \in \Data \cup \Codata$,
-we first show that $\M( t ) = \Val^\ast \ec{x}$ for all non-selector terms $t$ that occur in equivalence classes $\ec{x}$.
-We show this by induction on the size of $\Val^\ast \ec{x}$.
-In the case where $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t } = \Val^\ast \ec{ x }$.
-In the case where $t$ is a constructor term $C( \vec u )$, 
-then $\Val^\ast \ec{x}$ must have been assigned by \rn{Ind} for some constructor term $C'( \vec u' ) \in \ec{x}$.
-Since \rn{Unify$_2$} does not apply to $\Fc$, we have that $C = C'$.
-Since \rn{Unify$_1$} does not apply to $\Fc$, we have that $\ec{\vec u} = \ec{\vec u'}$.
-By the induction hypothesis, we have $\M( \vec u ) = \M( \vec u' )$, and thus $\M( t ) = C( \M( \vec u ) ) = C'( \M( \vec u ' ) ) = \Val^\ast \ec{ x }$.
-
-We now show that $\M( t ) = \Val^\ast \ec{x}$ for all selector terms $s^j_k( y )$ that occur in datatype equivalence classes $\ec{x}$.
-Since \rn{Split} does not apply, 
-$\ec{y}$ must contain a term of the form $C_i( s^1_i( y ), \ldots, s^{a_i}_i( y ) )$ for some $i$.
-Let $x_1, \ldots, x_n$ be variables in equivalence classes $\ec{s^1_i( y )}, \ldots, \ec{s^{a_i}_i( y )}$.
-By the previous paragraph, we have $\M( y ) = \M( C_i( s^1_i( y ), \ldots, s^{a_i}_i( y ) ) )$,
-which is $C_i( \Val^\ast \ec{ x_1 }, \ldots, \Val^\ast \ec{ x_{a_i} } )$.
-If $i = k$, then $\M( t ) = \M( s^j_k( y ) ) = s^j_k( \M( y ) ) = \Val^\ast \ec{x_j}$, which is $\Val^\ast \ec{ x }$ since $\ec{x_j} = \ec{s^j_i( y )} = \ec{x}$.
-If $i \neq k$, then $\thD$ does not constraint the value of $\M( t )$,
-and since $s^j_k( \M( y ) )$ is otherwise unconstrained in our model construction since \rn{Cong} does not apply, 
-we may interpret $s^j_k( \M( y ) )$ as $\Val^\ast \ec{ x }$. 
-Thus, for all datatype equivalence classes $\ec{x}$, we have $\M( t ) = \Val^\ast \ec{x}$ for each term $t \in \ec{x}$, which implies $\M \models t_1 \teq t_2$.
+%If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
+%If $\tau \in \Data \cup \Codata$, we show $\M \models t_1 \teq t_2$ by showing 
+%We show by induction on the term size of $t$ that $\M( t ) = \Val^\ast \ec{t}$.
+%If $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t } = \Val^\ast \ec{ x }$.
+%In the case where 
+%where say $\muvar( v_i ) = v_{\ec{y_i}}$ for $i = 1, \ldots, n$.
+%We have $\M( \const{C}( \vec u ) ) = \nf{(\mu y. \const{C}( \M( \vec u ) ))}$.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
