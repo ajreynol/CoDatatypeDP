@@ -3,13 +3,17 @@ cd ~/tmp/smt_codata_bench_v5
 mkdir huffman bindag rbt_impl splay_tree_analysis sorted_list_operations
 mkdir stern_brocot_bnf bird_bnf coinductive_list_prefix process stream coinductive_list coinductive_stream hamming_stream koenigslemma tllist abstract_completeness lmirror llist2 koenig stream_processor gram_lang parallel
 
+
+
+
+
 #Datatypes:
 
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/huffman/,fact_filter=mepo,max_facts=256]" $AFP/Huffman/Huffman.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/bindag/,fact_filter=mepo,max_facts=256]" $AFP/BDD/BinDag.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/rbt_impl/,fact_filter=mepo,max_facts=256]" /Users/blanchet/isabelle/src/HOL/Library/RBT_Impl.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/splay_tree_analysis/,fact_filter=mepo,max_facts=256]" $AFP/Amortized_Complexity/Splay_Tree_Analysis.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/sorted_list_operations/,fact_filter=mepo,max_facts=256]" $AFP/Collections/Lib/Sorted_List_Operations.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/rbt_impl/,fact_filter=mepo,max_facts=256]" /Users/blanchet/isabelle/src/HOL/Library/RBT_Impl.thy
 
 #Lochbihler & Gammie:
 

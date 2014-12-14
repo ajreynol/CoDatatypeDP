@@ -1477,6 +1477,36 @@ Blah.
   * on the other hand: every percentage point counts! cite Tom Hales
 
 
+\newcommand\landg{L\,\&\,G}
+\newcommand\HD[1]{\hbox to2.5em{\hfill#1\hfill}}
+
+\begin{table}[t!]
+\begin{center}\begin{tabular}{@{}l@{\kern1em}c@{\kern.5em}c@{\kern.5em}c@{\kern1em}c@{}}
+  & \HD{Distro} & \HD{\emph{AFP}} & \HD{\landg} & \HD{All}
+\\[1pt] %%% TYPESETTING HACK
+\midrule
+%$\enatT$
+\\[-9pt] %%% TYPESETTING HACK
+No decision procedure
+  & 800 & 922 \\
+Codatatypes without bisimilarity
+  &  & 936 \\
+Codatatypes with bisimilarity
+  &  & 939 \\
+Datatypes without cyclicity
+  & 815 & 947 \\
+Datatypes with cyclicity
+  & 815 & 953 \\
+Full decision procedure
+  &  & 970 \\[\jot]
+Total number of goals
+  & 1011\phantom{0} & 1121\phantom{0} & 899 & 3001\phantom{0}
+\end{tabular}\end{center}
+\caption{Number of solved goals for three benchmark suites}
+\end{table}
+
+Do we lose any problems by enabling it?
+
 {\footnotesize
 \begin{verbatim}
 So we can show the success rates, in a table like this:
@@ -1484,10 +1514,10 @@ So we can show the success rates, in a table like this:
                  Codatatype suite     Mixed suite        Datatype suite
                 (2345 problems)    (XXX problems)       (1240 problems)
 
-   w/o (co)data        800           1122                699
-   w codata            815 (2)       1139 (3)
-   w data                            1153 (6)            712 (4)
-   w both                            1170 (3+6)
+   w/o (co)data        800           922                699
+   w codata            815 (2)       939 (3)
+   w data                            953 (6)            712 (4)
+   w both                            970 (3+6)
 \end{verbatim}}
 
 * statistics, like how often do we get proofs that contain the cyclicity and
