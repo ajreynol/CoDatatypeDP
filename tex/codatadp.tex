@@ -1439,22 +1439,22 @@ Codatatypes being a recent addition to Isabelle
 included the theory files from the Isabelle distribution and the \emph{Archive
 of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
 within the supported fragment. We also included two unpublished theories by
-Andreas Lochbihler and Peter Gammie. We complemented the benchark suite with
-some theories about various list and tree data structures, to also test the
-datatypes. The theory files were selected before running the experiments.
+Andreas Lochbihler and Peter Gammie. We complemented the benchmarks with some
+theories about various list and tree data structures, to also test the
+datatypes. The theory files were selected before running the experiments. Our
+experimental data is publicly available \cite{our-eval-data}.
 
-  * for each goal, select 256 lemmas as axioms, before monomorphization
-    (after monomorphization, typically more formulas due to duplicates),
-    and encode with the goal
+For each goal in each theory file, Sledgehammer was invoked to select
+256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
+along with the goal \cite{boehme-2012-phd}. The resulting problem was given to
+CVC4, running for up to \textbf{TODO: XXX} seconds on the StarExec cluster
+\cite{xxx}.
 
-  * then ran CVC4 for XXX seconds on the StarExec cluster \cite{xxx}
-
-  * wanted to evaluate both the impact of datatypes and codatatypes
-  * datatypes are known to be very useful on SMT-LIB, e.g. blah
-  * but we wanted to see how much they make a difference in Isabelle
-
-  * ran all problems four times, to try all four combinations of datatypes and
-    codatatypes enabled or disabled
+  * ran all problems several times, to try all four combinations of datatypes
+    and codatatypes enabled or disabled -- also, for datatypes, we tried with
+    and without the cyclicity rule; and for codatatypes, with and without the
+    bisimilarity rule, so find out whether these somewhat expensive rules are
+    useful in practice
 
   * lemmas/axioms often include basic properties of constructor and selectors,
     which are tautologies and ignored if (co)datatypes are enabled
@@ -1495,8 +1495,11 @@ Full decision procedure
 Total number of goals
   & 1211\phantom{0} & 1121\phantom{0} & 899 & 3001
 \end{tabular}\end{center}
-\caption{Number of solved goals for three benchmark suites}
+\caption{Number of solved goals for the three benchmark suites}
 \end{table}
+
+* compare with BBP 2011!! --- potentially makes a more significant difference
+  than arithmetic (although the benchmark suites are not directly comparable)
 
 Do we lose any problems by enabling it?
 
@@ -1505,6 +1508,7 @@ Do we lose any problems by enabling it?
 
 * and finally, we look in more detail at one or two such proofs, by presenting
   it and explaining it (and, before that, understanding it)
+
 
 \section{Conclusion}
 \label{sec:conclusion}
