@@ -164,11 +164,11 @@ Codatatypes naturally capture potentially infinite data structures and
 processes. We present a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the cyclicity rule for datatypes is a
 bisimilarity rule that identifies equal values, also in the presence of cyclic
-($\omega$-regular) data. The procedure is complete for ground problems and is
-composable via the Nelson--Oppen method. It has been implemented in the latest
-version of CVC4, a state-of-the-art SMT solver. An evaluation based on
-problems generated from Isabelle theories demonstrates the potential of the
-procedure.
+($\omega$-regular) data. The procedure is complete for ground and universal
+problems and is composable via the Nelson--Oppen method. It has been
+implemented in the latest version of CVC4, a state-of-the-art SMT solver. An
+evaluation based on problems generated from Isabelle theories demonstrates the
+potential of the procedure.
 \end{abstract}
 
 %% The institutions above shouldn't count as footnotes
@@ -1481,13 +1481,13 @@ Blah.
 \begin{verbatim}
 So we can show the success rates, in a table like this:
 
-                 Datatype suite     Mixed suite        Codatatype suite
+                 Codatatype suite     Mixed suite        Datatype suite
                 (2345 problems)    (XXX problems)       (1240 problems)
 
-   w/o (co)data        800           1255                699
-   w data              815           1268                
-   w codata                          1270                712
-   w both                            1273
+   w/o (co)data        800           1122                699
+   w codata            815 (2)       1139 (3)
+   w data                            1153 (6)            712 (4)
+   w both                            1170 (3+6)
 \end{verbatim}}
 
 * statistics, like how often do we get proofs that contain the cyclicity and
