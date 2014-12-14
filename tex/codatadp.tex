@@ -1432,23 +1432,16 @@ Blah.
 \section{Experimental Results}
 \label{sec:experimental-results}
 
-  * to evaluate procedure, we generated problems from Isabelle theories using
-    Sledgehammer
-
-  * chose a selection of theory files:
-    * pretty much every theory file from Isabelle distribution and AFP that
-      defines a codatatype
-    * also included two private theories by Andreas Lochbihler and Peter Gammie
-    * (codatatypes being a recent addition to Isabelle \cite{itp},
-       they are not yet widely used)
-    * and included a number of theories on datatypes
-    * aimed at a good mixture between linear structures (lists, streams) and
-      tree structures
-    * the theory files were chosen before running the experiments
-
-  * how many problems
-  * how many problems have some codatatypes, how many have datatypes (including
-    XXX that have both)
+To evaluate the decision procedure, we generated problems from existing
+Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
+Codatatypes being a recent addition to Isabelle
+\cite{blanchette-et-al-2014-impl}, benchmarks are somewhat hard to come by. We
+included the theory files from the Isabelle distribution and the \emph{Archive
+of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
+within the supported fragment. We also included two unpublished theories by
+Andreas Lochbihler and Peter Gammie. We complemented the benchark suite with
+some theories about various list and tree data structures, to also test the
+datatypes. The theory files were selected before running the experiments.
 
   * for each goal, select 256 lemmas as axioms, before monomorphization
     (after monomorphization, typically more formulas due to duplicates),
@@ -1481,44 +1474,31 @@ Blah.
 \newcommand\HD[1]{\hbox to2.5em{\hfill#1\hfill}}
 
 \begin{table}[t!]
-\begin{center}\begin{tabular}{@{}l@{\kern1em}c@{\kern.5em}c@{\kern.5em}c@{\kern1em}c@{}}
-  & \HD{Distro} & \HD{\emph{AFP}} & \HD{\landg} & \HD{All}
+\begin{center}\begin{tabular}{l@{\kern1.5em}c@{\kern.5em}c@{\kern.5em}c@{\kern1.5em}c}
+  & \HD{Distro} & \HD{AFP} & \HD{\landg} & All
 \\[1pt] %%% TYPESETTING HACK
 \midrule
 %$\enatT$
 \\[-9pt] %%% TYPESETTING HACK
 No decision procedure
-  & 800 & 922 \\
+  & 800 & 922 & 450 & 2172 \\
 Codatatypes without bisimilarity
-  &  & 936 \\
+  & 810 & 936 & 470 & 2216 \\
 Codatatypes with bisimilarity
-  &  & 939 \\
+  & 811 & 939 & 472 & 2222 \\
 Datatypes without cyclicity
-  & 815 & 947 \\
+  & 815 & 947 & 469 & 2231 \\
 Datatypes with cyclicity
-  & 815 & 953 \\
+  & 818 & 953 & 470 & 2241 \\
 Full decision procedure
-  &  & 970 \\[\jot]
+  & 840 & 970 & 490 & 2300 \\[\jot]
 Total number of goals
-  & 1011\phantom{0} & 1121\phantom{0} & 899 & 3001\phantom{0}
+  & 1211\phantom{0} & 1121\phantom{0} & 899 & 3001
 \end{tabular}\end{center}
 \caption{Number of solved goals for three benchmark suites}
 \end{table}
 
 Do we lose any problems by enabling it?
-
-{\footnotesize
-\begin{verbatim}
-So we can show the success rates, in a table like this:
-
-                 Codatatype suite     Mixed suite        Datatype suite
-                (2345 problems)    (XXX problems)       (1240 problems)
-
-   w/o (co)data        800           922                699
-   w codata            815 (2)       939 (3)
-   w data                            953 (6)            712 (4)
-   w both                            970 (3+6)
-\end{verbatim}}
 
 * statistics, like how often do we get proofs that contain the cyclicity and
   bisimilarity rules
