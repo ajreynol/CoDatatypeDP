@@ -1432,48 +1432,10 @@ Blah.
 \section{Experimental Results}
 \label{sec:experimental-results}
 
-To evaluate the decision procedure, we generated problems from existing
-Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
-Codatatypes being a recent addition to Isabelle
-\cite{blanchette-et-al-2014-impl}, benchmarks are somewhat hard to come by. We
-included the theory files from the Isabelle distribution and the \emph{Archive
-of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
-within the supported fragment. We also included two unpublished theories by
-Andreas Lochbihler and Peter Gammie. We complemented the benchmarks with some
-theories about various list and tree data structures, to also test the
-datatypes. The theory files were selected before running the experiments. Our
-experimental data is publicly available \cite{our-eval-data}.
-
-For each goal in each theory file, Sledgehammer was invoked to select
-256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
-along with the goal \cite{boehme-2012-phd}. The resulting problem was given to
-CVC4, running for up to \textbf{TODO: XXX} seconds on the StarExec cluster
-\cite{xxx}.
-
-  * ran all problems several times, to try all four combinations of datatypes
-    and codatatypes enabled or disabled -- also, for datatypes, we tried with
-    and without the cyclicity rule; and for codatatypes, with and without the
-    bisimilarity rule, so find out whether these somewhat expensive rules are
-    useful in practice
-
-  * lemmas/axioms often include basic properties of constructor and selectors,
-    which are tautologies and ignored if (co)datatypes are enabled
-  * allows a fair comparison: how much do (co)datatype support brings as
-    opposed to just letting Sledgehammer do what it would normally do
-
-  * experience with such features is not extremely high -- e.g. arithmetic,
-    a most useful theory on lots of benchmarks, increases Sledgehammer's
-    success rate by 2 percentage points, or 4\%, with Z3 in earlier work \cite{xxx}
-
-  * so when analyzing statistics of this kind, with highly varied problems,
-    we must not overestimate the importance of a single trick
-  * on the other hand: every percentage point counts! cite Tom Hales
-
-
 \newcommand\landg{L\,\&\,G}
 \newcommand\HD[1]{\hbox to2.5em{\hfill#1\hfill}}
 
-\begin{table}[t!]
+\begin{table}[tbh!]
 \begin{center}\begin{tabular}{l@{\kern1.5em}c@{\kern.5em}c@{\kern.5em}c@{\kern1.5em}c}
   & \HD{Distro} & \HD{AFP} & \HD{\landg} & All
 \\[1pt] %%% TYPESETTING HACK
@@ -1496,19 +1458,60 @@ Total number of goals
   & 1211\phantom{0} & 1121\phantom{0} & 899 & 3001
 \end{tabular}\end{center}
 \caption{Number of solved goals for the three benchmark suites}
+\label{tab:bench}
 \end{table}
 
-* compare with BBP 2011!! --- potentially makes a more significant difference
-  than arithmetic (although the benchmark suites are not directly comparable)
+To evaluate the decision procedure, we generated problems from existing
+Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
+Codatatypes being a recent addition to Isabelle
+\cite{blanchette-et-al-2014-impl}, benchmarks are somewhat hard to come by. We
+included the theory files from the Isabelle distribution (the Distro) and the \emph{Archive
+of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
+within the supported fragment. We also included two unpublished theories by
+Andreas Lochbihler and Peter Gammie (\landg). We complemented the benchmarks
+with some theories about various list and tree data structures, to also test
+the datatypes.
+The theory files were selected before running the experiments.
+Our experimental data is publicly available \cite{our-eval-data}.
 
-Do we lose any problems by enabling it?
+For each goal in each theory file, Sledgehammer was invoked to select
+256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
+along with the goal \cite{boehme-2012-phd}. The resulting problem was given to
+CVC4, running for up to \textbf{TODO: XXX} seconds on the StarExec cluster
+\cite{xxx}. Due to the lack of machinery for reconstructing inferences about
+(co)datatypes in Isabelle, CVC4 is trusted as an oracle in these experiments.
 
-* statistics, like how often do we get proofs that contain the cyclicity and
-  bisimilarity rules
+CVC4 was run on each problem several times, with the support for datatypes and
+codatatypes either enabled or disabled. The contributions of the cyclicity and
+bisimilarity rules were also measured, so find out whether these somewhat
+expensive rules are useful in practice. Even when the decision procedure is
+disabled, some of the generated axioms typically include basic properties of
+constructors and selectors, which the decision procedure would recognize as
+tautologies. This allows us to answer the question, \relax{What are the
+benefits of activating the decision procedure as opposed to letting
+Sledgehammer do what it would normally do?}
 
-* and finally, we look in more detail at one or two such proofs, by presenting
-  it and explaining it (and, before that, understanding it)
+\newcommand\BAD[1]{\textcolor{red}{\textbf{#1}}}
 
+%  * experience with such features is not extremely high -- e.g. arithmetic,
+%    a most useful theory on lots of benchmarks, increases Sledgehammer's
+%    success rate by 2 percentage points, or 4\%, with Z3 in earlier work \cite{xxx}
+
+%  * so when analyzing statistics of this kind, with highly varied problems,
+%    we must not overestimate the importance of a single trick
+%  * on the other hand: every percentage point counts! cite Tom Hales
+
+The results are summarized in Table~\ref{tab:bench}. The decision procedure
+makes a difference across all theories, and an overall difference of
+\BAD{4.7\%}. Moreover, every aspect of the procedure, including the more
+expensive rules, make a contribution. What is not visible in the table, but
+readily available when looking at the raw data \cite{our-eval-data}, is that
+the stronger decision procedures subsume the weaker ones. In the context of
+Sledgehammer, the power of interpreted (co)datatype is comparable with that of
+arithmetic \cite{blanchette-et-al-2013-smt}.
+
+%* and finally, we look in more detail at one or two such proofs, by presenting
+%  it and explaining it (and, before that, understanding it)
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -1525,11 +1528,12 @@ some rather
 %mind-boggling
 puzzling bisimulation proofs.
 
-This work is part of a larger program that aims at enriching automatic
-provers with high-level features and at reducing the gap between automatic and
-interactive theorem proving. As future work, we want to try out CVC4 and its
-(co)datatypes for higher-order model finding in Isabelle, as an
-alternative to the counterexample generator Nitpick
+This work is part of a larger program that aims at enriching automatic provers
+with high-level features and at reducing the gap between automatic and
+interactive theorem proving. As future work, we want to implement proof
+reconstruction for (co)datatype inferences in Isabelle. We also want to try
+out CVC4 and its (co)datatypes for higher-order model finding in Isabelle, as
+an alternative to the counterexample generator Nitpick
 \cite{blanchette-nipkow-2010}. We also see some opportunities to enrich
 SMT solvers with recursive and corecursive functions. Finally, it might be
 possible to go further in terms of supporting nested and mixed (co)recursion
