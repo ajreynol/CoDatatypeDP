@@ -1110,8 +1110,6 @@ t_1\interp{\mu x. \const{C}( \vec u )}^M & = & \mu x. \const{C}( t_1\interp{ \ve
 t_1\interp{\mu x. \const{C}( \vec u )}^M & = & x & \text{otherwise}
 \end{array}\]
 We will often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
-We will write $\mathcal{T}( t_1 )$ to denote the set consisting of $t_1\interp{t_2}$ for all subterms $t_2$ of $t_1$,
-and write $\mathcal{T}( S )$ to denote the union of $\mathcal{T}( t )$ for each $t \in S$ where $S$ is a set of terms.
 
 Given a $\mu$-term $t_1$ of the form $\mu x. \const{C}( u_1, \ldots, u_n )$ with subterm $t_2$,
 we say $t_2$ is a \emph{bisimilar subterm} of $t_1$ if and only if it is of the form
@@ -1145,23 +1143,24 @@ that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with
 and by replacing all of the non-normal subterms of $t$ with their corresponding normal forms.
 For instance, $\nf{(\mu x. \const{C}( \mu y. \const{C}( x ) ))} = \mu x. \const{C}( x )$.
 
-We say that $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
-for some renaming that avoids capturing any variable other than $x$.
-For instance, 
-$\mu x. \const{D}( x ) \vsimv{y} \mu x. \const{D}( y )$,
-$\mu x. \const{C}( x, x ) \vsimv{x} \mu y. \const{C}( x, y )$ and
-$\mu x. \const{C}( z, x ) \vsimv{z} \mu y. \const{C}( z, y )$,
-but
-$\mu x. \const{D}( x ) \not\vsimv{x} \mu x. \const{D}( y )$ and
-$\mu x. \const{C}( x, x ) \not\vsimv{y} \mu y. \const{C}( x, y )$.
+\begin{lemma}
+\label{lem:mu-norm-arg}
+If $\vec u$ are normal, then if $t = \nf{(\mu x. \const{C}( \vec u ) )} = \mu x. \const{C}( \vec w )$,
+then $\vec u \vsim t\interp{\vec w}$.
+\end{lemma}
+\begin{proof}
+%Since $u_i$ is normal, $w_i$ is the result of replacing all subterms $v$ of $u_i$ such that $t\interp{v} \sim t$ with $x$.
+\rem{TODO}
+\end{proof}
 
-%\begin{lemma}
-%If $t_1$ and $u$ are normal, and if $u \not\vsimv{x} t_1\interp{t_2}$ for all $t_2 \in \mathcal{T}( t_1 )$,
-%then $t_1 \{ x \mapsto u \}$ is normal.
-%\end{lemma}
-%\begin{proof}
-%\rem{TODO}
-%\end{proof}
+\begin{lemma}
+\label{lem:mu-cong}
+If $t_u = \mu x. \const{C}( \vec u )$ and $t_w = \mu y. \const{C}( \vec w )$ are normal,
+then $t_u\interp{ \vec u } \vsim t_w\interp{ \vec w }$ if and only if $t_u \vsim t_w$.
+\end{lemma}
+\begin{proof}
+\rem{TODO}
+\end{proof}
 
 We now define a class of models that we consider.
 \rem{Clarify that non-codatatype terms are interpreted as $\mu$-terms, although dropping the $\mu$'s gives the standard representation?}
@@ -1192,58 +1191,85 @@ In the following, we consider only normal models.
 Thus, when constructing a model $\M$ for $\Ec$,
 it remains only to define how wrong-applied selector terms and variables in $\Ec$ are interpreted.
 For the latter, this will be based on the mapping $\Val$ constructed in step two of our calculus.
-Given a normal model $\M$, we compute the \emph{completion} of $\Val$, which we will write as $\Val^\ast$,
-by exhaustively applying the following update to $\Val$:
+We compute the \emph{completion} of $\Val$ for normal model $\M$, which we will write as $\Val^\ast$,
+which we construct by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
+
+First, we need the following definition.
+We say that $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
+for some renaming that avoids capturing any variable other than $x$.
+For instance, 
+$\mu x. \const{D}( x ) \vsimv{y} \mu x. \const{D}( y )$,
+$\mu x. \const{C}( x, x ) \vsimv{x} \mu y. \const{C}( x, y )$ and
+$\mu x. \const{C}( z, x ) \vsimv{z} \mu y. \const{C}( z, y )$,
+but
+$\mu x. \const{D}( x ) \not\vsimv{x} \mu x. \const{D}( y )$ and
+$\mu x. \const{C}( x, x ) \not\vsimv{y} \mu y. \const{C}( x, y )$.
+For a variable $x$ of type $\tau$ and a fixed normal model $\M$,
+we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
+such that $v \vsim_x t_1\interp{t_2}$ for some term $t_1$ with subterm $t_2$ occurring in the range of $\Val$.
+Our completion $\Val^\ast$ is constructed by exhaustively applying the following update to $\Val$:
 
 \(
 \inferrule{
   x : \tau \in FV( \Val ) 
   \quad
-  \mu x. t \sim v, v \in \M( \tau )
+  (\mu x. t) \sim v
   \quad
-  (\mu x. t) \not\sim_x u \text{ for all } u \in \mathcal{T}(\vrange(\Val))
+  v \in \M( \tau )
+  \quad
+  v \not\in \mathcal{T}^\M_x(\Val)
 }{
   \Val := \Val \{ x \mapsto \mu x. t \}
 }
 \)
 
-Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
+In this update, we choose an unassigned variable in $\Val$
+and assign it a value that is not bisimilar to one occurring in $\mathcal{T}^\M_x(\Val)$.
+Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
-We then replace all values in the range of $\Val^\ast$ by their normal forms.
+We then replace $\Val^\ast \ec{x}$ with $\nf{(\Val^\ast \ec{x})}$ for all $\ec{x}$.
 We first state the following properties of $\Val^\ast$, 
 where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
-%which amounts to saying that 
-%equivalence class are interpreted as values,
-%the interpretation of an equivalence class is not sensitive to the context in which it is interpreted,
-%and that each equivalence classes has a distinct interpretation.
-
-\begin{lemma}
-\label{lem:mu-norm-arg}
-If $\vec u$ are normal, then if $t = \nf{(\mu x. \const{C}( \vec u ) )} = \mu x. \const{C}( \vec w )$,
-then $\vec u \vsim t\interp{\vec w}$.
-\end{lemma}
-
-\begin{lemma}
-\label{lem:mu-cong}
-If $t_u = \mu x. \const{C}( \vec u )$ and $t_w = \mu y. \const{C}( \vec w )$ are normal,
-then $t_u\interp{ \vec u } \vsim t_w\interp{ \vec w }$ if and only if $t_u \vsim t_w$.
-\end{lemma}
 
 \begin{lemma} 
 \label{lem:model-completion}
-The following are true of $\Val^\ast$:
+If $\Val$ is constructed for a saturated $\Ec$,
+and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
 \begin{enumerate}
-\item $\Val^\ast \ec{x} \in \M( \tau )$ for all $\ec{x} : \tau$ of $\Ec$,
+\item $\Val^\ast \ec{x}$ is bisimilar with a value in $\M( \tau )$, for all $\ec{x} : \tau$ of $\Ec$,
 \item
 $t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
-for all $t_1\interp{t_2} \in \mathcal{T}(\Val)$ where $\muvar(t_2)=v_{\ec{x}}$,
+for all $t_1$ with subterm $t_2$ in the range of $\Val^\ast$ where $\muvar(t_2)=v_{\ec{x}}$,
 \item 
 $\Val^\ast \ec{x} \vsim \Val^\ast \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-To show 1, we must argue that $FV( \Val^\ast ) = \emptyset$, and that $\Val^\ast \ec{x}$ is not cyclic for
-$\ec{x} : \tau$ when $\tau \not\in \Codata$.
+To show 1, we first show that $\Val^\ast$ contains no free variables.
+Assume by contradiction that $\Val^\ast$ contained a free variable $v_{\ec{y}}$ for some $\ec{y}$ of type $\tau$.
+Then it must be the case that $\ec{y}$ does not contain a constructor term,
+or else $v_{\ec{y}}$ would not occur as a free variable in $\Val$.
+Consider the case when $\tau$ is finite.
+By assumption, $\tau \not\in \Nondata$.
+Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
+If $\tau \in \Codata$, then by Lemma~\ref{lem:corecursive-singletons},
+the cardinality of $\tau$ must be one (call the value in its domain $c$).
+Since \rn{Singleton} does not apply to $\Ec$,
+there is only one equivalence class of type $\tau$ in $\Ec$,
+and thus there are no terms in $\mathcal{T}(\Val^\ast)$ of type $\tau$.
+This is a contradiction, since our model completion may assign $c$ to $v_{\ec{x}}$.
+Now, consider the case when $\tau$ is infinite.
+This is also a contradiction, 
+since there are only a finite number of closed terms in $\mathcal{T}^\M_x(\Val^\ast)$,
+and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_x(\Val^\ast)$ to $v_{\ec{y}}$.
+By construction, $\Val^\ast \ec{x}$ is normal.
+Since \rn{Cyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
+Moreover, our construction of $\Val^\ast$ applies substitutions of the form 
+$\{ y \mapsto t \}$, where $t$ is acyclic when the type of $y$ is not a codatatype.
+Thus, $\Val^\ast \ec{x}$ is acyclic when $\tau \not\in \Codata$.
+Therefore, by definition, $\Val^\ast \ec{x}$ is bisimilar with a value in $\M( \tau )$.
+
+
 \rem{TODO}
 \qed
 \end{proof}
@@ -1292,13 +1318,13 @@ we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 If $t$ is a selector term of the form $s^j_k( u )$,
 since \rn{Split} does not apply, 
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) )$ for some $i$.
-By our construction and since \rn{Unify$_1$} and \rn{Unify$_2$} do not apply to $\Fc$, 
+By our construction of $\Val^\ast$ and since \rn{Unify$_1$} and \rn{Unify$_2$} do not apply to $\Fc$, 
 $\Val^\ast \ec{ u }$ must be of the form $t_u = \mu v_{\ec{u}}. C_i( u_1, \ldots, u_n )$,
-where $\muvar( u_1 ) = v_{\ec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = v_{\ec{s^n_i( u )}}$.
-Moreover, $\M( u )$ is of the form $t_w = \mu x. C_i( w_1, \ldots, w_n )$,
+where $\muvar( u_1 ) = v_{\ec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = v_{\ec{s^n_i( u )}}$,
+and $\M( u )$ is of the form $t_w = \mu x. C_i( w_1, \ldots, w_n )$,
 which by the induction hypothesis is bisimilar with $\Val^\ast \ec{u}$.
 If $k = i$, then $\M( t )$ is bisimilar with $t_w\interp{w_j}$,
-which by Lemma~\ref{lem:mu-cong} is bisimilar with $t_u\interp{u_j}$,
+which since $t_w \vsim t_u$ by Lemma~\ref{lem:mu-cong} is bisimilar with $t_u\interp{u_j}$,
 which by Lemma~\ref{lem:model-completion}.2 is equal to $\Val^\ast \ec{ s^j_k( u )}$.
 Thus, $\M( t ) \vsim \Val^\ast \ec{ s^j_k( u )} = \Val^\ast \ec{t}$.
 If $k \neq i$, then we interpret $s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is bisimilar with $\Val^\ast \ec{ t }$.
@@ -1317,7 +1343,7 @@ and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 \qed
 \end{proof}
 
-By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, the calculus described in this section is sound and complete for $\thD$.
+By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, the calculus is sound and complete for $\thD$.
 
 \section{Extension to Quantified Formulas}
 \label{sec:extension-to-quantified-formulas}
