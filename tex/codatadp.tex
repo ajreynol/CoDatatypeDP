@@ -165,7 +165,7 @@ Codatatypes naturally capture potentially infinite data structures and
 processes. We present a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the cyclicity rule for datatypes is a
 bisimilarity rule that identifies equal values, also in the presence of cyclic
-($\omega$-regular) data. The procedure is complete for ground and universal
+($\omega$-regular) data. The procedure decides ground and universal
 problems and is composable via the Nelson--Oppen method. It has been
 implemented in the latest version of CVC4, a state-of-the-art SMT solver. An
 evaluation based on problems generated from Isabelle theories demonstrates the
@@ -714,7 +714,7 @@ that the type has at most one value.
 % * either there is only one ``path'' from ctr to itself
 %   or at least two;
 
-\section{A Ground Decision Procedure for (Co)datatypes}
+\section{The Decision Procedure} % for (Co)datatypes}
 \label{sec:a-ground-decision-procedure-for-co-datatypes}
 
   * SMT background
@@ -726,19 +726,21 @@ This section presents a calculus for determining the satisfiability of conjuncti
 Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sig$-terms.
 We will write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
-We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $s^i_j( \const{C}_j( \vec t ) )$
-are replaced by $t_i$, and moreover assume that all additional constraints added to $\Ec$ are normalized in this manner.
+We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
+are simplified to $t_i$, and moreover assume that all %additional
+constraints added to $\Ec$ are normalized in this manner.
 
-We present the calculus in three parts.
-In the first part we compute the bidirectional closure of $\Ec$,
-in the second part we make inferences based on cyclicity and bisimilarity,
-and in the third part (when necessary) we branch on constructor types for various terms in $\tEc$.
+We present the calculus in three steps.
+In the first step, we compute the bidirectional closure of $\Ec$;
+in the second step, we make inferences based on cyclicity and bisimilarity;
+and in the third step, %(when necessary),
+we branch on constructor types for various terms in $\tEc$.
 Following the conventions from~\cite{}, 
 the derivation rules of our calculus are given in \emph{guarded assignment form},
 where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
-The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{non-terminal}),
+The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{nonterminal}),
 or is $\bot$ (in which case we will call an application of it to be \emph{terminal}).
-A rule may have multiple conclusions separated by $\parallel$, which denotes a non-deterministic branching.
+A rule may have multiple conclusions separated by $\parallel$, which denotes nondeterministic branching.
 
 \begin{figure}[t]
 \centering
@@ -806,15 +808,15 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes a n
 }
 \)
 \end{tabular}
-\caption{Rules for bidirectional closure.
+\caption{Rules for bidirectional closure%.
 }
 \label{fig:cc-rules}
 \end{figure}
 
-\paragraph{Step 1: Compute Birectional Closure}
+\paragraph{Step 1: Computing the Bidirectional Closure.}
 Figure~\ref{fig:cc-rules} gives the basic rules of our calculus.
-Together with the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, the rule \rn{Cong} computes the (upwards) congruence closure,
-while the rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downwards) unification.
+Together with the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, the rule \rn{Cong} computes the (upward) congruence closure,
+while the rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downward) unification.
 In the unification rules, additional equalities are inferred based on the injectivity of constructors by \rn{Unify$_1$},
 and failures to unify equated terms are recognized by \rn{Unify$_2$}.
 The rule \rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
@@ -852,15 +854,15 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 }
 \)
 \end{tabular}
-\caption{Rules for cyclicity and bisimilarity.
+\caption{Rules for cyclicity and bisimilarity%.
 }
 \label{fig:ab-rules}
 \end{figure}
 
-\paragraph{Step 2: Apply cyclicity and bisimilarity.}
+\paragraph{Step 2: Applying Cyclicity and Bisimilarity.}
 In this step,
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}, that is,
-no non-redudant application of one of its rules can be applied to $\Ec$.
+no nonredudant application of one of its rules can be applied to $\Ec$.
 When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
 Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
 For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
@@ -1012,7 +1014,7 @@ are equivalent for any value of $v_{\ec{y}}$.
 }
 \)
 \end{tabular}
-\caption{Rules for branching.  
+\caption{Rules for branching%.  
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
 %Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
 }
@@ -1030,11 +1032,11 @@ which is enforced by the rule \rn{Split}.
 
 \ 
 
-An application of a rule is \emph{redundant} if it is non-terminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
+An application of a rule is \emph{redundant} if it is nonterminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
 A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes vtained by 
-a non-redundant application of a derivation rule to its parent node.
+a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
-A node is \emph{saturated} if no non-redundant application of a rule can be applied to it.
+A node is \emph{saturated} if no nonredundant application of a rule can be applied to it.
 If there exists a closed derivation tree with root node $\Ec$, then we conclude that $\Ec$ is $\thD$-unsatisfiable.
 If there exists a derivation tree with root node $\Ec$ that contains a saturated node, then we conclude that $\Ec$ is $\thD$-satisfiable. 
 
@@ -1142,7 +1144,8 @@ is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming 
 For any $\mu$-term $t$ of the form $\mu x. C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
 (which we will call the \emph{normal form} of $t$)
 that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$,
-and by replacing all of the non-normal subterms of $t$ with their corresponding normal forms.
+%and by replacing all of the nonnormal subterms of $t$ with their corresponding normal forms.
+and by normalizing $t$'s subterms.
 For instance, $\nf{(\mu x. \const{C}( \mu y. \const{C}( x ) ))} = \mu x. \const{C}( x )$.
 
 We say that $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
