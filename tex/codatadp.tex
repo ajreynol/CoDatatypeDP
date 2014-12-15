@@ -1143,7 +1143,7 @@ is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming 
 
 For any $\mu$-term $t$ of the form $\mu x. C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
 (which we will call the \emph{normal form} of $t$)
-that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$,
+that is a renaming of $t$ by replacing all of the bisimilar subterms of $t$ with $x$,
 %and by replacing all of the nonnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
 For instance, $\nf{(\mu x. \const{C}( \mu y. \const{C}( x ) ))} = \mu x. \const{C}( x )$.
@@ -1194,7 +1194,7 @@ when $\M( t )$ is of the form $\mu x. \const{C}_i( \vec u )$.
 
 In the following, we consider only normal models.
 Thus, when constructing a model $\M$ for $\Ec$,
-it remains only to define how wrong-applied selector terms and variables in $\Ec$ are interpreted.
+it remains only to define how $\M$ interprets wrong-applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ constructed in step two of our calculus.
 We compute the \emph{completion} of $\Val$ for normal model $\M$, which we will write as $\Val^\ast$,
 which we construct by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
@@ -1243,8 +1243,13 @@ and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
 \begin{enumerate}
 \item $\Val^\ast \ec{x}$ is bisimilar with a value in $\M( \tau )$, for all $\ec{x} : \tau$ of $\Ec$,
 \item
-$t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
-for all $t_1$ with subterm $t_2$ in the range of $\Val^\ast$ where $\muvar(t_2)=v_{\ec{x}}$,
+If $\const{C}( t_1, \ldots, t_n ) \in \ec{x}$,
+then $\Val^\ast \ec{x} = \mu v_{\ec{x}}. \const{C}( w_1, \ldots, w_n )$
+and $\Val^\ast \ec{x} \interp{ w_i } = \Val^\ast \ec{t_i}$ for $i = 1, \ldots, n$.
+%and $\muvar( w_i ) = v_{\ec{t_i}}$ for $i = 1, \ldots, n$,
+%\item
+%$t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
+%for all $t_1$ with subterm $t_2$ in the range of $\Val^\ast$ where $\muvar(t_2)=v_{\ec{x}}$,
 \item 
 $\Val^\ast \ec{x} \vsim \Val^\ast \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
