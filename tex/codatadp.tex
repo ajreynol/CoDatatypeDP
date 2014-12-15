@@ -749,7 +749,7 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \inferrule{
   t \in \tEc
 }{
-  \Ec := \Ec, t \teq t
+  \Ec := \Ec,\: t \teq t
 }
 \)
 \rn{Refl}
@@ -758,50 +758,50 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \inferrule{
  t_1 \teq t_2 \in \Ec
 }{
- \Ec := \Ec, t_2 \teq t_1
+ \Ec := \Ec,\: t_2 \teq t_1
 }
 \)
 \rn{Symm}
 \qquad
 \(
 \inferrule{
-  t_1 \teq t_2, t_1 \tneq t_2 \in \Ec
+  t_1 \teq t_2,\; t_1 \tneq t_2 \in \Ec
 }{
   \bot
 }
 \)
 \rn{Conflict}
-\\[3.7ex]
+\\[5\jot]
 \(
 \inferrule{
-  t_1 \teq t_2, t_2 \teq t_3 \in \Ec
+  t_1 \teq t_2,\; t_2 \teq t_3 \in \Ec
 }{
-  \Ec := \Ec, t_1 \teq t_3
+  \Ec := \Ec,\: t_1 \teq t_3
 }
 \)
 \rn{Trans}
 \qquad
 \(
 \inferrule{
-  \vec t \teq \vec u \in \Ec \quad f( \vec t ), f( \vec u ) \in \tEc
+  \vec t \teq \vec u \in \Ec \quad \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
 }{
-  \Ec := \Ec, f( \vec t ) \teq f( \vec u )
+  \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
 }
 \)
 \rn{Cong} 
-\\[3.7ex]
+\\[5\jot]
 \(
 \inferrule{
-  \const{C}_1( \vec t ) \teq \const{C}_1( \vec u ) \in \Ec
+  \const{C}_1( \vec t \,) \teq \const{C}_1( \vec u ) \in \Ec
 }{
-  \Ec := \Ec, \vec t \teq \vec u
+  \Ec := \Ec,\: \vec t \teq \vec u
 }
 \)
 \rn{Unify$_1$} 
 \qquad
 \(
 \inferrule{
-  \const{C}_1( \vec t ) \teq \const{C}_2( \vec u ) \in \Ec
+  \const{C}_1( \vec t \,) \teq \const{C}_2( \vec u ) \in \Ec
 }{
   \bot
 }
@@ -826,12 +826,12 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \begin{tabular}{c}
 \(
 \inferrule{
-  t_1 : \tau
-  \quad
   \tau \in \Data
   \quad
+  t_1 : \tau
+  \quad
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
-  \Val \ec{t_1} = \mu x. t_2
+  \Val \ec{t_1} = (\vthinspace\mu x.\; t_2)
   \quad
   x \in FV( t_2 )
 }{
@@ -839,17 +839,17 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 }
 \)
 \rn{Cyclic}
-\\[3.7ex]
+\\[5\jot]
 \(
 \inferrule{
- t_1, t_2 : \tau
- \quad
  \tau \in \Codata
+ \quad
+ t_1, t_2 : \tau
  \quad
  %\tpath{\Ec}{\ec{t_1}} = \tpath{\Ec}{\ec{t_2}}\sigma \neq \emptyset
  \Val \ec{t_1} \vsim \Val \ec{t_2}
 }{
- \Ec := \Ec, t_1 \teq t_2
+ \Ec := \Ec,\: t_1 \teq t_2
 }
 \)
 \rn{Bisimilar}
@@ -872,7 +872,7 @@ The rules of this step contain premises that involve a mapping $\Val$ from equiv
 Recall that $\mu$-bindings can be used for representing (possibly cyclic) terms and values,
 for instance, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
 Formally, we recursively define a $\mu$-term as a term-like structure either of the form
-$\mu x. \const{C}( \vec t )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$, 
+$\mu x. \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$, 
 or a variable $x$.
 For consistency, we will also consider $\mu x. \const{c}$ to be a $\mu$-term
 in the case where $\const{c}$ is a constant of type $\tau \in \Nondata$.
@@ -1000,7 +1000,7 @@ are equivalent for any value of $v_{\ec{y}}$.
 }
 \)
 \rn{Singleton}
-\\[3.7ex]
+\\[5\jot]
 \(
 \inferrule{
   t : \tau \in \tEc 
@@ -1178,10 +1178,10 @@ $\M( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
 unique up to renaming of $\mu$-bound variables,
 and acyclic when $\tau \not\in \Codata$,
 \item 
-for all constructor terms $\const{C}( \vec t )$ of type $\tau$,
-$\M( \const{C}( \vec t ) )$ is the value 
+for all constructor terms $\const{C}( \vec t \,)$ of type $\tau$,
+$\M( \const{C}( \vec t \,) )$ is the value 
 in $\M( \tau )$ that is a renaming of 
-$\nf{(\mu x. \const{C}( \M( \vec t ) ))}$ where $x$ is fresh, and
+$\nf{(\mu x. \const{C}( \M( \vec t \,) ))}$ where $x$ is fresh, and
 \item 
 for all selector terms $s^j_i( t )$ of type $\tau$,% for some $\vec u$,
 $\M( s^j_i( t ) )$ is the value
