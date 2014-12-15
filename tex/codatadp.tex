@@ -662,7 +662,7 @@ infinite: \,$\mu a.\; A(a)$. Other specimens are
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$, as well as $\ty{stream}_{\,\ty{unit}\,}$. We call such types
 \emph{corecursive singletons}. For the decision procedure, it will be
-important to detect these types, even if they occur rarely in practice. A type
+important to detect these types, even if they rarely arise in practice. A type
 may also be a corecursive singleton only in some models. For example, if
 \ty{unit} is an uninterpreted type, \ty{b} and \ty{c} will be singleton types
 precisely for the models that interpret \ty{unit} as a singleton. Fortunately,
@@ -724,7 +724,7 @@ that the type has at most one value.
 This section presents a calculus for determining the satisfiability of conjunctions of $\thD$-constraints.
 
 Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sig$-terms.
-We will write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
+We write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
 are simplified to $t_i$, and moreover assume that all %additional
@@ -738,8 +738,8 @@ we branch on constructor types for various terms in $\tEc$.
 Following the conventions from~\cite{}, 
 the derivation rules of our calculus are given in \emph{guarded assignment form},
 where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
-The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we will call an application of it to be \emph{nonterminal}),
-or is $\bot$ (in which case we will call an application of it to be \emph{terminal}).
+The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we call an application of it \emph{nonterminal}),
+or is $\bot$ (in which case we call an application of it \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$, which denotes nondeterministic branching.
 
 \begin{figure}[t]
@@ -866,26 +866,34 @@ In the second step,
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}---that is,
 no rule can be applied to extend $\Ec$ further.
 When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
-Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
-For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that contains $t$.
+Thus, we can consider $\Ec$ as a set of equivalence classes of terms. 
+For a term $t \in \tEc$, we write $\ec{t}$ to denote the equivalence class in $\Ec$ that contains $t$.
 
 %For presentation of the rules in this step, we rely on a representation of terms in the $\mu$-notation.
 The rules of this step contain premises that involve a mapping $\Val$ from equivalence classes to terms containing $\mu$-bindings.
-Recall that $\mu$-bindings can be used for representing (possibly cyclic) terms and values,
-for instance, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
-Formally, we recursively define a $\mu$-term as a term-like structure either of the form
-$\mu x. \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$, 
-or a variable $x$.
-For consistency, we will also consider $\mu x. \const{c}$ to be a $\mu$-term
-in the case where $\const{c}$ is a constant of type $\tau \in \Nondata$.
-We consider only $\mu$-terms that are \emph{well-typed}, which we define recursively:
-if the type of $\const{C}$ is $\vec \tau \rightarrow \upsilon$
-and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
-then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
-We say a $\mu$-term is \emph{closed} if and only if it contains no free variables.
-A $\mu$-term is \emph{cyclic} if and only if it contains a bound variable.
+Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
+%(Section~\ref{sec:introduction}).
+% for example, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
+Formally, we recursively define a $\mu$-term as a term-like structure as either a variable $x$
+or a node of the form
+$\mu x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$.
+For uniformity, we also consider $\mu x.\; \const{c}$ to be a $\mu$-term
+if $\const{c}$ is a constant of type $\tau \in \Nondata$.
+We consider only $\mu$-terms that are well-typed---i.e., whose function symbols
+are applied to arguments of the expected type.
+%%% I think this should be clear enough from the "Conventions" paragraph at the
+%%% end of the introduction.
+%%
+% which we define recursively:
+%if $\const{C} : \vec \tau \rightarrow \upsilon$
+%and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
+%then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
+We say a $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
+it contains no free variables.
+A $\mu$-term is \emph{cyclic} if %and only if --- ditto
+it contains an occurrence of a bound variable.
 We write $t \vsim s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables,
-in which case we will commonly say $t$ and $s$ are \emph{bisimilar}.
+in which case $t$ and $s$ are $\alpha$-\emph{equivalent}.
 For instance, 
 $\mu x. \const{C}( x ) \vsim \mu y. \const{C}( y )$ and
 $\mu x, \const{D}( y, x ) \vsim \mu z. \const{D}( y, z )$, but
@@ -896,7 +904,7 @@ Also, note that
 two $\mu$-terms may represent the same value while being not bisimilar, as in
 $\mu x. \const{C}( \mu y. \const{C}( x ) ) \not\vsim \mu x. \const{C}( x )$.
 %, or informally are \emph{observationally equivalent}.
-%For convienience, we will use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
+%For convienience, we use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
@@ -1113,7 +1121,7 @@ t_1\interp{x}^M & = & x & \text{otherwise} \\
 t_1\interp{\mu x. \const{C}( \vec u )}^M & = & \mu x. \const{C}( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & x \not\in M \\
 t_1\interp{\mu x. \const{C}( \vec u )}^M & = & x & \text{otherwise}
 \end{array}\]
-We will often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
+We often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
 
 Given a $\mu$-term $t_1$ of the form $\mu x. \const{C}( u_1, \ldots, u_n )$ with subterm $t_2$,
 we say $t_2$ is a \emph{bisimilar subterm} of $t_1$ if and only if it is of the form
@@ -1142,7 +1150,7 @@ $\mu y. \const{C}( \mu x. \const{C}( y ) )$
 is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-term $t$ of the form $\mu x. C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
-(which we will call the \emph{normal form} of $t$)
+(which we call the \emph{normal form} of $t$)
 that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$,
 %and by replacing all of the nonnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
@@ -1196,7 +1204,7 @@ In the following, we consider only normal models.
 Thus, when constructing a model $\M$ for $\Ec$,
 it remains only to define how wrong-applied selector terms and variables in $\Ec$ are interpreted.
 For the latter, this will be based on the mapping $\Val$ constructed in step two of our calculus.
-We compute the \emph{completion} of $\Val$ for normal model $\M$, which we will write as $\Val^\ast$,
+We compute the \emph{completion} of $\Val$ for normal model $\M$, which we write as $\Val^\ast$,
 which we construct by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
 First, we need the following definition.
