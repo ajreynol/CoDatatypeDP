@@ -256,17 +256,19 @@ int generate_one_file(const char *in_name, int keep_data, int keep_codata)
 
     strcpy(out_name, in_name);
 
+    char *dir = strstr(out_name, "both/");
+
     if (keep_data) {
         if (keep_codata) {
-            strcat(out_name, ".all");
+            memcpy(dir, "both", 4);
         } else {
-            strcat(out_name, ".data");
+            memcpy(dir, "data", 4);
         }
     } else {
         if (keep_codata) {
-            strcat(out_name, ".codata");
+            memcpy(dir, "coda", 4);
         } else {
-            strcat(out_name, ".nix");
+            memcpy(dir, "nada", 4);
         }
     }
 

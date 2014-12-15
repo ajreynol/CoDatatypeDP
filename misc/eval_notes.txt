@@ -1,42 +1,127 @@
-mkdir ~/tmp/smt_codata_bench_v5
-cd ~/tmp/smt_codata_bench_v5
-mkdir huffman bindag rbt_impl splay_tree_analysis sorted_list_operations
-mkdir stern_brocot_bnf bird_bnf coinductive_list_prefix process stream coinductive_list coinductive_stream hamming_stream koenigslemma tllist abstract_completeness lmirror llist2 koenig stream_processor gram_lang parallel
+mkdir ~/tmp/smt_codata_bench_v6
+cd ~/tmp/smt_codata_bench_v6
 
+mkdir -p nada/distro/koenig
+mkdir -p nada/distro/stream_processor
+mkdir -p nada/distro/gram_lang
+mkdir -p nada/distro/parallel
+mkdir -p nada/distro/process
+mkdir -p nada/distro/stream
+mkdir -p nada/distro/rbt_impl
+mkdir -p nada/afp/coinductive_list_prefix
+mkdir -p nada/afp/coinductive_list
+mkdir -p nada/afp/coinductive_stream
+mkdir -p nada/afp/hamming_stream
+mkdir -p nada/afp/koenigslemma
+mkdir -p nada/afp/tllist
+mkdir -p nada/afp/lmirror
+mkdir -p nada/afp/llist2
+mkdir -p nada/afp/abstract_completeness
+mkdir -p nada/afp/huffman
+mkdir -p nada/afp/bindag
+mkdir -p nada/afp/splay_tree_analysis
+mkdir -p nada/afp/sorted_list_operations
+mkdir -p nada/gandl/stern_brocot_bnf
+mkdir -p nada/gandl/bird_bnf
 
+mkdir -p data/distro/koenig
+mkdir -p data/distro/stream_processor
+mkdir -p data/distro/gram_lang
+mkdir -p data/distro/parallel
+mkdir -p data/distro/process
+mkdir -p data/distro/stream
+mkdir -p data/distro/rbt_impl
+mkdir -p data/afp/coinductive_list_prefix
+mkdir -p data/afp/coinductive_list
+mkdir -p data/afp/coinductive_stream
+mkdir -p data/afp/hamming_stream
+mkdir -p data/afp/koenigslemma
+mkdir -p data/afp/tllist
+mkdir -p data/afp/lmirror
+mkdir -p data/afp/llist2
+mkdir -p data/afp/abstract_completeness
+mkdir -p data/afp/huffman
+mkdir -p data/afp/bindag
+mkdir -p data/afp/splay_tree_analysis
+mkdir -p data/afp/sorted_list_operations
+mkdir -p data/gandl/stern_brocot_bnf
+mkdir -p data/gandl/bird_bnf
 
+mkdir -p coda/distro/koenig
+mkdir -p coda/distro/stream_processor
+mkdir -p coda/distro/gram_lang
+mkdir -p coda/distro/parallel
+mkdir -p coda/distro/process
+mkdir -p coda/distro/stream
+mkdir -p coda/distro/rbt_impl
+mkdir -p coda/afp/coinductive_list_prefix
+mkdir -p coda/afp/coinductive_list
+mkdir -p coda/afp/coinductive_stream
+mkdir -p coda/afp/hamming_stream
+mkdir -p coda/afp/koenigslemma
+mkdir -p coda/afp/tllist
+mkdir -p coda/afp/lmirror
+mkdir -p coda/afp/llist2
+mkdir -p coda/afp/abstract_completeness
+mkdir -p coda/afp/huffman
+mkdir -p coda/afp/bindag
+mkdir -p coda/afp/splay_tree_analysis
+mkdir -p coda/afp/sorted_list_operations
+mkdir -p coda/gandl/stern_brocot_bnf
+mkdir -p coda/gandl/bird_bnf
 
+mkdir -p both/distro/koenig
+mkdir -p both/distro/stream_processor
+mkdir -p both/distro/gram_lang
+mkdir -p both/distro/parallel
+mkdir -p both/distro/process
+mkdir -p both/distro/stream
+mkdir -p both/distro/rbt_impl
+mkdir -p both/afp/coinductive_list_prefix
+mkdir -p both/afp/coinductive_list
+mkdir -p both/afp/coinductive_stream
+mkdir -p both/afp/hamming_stream
+mkdir -p both/afp/koenigslemma
+mkdir -p both/afp/tllist
+mkdir -p both/afp/lmirror
+mkdir -p both/afp/llist2
+mkdir -p both/afp/abstract_completeness
+mkdir -p both/afp/huffman
+mkdir -p both/afp/bindag
+mkdir -p both/afp/splay_tree_analysis
+mkdir -p both/afp/sorted_list_operations
+mkdir -p both/gandl/stern_brocot_bnf
+mkdir -p both/gandl/bird_bnf
 
-#Datatypes:
+#####
 
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/huffman/,fact_filter=mepo,max_facts=256]" $AFP/Huffman/Huffman.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/bindag/,fact_filter=mepo,max_facts=256]" $AFP/BDD/BinDag.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/splay_tree_analysis/,fact_filter=mepo,max_facts=256]" $AFP/Amortized_Complexity/Splay_Tree_Analysis.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/sorted_list_operations/,fact_filter=mepo,max_facts=256]" $AFP/Collections/Lib/Sorted_List_Operations.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/rbt_impl/,fact_filter=mepo,max_facts=256]" /Users/blanchet/isabelle/src/HOL/Library/RBT_Impl.thy
+#Distro:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/distro/koenig/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Koenig.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/distro/stream_processor/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Stream_Processor.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/distro/gram_lang/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Gram_Lang.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/distro/parallel/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Parallel.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/distro/process/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Process.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/distro/stream/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Library/Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/distro/rbt_impl/,fact_filter=mepo,max_facts=256]" /Users/blanchet/isabelle/src/HOL/Library/RBT_Impl.thy
+
+#AFP:
+
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/coinductive_list_prefix/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List_Prefix.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/coinductive_list/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/coinductive_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/hamming_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Hamming_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/koenigslemma/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Koenigslemma.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/tllist/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/TLList.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/lmirror/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/LMirror.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/llist2/,fact_filter=mepo,max_facts=256]" $AFP/Lazy-Lists-II/LList2.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/abstract_completeness/,fact_filter=mepo,max_facts=256]" $AFP/Abstract_Completeness/Abstract_Completeness.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/huffman/,fact_filter=mepo,max_facts=256]" $AFP/Huffman/Huffman.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/bindag/,fact_filter=mepo,max_facts=256]" $AFP/BDD/BinDag.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/splay_tree_analysis/,fact_filter=mepo,max_facts=256]" $AFP/Amortized_Complexity/Splay_Tree_Analysis.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/afp/sorted_list_operations/,fact_filter=mepo,max_facts=256]" $AFP/Collections/Lib/Sorted_List_Operations.thy
 
 #Lochbihler & Gammie:
 
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/stern_brocot_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/SternBrocotBNF.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/bird_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/BirdBNF.thy
-
-#Meaningful AFP/Isabelle:
-
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/coinductive_list_prefix/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List_Prefix.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/process/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Process.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/stream/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Library/Stream.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/coinductive_list/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/coinductive_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_Stream.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/hamming_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Hamming_Stream.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/koenigslemma/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Koenigslemma.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/tllist/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/TLList.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/lmirror/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/LMirror.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/llist2/,fact_filter=mepo,max_facts=256]" $AFP/Lazy-Lists-II/LList2.thy
-
-#Semi-meaningful AFP/Isabelle:
-
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/abstract_completeness/,fact_filter=mepo,max_facts=256]" $AFP/Abstract_Completeness/Abstract_Completeness.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/koenig/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Koenig.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/stream_processor/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Stream_Processor.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/gram_lang/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Gram_Lang.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v5/parallel/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Parallel.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/gandl/stern_brocot_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/SternBrocotBNF.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/gandl/bird_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/BirdBNF.thy
