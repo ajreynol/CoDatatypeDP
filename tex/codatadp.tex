@@ -792,21 +792,23 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \\[5\jot]
 \(
 \inferrule{
-  \const{C}_1( \vec t \,) \teq \const{C}_1( \vec u ) \in \Ec
+  \const{C}( \vec t \,) \teq \const{C}( \vec u ) \in \Ec
 }{
   \Ec := \Ec,\: \vec t \teq \vec u
 }
 \)
-\rn{Unify$_1$} 
+\rn{Decomp} 
 \qquad
 \(
 \inferrule{
-  \const{C}_1( \vec t \,) \teq \const{C}_2( \vec u ) \in \Ec
+  \const{C}( \vec t \,) \teq \const{D}( \vec u ) \in \Ec
+  \quad
+  \const{C} \not= \const{D}
 }{
   \bot
 }
 \)
-\rn{Unify$_2$} 
+\rn{Clash}
 \end{tabular}
 \caption{\,Rules for bidirectional closure%.
 }
@@ -816,9 +818,9 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \paragraph{Step 1: Computing the Bidirectional Closure.}
 Figure~\ref{fig:cc-rules} gives the basic rules of our calculus.
 Together with the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, the rule \rn{Cong} computes the (upward) congruence closure,
-while the rules \rn{Unify$_1$} and \rn{Unify$_2$} together compute (downward) unification.
-In the unification rules, additional equalities are inferred based on the injectivity of constructors by \rn{Unify$_1$},
-and failures to unify equated terms are recognized by \rn{Unify$_2$}.
+while the rules \rn{Decomp} and \rn{Clash} together compute (downward) unification.
+In the unification rules, additional equalities are inferred based on the injectivity of constructors by \rn{Decomp},
+and failures to unify equated terms are recognized by \rn{Clash}.
 The rule \rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
 
 \begin{figure}[t]
@@ -1073,10 +1075,10 @@ If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is uns
 \end{lemma}
 \begin{proof}
 We prove this by structural induction on the (closed) derivation tree with root node $\Ec$.
-First, if the derivation tree is an application of \rn{Conflict}, \rn{Unify$_2$}, or \rn{Cyclic},
+First, if the derivation tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Cyclic},
 then $\Ec$ is unsatisfiable in $\thD$.
 For \rn{Conflict}, this is a consequence of equality reasoning.
-For \rn{Unify$_2$}, this is a consequence of distinctness.
+For \rn{Clash}, this is a consequence of distinctness.
 For \rn{Cyclic}, our construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees 
@@ -1086,10 +1088,10 @@ for each $C_i \in \Ctr^\tau$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is unsatisfiable in $\thD$.
 Otherwise, the child of $\Ec$ is a closed derivation tree 
-whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, \rn{Unify$_1$}, \rn{Bisimilar}, or \rn{Singleton}.
+whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, \rn{Decomp}, \rn{Bisimilar}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
 For \rn{Refl}, \rn{Symm}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
-For \rn{Unify$_1$}, this is a consequence of injectivity.
+For \rn{Decomp}, this is a consequence of injectivity.
 For \rn{Bisimilar}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
 For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
 By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is unsatisfiable in $\thD$, 
@@ -1278,13 +1280,13 @@ If $t$ is a variable, then $\M( t ) \vsim \Val^\ast \ec{ t }$ by construction.
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$, 
 then $\M( t )$ is bisimilar with $\nf{(\mu x. \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) )}$ for fresh $x$,
 which by the induction hypothesis is bisimilar with $\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
-Since \rn{Unify$_2$} does not apply to $\Fc$,
+Since \rn{Clash} does not apply to $\Fc$,
 then $\Val^\ast \ec{t}$ must be a term $t_w$ of the form $\mu v_{\ec{t}}. \const{C}( w_1, \ldots, w_n )$,
 that is, an application of the same constructor.
 For each $i = 1, \ldots, n$, let $u_i'$ be the $i^{th}$ argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$.
 Say that $\muvar( w_i ) = v_{\ec{y_i}}$.
-Due to our construction of $\Val^\ast$ and since \rn{Unify$_1$} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$,
+Due to our construction of $\Val^\ast$ and since \rn{Decomp} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$,
 and thus $t_u\interp{u_i'} \vsim \Val^\ast \ec{y_i}$.
 By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{ y_i } = t_w\interp{ w_i }$,
 and thus $t_u\interp{u_i'} \vsim t_w\interp{ w_i }$ for each $i = 1, \ldots, n$.
@@ -1295,7 +1297,7 @@ we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 If $t$ is a selector term of the form $s^j_k( u )$,
 since \rn{Split} does not apply, 
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) )$ for some $i$.
-By our construction and since \rn{Unify$_1$} and \rn{Unify$_2$} do not apply to $\Fc$, 
+By our construction and since \rn{Decomp} and \rn{Clash} do not apply to $\Fc$, 
 $\Val^\ast \ec{ u }$ must be of the form $t_u = \mu v_{\ec{u}}. C_i( u_1, \ldots, u_n )$,
 where $\muvar( u_1 ) = v_{\ec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = v_{\ec{s^n_i( u )}}$.
 Moreover, $\M( u )$ is of the form $t_w = \mu x. C_i( w_1, \ldots, w_n )$,
