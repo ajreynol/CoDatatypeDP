@@ -1139,14 +1139,14 @@ $\mu y. \const{C}( \mu x. \const{C}( t_1\interp{\mu y. \const{C}( x )}^{\{x,y\}}
 $\mu y. \const{C}( \mu x. \const{C}( y ) )$
 is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
-For any $\mu$-value $v$ of the form $\mu x. C( \vec w )$, we may recursively construct a normal value $\nf{v}$
-(which we will call the \emph{normal form} of $v$)
-that is a renaming of $v$ by replacing all of the bisimilar subterms of $v$ with $x$,
-and by replacing all of the non-normal subterms of $v$ with their corresponding normal forms.
+For any $\mu$-term $t$ of the form $\mu x. C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
+(which we will call the \emph{normal form} of $t$)
+that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$,
+and by replacing all of the non-normal subterms of $t$ with their corresponding normal forms.
 For instance, $\nf{(\mu x. \const{C}( \mu y. \const{C}( x ) ))} = \mu x. \const{C}( x )$.
 
 We say that $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
-for some renaming that avoids capturing variables besides $x$.
+for some renaming that avoids capturing any variable other than $x$.
 For instance, 
 $\mu x. \const{D}( x ) \vsimv{y} \mu x. \const{D}( y )$,
 $\mu x. \const{C}( x, x ) \vsimv{x} \mu y. \const{C}( x, y )$ and
@@ -1190,8 +1190,8 @@ In the following, we consider only normal models.
 Thus, when constructing a model $\M$ for $\Ec$,
 it remains only to define how wrong-applied selector terms and variables in $\Ec$ are interpreted.
 For the latter, this will be based on the mapping $\Val$ constructed in step two of our calculus.
-Given a normal model $\M$, the \emph{completion} of $\Val$, which we will write as $\Val^\ast$, 
-is the result of exhaustively applying the following update to $\Val$:
+Given a normal model $\M$, we compute the \emph{completion} of $\Val$, which we will write as $\Val^\ast$,
+by exhaustively applying the following update to $\Val$:
 
 \(
 \inferrule{
@@ -1207,7 +1207,8 @@ is the result of exhaustively applying the following update to $\Val$:
 
 Since this rule removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
-We first state the following properties of $\Val$, 
+We then replace all values in the range of $\Val^\ast$ by their normal forms.
+We first state the following properties of $\Val^\ast$, 
 where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
 %which amounts to saying that 
 %equivalence class are interpreted as values,
@@ -1218,16 +1219,16 @@ where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ i
 \label{lem:model-completion}
 The following are true of $\Val^\ast$:
 \begin{enumerate}
-\item $\nf{(\Val^\ast \ec{x})} \in \M( \tau )$ for all $\ec{x} : \tau$ of $\Ec$,
+\item $\Val^\ast \ec{x} \in \M( \tau )$ for all $\ec{x} : \tau$ of $\Ec$,
 \item
-$t_1 \interp{ t_2 } = \nf{(\Val^\ast \ec{x})}$
+$t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
 for all $t_1\interp{t_2} \in \mathcal{T}(\Val)$ where $\muvar(t_2)=v_{\ec{x}}$,
 \item 
-$\nf{(\Val^\ast \ec{x})} \vsim \nf{(\Val^\ast \ec{y})}$ if and only if $\ec{x} = \ec{y}$.
+$\Val^\ast \ec{x} \vsim \Val^\ast \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-To show 1, we must argue that $FV( \Val^\ast ) = \emptyset$, and that $\nf{(\Val^\ast \ec{x})}$ is not cyclic for
+To show 1, we must argue that $FV( \Val^\ast ) = \emptyset$, and that $\Val^\ast \ec{x}$ is not cyclic for
 $\ec{x} : \tau$ when $\tau \not\in \Codata$.
 \rem{TODO}
 \qed
@@ -1248,7 +1249,7 @@ The latter also comes with no loss of generality since nested applications of se
 We consider a normal model $\M$ 
 that interprets wrongly-applied selectors based on equality information in $\Fc$,
 and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from step two of our calculus.
-For the latter, let $\M( x )$ be the value in $\M$ that is a renaming of $\nf{(\Val^\ast \ec{x})}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
+For the latter, let $\M( x )$ be the value in $\M$ that is a renaming of $\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
 Notice that due to Lemma~\ref{lem:model-completion}.3, for variables $x, y \in FV( \Fc )$,
 \begin{eqnarray}
 \label{eqn:m-bij} 
@@ -1256,15 +1257,32 @@ Notice that due to Lemma~\ref{lem:model-completion}.3, for variables $x, y \in F
 \end{eqnarray}
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
-We show that $\M( t ) = \Val^\ast \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$, which we show by induction on the size of $t$.
-
+We show,
+by induction on the size of $t$,
+that $\M( t ) \sim \Val^\ast \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$.
 If $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t }$ by construction.
 If $t$ is a constructor term $\const{C}( u_1, \ldots, u_n )$, 
-then since \rn{Unify$_2$} does not apply to $\Fc$,
-then $\Val^\ast \ec{t}$ must be a term of the form $\mu v_{\ec{t}}. \const{C}( w_1, \ldots, w_n )$,
-where say that $\muvar( w_i ) = v_{\ec{y_i}}$ for $i = 1, \ldots, n$.
-Since \rn{Unify$_1$} does not apply to $\Fc$, it must be that $\ec{u_i} = \ec{y_i}$ for $i = 1, \ldots, n $.
-%Due to Lemma~\ref{lem:model-completion}.2 and by induction
+then $\M( t )$ is a renaming of $\nf{(\mu x. \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) )}$ for fresh $x$,
+which by the induction hypothesis is bisimilar to $\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
+Now, since \rn{Unify$_2$} does not apply to $\Fc$,
+then $\Val^\ast \ec{t}$ must be a term $t_w$ of the form $\mu v_{\ec{t}}. \const{C}( w_1, \ldots, w_n )$,
+that is, an application of the same construction $\const{C}$.
+For each $i = 1, \ldots, n$,
+say that $\muvar( w_i ) = v_{\ec{y_i}}$.
+Due to Lemma~\ref{lem:model-completion}.2, $t_w\interp{ w_i } = \Val^\ast \ec{ y_i }$.
+Due to our construction of $\Val^\ast$ and since \rn{Unify$_1$} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$.
+
+If $t$ is a selector term $s^j_k( u )$,
+by the induction hypothesis, $\M( u ) \vsim \Val^\ast \ec{ u }$. 
+since \rn{Split} does not apply, 
+$\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{a_i}_i( u ) )$ for some $i$.
+
+
+%we show that $w_i$ is bisimilar to the $i^{th}$ argument of
+%$\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$.
+%In the case that $\mu
+%Since $t_c$ is normal
+
 \rem{TODO}
 
 %If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
