@@ -1152,13 +1152,10 @@ $\mu y. \const{C}( \mu x. \const{C}( y ) )$
 is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-term $t$ of the form $\mu x. C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
-<<<<<<< HEAD
 (which we call the \emph{normal form} of $t$)
 that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$,
-=======
-(which we will call the \emph{normal form} of $t$)
+(which we call the \emph{normal form} of $t$)
 that is a renaming of $t$ by replacing all of the bisimilar subterms of $t$ with $x$,
->>>>>>> 8acd5e54322b4368967f44f342a29bcc7df56ead
 %and by replacing all of the nonnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
 For instance, $\nf{(\mu x. \const{C}( \mu y. \const{C}( x ) ))} = \mu x. \const{C}( x )$.
