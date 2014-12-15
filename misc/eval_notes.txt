@@ -133,7 +133,7 @@ cd ~/tmp/smt_codata_bench_v6
 ~/misc/CoDatatypeDP/tools/undata both/afp/*/*.smt_in
 ~/misc/CoDatatypeDP/tools/undata both/gandl/*/*.smt_in
 
-find . -name '*.smt_out' | xargs rm
+find smt_codata_bench_v6/ -name '*.smt_out' | xargs rm
 
 tar zcvf smt_codata_bench_v6.tgz smt_codata_bench_v6/
 scp smt_codata_bench_v6.tgz mb:.html-data/
