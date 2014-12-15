@@ -1355,7 +1355,8 @@ Blah.
 \newcommand\gandl{G\&L}
 \newcommand\HD[1]{\hbox to2.5em{\hfill#1\hfill}}
 
-\begin{table}[tbh!]
+\begin{table*}[tbh!]
+\normalsize
 \begin{center}\begin{tabular}{l@{\kern1.5em}c@{\kern.5em}c@{\kern.5em}c@{\kern1.5em}c}
   & \HD{Distro} & \HD{AFP} & \HD{\gandl} & All
 \\[1pt] %%% TYPESETTING HACK
@@ -1379,7 +1380,7 @@ Total number of goals
 \end{tabular}\end{center}
 \caption{Number of solved goals for the three benchmark suites}
 \label{tab:bench}
-\end{table}
+\end{table*}
 
 To evaluate the decision procedure, we generated problems from existing
 Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
