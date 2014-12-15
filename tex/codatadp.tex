@@ -816,9 +816,9 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \end{figure}
 
 \paragraph{Step 1: Computing the Bidirectional Closure.}
-Figure~\ref{fig:cc-rules} gives the basic rules of our calculus.
-Together with the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, the rule \rn{Cong} computes the (upward) congruence closure,
-while the rules \rn{Decomp} and \rn{Clash} together compute (downward) unification.
+Figure~\ref{fig:cc-rules} gives the basic rules of the calculus.
+Together with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
+whereas the \rn{Decomp} and \rn{Clash} rules together compute (downward) unification.
 In the unification rules, additional equalities are inferred based on the injectivity of constructors by \rn{Decomp},
 and failures to unify equated terms are recognized by \rn{Clash}.
 The rule \rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
@@ -841,7 +841,7 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 }
 \)
 \rn{Cyclic}
-\\[5\jot]
+\\[4\jot]
 \(
 \inferrule{
  \tau \in \Codata
@@ -862,12 +862,12 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \end{figure}
 
 \paragraph{Step 2: Applying Cyclicity and Bisimilarity.}
-In this step,
-we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}, that is,
-no nonredudant application of one of its rules can be applied to $\Ec$.
+In the second step,
+we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}---that is,
+no rule can be applied to extend $\Ec$ further.
 When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
 Thus, we will in the following consider $\Ec$ as a set of equivalence classes of terms. 
-For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that containing $t$.
+For term $t \in \tEc$, we will write $\ec{t}$ to denote the equivalence class in $\Ec$ that contains $t$.
 
 %For presentation of the rules in this step, we rely on a representation of terms in the $\mu$-notation.
 The rules of this step contain premises that involve a mapping $\Val$ from equivalence classes to terms containing $\mu$-bindings.
