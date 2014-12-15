@@ -714,7 +714,7 @@ that the type has at most one value.
 % * either there is only one ``path'' from ctr to itself
 %   or at least two;
 
-\section{The Decision Procedure} % for (Co)datatypes}
+\section{The Ground Decision Procedure} % for (Co)datatypes}
 \label{sec:a-ground-decision-procedure-for-co-datatypes}
 
   * SMT background
@@ -745,7 +745,6 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \begin{figure}[t]
 \centering
 \begin{tabular}{c}
-\rn{Refl}
 \(
 \inferrule{
   t \in \tEc
@@ -753,8 +752,8 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
   \Ec := \Ec, t \teq t
 }
 \)
+\rn{Refl}
 \qquad
-\rn{Symm}
 \(
 \inferrule{
  t_1 \teq t_2 \in \Ec
@@ -762,8 +761,8 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
  \Ec := \Ec, t_2 \teq t_1
 }
 \)
+\rn{Symm}
 \qquad
-\rn{Conflict}
 \(
 \inferrule{
   t_1 \teq t_2, t_1 \tneq t_2 \in \Ec
@@ -771,8 +770,8 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
   \bot
 }
 \)
+\rn{Conflict}
 \\[3.7ex]
-\rn{Trans}
 \(
 \inferrule{
   t_1 \teq t_2, t_2 \teq t_3 \in \Ec
@@ -780,8 +779,8 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
   \Ec := \Ec, t_1 \teq t_3
 }
 \)
+\rn{Trans}
 \qquad
-\rn{Cong} 
 \(
 \inferrule{
   \vec t \teq \vec u \in \Ec \quad f( \vec t ), f( \vec u ) \in \tEc
@@ -789,8 +788,8 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
   \Ec := \Ec, f( \vec t ) \teq f( \vec u )
 }
 \)
+\rn{Cong} 
 \\[3.7ex]
-\rn{Unify$_1$} 
 \(
 \inferrule{
   \const{C}_1( \vec t ) \teq \const{C}_1( \vec u ) \in \Ec
@@ -798,8 +797,8 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
   \Ec := \Ec, \vec t \teq \vec u
 }
 \)
+\rn{Unify$_1$} 
 \qquad
-\rn{Unify$_2$} 
 \(
 \inferrule{
   \const{C}_1( \vec t ) \teq \const{C}_2( \vec u ) \in \Ec
@@ -807,6 +806,7 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
   \bot
 }
 \)
+\rn{Unify$_2$} 
 \end{tabular}
 \caption{Rules for bidirectional closure%.
 }
@@ -824,7 +824,6 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \begin{figure}[t]
 \centering
 \begin{tabular}{c}
-\rn{Cyclic}
 \(
 \inferrule{
   t_1 : \tau
@@ -839,8 +838,8 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
   \bot
 }
 \)
+\rn{Cyclic}
 \\[3.7ex]
-\rn{Bisimilar}
 \(
 \inferrule{
  t_1, t_2 : \tau
@@ -853,6 +852,7 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
  \Ec := \Ec, t_1 \teq t_2
 }
 \)
+\rn{Bisimilar}
 \end{tabular}
 \caption{Rules for cyclicity and bisimilarity%.
 }
@@ -989,7 +989,6 @@ are equivalent for any value of $v_{\ec{y}}$.
 \begin{figure}[t]
 \centering
 \begin{tabular}{c}
-\rn{Singleton}
 \(
 \inferrule{
   t, u : \tau \in \tEc
@@ -1000,8 +999,8 @@ are equivalent for any value of $v_{\ec{y}}$.
   \Ec := \Ec, t \teq u
 }
 \)
+\rn{Singleton}
 \\[3.7ex]
-\rn{Split} 
 \(
 \inferrule{
   t : \tau \in \tEc 
@@ -1013,6 +1012,7 @@ are equivalent for any value of $v_{\ec{y}}$.
   \Ec := \Ec, t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \ldots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ) 
 }
 \)
+\rn{Split} 
 \end{tabular}
 \caption{Rules for branching%.  
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
@@ -1333,7 +1333,7 @@ By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, the calculus described in
 
 Blah.
 
-\section{Implementation}
+\section{Implementation as a Theory Solver in CVC4}
 \label{sec:the-theory-solver}
 
   * Strategies
@@ -1352,7 +1352,7 @@ Blah.
 %\section{Examples}
 %\label{sec:examples}
 
-\section{Experimental Results}
+\section{Evaluation on Isabelle Problems}
 \label{sec:experimental-results}
 
 \newcommand\gandl{G\&L}
