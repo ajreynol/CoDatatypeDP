@@ -125,3 +125,12 @@ isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep
 
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/gandl/stern_brocot_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/SternBrocotBNF.thy
 isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,keep=~/tmp/smt_codata_bench_v6/both/gandl/bird_bnf/,fact_filter=mepo,max_facts=256]" /Users/blanchet/misc/CoDatatypeDP/thy/Gammie_Lochbihler/BirdBNF.thy
+
+###
+
+cd ~/tmp/smt_codata_bench_v6
+~/misc/CoDatatypeDP/tools/undata both/distro/*/*.smt_in
+~/misc/CoDatatypeDP/tools/undata both/afp/*/*.smt_in
+~/misc/CoDatatypeDP/tools/undata both/gandl/*/*.smt_in
+
+find . -name '*.smt_out' | xargs rm
