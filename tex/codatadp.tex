@@ -1356,18 +1356,18 @@ Codatatypes being a recent addition to Isabelle
 included the theory files from the Isabelle distribution (the Distro) and the \emph{Archive
 of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
 within the supported fragment. We also included two unpublished theories by
-Peter Gammie and Andreas Lochbihler (\gandl). We complemented the benchmarks
-with some theories about various list and tree data structures, to also test
-the datatypes.
-The theory files were selected before running the experiments.
-Our experimental data is publicly available \cite{our-eval-data}.
+Peter Gammie and Andreas Lochbihler (\gandl). To also exercise the the support
+for datatypes, the benchmarks are complemented by theories about various list
+and tree data structures. The theory files were selected before running the
+experiments. The experimental data is publicly available \cite{our-eval-data}.
 
 For each goal in each theory file, Sledgehammer was invoked to select
 256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
 along with the goal \cite{boehme-2012-phd}. The resulting problem was given to
 CVC4, running for up to \textbf{TODO: XXX} seconds on the StarExec cluster
-\cite{xxx}. Due to the lack of machinery for reconstructing inferences about
-(co)datatypes in Isabelle, CVC4 is trusted as an oracle in these experiments.
+\cite{xxx}. Problems involving no (co)datatypes were filtered out.
+Due to the lack of machinery for reconstructing inferences about (co)datatypes
+in Isabelle, CVC4 is trusted as an oracle in these experiments.
 
 CVC4 was run on each problem several times, with the support for datatypes and
 codatatypes either enabled or disabled. The contributions of the cyclicity and
