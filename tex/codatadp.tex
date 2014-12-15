@@ -921,7 +921,7 @@ Then, $\Val$ is modified by applying the following update exhaustively:
 
 Here, we write $FV( \Val )$ to denote the \emph{free variables} occurring in $\Val$, which
 excludes variables that occur beneath $\mu$-binders.
-It is straightforward to see that the height of terms produced as a result of this rule
+It is straightforward to see that the height of terms produced as a result of this update
 is bounded by the number of equivalence classes of $\Ec$,
 and thus our construction of $\Val$ is terminating.
 
@@ -1022,7 +1022,7 @@ are equivalent for any value of $v_{\ec{y}}$.
 \paragraph{Step 3: Branching.}
 If neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
 the rules from Figure~\ref{fig:split-rule} are applied.
-The rule \rn{Singleton} handles the degenerate case when there are two terms from $\tEc$ having a singleton codatatype type,
+The rule \rn{Singleton} handles the case when there are two terms from $\tEc$ having a co-recursive singleton type,
 in which case they must be equivalent.
 Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type, 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
@@ -1163,6 +1163,8 @@ $\mu x. \const{C}( x, x ) \not\vsimv{y} \mu y. \const{C}( x, y )$.
 %\rem{TODO}
 %\end{proof}
 
+We now define a class of models that we consider.
+\rem{Clarify that non-codatatype terms are interpreted as $\mu$-terms, although dropping the $\mu$'s gives the standard representation?}
 
 \begin{definition}[Normal Model] \label{def:norm-model}
 A model $\M$ is \emph{normal} if and only if:
@@ -1215,6 +1217,18 @@ where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ i
 %the interpretation of an equivalence class is not sensitive to the context in which it is interpreted,
 %and that each equivalence classes has a distinct interpretation.
 
+\begin{lemma}
+\label{lem:mu-norm-arg}
+If $\vec u$ are normal, then if $t = \nf{(\mu x. \const{C}( \vec u ) )} = \mu x. \const{C}( \vec w )$,
+then $\vec u \vsim t\interp{\vec w}$.
+\end{lemma}
+
+\begin{lemma}
+\label{lem:mu-cong}
+If $t_u = \mu x. \const{C}( \vec u )$ and $t_w = \mu y. \const{C}( \vec w )$ are normal,
+then $t_u\interp{ \vec u } \vsim t_w\interp{ \vec w }$ if and only if $t_u \vsim t_w$.
+\end{lemma}
+
 \begin{lemma} 
 \label{lem:model-completion}
 The following are true of $\Val^\ast$:
@@ -1240,63 +1254,63 @@ $\ec{x} : \tau$ when $\tau \not\in \Codata$.
 If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
 \end{lemma}
 \begin{proof}
-Let $\Fc_0$ be a saturated node in a derivation tree with root node $\Ec$.
-We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where 
-all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
-The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
-The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
-
+Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
+%We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where 
+%all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
+%The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
+%The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
 We consider a normal model $\M$ 
 that interprets wrongly-applied selectors based on equality information in $\Fc$,
 and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from step two of our calculus.
-For the latter, let $\M( x )$ be the value in $\M$ that is a renaming of $\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
-Notice that due to Lemma~\ref{lem:model-completion}.3, for variables $x, y \in FV( \Fc )$,
-\begin{eqnarray}
-\label{eqn:m-bij} 
-\M( x ) = \M( y ) \text{ if and only if } \ec{x} = \ec{y}
-\end{eqnarray}
+For the latter, let $\M( x )$ be the value in $\M$ that is bisimilar with $\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 We show,
-by induction on the size of $t$,
-that $\M( t ) \sim \Val^\ast \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$.
-If $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t }$ by construction.
-If $t$ is a constructor term $\const{C}( u_1, \ldots, u_n )$, 
-then $\M( t )$ is a renaming of $\nf{(\mu x. \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) )}$ for fresh $x$,
-which by the induction hypothesis is bisimilar to $\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
-Now, since \rn{Unify$_2$} does not apply to $\Fc$,
+by structural induction on $t$,
+that $\M( t ) \sim \Val^\ast \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$,
+which implies $\M \models t_1 \teq t_2$.
+
+If $t$ is a variable, then $\M( t ) \vsim \Val^\ast \ec{ t }$ by construction.
+
+If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$, 
+then $\M( t )$ is bisimilar with $\nf{(\mu x. \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) )}$ for fresh $x$,
+which by the induction hypothesis is bisimilar with $\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
+Since \rn{Unify$_2$} does not apply to $\Fc$,
 then $\Val^\ast \ec{t}$ must be a term $t_w$ of the form $\mu v_{\ec{t}}. \const{C}( w_1, \ldots, w_n )$,
-that is, an application of the same construction $\const{C}$.
-For each $i = 1, \ldots, n$,
-say that $\muvar( w_i ) = v_{\ec{y_i}}$.
-Due to Lemma~\ref{lem:model-completion}.2, $t_w\interp{ w_i } = \Val^\ast \ec{ y_i }$.
-Due to our construction of $\Val^\ast$ and since \rn{Unify$_1$} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$.
+that is, an application of the same constructor.
+For each $i = 1, \ldots, n$, let $u_i'$ be the $i^{th}$ argument of $t_u$.
+By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$.
+Say that $\muvar( w_i ) = v_{\ec{y_i}}$.
+Due to our construction of $\Val^\ast$ and since \rn{Unify$_1$} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$,
+and thus $t_u\interp{u_i'} \vsim \Val^\ast \ec{y_i}$.
+By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{ y_i } = t_w\interp{ w_i }$,
+and thus $t_u\interp{u_i'} \vsim t_w\interp{ w_i }$ for each $i = 1, \ldots, n$.
+By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
+Since $\vsim$ is a transitive relation and since $\M( t ) \vsim t_u \vsim t_w = \Val^\ast \ec{t}$,
+we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 
-If $t$ is a selector term $s^j_k( u )$,
-by the induction hypothesis, $\M( u ) \vsim \Val^\ast \ec{ u }$. 
+If $t$ is a selector term of the form $s^j_k( u )$,
 since \rn{Split} does not apply, 
-$\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{a_i}_i( u ) )$ for some $i$.
-
-
-%we show that $w_i$ is bisimilar to the $i^{th}$ argument of
-%$\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$.
-%In the case that $\mu
-%Since $t_c$ is normal
-
-\rem{TODO}
-
-%If $\tau \in \Nondata$, $t_1$ and $t_2$ must be variables, and thus $\M( t_1 ) = \M( t_2 )$ by construction.
-%If $\tau \in \Data \cup \Codata$, we show $\M \models t_1 \teq t_2$ by showing 
-%We show by induction on the term size of $t$ that $\M( t ) = \Val^\ast \ec{t}$.
-%If $t$ is a variable, then $\M( t ) = \Val^\ast \ec{ t } = \Val^\ast \ec{ x }$.
-%In the case where 
-%where say $\muvar( v_i ) = v_{\ec{y_i}}$ for $i = 1, \ldots, n$.
-%We have $\M( \const{C}( \vec u ) ) = \nf{(\mu y. \const{C}( \M( \vec u ) ))}$.
+$\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) )$ for some $i$.
+By our construction and since \rn{Unify$_1$} and \rn{Unify$_2$} do not apply to $\Fc$, 
+$\Val^\ast \ec{ u }$ must be of the form $t_u = \mu v_{\ec{u}}. C_i( u_1, \ldots, u_n )$,
+where $\muvar( u_1 ) = v_{\ec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = v_{\ec{s^n_i( u )}}$.
+Moreover, $\M( u )$ is of the form $t_w = \mu x. C_i( w_1, \ldots, w_n )$,
+which by the induction hypothesis is bisimilar with $\Val^\ast \ec{u}$.
+If $k = i$, then $\M( t )$ is bisimilar with $t_w\interp{w_j}$,
+which by Lemma~\ref{lem:mu-cong} is bisimilar with $t_u\interp{u_j}$,
+which by Lemma~\ref{lem:model-completion}.2 is equal to $\Val^\ast \ec{ s^j_k( u )}$.
+Thus, $\M( t ) \vsim \Val^\ast \ec{ s^j_k( u )} = \Val^\ast \ec{t}$.
+If $k \neq i$, then we interpret $s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is bisimilar with $\Val^\ast \ec{ t }$.
+Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3, 
+pairs of wrongly-applied selectors are assigned the same value if and only if they reside in the same equivalence class,
+and thus this definition is well-defined.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
-Since \rn{Conflict} does not apply, we know $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
-By the previous paragraph and statement~\ref{eqn:m-bij}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
+Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
+Since $\M( t_1 ) \vsim \Val^\ast \ec{t_1}$, $\M( t_2 ) \vsim \Val^\ast \ec{t_2}$
+and Lemma~\ref{lem:model-completion}.3, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
