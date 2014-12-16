@@ -906,7 +906,7 @@ but
 $\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{D}( y, x ) \not\aequiv \mu x.\; \const{D}( z, x )
 \not\aequiv \mu y.\; \const{D}( y, x )$.
 Two $\mu$-terms may represent the same value while not being $\alpha$-equivalent, as in
-$\mu x. \const{C}( \const{C}( x ) ) \not\aequiv \mu x. \const{C}( x )$.
+$\mu x.\; \const{C}( \const{C}( x ) ) \not\aequiv \mu x.\; \const{C}( x )$.
 %, or informally are \emph{observationally equivalent}.
 %For convienience, we use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
@@ -914,7 +914,9 @@ $\mu x. \const{C}( \const{C}( x ) ) \not\aequiv \mu x. \const{C}( x )$.
 
 Intuitively, a $\mu$-term $t$ of type $\tau$ describes a class of values of $\tau$, 
 %either in the case when $\tau$ is a co-datatype or datatype type,
-where a cyclic $t$ describes an infeasible class of values when $\tau \not\in \Codata$.
+where a cyclic $t$ describes an infeasible class of values when
+%$\tau \not\in \Codata$.
+$\tau \in \Data$.
 At the beginning of this step, 
 we compute a mapping $\Val$ from equivalence classes to $\mu$-terms 
 that describe the class of values that terms in that equivalence class can take in the models of $\Ec$. 
