@@ -424,8 +424,10 @@ $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Dat
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the %remaining
 \emph{ordinary types}. The functions are partitioned into $\Funcs = \Ctr
 \mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
-\emph{selectors}; there is no need to consider further function symbols
+\emph{selectors}. There is no need to consider further function symbols
 because they can be abstracted away as variables when combining theories.
+Nonetheless, it is convenient to make an exception for natural number
+constants ($0$, $1$, \ldots) in examples.
 
 \paragraph{Specifications.}
 In an SMT problem, the signature is normally given by specifying the
@@ -451,6 +453,8 @@ family of ground types including
 $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
 and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.
 
+\newcommand\elll{\kern.2ex l\kern.14ex}
+
 Each datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
 arguments and returns a $\delta$ value. The argument types must be either
@@ -468,12 +472,10 @@ Schematically:
 %
 \[
 \begin{aligned}[t]
-(\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}=\, \smash{\const{C}_{11}(\bigl[\const{s}_{11}^1{:}\bigr]\; \tau_{11}^1, \,\ldots,\, \bigl[\const{s}_{11}^{n_{11}}{:}\bigr]\; \tau_{11}^{n_{11}})} & \\
-           & {}\;\phantom{=\,}\;{} \smash{\,\,\,\vdots} \\[-\jot] % {}\;\phantom{=}\llap{\ensuremath{\mid}}\; \cdots \\
-           & {}\;\phantom{=\,}\llap{\ensuremath{\,\mid\,}}\; \smash{\const{C}_{1m}(\bigl[\const{s}_{1m}^1{:}\bigr]\; \tau_{1m}^1, \,\ldots,\, \big[\const{s}_{1m}^{n_{1m}}{:}\big]\; \tau_{1m}^{n_{1m}})} \\[-1\jot]
+\!(\keyw{co})\keyw{datatype}\;\,
+  \delta_1 & {}= \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m}(\bigl[\const{s}_{1m}^1{:}\bigr]\vthinspace \tau_{1m}^1, \ldots, \bigl[\const{s}_{1m}^{n_{1m}}{:}\bigr]\vthinspace \tau_{1m}^{n_{1m}})} \\
    \smash{\vdots\,\,\,} \\[-1\jot]
-  \keyw{and}\; \,\delta_l & =\, \ldots
+  \keyw{and}\; \,\delta_l & = \smash{\const{C}_{\elll 1\!}(\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \ldots, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}})} \mid \cdots \mid \smash{\const{C}_{\elll m}(\bigl[\const{s}_{\elll m}^1{:}\bigr]\vthinspace \tau_{\elll m}^1, \ldots, \bigl[\const{s}_{\elll m}^{n_{\elll m}}{:}\bigr]\vthinspace \tau_{\elll m}^{n_{\elll m}})}
 \end{aligned}
 \]
 %
