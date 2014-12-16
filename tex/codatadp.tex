@@ -883,8 +883,12 @@ $\mu x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ with the expected types.
 The variable $x$ need not occur under the binder's body, in which case the $\mu$-prefix
 is optional.
-For uniformity, we also consider $%\mu x.\;
-\const{c}$ to be a $\mu$-term if $\const{c}$ is a constant of type $\tau \in \Nondata$.
+
+%%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
+%
+%For uniformity, we also consider $%\mu x.\;
+%\const{c}$ to be a $\mu$-term if $\const{c}$ is a constant of type $\tau \in \Nondata$.
+
 %%% I think this should be clear enough from the "Conventions" paragraph at the
 %%% end of the introduction.
 %%
@@ -1036,7 +1040,7 @@ are equivalent for any value of $v_{\ec{y}}$.
 \end{figure}
 
 \paragraph{Step 3: Branching.}
-If neither a rule from Figure~\ref{fig:cc-rules} or Figure~\ref{fig:ab-rules} applies to $\Ec$, 
+If neither a rule from Figure \ref{fig:cc-rules}~or~\ref{fig:ab-rules} applies to $\Ec$, 
 the rules from Figure~\ref{fig:split-rule} are applied.
 The rule \rn{Singleton} handles the case when there are two terms from $\tEc$ having a co-recursive singleton type,
 in which case they must be equivalent.
