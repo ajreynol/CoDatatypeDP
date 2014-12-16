@@ -266,9 +266,10 @@ $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
 
 Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \emph{values as closed terms and
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
-and for theory combinations. The $\mu$-binder notation is used to represent cyclic
-values internally. For example,
-the term $\const{SCons}(1,\: \mu s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
+and for theory combinations. The $\mu$-binder notation associates a name with
+a (sub)term; it is used to represent cyclic values in the generated models and
+in the metatheory. For example,
+the $\mu$-term $\const{SCons}(1,\: \mu s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
 denotes the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
 
 %%% 1090909 is a prime number
@@ -866,7 +867,7 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \paragraph{Step 2: Applying Cyclicity and Bisimilarity.}
 In the second step,
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}---that is,
-no rule can be applied to extend $\Ec$ further.
+no rule can be applied to extend~$\Ec$ further.
 When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
 Thus, we can consider $\Ec$ as a set of equivalence classes of terms. 
 For a term $t \in \tEc$, we write $\ec{t}$ to denote the equivalence class in $\Ec$ that contains $t$.
@@ -876,13 +877,14 @@ The rules of this step contain premises that involve a mapping $\Val$ from equiv
 Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
 % for example, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
-Formally, we recursively define a $\mu$-term as a term-like structure as either a variable $x$
+Formally, $\mu$-terms are defined recursively as being either a variable $x$
 or a node of the form
-$\mu x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and $\mu$-terms $\vec t$.
-For uniformity, we also consider $\mu x.\; \const{c}$ to be a $\mu$-term
-if $\const{c}$ is a constant of type $\tau \in \Nondata$.
-We consider only $\mu$-terms that are well-typed---i.e., whose function symbols
-are applied to arguments of the expected type.
+$\mu x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
+$\mu$-terms $\vec t$ with the expected types.
+The variable $x$ need not occur under the binder's body, in which case the $\mu$-prefix
+is optional.
+For uniformity, we also consider $%\mu x.\;
+\const{c}$ to be a $\mu$-term if $\const{c}$ is a constant of type $\tau \in \Nondata$.
 %%% I think this should be clear enough from the "Conventions" paragraph at the
 %%% end of the introduction.
 %%
@@ -890,21 +892,21 @@ are applied to arguments of the expected type.
 %if $\const{C} : \vec \tau \rightarrow \upsilon$
 %and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
 %then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
-We say a $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
-it contains no free variables.
-A $\mu$-term is \emph{cyclic} if %and only if --- ditto
+
+A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
+it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
 it contains an occurrence of a bound variable.
-We write $t \aequiv s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables,
-in which case $t$ and $s$ are $\alpha$-\emph{equivalent}.
-For instance, 
-$\mu x. \const{C}( x ) \vsim \mu y. \const{C}( y )$ and
-$\mu x, \const{D}( y, x ) \vsim \mu z. \const{D}( y, z )$, but
-$\mu x. \const{D}( y, x ) \not\vsim \mu x. \const{C}( x )$,
-$\mu x. \const{D}( y, x ) \not\vsim \mu x. \const{D}( z, x )$ and
-$\mu x. \const{D}( y, x ) \not\vsim \mu y. \const{D}( y, x )$.
-Also, note that
-two $\mu$-terms may represent the same value while being not bisimilar, as in
-$\mu x. \const{C}( \mu y. \const{C}( x ) ) \not\vsim \mu x. \const{C}( x )$.
+The notation $t \aequiv u$, expressing $\alpha$-\emph{equivalence},
+indicates that the $\mu$-terms $t$ and $u$
+are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables.
+For example, 
+%$\mu x. \const{C}( x ) \aequiv \mu y. \const{C}( y )$ and
+$\mu x.\; \const{D}( y, x ) \aequiv \mu z.\; \const{D}( y, z )$,
+but
+$\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{D}( y, x ) \not\aequiv \mu x.\; \const{D}( z, x )
+\not\aequiv \mu y.\; \const{D}( y, x )$.
+Two $\mu$-terms may represent the same value while not being $\alpha$-equivalent, as in
+$\mu x. \const{C}( \const{C}( x ) ) \not\aequiv \mu x. \const{C}( x )$.
 %, or informally are \emph{observationally equivalent}.
 %For convienience, we use $\mu$-terms to refer to (classes of) values for both co-datatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
