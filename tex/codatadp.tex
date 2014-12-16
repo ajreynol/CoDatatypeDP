@@ -453,7 +453,8 @@ family of ground types including
 $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
 and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.
 
-\newcommand\elll{\kern.2ex l\kern.14ex}
+\newcommand\elll{\kern.18ex l\kern.11ex}
+\newcommand\elllx{\kern.11ex l\kern.18ex}
 
 Each datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
@@ -473,9 +474,9 @@ Schematically:
 \[
 \begin{aligned}[t]
 \!(\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}= \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m}(\bigl[\const{s}_{1m}^1{:}\bigr]\vthinspace \tau_{1m}^1, \ldots, \bigl[\const{s}_{1m}^{n_{1m}}{:}\bigr]\vthinspace \tau_{1m}^{n_{1m}})} \\
+  \delta_1 & {}= \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m_1\!}(\ldots)} \\
    \smash{\vdots\,\,\,} \\[-1\jot]
-  \keyw{and}\; \,\delta_l & =\, \ldots
+  \keyw{and}\; \,\delta_{\elllx} & =\, \smash{\const{C}_{\elll 1\!}(\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \ldots, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}})} \mid \cdots \mid \smash{\const{C}_{\elll m_{\elllx}\!}(\ldots)}
 \end{aligned}
 \]
 %
