@@ -192,11 +192,11 @@ properties that can be exploited in automated reasoners.
 %constructed by $\const{Z} : \ty{nat}$ and $\const{S} : \ty{nat} \to \ty{nat}$
 %only allow values of the form $\const{S}(\ldots(\const{S}(\const{Z}))\ldots)$.
 
-To represent infinite values, % such as $\const{S}(\const{S}(\const{S}(\ldots))$,
+To represent infinite objects, % such as $\const{S}(\const{S}(\const{S}(\ldots))$,
 a natural choice is to turn to coinductive datatypes, or \emph{codatatypes},
 the non-well-founded dual of inductive \emph{datatypes}.
 %
-Although they are sometimes perceived as esoteric, codatatypes have an important
+Despite their reputation for being esoteric, codatatypes have a
 role to play in computer science. The verified C compiler CompCert
 \cite{leroy-2009}, the verified Java compiler Jinja\-Threads
 \cite{lochbihler-2010-jinja}, and the formalized Java memory model
@@ -215,23 +215,25 @@ terms, and only those. For example, the coinductive specification
 models the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
 using Peano notation but extended with an
 infinity value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$. Compared
-with the more conventional, inductive definition
-\[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
+with the more conventional, inductive definition with a dedicated constructor
+for representing infinity,
+%\[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
 %
 the codatatype avoids one case by unifying the finite and infinite nonzero cases.
-Moreover, equations such as $\const{S}(\infty) \teq \infty$ hold without additional
-work, because both sides expand to the infinite term
+Moreover, equations such as $\const{S}(\infty) \teq \infty$ hold by default,
+because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
-value $\infty$.
+value~$\infty$.
 
 \nopagebreak
 
 Datatypes and codatatypes are an integral part of modern proof assistants,
-including Agda, Coq, Isabelle, Matita, and PVS. In recent years, some
-automatic theorem provers have been extended with dedicated reasoning facilities
-for datatypes. The SMT-LIB~2 \cite{barrett-et-al-2010} syntax, implemented by
-most SMT (satisfiability modulo theories) solvers, includes a theory of
-datatypes.
+including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
+have made their appearance in a few automatic theorem provers. The SMT-LIB~2
+\cite{barrett-et-al-2010} syntax, implemented by most SMT (satisfiability
+modulo theories) solvers, includes a theory of datatypes.
+
+\pagebreak
 
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in combination
@@ -254,7 +256,7 @@ For example, the type
 \[\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\, \const{SCons}(\tau,\: \ty{stream}_{\,\tau})\]
 %
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
-corresponding datatype would be rejected as non-well-founded.
+corresponding datatype would be rejected as non-well-founded \cite{blanchette-et-al-2015-esop}.
 
 Second, \emph{a bisimilarity rule takes the place of the cyclicity rule of datatypes.}
 Cyclic constraints such as
@@ -263,6 +265,18 @@ are unsatisfiable for datatypes but satisfiable for codatatypes.
 The bisimilarity principle states that two values having the same (possibly
 infinite) expansion must be equal; from $\const{x} \teq \const{S}(\const{y})$ and
 $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
+The cyclicity and bisimilarity rules are needed to ensure completeness on
+ground problems and the absence of spurious models. They cannot be replaced by
+finite axiomatizations, so they naturally belong in a decision procedure.
+%    * in particular, acyclicity and bisimilarity are necessary for some proofs
+%%      (and cannot be axiomatized finitely)
+%    * and for model finding, without them we quickly get spurious models
+%    * explain how finite model finding works
+%(For the other (co)datatype properties---the injectivity, distinctness, and
+%exhaustiveness of constructors and the selector laws---it is
+%widely recognized that decision procedures can be more efficient than
+%axiomatizations.)
+%axiom.
 
 Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \emph{values as closed terms and
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
@@ -270,24 +284,10 @@ and for theory combinations. The $\mu$-binder notation associates a name with
 a (sub)term; it is used to represent cyclic values in the generated models and
 in the metatheory. For example,
 the $\mu$-term $\const{SCons}(1,\: \mu s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
-denotes the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
+stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
 
 %%% 1090909 is a prime number
 
-The cyclicity and bisimilarity rules are
-needed to ensure completeness on ground problems and the absence of spurious
-models in the context of finite model finding.
-They cannot be replaced by finite
-axiomatizations, so they naturally belong in a decision procedure. 
-%    * in particular, acyclicity and bisimilarity are necessary for some proofs
-%%      (and cannot be axiomatized finitely)
-%    * and for model finding, without them we quickly get spurious models
-%    * explain how finite model finding works
-For the other (co)datatype properties---the injectivity, distinctness, and
-exhaustiveness of constructors and the selector laws---it is
-widely recognized that decision procedures can be more efficient than
-axiomatizations.
-%axiom.
 
 \begin{paper}
 Proofs of soundness and completeness are included in the technical report
@@ -382,14 +382,15 @@ The setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are simply atomic sorts, with no
 structure, and interpreted by nonempty domains. The set~$\Types$ must contain a
-distinguished type \ty{bool} interpreted as the set of truth
-values $\{\bot, \top\}$. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-The only predicate is equality ($\teq$) and belongs to the logical symbols.
-Other predicates can be represented as functions that return $\ty{bool}$,
+distinguished type \ty{bool}\begin{report} interpreted as the set of truth
+values $\{\bot, \top\}$\end{report}. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
+The only predicate is equality ($\teq$)\begin{report} and belongs to the logical symbols\end{report}.
+Other predicates can be represented as functions to $\ty{bool}$,
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
+\begin{report}
 The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
 whereas $\tau,\:\upsilon$ range over arbitrary types.
-\begin{report}When applied to terms, the symbol $=$ denotes syntactic equality.\end{report}
+When applied to terms, the symbol $=$ denotes syntactic equality.\end{report}
 
 \begin{report}
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
@@ -504,15 +505,14 @@ Here are a few examples of legal specifications of (co)datatype families:
 \end{aligned}
 \]
 
-Because all types must be inhabited (nonempty), a datatype specification is
-admissible only if a ground constructor term can be exhibited that belongs to
-the datatype. This rules out non-well-founded specifications\begin{paper}.\end{paper}
 \begin{report}%
-such as
+Because all types must be inhabited (nonempty), a datatype specification is
+admissible only if a ground constructor term can be exhibited.
+This rules out non-well-founded specifications such as
 \[\keyw{datatype}\;\, \ty{fstream}_{\,\tau} \,=\, \const{FSCons}(\tau,\:\, \ty{fstream}_{\,\tau})\]
-\end{report}
 For codatatypes, no admissibility check is necessary because there is always a term,
-finite or infinite, that witnesses nonemptiness.
+finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop}.
+\end{report}
 %Given the specification
 %
 %\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\:\ty{stream})\]
@@ -660,15 +660,18 @@ semantic notion is more precise and is the one that interests us.
 %
 In addition, nothing forbids non(co)recursive specifications
 such~as
+\begin{paper}
+\[\keyw{datatype}\;\, \ty{option}_{\,\tau} \,=\, \const{None} \,\mid\, \const{Some}(\tau)\]%
+\end{paper}%
+\begin{report}%
 \[\begin{aligned}[t]
-      \keyw{datatype}\;\, \ty{enat} & \,=\, \const{Nat}(\ty{nat}) \,\mid\, \const{Infty} \\[-.5\jot]
+      \keyw{datatype}\;\, \ty{option}_{\,\tau} & \,=\, \const{None} \mid \const{Some}(\tau) \\[-.5\jot]
       \keyw{codatatype}\; \,\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
 \end{aligned}
 \]
-\begin{report}
 At the semantic level, it makes no difference whether such types are
 introduced as datatypes or as codatatypes.
-\end{report}
+\end{report}%
 %Without loss of generality, we consider that these types are datatypes
 %instead of codatatypes.
 
