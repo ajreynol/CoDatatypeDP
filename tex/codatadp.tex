@@ -1264,7 +1264,7 @@ $\mu x. \const{C}( x, x ) \not\vsimv{y} \mu y. \const{C}( x, y )$.
 For a variable $x$ of type $\tau$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
 such that $v \vsim_x t_1\interp{t_2}$ for some term $t_1$ with subterm $t_2$ occurring in the range of $\Val$.
-Our completion $\Val^\ast$ is constructed by exhaustively applying the following update to $\Val$:
+We first construct a mapping $\Val'$ by exhaustively applying the following update to $\Val$:
 
 \(
 \inferrule{
@@ -1284,7 +1284,7 @@ In this update, we choose an unassigned variable in $\Val$
 and assign it a value that is not bisimilar to one occurring in $\mathcal{T}^\M_x(\Val)$.
 Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
-We then replace $\Val^\ast \ec{x}$ with $\nf{(\Val^\ast \ec{x})}$ for all $\ec{x}$.
+We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
 We first state the following properties of $\Val^\ast$, 
 where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
 
@@ -1293,7 +1293,7 @@ where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ i
 If $\Val$ is constructed for a saturated $\Ec$,
 and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
 \begin{enumerate}
-\item $\Val^\ast \ec{x}$ is bisimilar with a value in $\M( \tau )$, for all $\ec{x} : \tau$ of $\Ec$,
+\item $\Val^\ast \ec{x}$ is bisimilar with a value in $\M( \tau )$, for all $\ec{x}$ of type $\tau$ of $\Ec$,
 \item
 If $\const{C}( t_1, \ldots, t_n ) \in \ec{x}$,
 then $\Val^\ast \ec{x} = \mu v_{\ec{x}}. \const{C}( w_1, \ldots, w_n )$
@@ -1315,11 +1315,11 @@ Consider the case when $\tau$ is finite.
 By assumption, $\tau \not\in \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
 If $\tau \in \Codata$, then by Lemma~\ref{lem:corecursive-singletons},
-the cardinality of $\tau$ must be one (call the value in its domain $c$).
+the cardinality of $\tau$ must be one.
 Since \rn{Singleton} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
 and thus there are no terms in $\mathcal{T}(\Val^\ast)$ of type $\tau$.
-This is a contradiction, since our model completion may assign $c$ to $v_{\ec{x}}$.
+This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to $v_{\ec{x}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction, 
 since there are only a finite number of closed terms in $\mathcal{T}^\M_x(\Val^\ast)$,
@@ -1330,6 +1330,32 @@ Moreover, our construction of $\Val^\ast$ applies substitutions of the form
 $\{ y \mapsto t \}$, where $t$ is acyclic when the type of $y$ is not a codatatype.
 Thus, $\Val^\ast \ec{x}$ is acyclic when $\tau \not\in \Codata$.
 Therefore, by definition, $\Val^\ast \ec{x}$ is bisimilar with a value in $\M( \tau )$.
+
+To show 2, 
+first note that since \rn{Clash} does not apply to $\Ec$,
+for all equivalence classes $\ec{y}$,
+each pair of constructor terms $\const{C}_i( \vec t )$ and $\const{C}_j( \vec u )$ in $\ec{y}$
+are such that $i = j$ since \rn{Clash} does not apply
+are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not apply.
+Thus, 
+if $\const{C}_i( t_1, \ldots, t_n ) \in \ec{y}$,
+$\Val$ was constructed by applying a sequence of substitutions
+that replace $v_{\ec{y}}$ by $\mu v_{\ec{y}}. \const{C}_i( v_{\ec{t_1}}, \ldots, v_{\ec{t_n}} )$.
+Now, say that $\const{C}( t_1, \ldots, t_n )$ occurs in some equivalence class $\ec{x}$.
+Then $\Val \ec{x}$ must be of the form $\mu v_{\ec{x}}. \const{C}_i( w_1, \ldots, w_n )$,
+where for each $i=1,\ldots,n$, $w_i$ was obtained by applying a sequence of substitutions
+of the form mentioned above to $v_{\ec{t_i}}$.
+%Each $w_i$ is either $v_{\ec{x}}$,
+%a variable $v_{\ec{y}}$ where $\ec{y}$ does not contain a constructor,
+%or a term of the form $\mu v_{\ec{y}}. \const{C}_j( \vec u )$.
+While interpreting $w_i$ in $\Val \ec{x}$,
+all free occurrences of $v_{\ec{x}}$ in $\Val \ec{x} \interp{w_i}$ are replaced by $\Val \ec{x}$. \rem{better formalize.}
+Thus, since $\Val \ec{x} \interp{w_i}$ and $\Val \ec{t_i}$ are obtained by applying the same sequence of substitutions to $v_{\ec{t_i}}$,
+we have $\Val \ec{w_i} = \Val \ec{x} \interp{ w_i }$.
+Since $\Val'$ is obtained by applying the same substitution to all terms in the range of $\Val$,
+we have that $\Val' \ec{x} \interp{w_i} = \Val' \ec{t_i}$,
+and hence $\Val^\ast \ec{x} \interp{w_i} = \Val^\ast \ec{t_i}$.
+
 
 
 \rem{TODO}
