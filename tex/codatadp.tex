@@ -660,8 +660,8 @@ semantic notion is more precise and is the one that interests us.
 %
 In addition, nothing forbids non(co)recursive specifications
 such~as
-\begin{paper}
-\[\keyw{datatype}\;\, \ty{option}_{\,\tau} \,=\, \const{None} \,\mid\, \const{Some}(\tau)\]%
+\begin{paper}%
+\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} = \const{None} \mid \const{Some}(\tau)$.%
 \end{paper}%
 \begin{report}%
 \[\begin{aligned}[t]
@@ -679,11 +679,17 @@ Some codatatypes are so degenerate as to have infinite values
 even though they are finite. The simplest example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
 only value is $\mu a.\; A(a)$. Other specimens are
+\begin{paper}%
+\vthinspace$\keyw{codatatype}~\ty{b} = \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit})
+~\keyw{and}~ \ty{c} = \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})$,
+\end{paper}%
+\begin{report}%
 \[\begin{aligned}[t]
       \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-1\jot]
       \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})
 \end{aligned}
 \]
+\end{report}
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$, as well as $\ty{stream}_{\,\ty{unit}\,}$. We call such types
 \emph{corecursive singletons}. For the decision procedure, it will be
