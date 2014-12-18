@@ -1311,7 +1311,7 @@ After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains:
 \end{array}\]
 
 To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, $v_{\ec{x}}$ and $v_{\ec{w_3}}$.
-The content of set $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$ is $\alpha$-equivalent to
+The content of the set $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$ is $\alpha$-equivalent to:
 \[%\begin{array}{c}
 \{
 \mu x. \const{A}( \mu y. \const{B}( x )),
@@ -1323,7 +1323,7 @@ The content of set $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$ is $\alpha$-equivalent 
 \}
 %\end{array}
 \]
-Say that $\M$ interprets variables in $\Ec$ based on the mapping $\Val$,
+Now, consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$,
 for instance, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
 Assigning a value for $v_{\ec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent, 
@@ -1333,9 +1333,8 @@ After this substitution, $\Val \ec{y_2}$ is $\mu v_{\ec{y_2}}. \const{B}( \mu v_
 which has normal form $\mu v_{\ec{y_2}}. \const{B}( v_{\ec{y_2}} )$,
 which is $\alpha$-equivalent to $\mu v_{\ec{x}}. \const{B}( v_{\ec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
-
 Inversely, if the value assigned to $v_{\ec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$,
-then the values in the range of $\Val$ remain distinct.
+then the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For instance, we may assign values such as 
 $\mu v_{\ec{x}}. \const{C}( v_{\ec{x}} )$,
 $\mu v_{\ec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, and
