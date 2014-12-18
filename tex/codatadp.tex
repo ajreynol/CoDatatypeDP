@@ -1666,18 +1666,21 @@ comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}.
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
 
-\begin{verbatim}
-primcorec FIXME_x :: "nat tree" where
-  "FIXME_x = Node 0 num FIXME_x"
-
-lemma FIXME_x_unique: "x = Node 0 num x \<Longrightarrow> x = FIXME_x"
-proof (coinduction arbitrary: x rule: tree.coinduct_strong)
-  case (Eq_tree x)
-  show ?case
-    by (subst (1 2 3 4) Eq_tree) (simp add: eqTrueI[OF Eq_tree])
-qed
-\end{verbatim}
-
+Among the four bisimilarity proofs, three corresponded to one-line
+proofs in Isabelle, of the form \keyw{by}~\textit{coinduction}~\textit{auto}
+\cite{blanchette-et-al-2014-impl}. The fourth proof was somewhat more elaborate:
+%
+\begin{quote}
+\keyw{lemma} \,\textit{X0\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \Longrightarrow x = \const{X0}$ \\
+\keyw{proof} \,(\textit{coinduction arbitrary}: $x$ \textit{rule}: \textit{tree.coinduct\_strong}) \\
+\noindent\hbox{}\quad  \keyw{case} (\textit{Eq\_tree} $x$) \keyw{show} \textit{?case} \\
+\noindent\hbox{}\qquad  \keyw{by} (\textit{subst} (1 2 3 4) \textit{Eq\_tree}) (\textit{simp add}: \textit{eqTrueI}[OF \textit{Eq\_tree}]) \\
+\keyw{qed}
+\end{quote}
+%
+\noindent
+where \const{X0} is defined as $\const{X0} =
+\const{Node}\;0\;\const{num}\;\const{X0}$.
 
 \section{Conclusion}
 \label{sec:conclusion}
