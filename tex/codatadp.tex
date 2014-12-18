@@ -751,13 +751,21 @@ that the type has at most one value.
 \section{The Ground Decision Procedure} % for (Co)datatypes}
 \label{sec:a-ground-decision-procedure-for-co-datatypes}
 
-  * SMT background
+This section presents a decision procedure for \rem{introduce ``$\thD$" in previous section?}
+determining the $\thD$-satisfiability of sets of constraints built from a fixed signature $\Sig$.
+We will make the following assumptions about $\Sig$.
+First, all codatatypes in $\Codata$ are corecursive.
+This is not restrictive, since checking the $\thD$-satisfiability for constraints involving a non-corecursive co-datatype $\tau$ can be trivially reduced to
+checking the satisfiability of the same constraint involving a (non-recursive) datatype of the same form as $\tau$. \rem{revise?}
+Second, all types $\tau \in \Nondata$ have infinite cardinality.
+This also is not restrictive, since each interpreted type $\tau \in \Nondata$ having finite cardinality $n$
+can be replaced by a enumeration datatype with $n$ constructors
+\footnote{Doing so simplifies the presentation of the calculus, but is not done in practice. \rem{More?}}.
+Additionally, since $\Ec$ is ground, we know that $\Ec$ cannot entail an upper bound on the cardinality of any uninterpreted type $\tau \in \Nondata$, 
+and thus without loss of completeness we may treat all other types as infinite.
 
-\rem{Discuss signature $\Sig$, theory $\thD$}
-\rem{DPLL(T) : we can restrict ourselves to conjunctions.}
-This section presents a calculus for determining the satisfiability of conjunctions of $\thD$-constraints.
-
-Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sig$-terms.
+Our calculus consists of derivation rules that operate on a set $\Ec$ of equalities and disequalities between $\Sig$-terms,
+where $\Ec$ is interpreted as a conjunction.
 We write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
@@ -1375,7 +1383,7 @@ or else $v_{\ec{y}}$ would not occur as a free variable in $\Val$.
 Consider the case when $\tau$ is finite.
 By assumption, $\tau \not\in \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
-If $\tau \in \Codata$, then by Lemma~\ref{lem:corecursive-singletons},
+If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\ref{lem:corecursive-singletons},
 the cardinality of $\tau$ must be one.
 Since \rn{Singleton} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
@@ -1523,12 +1531,12 @@ This section describes how the calculus in Section~\ref{sec:the-calculus} is imp
 
 \paragraph{Optimizations}
 We first discuss several optimizations that are not reflected in the presentation of the calculus, which closely follow the approach outlined by Barrett et al in~\cite{}.
-We only briefly mention these optimizations, since each applies to datatypes as well as co-datatype, and most have been presented thoroughly in~\cite{}.
+We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in~\cite{}.
 
 Discriminators are treated as predicate symbols, so a discriminator $\const{d}_i( t )$ is such that $\const{d}_i$ 
 is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_i( s^1_i( t ), \ldots, s^n_i( t ) )$.
 We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
-Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and co-datatypes.
+Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
 if $s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor 
 $\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Decomp} before inferring this equality.  
