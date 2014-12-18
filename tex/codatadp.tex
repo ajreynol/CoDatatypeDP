@@ -1541,7 +1541,8 @@ Also, selectors are collapsed eagerly:
 if $s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor 
 $\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Decomp} before inferring this equality.  
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a pre-processing step.
-In particular, we rewrite $t \teq s$ to $s \teq t$ if $s$ is less than $t$ based on a term ordering,
+In particular, we 
+replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
 replace $\const{C}_i( \vec t ) \teq \const{C}_j( \vec u )$ with $\bot$ when $i \neq j$,
 replace all selector terms of the form $\const{s}^{\,i}_j( \const{C}_j(t_1,\ldots,t_n) )$ by $t_i$,
 and replace all occurrences of discriminators $\const{d}_i( \const{C}_k( \vec t ) )$ by $\top$ if $i=k$ and $\bot$ if $i \neq k$.
@@ -1560,28 +1561,31 @@ each $T_i$-solver for $i = 1, \ldots, n$ takes as input a combination of (1) the
 (2) additional equalities and disequalities between variables of types not belonging to $T_i$.
 Let us call this set $M_i$.
 Each $T_i$ solver either 
-reports that a subset $C$ of $M_i$ is unsatisfiable in which case $\neg C$ is added as a additional clause to $F$,
+reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable in which case $\neg C$ is added as a additional clause to $F$,
 adds an additional clause $C$ to $F$,
 or does nothing.
 When $M$ is a complete assignment for $F$, then a theory solver can only choose to do nothing when $M_i$ is indeed $T_i$-satisfiable.
 
-The rules of the calculus from Section~\ref{sec:the-calculus} are implemented as follows.
-First, for each equality, we associate an \emph{explanation} for that equality.
-\rem{TODO}
+Assume $\Ec$ is initially the set $M_i$ described above.
+For each equality added to $\Ec$, we associate a set of equalities from $M_i$ that together $\thD$-entail $t \teq s$,
+which we call its \emph{explanation}.
+Similarly, each $\Val \ec{x}$ is also associated an explanation, that is, 
+a set of equalities from $M_i$ that $\thD$-entail that the values of $\ec{x}$ in models of $\Ec$ are of the form $\Val \ec{x}$.
+For instance, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \mu v_{\ec{x}}. \const{C}( v_{\ec{x}} )$.
+Thus, the rules of the calculus are implemented as follows.
+For all rules with conclusion $\bot$,
+we report the union of the explanations for all premises is $\thD$-unsatisfiable.
+For the \rn{Split} rule, we add a clause of the form
+$(\const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \vee \ldots \vee t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ))$
+to $F$.
+Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
+All other rules add equalities to the internal state of the theory solver.
 
-Step 1 of the calculus (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly, that is for partial satisfying assignments $M$, while step 2 and the \rn{Split} rule from step 3 are performed only for complete satisfying assignments $M$, and in that order.
+Step 1 of the calculus (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly, 
+that is for partial satisfying assignments $M$, while step 2 and the \rn{Split} rule from step 3 are performed only for complete satisfying assignments $M$, and in that order.
 
-
-  * Implementation
-    * what is an SMT theory solver
-    * sharing is caring (and other "refinements" on calculus)
+    * sharing is caring
     * theory combination more complicated (and Theorem Completeness too weak)
-      * need something like the string paper
-    * cooperation with Nelson-Oppen / integration into SMT solver
-    * "mu" stuff
-    * no "internal search"
-  * Enumerator?
-    * for model generation
 
 
 %\section{Examples}
