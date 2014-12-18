@@ -1285,8 +1285,69 @@ and assign it a value that is not bisimilar to one occurring in $\mathcal{T}^\M_
 Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
 We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
-We first state the following properties of $\Val^\ast$, 
-where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
+
+\begin{example}
+Let $\tau$ be a type in $\Codata$ with three constructors $\const{A}$, $\const{B}$ and $\const{C}$ each having type $\tau \rightarrow \tau$.
+Let $\Ec$ be the set consisting of equalities
+$\{$
+$y_1 \teq \const{A}( y_2 )$,
+$y_2 \teq \const{B}( x )$,
+$z_1 \teq \const{C}( z_2 )$,
+$z_2 \teq \const{A}( z_1 )$,
+$w_1 \teq \const{A}( x )$,
+$w_2 \teq \const{C}( w_3 )$,
+$x \not\teq y_2$,
+$\}$.
+After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains:
+\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{2.0em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
+\Val \ec{y_1} & = & \mu v_{\ec{y_1}}. & \const{A}( & \mu v_{\ec{y_2}}. & \const{B}( v_{\ec{x}} ) ) &
+\Val \ec{w_1} & = & \mu v_{\ec{w_1}}. & \const{A}( v_{\ec{x}} )      & \\ 
+\Val \ec{y_2} & = & \mu v_{\ec{y_2}}. & \multicolumn{2}{l}{\const{B}( v_{\ec{x}} )}      & &
+\Val \ec{w_2} & = & \mu v_{\ec{w_2}}. & \const{C}( v_{\ec{w_3}} ) \\
+\Val \ec{z_1} & = & \mu v_{\ec{z_1}}. & \const{C}( & \mu v_{\ec{z_2}}. & \const{A}( v_{\ec{z_1}} ) ) &
+\Val \ec{w_3} & = & v_{\ec{w_3}} \\
+\Val \ec{z_2} & = & \mu v_{\ec{z_2}}. & \const{A}( & \mu v_{\ec{z_1}}. & \const{C}( v_{\ec{z_2}} ) ) & 
+\Val \ec{x} & = & v_{\ec{x}} \\
+\end{array}\]
+
+To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, $v_{\ec{x}}$ and $v_{\ec{w_3}}$.
+The content of set $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$ is $\alpha$-equivalent to
+\[\begin{array}{c}
+\{
+\mu x. \const{A}( \mu y. \const{B}( x )),
+\mu x. \const{A}( \mu y. \const{B}( y )),
+\mu x. \const{B}( x ),
+\mu x. \const{C}( \mu y. \const{A}( x )),
+\mu x. \const{A}( \mu y. \const{C}( x )),
+\mu x. \const{A}( x )
+\}
+\end{array}\]
+Say that $\M$ interprets variables in $\Ec$ based on the mapping $\Val$,
+for instance, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
+Assigning a value for $v_{\ec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$
+may cause values in the range of $\Val$ to become $\alpha$-equivalent, 
+which in turn may cause $\M$ to be inconsistent.
+For instance, say we assign $\mu v_{\ec{x}}. \const{B}( v_{\ec{x}} )$ for $v_{\ec{x}}$.
+After this substitution, $\Val \ec{y_2}$ is $\mu v_{\ec{y_2}}. \const{B}( \mu v_{\ec{x}}. \const{B}( v_{\ec{x}} ) )$, 
+which has normal form $\mu v_{\ec{y_2}}. \const{B}( v_{\ec{y_2}} )$,
+which is $\alpha$-equivalent to $\mu v_{\ec{x}}. \const{B}( v_{\ec{x}} )$.
+However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
+
+Inversely, if the value assigned to $v_{\ec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$,
+then the values in the range of $\Val$ remain distinct.
+For instance, we may assign values such as 
+$\mu v_{\ec{x}}. \const{C}( v_{\ec{x}} )$,
+$\mu v_{\ec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, and
+$\mu v_{\ec{x}}. \const{B}( \mu x_1. \const{A}( v_{\ec{x}} ) )$
+to $v_{\ec{x}}$.
+Notice that legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain non-normal terms,
+as in after applying the third substitution mentioned above,
+$\Val \ec{w_1}$ is $\mu v_{\ec{w_1}}. \const{A}( \mu v_{\ec{x}}. \const{B}( \mu x_1. \const{A}( v_{\ec{x}} ) ) )$.
+$\Box$
+\end{example}
+
+We first state the following properties of $\Val^\ast$,.
+%where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
 
 \begin{lemma} 
 \label{lem:model-completion}
@@ -1318,7 +1379,7 @@ If $\tau \in \Codata$, then by Lemma~\ref{lem:corecursive-singletons},
 the cardinality of $\tau$ must be one.
 Since \rn{Singleton} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
-and thus there are no terms in $\mathcal{T}(\Val^\ast)$ of type $\tau$.
+and thus there are no terms in $\mathcal{T}^\M_x(\Val^\ast)$ of type $\tau$.
 This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to $v_{\ec{x}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction, 
@@ -1335,8 +1396,8 @@ To show 2,
 first note that since \rn{Clash} does not apply to $\Ec$,
 for all equivalence classes $\ec{y}$,
 each pair of constructor terms $\const{C}_i( \vec t )$ and $\const{C}_j( \vec u )$ in $\ec{y}$
-are such that $i = j$ since \rn{Clash} does not apply
-are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not apply.
+are such that $i = j$ since \rn{Clash} does not apply to $\Ec$,
+and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not apply to $\Ec$.
 Thus, 
 if $\const{C}_i( t_1, \ldots, t_n ) \in \ec{y}$,
 $\Val$ was constructed by applying a sequence of substitutions
@@ -1356,8 +1417,13 @@ Since $\Val'$ is obtained by applying the same substitution to all terms in the 
 we have that $\Val' \ec{x} \interp{w_i} = \Val' \ec{t_i}$,
 and hence $\Val^\ast \ec{x} \interp{w_i} = \Val^\ast \ec{t_i}$.
 
-
-
+To show 3,
+first note that since \rn{Bisimilar} does not apply,
+$\Val \ec{x} \sim \Val \ec{y}$ if and only if $\ec{x} = \ec{y}$.
+Since \rem{TODO}
+we have $\nf{(\Val \ec{x})} \sim \nf{(\Val \ec{y})}$ if and only if $\ec{x} = \ec{y}$.
+We show that for any substitution $\sigma$ applied to $\Val$ while constructing its completion is such that
+$\nf{(\Val \ec{x} \sigma)} \sim \nf{(\Val \ec{y} \sigma)}$ if and only if $\ec{x} = \ec{y}$.
 \rem{TODO}
 \qed
 \end{proof}
