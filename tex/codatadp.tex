@@ -1312,7 +1312,7 @@ After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains:
 
 To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, $v_{\ec{x}}$ and $v_{\ec{w_3}}$.
 The content of set $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$ is $\alpha$-equivalent to
-\[\begin{array}{c}
+\[%\begin{array}{c}
 \{
 \mu x. \const{A}( \mu y. \const{B}( x )),
 \mu x. \const{A}( \mu y. \const{B}( y )),
@@ -1321,7 +1321,8 @@ The content of set $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$ is $\alpha$-equivalent 
 \mu x. \const{A}( \mu y. \const{C}( x )),
 \mu x. \const{A}( x )
 \}
-\end{array}\]
+%\end{array}
+\]
 Say that $\M$ interprets variables in $\Ec$ based on the mapping $\Val$,
 for instance, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
 Assigning a value for $v_{\ec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$
@@ -1659,14 +1660,24 @@ makes a difference across all theories, and an overall difference of
 expensive rules, make a contribution. \textbf{NOT TRUE}: What is not visible in the table, but
 readily available when looking at the raw data \cite{our-eval-data}, is that
 the stronger decision procedures subsume the weaker ones. In the context of
-Sledgehammer, the power of interpreted (co)datatype is comparable with that of
-arithmetic \cite{blanchette-et-al-2013-smt}.
-
-
-
+Sledgehammer, the power of interpreted (co)datatypes is roughly
+comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}.
 
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
+
+\begin{verbatim}
+primcorec FIXME_x :: "nat tree" where
+  "FIXME_x = Node 0 num FIXME_x"
+
+lemma FIXME_x_unique: "x = Node 0 num x \<Longrightarrow> x = FIXME_x"
+proof (coinduction arbitrary: x rule: tree.coinduct_strong)
+  case (Eq_tree x)
+  show ?case
+    by (subst (1 2 3 4) Eq_tree) (simp add: eqTrueI[OF Eq_tree])
+qed
+\end{verbatim}
+
 
 \section{Conclusion}
 \label{sec:conclusion}
