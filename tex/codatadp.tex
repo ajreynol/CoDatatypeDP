@@ -819,8 +819,8 @@ that the type has at most one value.
 
 The decision procedure for the ground theory of (co)datatypes $\thD$ determines the
 $\thD$-satisfiability of sets of ground constraints over a fixed
-signature~$\Sig$. It is formulated as a calculus, whose rules can be applied in
-any order until saturation.
+signature~$\Sig$. It is formulated as a calculus, whose rules are applied
+until a contradiction is detected or until saturation.
 %
 The rules operate on a finite set $\Ec$ of equalities and disequalities
 between $\Sig$-terms, where $\Ec$ is interpreted as a conjunction.
@@ -1075,7 +1075,7 @@ The mapping $\Val$ is then modified by applying the following unfolding rule exh
   \Val := \Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}
 }
 \)
-\rn{Unfold}}
+%\rn{Unfold}}
 \]
 $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
 It is easy to see that the height of terms produced as a result of the unfolding
@@ -1085,7 +1085,7 @@ and thus the construction of $\Val$ will terminate.
 \begin{examplex}
 Suppose that $\Ec$ contains distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and $\ec{z}$
 where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$ for some $\const{C} \in \Ctr$.
-A possible sequence of \rn{Unfold} rule applications is given below, omitting
+A possible sequence of unfoldings is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
@@ -1399,7 +1399,7 @@ We construct $\Val^\ast$ by exhaustively applying the following rule to $\nf{\Va
   \Val := \nf{\Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t \}}
 }
 \)
-\rn{Assign}}
+%\rn{Assign}}
 \]
 %
 The rule chooses an unassigned variable in $\Val$
