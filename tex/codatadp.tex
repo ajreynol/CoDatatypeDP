@@ -12,7 +12,7 @@
 %\usepackage{mathrsfs}
 %\usepackage{pifont}
 %\usepackage{smallcap}
-\usepackage{mathpartir} 
+\usepackage{mathpartir}
 \usepackage{stmaryrd}
 \usepackage{subfigure}
 \usepackage[usenames]{color}
@@ -197,7 +197,7 @@ logical specifications. They are especially
 useful to represent finite data structures in computer science applications but
 also arise when formalizing mathematics.
 They can be implemented efficiently and enjoy
-properties that can be exploited in automated reasoners. 
+properties that can be exploited in automated reasoners.
 %
 %However, because datatype values correspond to finite ground terms, they
 %are generally not adequate to represent infinite objects.
@@ -258,7 +258,7 @@ The procedure is described abstractly as a calculus and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 To our knowledge, our procedure is the first of its kind for the theory of
-codatatypes. 
+codatatypes.
 
 Datatypes and codatatypes share many of the same properties, so it makes sense
 to consider them together. There are, however, at least three important
@@ -388,7 +388,7 @@ both methods naturally depend on a notion of datatype.
 %       * Dafny, CoALP
 %       * also a lot of theoretical research, some of which is loosely connected,
 %         e.g. decision procedure for corecursive functions (Henning in Nijmegen)
-% 
+%
 %     * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
 
 \paragraph{Conventions.}
@@ -685,7 +685,7 @@ Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory} of (co-)
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
 namely the ones that satisfy the axioms mentioned in this section.
 In particular, this means that each interpretation in $\mathbf{I}$ has a fixed interpretation
-for constructor terms and correctly-applied selector terms, but may differ on its interpretation for 
+for constructor terms and correctly-applied selector terms, but may differ on its interpretation for
 wrongly-applied selector terms and variables.
 A formula $\varphi$ is $\thD$-satisfiable if there is an interpretation in $\mathbf{I}$ that satisfies $\varphi$,
 and $\thD$-unsatisfiable otherwise.
@@ -818,7 +818,7 @@ phase computes the bidirectional closure of $\Ec$. The second phase makes
 inferences based on acyclicity (for datatypes) and bisimilarity (for
 codatatypes). The third phase performs case splitting on constructors for
 various terms in $\tEc$.
-%Following the conventions from~\cite{}, 
+%Following the conventions from~\cite{},
 %The derivation rules are given in \relax{guarded assignment form},
 %where
 A rule can be applied to $\Ec$ if all the specified preconditions are met.
@@ -839,7 +839,7 @@ further) before the next phase can begin.
 %in the second step, we make inferences based on cyclicity and bisimilarity;
 %and in the third step, %(when necessary),
 %we branch on constructor types for various terms in $\tEc$.
-%Following the conventions from~\cite{}, 
+%Following the conventions from~\cite{},
 %the derivation rules of our calculus are given in \emph{guarded assignment form},
 %where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
 %The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we call an application of it \emph{nonterminal}),
@@ -893,7 +893,7 @@ further) before the next phase can begin.
   \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
 }
 \)
-\rn{Cong} 
+\rn{Cong}
 \\[5\jot]
 \(
 \inferrule{
@@ -902,7 +902,7 @@ further) before the next phase can begin.
   \Ec := \Ec,\: \vec t \teq \vec u
 }
 \)
-\rn{Inject} 
+\rn{Inject}
 \qquad
 \(
 \inferrule{
@@ -1077,7 +1077,7 @@ Given $\Val$, the rules for acyclicity and bisimilarity can be stated as follows
 For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x.\; u$ are cyclic,
 as indicated by the assumption $x \in \FV( u )$,
 then we can conclude that $\Ec$ is unsatisfiable.
-For bisimilarity, if there are two equivalence classes $\ec{t}$ and $\ec{u}$ 
+For bisimilarity, if there are two equivalence classes $\ec{t}$ and $\ec{u}$
 of codatatype type whose classes of values $\Val \ec{t}$ and $\Val \ec{u}$ are equivalent for a capture-avoiding renaming of $\mu$-bound variables,
 then we can conclude $t \teq u$.
 We demonstrate the bisimilarity rule concretely with the following example.
@@ -1089,15 +1089,15 @@ After phase~1, the equivalence classes of $\Ec$ are
 $\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
 We then construct $\Val$ using the aforementioned phases, after which we obtain:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l}
-\Val \ec{x} & = & 
+\Val \ec{x} & = &
 \mu {\Varec{x}}. & \const{C}( {\Varec{y}}, & \mu {\Varec{\const{C}(y,x)}}. & \const{C}( {\Varec{y}}, {\Varec{x}} ) ) \\
-\Val \ec{\const{C}(y,x)} & = & 
+\Val \ec{\const{C}(y,x)} & = &
 \mu {\Varec{\const{C}(y,x)}}. & \const{C}( {\Varec{y}}, & \mu {\Varec{x}}. & \const{C}( {\Varec{y}}, {\Varec{\const{C}(y,x)}} ) )
 \end{array}\]
 Notice that $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are syntactically equivalent for the renaming
 $\{ {\Varec{x}} \mapsto {\Varec{\const{C}(y,x)}}, {\Varec{\const{C}(y,x)}} \mapsto {\Varec{x}} \}$,
 and thus our calculus may infer $x \teq \const{C}(y,x)$.
-Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$ 
+Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$
 are equivalent for any value of ${\Varec{y}}$.
 $\Box$
 \end{example}
@@ -1121,18 +1121,18 @@ $\Box$
 \\[5\jot]
 \(
 \inferrule{
-  t : \tau \in \tEc 
-  \quad 
-  ( s( t ) \in \tEc, s \in \Sel^\tau ) 
-  \text{ or } 
+  t : \tau \in \tEc
+  \quad
+  ( s( t ) \in \tEc, s \in \Sel^\tau )
+  \text{ or }
   ( \tau \in \Data, \tau \text{ finite } )
 }{
-  \Ec := \Ec,\: t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ) 
+  \Ec := \Ec,\: t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) )
 }
 \)
-\rn{Split} 
+\rn{Split}
 \end{tabular}
-\caption{\,Derivation rules for branching%.  
+\caption{\,Derivation rules for branching%.
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
 %Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
 }
@@ -1143,18 +1143,18 @@ $\Box$
 In the third phase,
 the \rn{Singleton} rule handles the case when there are two terms from $\tEc$
 having a co-recursive singleton type, in which case they must be equivalent.
-Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type, 
-then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
+Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type,
+then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$),
 which is enforced by the rule \rn{Split}.
 
 An application of a rule is \emph{redundant} if at least one branch in the
 conclusion does not add a new equality to $\Ec$ and is not $\bot$.
-A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes vtained by 
+A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes vtained by
 a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
 A node is \emph{saturated} if no nonredundant application of a rule can be applied to it.
 If there exists a closed derivation tree with root node $\Ec$, then we conclude that $\Ec$ is $\thD$-unsatisfiable.
-If there exists a derivation tree with root node $\Ec$ that contains a saturated node, then we conclude that $\Ec$ is $\thD$-satisfiable. 
+If there exists a derivation tree with root node $\Ec$ that contains a saturated node, then we conclude that $\Ec$ is $\thD$-satisfiable.
 
 \paragraph{Correctness.}
 
@@ -1174,8 +1174,8 @@ and let $S^\ast_t$ be the fixed point of this sequence.
 We know this is a finite set for each $t$ since the values of the type of $t$ are of finite size.
 Let $S^\ast$ be the union of $S^\ast_t$ for all $t \in T$,
 and let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \cup S^\ast, C_i \in \Ctr^\tau \}$.
-In a derivation tree with root node $\Ec$, 
-it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that 
+In a derivation tree with root node $\Ec$,
+it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and moreover thus contains an equality between two terms from $\tcEc$ not occurring in its parent node.
 Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\mid \tcEc \mid^2$,
 which is finite since $\tcEc$ is finite.
@@ -1195,20 +1195,20 @@ For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
 For \rn{Acyclic}, our construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
-If the children of $\Ec$ are closed derivation trees 
+If the children of $\Ec$ are closed derivation trees
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
 then by the induction hypothesis $\Ec \cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
 for each $C_i \in \Ctr^\tau$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
-Otherwise, the child of $\Ec$ is a closed derivation tree 
+Otherwise, the child of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Bisimilar}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
 For \rn{Bisimilar}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
 For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
-By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is $\thD$-unsatisfiable, 
+By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is $\thD$-unsatisfiable,
 and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
 \end{proof}
@@ -1218,7 +1218,7 @@ then $\Ec$ is satisfiable $\thD$.
 To do so, we demonstrate a particular model $\M$ of $\thD$ that satisfies $\Ec$,
 but first we require additional terminology concerning $\mu$-terms.
 
-For a $\mu$-term $t_1$ with subterm $t_2$, 
+For a $\mu$-term $t_1$ with subterm $t_2$,
 the \emph{interpretation of $t_2$ in $t_1$} is the $\mu$-term $t_1\interp{t_2}^\emptyset$ as returned by the following recursive procedure,
 where $x \mapsto \mu x. \const{C}( \vec u ) \in t_1$ indicates that $\mu x. \const{C}( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
@@ -1234,24 +1234,24 @@ we say $t_2$ is a \emph{bisimilar subterm} of $t_1$ if and only if it is of the 
 $\mu y. \const{C}( v_1, \ldots, v_n )$ and $t_1\interp{ u_i } \sim t_1\interp{ v_i }$ for $i = 1,\ldots, n$.
 We say $t_1$ is \emph{normal} if and only if it does not contain a strict bisimilar subterm
 and all of its strict subterms are also normal.
-For instance, the $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( y ) )$ is not normal, 
+For instance, the $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( y ) )$ is not normal,
 since $\mu y. \const{C}( y )$ is a bisimilar subterm of $t_1$.
-In particular, note that their arguments have the same interpretation in $t_1$, 
+In particular, note that their arguments have the same interpretation in $t_1$,
 that is,
-$t_1\interp{\mu y. \const{C}( y )}^\emptyset =$ 
-$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$ 
-$\mu y. \const{C}( y )$ 
+$t_1\interp{\mu y. \const{C}( y )}^\emptyset =$
+$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$
+$\mu y. \const{C}( y )$
 is syntactically equivalent to
-$t_1\interp{y}^\emptyset =$ 
-$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$ 
+$t_1\interp{y}^\emptyset =$
+$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$
 $\mu y. \const{C}( y )$.
-The $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( x ) )$ is also not normal, 
+The $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( x ) )$ is also not normal,
 since $\mu y. \const{C}( x )$ is a bisimilar subterm of $t_1$,
 noting that
-$t_1\interp{\mu y. \const{C}( x )}^\emptyset =$ 
-$\mu y. \const{C}( t_1\interp{x}^{\{y\}} ) =$ 
-$\mu y. \const{C}( t_1\interp{\mu x. \const{C}( \mu y. \const{C}( x ) ) }^{\{y\}} ) =$ 
-$\mu y. \const{C}( \mu x. \const{C}( t_1\interp{\mu y. \const{C}( x )}^{\{x,y\}} ) ) =$ 
+$t_1\interp{\mu y. \const{C}( x )}^\emptyset =$
+$\mu y. \const{C}( t_1\interp{x}^{\{y\}} ) =$
+$\mu y. \const{C}( t_1\interp{\mu x. \const{C}( \mu y. \const{C}( x ) ) }^{\{y\}} ) =$
+$\mu y. \const{C}( \mu x. \const{C}( t_1\interp{\mu y. \const{C}( x )}^{\{x,y\}} ) ) =$
 $\mu y. \const{C}( \mu x. \const{C}( y ) )$
 is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
@@ -1293,17 +1293,17 @@ that is, an element of $\M( \tau )$ where $\tau$ is the type of $t$.
 \begin{definition}[Normal Model] \label{def:norm-model}
 A model $\M$ is \emph{normal} if and only if:
 \begin{enumerate}
-\item 
-for all types $\tau$, 
-$\M( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are 
+\item
+for all types $\tau$,
+$\M( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
 unique up to renaming of $\mu$-bound variables,
 and acyclic when $\tau \not\in \Codata$,
-\item 
+\item
 for all constructor terms $\const{C}( \vec t \,)$ of type $\tau$,
-$\M( \const{C}( \vec t \,) )$ is the value 
+$\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{(\mu x. \const{C}( \M( \vec t \,) ))}$ where $x$ is fresh, and
-\item 
+\item
 for all selector terms $s^j_i( t )$ of type $\tau$,% for some $\vec u$,
 $\M( s^j_i( t ) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
@@ -1322,7 +1322,7 @@ which we construct by assigning values from $\M$ to unassigned variables in the 
 First, we need the following definition.
 We say that $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
 for some renaming that avoids capturing any variable other than $x$.
-For instance, 
+For instance,
 $\mu x. \const{D}( x ) \vsimv{y} \mu x. \const{D}( y )$,
 $\mu x. \const{C}( x, x ) \vsimv{x} \mu y. \const{C}( x, y )$ and
 $\mu x. \const{C}( z, x ) \vsimv{z} \mu y. \const{C}( z, y )$,
@@ -1336,7 +1336,7 @@ We construct $\Val^\ast$ by exhaustively applying the following update to $\Val$
 
 \(
 \inferrule{
-  x : \tau \in \FV( \Val ) 
+  x : \tau \in \FV( \Val )
   \quad
   (\mu x. t) \aequiv v
   \quad
@@ -1350,7 +1350,7 @@ We construct $\Val^\ast$ by exhaustively applying the following update to $\Val$
 
 In this update, we choose an unassigned variable in $\Val$
 and assign it a value that is not $\alpha$-equivalent to one occurring in $\mathcal{T}^\M_x(\Val)$.
-Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $\FV( \Val )$, 
+Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $\FV( \Val )$,
 it can only be applied a finite number of times.
 After assigning this value, we normalize all terms in the range of $\Val$.
 %We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
@@ -1370,12 +1370,12 @@ $\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{2.0em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
 \Val \ec{y_1} & = & \mu {\Varec{y_1}}. & \const{A}( & \mu {\Varec{y_2}}. & \const{B}( {\Varec{x}} ) ) &
-\Val \ec{w_1} & = & \mu {\Varec{w_1}}. & \const{A}( {\Varec{x}} )      & \\ 
+\Val \ec{w_1} & = & \mu {\Varec{w_1}}. & \const{A}( {\Varec{x}} )      & \\
 \Val \ec{y_2} & = & \mu {\Varec{y_2}}. & \multicolumn{2}{l}{\const{B}( {\Varec{x}} )}      & &
 \Val \ec{w_2} & = & \mu {\Varec{w_2}}. & \const{C}( {\Varec{w_3}} ) \\
 \Val \ec{z_1} & = & \mu {\Varec{z_1}}. & \const{C}( & \mu {\Varec{z_2}}. & \const{A}( {\Varec{z_1}} ) ) &
 \Val \ec{w_3} & = & {\Varec{w_3}} \\
-\Val \ec{z_2} & = & \mu {\Varec{z_2}}. & \const{A}( & \mu {\Varec{z_1}}. & \const{C}( {\Varec{z_2}} ) ) & 
+\Val \ec{z_2} & = & \mu {\Varec{z_2}}. & \const{A}( & \mu {\Varec{z_1}}. & \const{C}( {\Varec{z_2}} ) ) &
 \Val \ec{x} & = & {\Varec{x}} \\
 \end{array}\]
 
@@ -1395,16 +1395,16 @@ The content of the set $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$ is $\alpha$-equiva
 Now, consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$,
 for instance, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
 Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$
-may cause values in the range of $\Val$ to become $\alpha$-equivalent, 
+may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\M$ to be inconsistent.
 For instance, say we assign $\mu {\Varec{x}}. \const{B}( {\Varec{x}} )$ for ${\Varec{x}}$.
-After this substitution, $\Val \ec{y_2}$ is $\mu {\Varec{y_2}}. \const{B}( \mu {\Varec{x}}. \const{B}( {\Varec{x}} ) )$, 
+After this substitution, $\Val \ec{y_2}$ is $\mu {\Varec{y_2}}. \const{B}( \mu {\Varec{x}}. \const{B}( {\Varec{x}} ) )$,
 which has normal form $\mu {\Varec{y_2}}. \const{B}( {\Varec{y_2}} )$,
 which is $\alpha$-equivalent to $\mu {\Varec{x}}. \const{B}( {\Varec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
 Inversely, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
 then the values in the range of $\Val$ remain $\alpha$-disequivalent.
-For instance, we may assign values such as 
+For instance, we may assign values such as
 $\mu {\Varec{x}}. \const{C}( {\Varec{x}} )$,
 $\mu {\Varec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, or
 $\mu {\Varec{x}}. \const{B}( \const{A}( {\Varec{x}} ) )$
@@ -1420,7 +1420,7 @@ $\Box$
 We first state the following properties of $\Val^\ast$.
 %where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
 
-\begin{lemma} 
+\begin{lemma}
 \label{lem:model-completion}
 If $\Val$ is constructed for a saturated $\Ec$,
 and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
@@ -1434,7 +1434,7 @@ and $\Val^\ast \ec{x} \interp{ w_i } = \Val^\ast \ec{t_i}$ for $i = 1, \ldots, n
 %\item
 %$t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
 %for all $t_1$ with subterm $t_2$ in the range of $\Val^\ast$ where $\muvar(t_2)={\Varec{x}}$,
-\item 
+\item
 $\Val^\ast \ec{x} \vsim \Val^\ast \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
@@ -1453,23 +1453,23 @@ there is only one equivalence class of type $\tau$ in $\Ec$,
 and thus there are no terms in $\mathcal{T}^\M_x(\Val^\ast)$ of type $\tau$.
 This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to ${\Varec{x}}$.
 Now, consider the case when $\tau$ is infinite.
-This is also a contradiction, 
+This is also a contradiction,
 since there are only a finite number of closed terms in $\mathcal{T}^\M_x(\Val^\ast)$,
 and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_x(\Val^\ast)$ to ${\Varec{y}}$.
 By construction, $\Val^\ast \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
-Moreover, our construction of $\Val^\ast$ applies substitutions of the form 
+Moreover, our construction of $\Val^\ast$ applies substitutions of the form
 $\{ y \mapsto t \}$, where $t$ is acyclic when the type of $y$ is not a codatatype.
 Thus, $\Val^\ast \ec{x}$ is acyclic when $\tau \not\in \Codata$.
 Therefore, by definition, $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
 
-To show 2, 
+To show 2,
 first note that since \rn{Clash} does not apply to $\Ec$,
 for all equivalence classes $\ec{y}$,
 each pair of constructor terms $\const{C}_i( \vec t )$ and $\const{C}_j( \vec u )$ in $\ec{y}$
 are such that $i = j$ since \rn{Clash} does not apply to $\Ec$,
 and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply to $\Ec$.
-Thus, 
+Thus,
 if $\const{C}_i( t_1, \ldots, t_n ) \in \ec{y}$,
 $\Val$ was constructed by applying a sequence of substitutions
 that replace ${\Varec{y}}$ by $\mu {\Varec{y}}. \const{C}_i( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )$.
@@ -1506,11 +1506,11 @@ If there exists a derivation tree with root node $\Ec$ containing a saturated no
 \end{lemma}
 \begin{proof}
 Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
-%We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where 
+%We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where
 %all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
-We consider a normal model $\M$ 
+We consider a normal model $\M$
 that interprets wrongly-applied selectors based on equality information in $\Fc$,
 and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from phase~2.
 For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
@@ -1523,7 +1523,7 @@ which since $\M$ is normal, implies $\M \models t_1 \teq t_2$.
 
 If $t$ is a variable, then $\M( t ) \vsim \Val^\ast \ec{ t }$ by construction.
 
-If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$, 
+If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
 then $\M( t )$ is $\alpha$-equivalent with $\nf{(\mu x. \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) )}$ for fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
 By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{t}$ is a term
@@ -1543,12 +1543,12 @@ Since $\vsim$ is a transitive relation and since $\M( t ) \vsim t_u \vsim t_w = 
 we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 
 If $t$ is a selector term of the form $s^j_k( u )$,
-since \rn{Split} does not apply, 
+since \rn{Split} does not apply,
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) )$ for some $i$.
 By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{u}$ is a term $t_w$ of the form
 $\mu {\Varec{u}}. C_i( w_1, \ldots, w_n )$,
-where $t_w \interp{ w_j } = \Val^\ast \ec{ s^j_k( u )}$. 
-%By our construction of $\Val^\ast$ and since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
+where $t_w \interp{ w_j } = \Val^\ast \ec{ s^j_k( u )}$.
+%By our construction of $\Val^\ast$ and since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 %$\Val^\ast \ec{ u }$ must be of the form $t_u = \mu {\Varec{u}}. C_i( u_1, \ldots, u_n )$,
 %where $\muvar( u_1 ) = {\Varec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = {\Varec{s^n_i( u )}}$,
 %and $\M( u )$ is of the form $t_w = \mu x. C_i( w_1, \ldots, w_n )$,
@@ -1557,9 +1557,9 @@ If $k = i$, then $\M( t )$ is $\alpha$-equivalent with $t_w\interp{w_j} = \Val^\
 which is $\Val^\ast \ec{t}$.
 %which since $t_w \vsim t_u$ by Lemma~\ref{lem:mu-cong} is bisimilar with $t_u\interp{u_j}$,
 %which by Lemma~\ref{lem:model-completion}.2 is equal to $\Val^\ast \ec{ s^j_k( u )}$.
-%Thus, $\M( t ) \vsim \Val^\ast \ec{ s^j_k( u )} 
+%Thus, $\M( t ) \vsim \Val^\ast \ec{ s^j_k( u )}
 If $k \neq i$, then we interpret $s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
-Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3, 
+Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3,
 pairs of wrongly-applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
 
@@ -1596,15 +1596,15 @@ This section describes how the calculus in Section~\ref{sec:a-ground-decision-pr
 We first discuss several optimizations that are not reflected in the presentation of the calculus, which closely follow the approach outlined by Barrett et al in~\cite{}.
 We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in~\cite{}.
 
-Discriminators are treated as predicate symbols, so a discriminator $\const{d}_i( t )$ is such that $\const{d}_i$ 
+Discriminators are treated as predicate symbols, so a discriminator $\const{d}_i( t )$ is such that $\const{d}_i$
 is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_i( s^1_i( t ), \ldots, s^n_i( t ) )$.
 We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
-if $s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor 
-$\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.  
+if $s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor
+$\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
-In particular, we 
+In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
 replace $\const{C}_i( \vec t ) \teq \const{C}_j( \vec u )$ with $\bot$ when $i \neq j$,
 replace all selector terms of the form $\const{s}^{\,i}_j( \const{C}_j(t_1,\ldots,t_n) )$ by $t_i$,
@@ -1618,10 +1618,10 @@ the DPLL(T) \rem{CDCL(T)?} procedure
 (incrementally) builds partial assignments from the atomic formulas of $F$ to truth values such that no clause in $F$ is falsified.
 We may interpret this partial assignment as a set of literals where $a \in M$ for all atoms $a$ that it assigned the value $\top$, and $\neg a \in M$ for all atoms that it assigns the value $\bot$.
 Then, at a high level, by the Nelson-Oppen combination framework,
-each $T_i$-solver for $i = 1, \ldots, n$ takes as input a combination of (1) the purified form of $T_i$-constraints occurring in $M$ where terms containing symbols not belonging to $T_i$ are replaced by fresh variables of the same type, 
+each $T_i$-solver for $i = 1, \ldots, n$ takes as input a combination of (1) the purified form of $T_i$-constraints occurring in $M$ where terms containing symbols not belonging to $T_i$ are replaced by fresh variables of the same type,
 (2) additional equalities and disequalities between variables of types not belonging to $T_i$.
 Let us call this set $M_i$.
-Each $T_i$ solver either 
+Each $T_i$ solver either
 reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case $\neg C$ is added as a additional clause to $F$,
 adds an additional clause $C$ to $F$,
 or does nothing.
@@ -1630,7 +1630,7 @@ When $M$ is a complete assignment for $F$, then a theory solver can only choose 
 Assume $\Ec$ is initially the set $M_i$ described above.
 For each equality added to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t \teq s$,
 which we call its \emph{explanation}.
-Similarly, each $\Val \ec{x}$ is also associated an explanation, that is, 
+Similarly, each $\Val \ec{x}$ is also associated an explanation, that is,
 a set of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of $\Ec$ are of the form $\Val \ec{x}$.
 For instance, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \mu {\Varec{x}}. \const{C}( {\Varec{x}} )$.
 Thus, the rules of the calculus are implemented as follows.
@@ -1641,8 +1641,8 @@ $(\const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \vee \ldots \vee t \teq \con
 to $F$.
 Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
 All other rules add equalities to the internal state of the theory solver.
-The rules in phase~1 (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly, 
-that is for partial satisfying assignments $M$, while the rules in phase~2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$, 
+The rules in phase~1 (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly,
+that is for partial satisfying assignments $M$, while the rules in phase~2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$,
 and in that order.
 
     * sharing is caring
