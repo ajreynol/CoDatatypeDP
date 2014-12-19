@@ -70,6 +70,8 @@
 \newcommand\const[1]{\textsf{#1}}
 \newcommand\ty[1]{\textit{#1}}
 
+\newcommand\xend{{\hfill\footnotesize$\blacksquare$}}
+
 %\renewcommand{\vec}[1]{\mathbf{#1}}
 \renewcommand{\vec}[1]{\bar #1}
 \newcommand{\Ec}{\mathsf{E}}
@@ -89,7 +91,7 @@
 \newcommand{\rem}[1]{\textcolor{red}{[#1]}}
 %\newcommand{\is}[1]{is\text{-} #1}
 \newcommand{\is}[1]{\const{is#1}}
-\newcommand{\ror}{\quad \parallel \quad}
+\newcommand{\ror}{\kern.45em \parallel \kern.45em}
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
 \newcommand{\interp}[1]{[\![ #1 ]\!]}
@@ -1071,7 +1073,7 @@ This indicates that the values for $x$ and $y$ in models of $\Ec$
 are of the forms $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots ))))$
 and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))))$,
 respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
-$\Box$
+\xend
 \end{example}
 
 Given $\Val$, the rules for acyclicity and uniqueness can be stated as follows.
@@ -1100,7 +1102,7 @@ $\{ {\Varec{x}} \mapsto {\Varec{\const{C}(y,x)}}, {\Varec{\const{C}(y,x)}} \maps
 and thus our calculus may infer $x \teq \const{C}(y,x)$.
 Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$
 are equivalent for any value of ${\Varec{y}}$.
-$\Box$
+\xend
 \end{example}
 
 \begin{figure}[t]
@@ -1124,11 +1126,11 @@ $\Box$
 \inferrule{
   t : \tau \in \tEc
   \quad
-  ( s( t ) \in \tEc, s \in \Sel^\tau )
+  ( s( t ) \in \tEc \text{ and } s \in \Sel^\tau )
   \text{ or }
-  ( \tau \in \Data, \tau \text{ finite } )
+  ( \tau \in \Data \text{ and } \tau \text{ finite} )
 }{
-  \Ec := \Ec,\: t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) )
+  \Ec := \Ec,\: t \teq \const{C}_1(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec,\: t \teq \const{C}_m(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) )
 }
 \)
 \rn{Split}
@@ -1415,7 +1417,7 @@ as in after applying the substitution for the third term mentioned above,
 $\Val \ec{w_1}$ is $\mu {\Varec{w_1}}. \const{A}( \mu {\Varec{x}}. \const{B}( \const{A}( {\Varec{x}} ) ) )$,
 which has normal form
 $\mu {\Varec{w_1}}. \const{A}( \mu {\Varec{x}}. \const{B}( {\Varec{w_1}} ) )$.
-$\Box$
+\xend
 \end{example}
 
 We first state the following properties of $\Val^\ast$.
