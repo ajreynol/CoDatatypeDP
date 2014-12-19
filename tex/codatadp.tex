@@ -1214,7 +1214,7 @@ for $i \geq 0$ let $\SSSS {i+1}_t =$ $\SSSS i_t \mathrel\cup \{ \const s( u ) \m
 and let $\SSSS \ast_t$ be the fixed point of this sequence.
 We know this is a finite set for each $t$ since the values of the type of $t$ are of finite size.
 Let $\SSSS \ast$ be the union of $\SSSS \ast_t$ for all $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_i( \const s^1_i( t ), \ldots, \const s^{n_i}_i( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \ast,\, \const C_i \in \Ctr^\delta \}$.
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \ast,\, \const C_j \in \Ctr^\delta \}$.
 In a derivation tree with root node~$\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
@@ -1238,9 +1238,9 @@ For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values 
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
-by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{n_i}_i( t ) )$ is unsatisfiable
-for each $\const C_i \in \Ctr^\delta$.
-Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{n_i}_i( t ) )$,
+by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) )$ is unsatisfiable
+for each $\const C_j \in \Ctr^\delta$.
+Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
@@ -1279,7 +1279,7 @@ We write $t\interp{u}$ to abbreviate $t\interp{u}^\emptyset$.
 
 Given a $\mu$-term $t$ of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$ with subterm $u$,
 we say $u$ is a \emph{bisimilar subterm} of $t$ if it is of the form
-$\MU y.\; \const{C}( u_1, \ldots, u_n )$ and $t\interp{ t_i } \aequiv t\interp{ u_i }$ for $i = 1,\ldots, n$.
+$\MU y.\; \const{C}( u_1, \ldots, u_n )$ and $t\interp{ t_k } \aequiv t\interp{ u_k }$ for $k = 1,\ldots, n$.
 The term $t$ is \emph{normal} if it does not contain a strict, bisimilar subterm
 and all of its strict subterms are also normal.
 For example, the $\mu$-term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal,
@@ -1317,7 +1317,7 @@ If $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU 
 then $\vec u \vsim t\interp{\vec w}$.
 \end{lemma}
 \begin{proof}
-%Since $u_i$ is normal, $w_i$ is the result of replacing all subterms $v$ of $u_i$ such that $t\interp{v} \aequiv t$ with $x$.
+%Since $u_k$ is normal, $w_k$ is the result of replacing all subterms $v$ of $u_k$ such that $t\interp{v} \aequiv t$ with $x$.
 \rem{TODO}
 \end{proof}
 
@@ -1355,11 +1355,11 @@ $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$ where $x$ is fresh.
 \item
-For all selector terms $\const s^k_i( t )$ of type $\tau$, % for some $\vec u$,
-$\M( \const s^k_i( t ) )$ is the value
+For all selector terms $\const s^k_j( t )$ of type $\tau$, % for some $\vec u$,
+$\M( \const s^k_j( t ) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\M( t )\interp{u_j}$
-when $\M( t )$ is of the form $\MU x.\; \const{C}_i( \vec u )$.
+when $\M( t )$ is of the form $\MU x.\; \const{C}_j( \vec u )$.
 \end{enumerate}
 \end{definition}
 
@@ -1526,13 +1526,13 @@ Therefore, by definition, $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value i
 To show 2,
 first note that since \rn{Clash} does not apply to $\Ec$,
 for all equivalence classes $\ec{z}$,
-each pair of constructor terms $\const{C}_i( \vec t )$ and $\const{C}_j( \vec u )$ in $\ec{z}$
-are such that $i = j$ since \rn{Clash} does not apply to $\Ec$,
+each pair of constructor terms $\const{C}_j( \vec t )$ and $\const{C}_{j'}( \vec u )$ in $\ec{z}$
+are such that $j = j'$ since \rn{Clash} does not apply to $\Ec$,
 and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not apply to $\Ec$.
 Thus, 
-if $\const{C}_i( t_1, \ldots, t_n ) \in \ec{z}$,
+if $\const{C}_j( t_1, \ldots, t_n ) \in \ec{z}$,
 $\Val$ was constructed by applying a sequence of substitutions
-where ${\Varec{z}}$ was replaced only by $\MU {\Varec{z}}.\; \const{C}_i( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )$.
+where ${\Varec{z}}$ was replaced only by $\MU {\Varec{z}}.\; \const{C}_j( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )$.
 Assume $\Val \ec{y}$ has a subterm $\MU {\Varec{x}}.\; \const{C}( \vec t )$.
 We first show that our construction of $\Val$ is such that $\Val \ec{x} = \Val \ec{y}\interp{ \MU {\Varec{x}}.\; t }$.
 Notice that both $\Val \ec{x}$ and the subterm $\MU {\Varec{x}}.\; t$ of $\Val \ec{y}$ were
@@ -1590,7 +1590,7 @@ which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \con
 By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{t}$ is a term
 $t_w$ of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 where $t_w\interp{w_i} = \Val^\ast \ec{u_i}$ for $i = 1, \ldots, n$.
-For each $i = 1, \ldots, n$, let $u_i'$ be the $i^{th}$ argument of $t_u$.
+For each $i = 1, \ldots, n$, let $u_i'$ be the $i$\vvthinspace th argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$,
 and thus $t_u\interp{u_i'} \vsim t_w\interp{ w_i }$. % for each $i = 1, \ldots, n$.
 By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
@@ -1599,9 +1599,9 @@ we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 
 If $t$ is a selector term of the form $\const s^j_k( u )$,
 since \rn{Split} does not apply,
-$\ec{u}$ must contain a term of the form $\const C_i( \const s^1_i( u ), \ldots, \const s^{n}_i( u ) )$ for some $i$.
+$\ec{u}$ must contain a term of the form $\const C_j( \const s^1_j( u ), \ldots, \const s^{n}_j( u ) )$ for some $j$.
 By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{u}$ is a term $t_w$ of the form
-$\MU {\Varec{u}}.\; \const C_i( w_1, \ldots, w_n )$,
+$\MU {\Varec{u}}.\; \const C_j( w_1, \ldots, w_n )$,
 where $t_w \interp{ w_j } = \Val^\ast \ec{ \const s^j_k( u )}$. 
 If $k = i$, then $\M( t )$ is $\alpha$-equivalent with $t_w\interp{w_j} = \Val^\ast \ec{ \const s^j_k( u )}$,
 which is $\Val^\ast \ec{t}$.
@@ -1643,19 +1643,19 @@ This section describes how the calculus in Section~\ref{sec:a-ground-decision-pr
 We first discuss several optimizations that are not reflected in the presentation of the calculus, which closely follow the approach outlined by Barrett et al in~\cite{}.
 We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in~\cite{}.
 
-Discriminators are treated as predicate symbols, so a discriminator $\const{d}_i( t )$ is such that $\const{d}_i$
-is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_i( \const s^1_i( t ), \ldots, \const s^n_i( t ) )$.
+Discriminators are treated as predicate symbols, so a discriminator $\const{d}_j( t )$ is such that $\const{d}_j$
+is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_j( \const s^1_j( t ), \ldots, \const s^n_j( t ) )$.
 We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
-if $\const s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor
-$\const{C}_i( \vec u )$, we immediately infer $\const s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
+if $\const s^k_j( t )$ is a term in $\tEc$ and $t$ contains the constructor
+$\const{C}_j( \vec u )$, we immediately infer $\const s^k_j( t ) \teq u_k$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
 In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
-replace $\const{C}_i( \vec t ) \teq \const{C}_j( \vec u )$ with $\bot$ when $i \neq j$,
-replace all selector terms of the form $\const{s}^{\,i}_j( \const{C}_j(t_1,\ldots,t_n) )$ by $t_i$,
-and replace all occurrences of discriminators $\const{d}_i( \const{C}_k( \vec t ) )$ by $\top$ if $i=k$ and $\bot$ if $i \neq k$.
+replace $\const{C}_j( \vec t ) \teq \const{C}_{j'}( \vec u )$ with $\bot$ when $j \neq j'$,
+replace all selector terms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$ by $t_k$,
+and replace all occurrences of discriminators $\const{d}_j( \const{C}_{j'}( \vec t ) )$ by $\top$ if $j=j'$ and $\bot$ otherwise.
 
 \paragraph{Integration into DPLL(T)}
 The calculus is implemented as \emph{theory solver} of CVC4,
@@ -1665,7 +1665,7 @@ the DPLL(T) \rem{CDCL(T)?} procedure
 (incrementally) builds partial assignments from the atomic formulas of $F$ to truth values such that no clause in $F$ is falsified.
 We may interpret this partial assignment as a set of literals where $a \in M$ for all atoms $a$ that it assigned the value $\top$, and $\neg a \in M$ for all atoms that it assigns the value $\bot$.
 Then, at a high level, by the Nelson--Oppen combination framework,
-each $T_i$-solver for $i = 1, \ldots, n$ takes as input a combination of (1) the purified form of $T_i$-constraints occurring in $M$ where terms containing symbols not belonging to $T_i$ are replaced by fresh variables of the same type,
+each $T_i$-solver for $i = 1, \ldots, l$ takes as input a combination of (1) the purified form of $T_i$-constraints occurring in $M$ where terms containing symbols not belonging to $T_i$ are replaced by fresh variables of the same type,
 (2) additional equalities and disequalities between variables of types not belonging to $T_i$.
 Let us call this set $M_i$.
 Each $T_i$ solver either
