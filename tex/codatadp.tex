@@ -769,9 +769,8 @@ $\thD$-satisfiability of sets of ground constraints over a fixed
 signature~$\Sig$. It is presented as a calculus, whose rules can be applied in
 any order until saturation.
 
-The calculus consists of derivation rules that operate on a set $\Ec$ of
-equalities and disequalities between $\Sig$-terms, where $\Ec$ is interpreted
-as a conjunction.
+The derivation rules operate on a set $\Ec$ of equalities and disequalities
+between $\Sig$-terms, where $\Ec$ is interpreted as a conjunction.
 We write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
@@ -797,12 +796,16 @@ The second phase makes inferences based on acyclicity (for datatypes)
 and bisimilarity (for codatatypes).
 The third phase performs case splitting on constructors
 for various terms in $\tEc$.
-Following the conventions from~\cite{}, 
-the derivation rules of our calculus are given in \emph{guarded assignment form},
-where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
-The conclusion of a rule either describes equalities to be added to $\Ec$ (in which case we call an application of it \emph{nonterminal}),
-or is $\bot$ (in which case we call an application of it \emph{terminal}).
-A rule may have multiple conclusions separated by $\parallel$, which denotes nondeterministic branching.
+%Following the conventions from~\cite{}, 
+%The derivation rules are given in \relax{guarded assignment form},
+%where
+A rule can be applied to $\Ec$ if all the specified preconditions are met.
+The conclusion of a rule either describes equalities to be added to $\Ec$
+or is $\bot$.
+% (in which case we call an application of it \emph{nonterminal})
+% (in which case we call an application of it \emph{terminal}).
+A rule may have multiple conclusions separated by $\parallel$,
+denoting nondeterministic branching.
 
 \begin{figure}[t]
 \normalsize
@@ -819,16 +822,16 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \qquad
 \(
 \inferrule{
- t_1 \teq t_2 \in \Ec
+ t \teq u \in \Ec
 }{
- \Ec := \Ec,\: t_2 \teq t_1
+ \Ec := \Ec,\: u \teq t
 }
 \)
 \rn{Sym}
 \qquad
 \(
 \inferrule{
-  t_1 \teq t_2,\; t_1 \tneq t_2 \in \Ec
+  t \teq u,\; t \tneq u \in \Ec
 }{
   \bot
 }
@@ -837,9 +840,9 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \\[5\jot]
 \(
 \inferrule{
-  t_1 \teq t_2,\; t_2 \teq t_3 \in \Ec
+  s \teq t,\; t \teq u \in \Ec
 }{
-  \Ec := \Ec,\: t_1 \teq t_3
+  \Ec := \Ec,\: s \teq u
 }
 \)
 \rn{Trans}
@@ -873,16 +876,16 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \)
 \rn{Clash}
 \end{tabular}
-\caption{\,Rules for bidirectional closure%.
+\caption{\,Derivation rules for bidirectional closure%.
 }
 \label{fig:cc-rules}
 \end{figure}
 
 \paragraph{Phase 1: Computing the Bidirectional Closure.}
 Figure~\ref{fig:cc-rules} gives the basic rules of the calculus.
-Together with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
+In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
 whereas the \rn{Decomp} and \rn{Clash} rules together compute (downward) unification.
-In the unification rules, additional equalities are inferred based on the injectivity of constructors by \rn{Decomp},
+For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Decomp},
 and failures to unify equated terms are recognized by \rn{Clash}.
 The rule \rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
 
@@ -894,12 +897,12 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \inferrule{
   \tau \in \Data
   \quad
-  t_1 : \tau
+  t : \tau
   \quad
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
-  \Val \ec{t_1} = \mu x.\; t_2
+  \Val \ec{t} = \mu x.\; u
   \quad
-  x \in FV( t_2 )
+  x \in FV( u )
 }{
   \bot
 }
@@ -910,17 +913,17 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \inferrule{
  \tau \in \Codata
  \quad
- t_1, t_2 : \tau
+ t, u : \tau
  \quad
- %\tpath{\Ec}{\ec{t_1}} = \tpath{\Ec}{\ec{t_2}}\sigma \neq \emptyset
- \Val \ec{t_1} \vsim \Val \ec{t_2}
+ %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
+ \Val \ec{t} \vsim \Val \ec{u}
 }{
- \Ec := \Ec,\: t_1 \teq t_2
+ \Ec := \Ec,\: t \teq u
 }
 \)
 \rn{Bisimilar}
 \end{tabular}
-\caption{\,Rules for acyclicity and bisimilarity%.
+\caption{\,Directional rules for acyclicity and bisimilarity%.
 }
 \label{fig:ab-rules}
 \end{figure}
@@ -929,7 +932,7 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 In the second phase,
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}---that is,
 no rule can be applied to extend~$\Ec$ further.
-When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
+When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and only if $t \teq u \in \Ec$.
 Thus, we can consider $\Ec$ as a set of equivalence classes of terms. 
 For a term $t \in \tEc$, we write $\ec{t}$ to denote the equivalence class in $\Ec$ that contains $t$.
 
@@ -1037,12 +1040,12 @@ for some value of $v_{\ec{w}}$ and $v_{\ec{z}}$.
 \end{example}
 
 Given $\Val$, the rules for acyclicity and bisimilarity (Figure~\ref{fig:ab-rules}) can be stated as follows.
-For acyclicity, if there is an equivalence class $\ec{t_1}$ of datatype type whose class of values $\Val \ec{t_1} = \mu x. t_2$ are cyclic,
-as indicated by the assumption $x \in FV( t_2 )$,
+For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x.\; u$ are cyclic,
+as indicated by the assumption $x \in FV( u )$,
 then we can conclude that $\Ec$ is unsatisfiable.
-For bisimilarity, if there are two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
-of codatatype type whose classes of values $\Val \ec{t_1}$ and $\Val \ec{t_2}$ are equivalent for a capture-avoiding renaming of $\mu$-bound variables,
-then we can conclude $t_1 \teq t_2$.
+For bisimilarity, if there are two equivalence classes $\ec{t}$ and $\ec{u}$ 
+of codatatype type whose classes of values $\Val \ec{t}$ and $\Val \ec{u}$ are equivalent for a capture-avoiding renaming of $\mu$-bound variables,
+then we can conclude $t \teq u$.
 We demonstrate the bisimilarity rule concretely with the following example.
 
 \begin{example}
@@ -1094,7 +1097,7 @@ are equivalent for any value of $v_{\ec{y}}$.
 \)
 \rn{Split} 
 \end{tabular}
-\caption{\,Rules for branching%.  
+\caption{\,Derivation rules for branching%.  
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
 %Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
 }
@@ -1110,9 +1113,8 @@ Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
 which is enforced by the rule \rn{Split}.
 
-\ 
-
-An application of a rule is \emph{redundant} if it is nonterminal and at least one branch in its conclusion does not add a new equality to $\Ec$.
+An application of a rule is \emph{redundant} if at least one branch in the
+conclusion does not add a new equality to $\Ec$ and is not $\bot$.
 A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes vtained by 
 a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
