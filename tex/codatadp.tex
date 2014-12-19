@@ -1010,12 +1010,12 @@ The mapping $\Val$ is then modified by applying the following rule exhaustively:
   \Val := \Val \{ \Var{\ec{x}} \mapsto \mu \Var{\ec{x}}.\; \const{C}( \Var{\ec{t_1}}, \ldots, \Var{\ec{t_n}} ) \}
 }
 \)
-\rn{Update}}
+\rn{Refine}}
 \]
-In the rule, $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
+$\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
 It is straightforward to see that the height of terms produced as a result of this update
 is bounded by the number of equivalence classes of $\Ec$,
-and thus our construction of $\Val$ is terminating.
+and thus the construction of $\Val$ will terminate.
 
 \begin{example}
 Say that $\Ec$ contains (distinct) equivalence classes $\ec{x}$, $\ec{y}$, $\ec{z}$ and $\ec{w}$ 
