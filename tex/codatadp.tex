@@ -669,12 +669,12 @@ won't have the place for a proof anyway).
 When looking at the ground theory, induction can be replaced by the acyclicity
 axiom schema, which states that any ground constructor term cannot be equal to
 a variable it contains \cite{xxx}. Dually, coinduction can be replaced by the
-bisimilarity axiom schema, which asserts that two values having the same
-corecursive specification---e.g., $x \teq \const{C}(x)$ and $y \teq
-\const{C}(y)$---must be identical.
+bisimilarity axiom schema, which asserts that (co)recursive definitions giving
+rise to the same infinite expansion---e.g., $x \teq \const{C}(x)$ and $y \teq
+\const{C}(\const{C}(y))$---must be identical.
 
 \begin{report}
-PROVE?
+TODO: State more precisely and proof?
 \end{report}
 
 %    * :
