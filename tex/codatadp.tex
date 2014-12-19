@@ -1169,8 +1169,9 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 
 \paragraph{Phase 3: Branching.}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
-the equivalence class of $t$ must contain an application of a $\delta$ constructor
-(where $\Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}$).
+the equivalence class of $t$ must contain an application of one of
+$\delta$'s constructors
+$\Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}$.
 This is enforced in the third phase by the \rn{Split} rule.
 A companion rule, \rn{Singleton}, handles the degenerate case where two terms
 from $\tEc$ have a corecursive singleton type, in which case they must be
@@ -1182,9 +1183,10 @@ conclusion does not add a new equality to $\Ec$ and is not $\bot$.
 A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by
 a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
-A node is \emph{saturated} if no nonredundant application of a rule can be applied to it.
-If there exists a closed derivation tree with root node $\Ec$, then we conclude that $\Ec$ is $\thD$-unsatisfiable.
-If there exists a derivation tree with root node $\Ec$ that contains a saturated node, then we conclude that $\Ec$ is $\thD$-satisfiable.
+A node is \emph{saturated} if no nonredundant instance of a rule can be applied to it.
+%
+If there exists a closed derivation tree with root node $\Ec$, we conclude that $\Ec$ is $\thD$-unsatisfiable.
+If there exists a derivation tree with root node $\Ec$ that contains a saturated node, we conclude that $\Ec$ is $\thD$-satisfiable.
 
 \begin{theorem}[Termination]%
 \label{thm:t}%
@@ -1197,15 +1199,15 @@ Let $S$ be the set of terms occurring as the argument of a selector in $\tEc$.
 Let $T$ be the set of terms in $\tEc$ of finite datatype type.
 For each term $t \in T$,
 let $S^0_t$ be the set $\{ t \}$,
-for $i \geq 0$ let $S^{i+1}_t =$ $S^i_t \cup \{ s( u ) \mid u : \upsilon \in S^i, \upsilon \in \Data, \upsilon \text{ finite}, s \in \Sel^{\upsilon}  \}$,
+for $i \geq 0$ let $S^{i+1}_t =$ $S^i_t \mathrel\cup \{ s( u ) \mid u : \upsilon \in S^i, \upsilon \in \Data, \upsilon \text{ finite}, s \in \Sel^{\upsilon}  \}$,
 and let $S^\ast_t$ be the fixed point of this sequence.
 We know this is a finite set for each $t$ since the values of the type of $t$ are of finite size.
 Let $S^\ast$ be the union of $S^\ast_t$ for all $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \cup S^\ast, C_i \in \Ctr^\tau \}$.
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \mathrel\cup S^\ast, C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and moreover thus contains an equality between two terms from $\tcEc$ not occurring in its parent node.
-Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\mid \tcEc \mid^2$,
+Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\left| \tcEc \right|^2$,
 which is finite since $\tcEc$ is finite.
 \qed
 \end{proof}
@@ -1225,18 +1227,18 @@ For \rn{Acyclic}, our construction of $\Val$ indicates that the class of values 
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
-then by the induction hypothesis $\Ec \cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
+then by the induction hypothesis $\Ec \mathrel\cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
 for each $C_i \in \Ctr^\tau$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
-whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
+whose root node is $\Ec \mathrel\cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
 For \rn{Unique}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
 For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
-By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is $\thD$-unsatisfiable,
+By the induction hypothesis, we have $\Ec \mathrel\cup t_1 \teq t_2$ is $\thD$-unsatisfiable,
 and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
 \end{proof}
@@ -1253,12 +1255,12 @@ where $x \mapsto \MU x. \const{C}( \vec u ) \in t_1$ indicates that $\MU x. \con
 \[\begin{array}{r@{}c@{}l}
 t_1\interp{x}^M & {} \,=\, {} &
 \textstyle\begin{cases}
-    \MU x.\; \const{C}( t_1\interp{ \vec u}^{M \cup \{ x \}}) & \text{if }x \not\in M, x \mapsto \MU x. \const{C}( \vec u ) \in t_1  \\[-\jot]
+    \MU x.\; \const{C}( t_1\interp{ \vec u}^{M \mathrel\cup \{ x \}}) & \text{if }x \not\in M, x \mapsto \MU x. \const{C}( \vec u ) \in t_1  \\[-\jot]
     x & \text{otherwise}
 \end{cases} \\
 t_1\interp{\MU x. \const{C}( \vec u )}^M & = &
 \textstyle\begin{cases}
-    \MU x. \const{C}( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & \text{if }x \not\in M \\[-\jot]
+    \MU x. \const{C}( t_1\interp{ \vec u }^{M \mathrel\cup \{ x \}} ) & \text{if }x \not\in M \\[-\jot]
     x & \text{otherwise}
 \end{cases}
 \end{array}\]
@@ -1643,7 +1645,7 @@ and replace all occurrences of discriminators $\const{d}_i( \const{C}_k( \vec t 
 \paragraph{Integration into DPLL(T)}
 The calculus is implemented as \emph{theory solver} of CVC4,
 that is, a specialized solver for determining the satisfiability of conjunctions of constraints for its theory.
-Given a theory $T = T_1 \cup \ldots T_n$ and a input set of clauses $F$ in CNF,
+Given a theory $T = T_1 \mathrel\cup \ldots T_n$ and a input set of clauses $F$ in CNF,
 the DPLL(T) \rem{CDCL(T)?} procedure
 (incrementally) builds partial assignments from the atomic formulas of $F$ to truth values such that no clause in $F$ is falsified.
 We may interpret this partial assignment as a set of literals where $a \in M$ for all atoms $a$ that it assigned the value $\top$, and $\neg a \in M$ for all atoms that it assigns the value $\bot$.
