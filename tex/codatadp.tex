@@ -29,7 +29,7 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
-\newcommand\MU{\mu\vvthinspace}
+\newcommand\MU{\vvthinspace\mu\vvthinspace}
 
 %%% not part of shared counter
 \spnXwtheorem{examplex}{Example}{\itshape}{\rmfamily}
@@ -91,12 +91,16 @@
 
 %\renewcommand{\vec}[1]{\mathbf{#1}}
 \renewcommand{\vec}[1]{\bar #1}
-\newcommand{\Ec}{\mathsf{E}}
-\newcommand{\Fc}{\mathsf{F}}
-\newcommand{\Gc}{\mathsf{G}}
-\newcommand{\Ac}{\mathsf{A}}
-\newcommand{\Dc}{\mathsf{D}}
-\newcommand{\Rc}{\mathsf{R}}
+%\newcommand{\Ec}{\mathsf{E}}
+%\newcommand{\Ec}{E}
+\newcommand{\Ec}{\mathcal{E}}
+%\newcommand{\Fc}{\mathsf{F}}
+%\newcommand{\Fc}{F}
+\newcommand{\Fc}{\mathcal{F}}
+%\newcommand{\Gc}{\mathsf{G}}
+%\newcommand{\Ac}{\mathsf{A}}
+%\newcommand{\Dc}{\mathsf{D}}
+%\newcommand{\Rc}{\mathsf{R}}
 \newcommand{\vrange}{\mathsf{range}}
 \newcommand{\vdom}{\mathsf{dom}}
 \newcommand{\tEc}{\mathcal{T}(\Ec)}
@@ -1013,7 +1017,7 @@ when $\tau \in \Data$, a cyclic $t$ describes an infeasible class of values.
 %$\tau \not\in \Codata$.
 Formally, $\mu$-terms are defined recursively as being either a variable $x$
 or a node of the form
-$\MU x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
+$\MU x.\: \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ with the expected types.
 The variable $x$ need not occur freely under the binder's body, in which case the
 binder can be omitted.
@@ -1178,7 +1182,10 @@ $\Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}$.
 This is enforced in the third phase by the \rn{Split} rule.
 A companion rule, \rn{Singleton}, handles the degenerate case where two terms
 from $\tEc$ have a corecursive singleton type, in which case they must be
-equivalent.
+equivalent. Both the finiteness assumption on the datatype in \rn{Split} and
+the cardinality-1 constraint on the codatatype in \rn{Singleton} are easy to
+check based on a recursive computation of the cardinalities of the
+constructors' argument types.
 
 \paragraph{Correctness.}
 An application of a rule is \emph{redundant} if at least one branch in the
@@ -1199,7 +1206,7 @@ All derivation trees are finite.
 \begin{proof}
 Consider a derivation tree with root node $\Ec$.
 Let $\SSS$ be the set of terms occurring as the argument of a selector in $\tEc$.
-Let $T$ be the set of terms in $\tEc$ whose types are finite datatype.
+Let $T$ be the set of terms in $\tEc$ whose types are finite datatypes.
 For each term $t \in T$,
 let $\SSSS 0_t$ be the set $\{ t \}$,
 for $i \geq 0$ let $\SSSS {i+1}_t =$ $\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u : \upsilon \in \SSSS i, \upsilon \in \Data, \upsilon \text{ finite}, s \in \Sel^{\upsilon}  \}$,
@@ -1399,26 +1406,26 @@ After assigning this value, we normalize all terms in the range of $\Val$.
 %We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
 
 \begin{examplex}
-Let $\tau$ be a type in $\Codata$ with three constructors $\const{A}$, $\const{B}$ and $\const{C}$ each having type $\tau \rightarrow \tau$.
+Let $\tau$ be a type in $\Codata$ with three constructors $\const{C}$, $\const{D}$, and $\const{E}$ each having type $\tau \rightarrow \tau$.
 Let $\Ec$ be the set
 $\{$
-$y_1 \teq \const{A}( y_2 )$,
-$y_2 \teq \const{B}( x )$,
-$z_1 \teq \const{C}( z_2 )$,
-$z_2 \teq \const{A}( z_1 )$,
-$w_1 \teq \const{A}( x )$,
-$w_2 \teq \const{C}( w_3 )$,
+$y_1 \teq \const{C}( y_2 )$,
+$y_2 \teq \const{D}( x )$,
+$z_1 \teq \const{E}( z_2 )$,
+$z_2 \teq \const{C}( z_1 )$,
+$w_1 \teq \const{C}( x )$,
+$w_2 \teq \const{E}( w_3 )$,
 $x \not\teq y_2$,
 $\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains
 \[\begin{array}{r@{}c@{}rlll@{\qquad}r@{}c@{}lllll}
-\Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{A}( & \MU {\Varec{y_2}}. & \const{B}( {\Varec{x}} ) ) &
-\Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{A}( {\Varec{x}} )      & \\
-\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{l}{\const{B}( {\Varec{x}} )}      & &
-\Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{C}( {\Varec{w_3}} ) \\
-\Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{C}( & \MU {\Varec{z_2}}. & \const{A}( {\Varec{z_1}} ) ) &
+\Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{C}( & \MU {\Varec{y_2}}. & \const{D}( {\Varec{x}} ) ) &
+\Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{C}( {\Varec{x}} )      & \\
+\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{l}{\const{D}( {\Varec{x}} )}      & &
+\Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{E}( {\Varec{w_3}} ) \\
+\Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{E}( & \MU {\Varec{z_2}}. & \const{C}( {\Varec{z_1}} ) ) &
 \Val \ec{w_3} & = & {\Varec{w_3}} \\
-\Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{A}( & \MU {\Varec{z_1}}. & \const{C}( {\Varec{z_2}} ) ) &
+\Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{C}( & \MU {\Varec{z_1}}. & \const{E}( {\Varec{z_2}} ) ) &
 \Val \ec{x} & = & {\Varec{x}} \\
 \end{array}\]
 
@@ -1426,12 +1433,12 @@ To construct a completion of $\Val$, we must choose values for the free variable
 The content of the set $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$ is $\alpha$-equivalent to
 \[%\begin{array}{c}
 \{
-\MU x.\; \const{A}( \const{B}( x )),
-\const{A}( \MU y.\; \const{B}( y )),
-\MU x.\; \const{B}( x ),
-\MU x.\; \const{C}( \const{A}( x )),
-\MU x.\; \const{A}( \const{C}( x )),
-\MU x.\; \const{A}( x )
+\MU x.\; \const{C}( \const{D}( x )),
+\const{C}( \MU y.\; \const{D}( y )),
+\MU x.\; \const{D}( x ),
+\MU x.\; \const{E}( \const{C}( x )),
+\MU x.\; \const{C}( \const{E}( x )),
+\MU x.\; \const{C}( x )
 \}
 %\end{array}
 \]
@@ -1440,23 +1447,23 @@ for example, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and 
 Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\M$ to be inconsistent.
-For example, say we assign $\MU {\Varec{x}}.\; \const{B}( {\Varec{x}} )$ for ${\Varec{x}}$.
-After this substitution, $\Val \ec{y_2}$ is $\MU {\Varec{y_2}}.\; \const{B}( \MU {\Varec{x}}.\; \const{B}( {\Varec{x}} ) )$,
-which has normal form $\MU {\Varec{y_2}}.\; \const{B}( {\Varec{y_2}} )$,
-which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{B}( {\Varec{x}} )$.
+For example, say we assign $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$ for ${\Varec{x}}$.
+After this substitution, $\Val \ec{y_2}$ is $\MU {\Varec{y_2}}.\; \const{D}( \MU {\Varec{x}}.\; \const{D}( {\Varec{x}} ) )$,
+which has normal form $\MU {\Varec{y_2}}.\; \const{D}( {\Varec{y_2}} )$,
+which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
 Inversely, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
 then the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For example, we may assign values such as 
-$\MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$,
-$\MU {\Varec{x}}.\; \const{C}( \MU x_1.\; \const{A}( x_1) )$, or
-$\MU {\Varec{x}}.\; \const{B}( \const{A}( {\Varec{x}} ) )$
+$\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
+$\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
+$\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
 to ${\Varec{x}}$.
 Legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain non-normal terms.
 After applying the substitution for the third term mentioned above,
-$\Val \ec{w_1}$ is $\MU {\Varec{w_1}}.\; \const{A}( \MU {\Varec{x}}.\; \const{B}( \const{A}( {\Varec{x}} ) ) )$,
+$\Val \ec{w_1}$ is $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
 which has normal form
-$\MU {\Varec{w_1}}.\; \const{A}( \MU {\Varec{x}}.\; \const{B}( {\Varec{w_1}} ) )$.
+$\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )$.
 \xend
 \end{examplex}
 
