@@ -878,7 +878,7 @@ A rule may have multiple conclusions separated by $\parallel$, which denotes non
 \label{fig:cc-rules}
 \end{figure}
 
-\paragraph{Step 1: Computing the Bidirectional Closure.}
+\paragraph{Phase 1: Computing the Bidirectional Closure.}
 Figure~\ref{fig:cc-rules} gives the basic rules of the calculus.
 Together with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
 whereas the \rn{Decomp} and \rn{Clash} rules together compute (downward) unification.
@@ -925,16 +925,16 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \label{fig:ab-rules}
 \end{figure}
 
-\paragraph{Step 2: Applying Acyclicity and Bisimilarity.}
-In the second step,
+\paragraph{Phase 2: Applying Acyclicity and Bisimilarity.}
+In the second phase,
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}---that is,
 no rule can be applied to extend~$\Ec$ further.
 When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t_1$ and $t_2$ are equivalent if and only if $t_1 \teq t_2 \in \Ec$.
 Thus, we can consider $\Ec$ as a set of equivalence classes of terms. 
 For a term $t \in \tEc$, we write $\ec{t}$ to denote the equivalence class in $\Ec$ that contains $t$.
 
-%For presentation of the rules in this step, we rely on a representation of terms in the $\mu$-notation.
-The rules of this step contain premises that involve a mapping $\Val$ from equivalence classes to terms containing $\mu$-bindings.
+%For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
+The rules of this phase contain premises that involve a mapping $\Val$ from equivalence classes to terms containing $\mu$-bindings.
 Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
 % for example, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
@@ -982,7 +982,7 @@ Intuitively, a $\mu$-term $t$ of type $\tau$ describes a class of values of $\ta
 where a cyclic $t$ describes an infeasible class of values when
 %$\tau \not\in \Codata$.
 $\tau \in \Data$.
-At the beginning of this step, 
+At the beginning of this phase, 
 we compute a mapping $\Val$ from equivalence classes to $\mu$-terms 
 that describe the class of values that terms in that equivalence class can take in the models of $\Ec$. 
 For each equivalence class $\ec{x}$, we associate a fresh variable $v_{\ec{x}}$ of the same type as $x$ not occurring in $\tEc$,
@@ -1050,7 +1050,7 @@ Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_
 and let $\Ec$ be the set $\{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
 After applying the rules in Figure~\ref{fig:cc-rules} to completion, the equivalence classes of $\Ec$ are
 $\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
-We then construct $\Val$ using the aforementioned steps, after which we obtain:
+We then construct $\Val$ using the aforementioned phases, after which we obtain:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l}
 \Val \ec{x} & = & 
 \mu v_{\ec{x}}. & \const{C}( v_{\ec{y}}, & \mu v_{\ec{\const{C}(y,x)}}. & \const{C}( v_{\ec{y}}, v_{\ec{x}} ) ) \\
@@ -1101,7 +1101,7 @@ are equivalent for any value of $v_{\ec{y}}$.
 \label{fig:split-rule}
 \end{figure}
 
-\paragraph{Step 3: Branching.}
+\paragraph{Phase 3: Branching.}
 If neither a rule from Figure \ref{fig:cc-rules}~or~\ref{fig:ab-rules} applies to $\Ec$, 
 the rules from Figure~\ref{fig:split-rule} are applied.
 The rule \rn{Singleton} handles the case when there are two terms from $\tEc$ having a co-recursive singleton type,
@@ -1275,7 +1275,7 @@ when $\M( t )$ is of the form $\mu x. \const{C}_i( \vec u )$.
 In the following, we consider only normal models.
 Thus, when constructing a model $\M$ for $\Ec$,
 it remains only to define how $\M$ interprets wrong-applied selector terms and variables.
-For the latter, this will be based on the mapping $\Val$ constructed in step two of our calculus.
+For the latter, this will be based on the mapping $\Val$ constructed in the second phase of our calculus.
 We compute the \emph{completion} of $\Val$ for normal model $\M$, which we write as $\Val^\ast$,
 which we construct by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
@@ -1469,7 +1469,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
 We consider a normal model $\M$ 
 that interprets wrongly-applied selectors based on equality information in $\Fc$,
-and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from step two of our calculus.
+and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from the second phase of our calculus.
 For the latter, let $\M( x )$ be the value in $\M$ that is bisimilar with $\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
@@ -1560,7 +1560,7 @@ Handling discriminators requires extending the decision procedure with several a
 Also, selectors are collapsed eagerly:
 if $s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor 
 $\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Decomp} before inferring this equality.  
-For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a pre-processing step.
+For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
 In particular, we 
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
 replace $\const{C}_i( \vec t ) \teq \const{C}_j( \vec u )$ with $\bot$ when $i \neq j$,
@@ -1601,8 +1601,8 @@ to $F$.
 Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
 All other rules add equalities to the internal state of the theory solver.
 
-Step 1 of the calculus (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly, 
-that is for partial satisfying assignments $M$, while step 2 and the \rn{Split} rule from step 3 are performed only for complete satisfying assignments $M$, and in that order.
+Phase 1 (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly, 
+that is for partial satisfying assignments $M$, while phase~2 and the \rn{Split} rule from phase~3 are performed only for complete satisfying assignments $M$, and in that order.
 
     * sharing is caring
     * theory combination more complicated (and Theorem Completeness too weak)
