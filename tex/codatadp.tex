@@ -1070,7 +1070,7 @@ trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
 \item \noindent\rlap{Initially:}\phantom{Unfold $\Varec{x}$:\enskip}$\{  \}$
-\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \}$
+\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
 \item \noindent\rlap{Unfold $\Varec{y}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
   \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
 \item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
@@ -1101,7 +1101,7 @@ We demonstrate the uniqueness rule concretely with the following example.
 Let $\const{C} : $ $\tau \times \delta \rightarrow \delta$ be a constructor,
 and let $\Ec = \{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
 After phase~1, the equivalence classes of $\Ec$ are
-$\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
+$\{ x,\, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
 Constructing $\Val$ as described above yields
 \[\begin{array}{rcrlrl}
 \Val \ec{x} & \,=\, &
@@ -1124,19 +1124,6 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  \tau \in \Codata
-  \quad
-  \left|\tau\right| = 1
-  \quad
-  t, u : \tau \in \tEc
-}{
-  \Ec := \Ec,\: t \teq u
-}
-\)
-\rn{Singleton}
-\\[5\jot]
-\(
-\inferrule{
   t : \tau \in \tEc
   \quad
   ( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\tau )
@@ -1147,6 +1134,19 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 }
 \)
 \rn{Split}
+\\[5\jot]
+\(
+\inferrule{
+  \tau \in \Codata
+  \quad
+  \left|\tau\right| = 1
+  \quad
+  t, u : \tau \in \tEc
+}{
+  \Ec := \Ec,\: t \teq u
+}
+\)
+\rn{Singleton}
 \end{tabular}
 \caption{\,Derivation rules for branching%.
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
@@ -1156,16 +1156,15 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 \end{figure}
 
 \paragraph{Phase 3: Branching.}
-In the third phase,
-the \rn{Singleton} rule handles the case when there are two terms from $\tEc$
-having a corecursive singleton type, in which case they must be equivalent.
 Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type,
-then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$),
-which is enforced by the rule \rn{Split}.
+the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$).
+This is enforced in the third phase by the \rn{Split} rule.
+The \rn{Singleton} rule handles the degenerate case where two terms from $\tEc$
+have a corecursive singleton type, in which case they must be equivalent.
 
 An application of a rule is \emph{redundant} if at least one branch in the
 conclusion does not add a new equality to $\Ec$ and is not $\bot$.
-A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes vtained by
+A \emph{derivation tree} is a tree whose nodes are sets of equalities, where non-root nodes are obtained by
 a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
 A node is \emph{saturated} if no nonredundant application of a rule can be applied to it.
