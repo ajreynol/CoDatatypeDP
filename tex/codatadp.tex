@@ -663,10 +663,21 @@ function space $\ty{nat} \to \ty{int}$.
 
 TODO: Andy, introduce theory here. There were some ideas below in the comments
 you might want to mention either here or in Section 3. I'm not sure what's the
-best way to justify it though, but for the conference at least we can just
-claim it. (we won't have the place for a proof anyway).
+best way to justify it though, but for the conference at least we can just claim it. (we
+won't have the place for a proof anyway).
 
-%    * when looking at the ground theory:
+When looking at the ground theory, induction can be replaced by the acyclicity
+axiom schema, which states that any ground constructor term cannot be equal to
+a variable it contains \cite{xxx}. Dually, coinduction can be replaced by the
+bisimilarity axiom schema, which asserts that two values having the same
+corecursive specification---e.g., $x \teq \const{C}(x)$ and $y \teq
+\const{C}(y)$---must be identical.
+
+\begin{report}
+PROVE?
+\end{report}
+
+%    * :
 %        enough to consider acyclicity -- no way to specify infinite objects
 %        otherwise
 
