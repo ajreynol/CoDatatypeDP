@@ -832,7 +832,7 @@ on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
 we may without loss of generality or completeness treat all types in $\Nondata$ as infinite.
 
 The calculus consists of three sets of rules, given in \figuresname~\ref{fig:cc-rules} to
-\ref{fig:split-rule}, corresponding to three successive phases. The first
+\ref{fig:split-rule}, corresponding to three phases. The first
 phase computes the bidirectional closure of $\Ec$. The second phase makes
 inferences based on acyclicity (for datatypes) and uniqueness (for
 codatatypes). The third phase performs case splitting on constructors for
@@ -846,9 +846,10 @@ or is $\bot$.
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$,
-denoting nondeterministic branching. The rules associated with a phase are
-applied until saturation (i.e., until no rule can be applied to extend~$\Ec$
-further) before the next phase can begin.
+denoting nondeterministic branching. The rules associated with a phase have
+priority over those of the previous phases. The rules are applied until
+saturation (i.e., until no rule can be applied to extend~$\Ec$
+further).
 
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
 %are simplified to $t_i$, and moreover assume that all %additional
@@ -1165,10 +1166,12 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 
 \paragraph{Phase 3: Branching.}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
-the equivalence class of $t$ must contain an application of one of the constructors of $\delta$ (where $\Ctr^\delta = \{ \const{C}_1, \ldots \const{C}_m \}$).
+the equivalence class of $t$ must contain an application of a $\delta$ constructor
+(where $\Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}$).
 This is enforced in the third phase by the \rn{Split} rule.
-The \rn{Singleton} rule handles the degenerate case where two terms from $\tEc$
-have a corecursive singleton type, in which case they must be equivalent.
+A companion rule, \rn{Singleton}, handles the degenerate case where two terms
+from $\tEc$ have a corecursive singleton type, in which case they must be
+equivalent.
 
 \paragraph{Correctness.}
 An application of a rule is \emph{redundant} if at least one branch in the
