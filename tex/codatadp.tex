@@ -1333,11 +1333,11 @@ To construct a completion of $\Val$, we must choose values for the free variable
 The content of the set $\mathcal{T}^\M_{v_{\ec{x}}}( \Val )$ is $\alpha$-equivalent to:
 \[%\begin{array}{c}
 \{
-\mu x. \const{A}( \mu y. \const{B}( x )),
-\mu x. \const{A}( \mu y. \const{B}( y )),
+\mu x. \const{A}( \const{B}( x )),
+\const{A}( \mu y. \const{B}( y )),
 \mu x. \const{B}( x ),
-\mu x. \const{C}( \mu y. \const{A}( x )),
-\mu x. \const{A}( \mu y. \const{C}( x )),
+\mu x. \const{C}( \const{A}( x )),
+\mu x. \const{A}( \const{C}( x )),
 \mu x. \const{A}( x )
 \}
 %\end{array}
@@ -1357,11 +1357,11 @@ then the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For instance, we may assign values such as 
 $\mu v_{\ec{x}}. \const{C}( v_{\ec{x}} )$,
 $\mu v_{\ec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, and
-$\mu v_{\ec{x}}. \const{B}( \mu x_1. \const{A}( v_{\ec{x}} ) )$
+$\mu v_{\ec{x}}. \const{B}( \const{A}( v_{\ec{x}} ) )$
 to $v_{\ec{x}}$.
 Notice that legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain non-normal terms,
 as in after applying the third substitution mentioned above,
-$\Val \ec{w_1}$ is $\mu v_{\ec{w_1}}. \const{A}( \mu v_{\ec{x}}. \const{B}( \mu x_1. \const{A}( v_{\ec{x}} ) ) )$.
+$\Val \ec{w_1}$ is $\mu v_{\ec{w_1}}. \const{A}( \mu v_{\ec{x}}. \const{B}( \const{A}( v_{\ec{x}} ) ) )$.
 $\Box$
 \end{example}
 
