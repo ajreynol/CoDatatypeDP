@@ -92,11 +92,11 @@
 %\renewcommand{\vec}[1]{\mathbf{#1}}
 \renewcommand{\vec}[1]{\bar #1}
 %\newcommand{\Ec}{\mathsf{E}}
-%\newcommand{\Ec}{E}
-\newcommand{\Ec}{\mathcal{E}}
+\newcommand{\Ec}{E}
+%\newcommand{\Ec}{\mathcal{E}}
 %\newcommand{\Fc}{\mathsf{F}}
-%\newcommand{\Fc}{F}
-\newcommand{\Fc}{\mathcal{F}}
+\newcommand{\Fc}{F}
+%\newcommand{\Fc}{\mathcal{F}}
 %\newcommand{\Gc}{\mathsf{G}}
 %\newcommand{\Ac}{\mathsf{A}}
 %\newcommand{\Dc}{\mathsf{D}}
@@ -136,7 +136,7 @@
 
 % change?
 \newcommand{\thO}{T_{\mathrm{o}}}
-\newcommand{\thD}{T_{\mathrm{cd}}}
+\newcommand{\thD}{T_{\!\mathrm{cd}}}
 
 %\newcommand\Types{\mathcal{T}}
 \newcommand\Types{\mathcal{Y}}
@@ -1213,11 +1213,11 @@ for $i \geq 0$ let $\SSSS {i+1}_t =$ $\SSSS i_t \mathrel\cup \{ \const s( u ) \m
 and let $\SSSS \ast_t$ be the fixed point of this sequence.
 We know this is a finite set for each $t$ since the values of the type of $t$ are of finite size.
 Let $\SSSS \ast$ be the union of $\SSSS \ast_t$ for all $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) ) \mid t : \tau \in \SSS \mathrel\cup \SSSS \ast, \const C_i \in \Ctr^\tau \}$.
-In a derivation tree with root node $\Ec$,
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \ast,\, \const C_i \in \Ctr^\delta \}$.
+In a derivation tree with root node~$\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
-Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\left| \tcEc \right|^2$,
+Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\left| \smash{\tcEc}\vphantom{X} \right|{\!}^2$,
 which is finite since $\tcEc$ is finite.
 \qed
 \end{proof}
@@ -1228,17 +1228,17 @@ which is finite since $\tcEc$ is finite.
 If there exists a closed derivation tree with root node\/ $\Ec$, then\/ $\Ec$ is $\thD$-unsatisfiable.
 \end{theorem}
 \begin{proof}
-We prove this by structural induction on the (closed) derivation tree with root node $\Ec$.
-First, if the derivation tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
+The proof is by structural induction on the derivation tree with root node $\Ec$.
+If the tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
 then $\Ec$ is $\thD$-unsatisfiable.
 For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
-For \rn{Acyclic}, our construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
+For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
-whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
-then by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) )$ is unsatisfiable
-for each $\const C_i \in \Ctr^\tau$.
+whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
+by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) )$ is unsatisfiable
+for each $\const C_i \in \Ctr^\delta$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
@@ -1313,7 +1313,7 @@ For example, $\nf{(\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ))} = \MU x.\; \c
 
 \begin{lemma}
 \label{lem:mu-norm-arg}
-If $\vec u$ are normal, then if $t = \nf{(\MU x.\; \const{C}( \vec u ) )} = \MU x.\; \const{C}( \vec w )$,
+If $\vec u$ are normal and $t = \nf{(\MU x.\; \const{C}( \vec u ) )} = \MU x.\; \const{C}( \vec w )$,
 then $\vec u \vsim t\interp{\vec w}$.
 \end{lemma}
 \begin{proof}
@@ -1453,7 +1453,7 @@ which has normal form $\MU {\Varec{y_2}}.\; \const{D}( {\Varec{y_2}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
 Inversely, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
-then the values in the range of $\Val$ remain $\alpha$-disequivalent.
+the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For example, we may assign values such as 
 $\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
 $\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
@@ -1473,7 +1473,7 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 \begin{lemma}
 \label{lem:model-completion}
 If $\Val$ is constructed for a saturated $\Ec$,
-and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
+and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then
 \begin{enumerate}
 \item $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$,
 \item
@@ -1600,7 +1600,7 @@ $\MU {\Varec{u}}.\; \const C_i( w_1, \ldots, w_n )$,
 where $t_w \interp{ w_j } = \Val^\ast \ec{ \const s^j_k( u )}$. 
 If $k = i$, then $\M( t )$ is $\alpha$-equivalent with $t_w\interp{w_j} = \Val^\ast \ec{ \const s^j_k( u )}$,
 which is $\Val^\ast \ec{t}$.
-If $k \neq i$, then we interpret $\const s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
+If $k \neq i$, we interpret $\const s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
 Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3,
 pairs of wrongly-applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
@@ -1644,7 +1644,7 @@ We have found that this leads to better performance since this reduction introdu
 Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
 if $\const s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor
-$\const{C}_i( \vec u )$, then we immediately infer $\const s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
+$\const{C}_i( \vec u )$, we immediately infer $\const s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
 In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
@@ -1667,7 +1667,7 @@ Each $T_i$ solver either
 reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case $\neg C$ is added as a additional clause to $F$,
 adds an additional clause $C$ to $F$,
 or does nothing.
-When $M$ is a complete assignment for $F$, then a theory solver can only choose to do nothing when $M_i$ is indeed $T_i$-satisfiable.
+When $M$ is a complete assignment for $F$, a theory solver can only choose to do nothing when $M_i$ is indeed $T_i$-satisfiable.
 
 Assume $\Ec$ is initially the set $M_i$ described above.
 For each equality added to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t \teq s$,
