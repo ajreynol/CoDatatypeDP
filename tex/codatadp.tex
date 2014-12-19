@@ -164,7 +164,7 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 \begin{abstract}
 Codatatypes naturally capture potentially infinite data structures and
 processes. We present a decision procedure that combines reasoning about
-datatypes and codatatypes. The dual of the cyclicity rule for datatypes is a
+datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
 bisimilarity rule that identifies equal values, also in the presence of cyclic
 ($\omega$-regular) data. The procedure decides ground and universal
 problems and is composable via the Nelson--Oppen method. It has been
@@ -259,14 +259,14 @@ For example, the type
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
 corresponding datatype would be rejected as non-well-founded \cite{blanchette-et-al-2015-esop}.
 
-Second, \emph{a bisimilarity rule takes the place of the cyclicity rule of datatypes.}
+Second, \emph{a bisimilarity rule takes the place of the acyclicity rule of datatypes.}
 Cyclic constraints such as
 $\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes but satisfiable for codatatypes.
 The bisimilarity principle states that two values having the same (possibly
 infinite) expansion must be equal; from $\const{x} \teq \const{S}(\const{y})$ and
 $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
-The cyclicity and bisimilarity rules are needed to ensure completeness on
+The acyclicity and bisimilarity rules are needed to ensure completeness on
 ground problems and the absence of spurious models. They cannot be replaced by
 finite axiomatizations, so they naturally belong in a decision procedure.
 %    * in particular, acyclicity and bisimilarity are necessary for some proofs
@@ -793,7 +793,7 @@ we may without loss of completeness treat all other types as infinite.
 The calculus consists of three sets of rules corresponding to three
 successive phases.
 The first phase computes the bidirectional closure of $\Ec$.
-The second phase makes inferences based on cyclicity (for datatypes)
+The second phase makes inferences based on acyclicity (for datatypes)
 and bisimilarity (for codatatypes).
 The third phase performs case splitting on constructors
 for various terms in $\tEc$.
@@ -904,7 +904,7 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
   \bot
 }
 \)
-\rn{Cyclic}
+\rn{Acyclic}
 \\[4\jot]
 \(
 \inferrule{
@@ -920,12 +920,12 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
 \)
 \rn{Bisimilar}
 \end{tabular}
-\caption{\,Rules for cyclicity and bisimilarity%.
+\caption{\,Rules for acyclicity and bisimilarity%.
 }
 \label{fig:ab-rules}
 \end{figure}
 
-\paragraph{Step 2: Applying Cyclicity and Bisimilarity.}
+\paragraph{Step 2: Applying Acyclicity and Bisimilarity.}
 In the second step,
 we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}---that is,
 no rule can be applied to extend~$\Ec$ further.
@@ -1036,8 +1036,8 @@ for some value of $v_{\ec{w}}$ and $v_{\ec{z}}$.
 \qed
 \end{example}
 
-Given $\Val$, the rules for cyclicity and bisimilarity (shown in Figure~\ref{fig:ab-rules}) can be stated as follows.
-For cyclicity, if there is an equivalence class $\ec{t_1}$ of datatype type whose class of values $\Val \ec{t_1} = \mu x. t_2$ are cyclic,
+Given $\Val$, the rules for acyclicity and bisimilarity (Figure~\ref{fig:ab-rules}) can be stated as follows.
+For acyclicity, if there is an equivalence class $\ec{t_1}$ of datatype type whose class of values $\Val \ec{t_1} = \mu x. t_2$ are cyclic,
 as indicated by the assumption $x \in FV( t_2 )$,
 then we can conclude that $\Ec$ is unsatisfiable.
 For bisimilarity, if there are two equivalence classes $\ec{t_1}$ and $\ec{t_2}$ 
@@ -1153,11 +1153,11 @@ If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is uns
 \end{lemma}
 \begin{proof}
 We prove this by structural induction on the (closed) derivation tree with root node $\Ec$.
-First, if the derivation tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Cyclic},
+First, if the derivation tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
 then $\Ec$ is unsatisfiable in $\thD$.
 For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
-For \rn{Cyclic}, our construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
+For \rn{Acyclic}, our construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees 
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
@@ -1414,7 +1414,7 @@ This is also a contradiction,
 since there are only a finite number of closed terms in $\mathcal{T}^\M_x(\Val^\ast)$,
 and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_x(\Val^\ast)$ to $v_{\ec{y}}$.
 By construction, $\Val^\ast \ec{x}$ is normal.
-Since \rn{Cyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
+Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
 Moreover, our construction of $\Val^\ast$ applies substitutions of the form 
 $\{ y \mapsto t \}$, where $t$ is acyclic when the type of $y$ is not a codatatype.
 Thus, $\Val^\ast \ec{x}$ is acyclic when $\tau \not\in \Codata$.
@@ -1627,9 +1627,9 @@ that is for partial satisfying assignments $M$, while step 2 and the \rn{Split} 
 \\[-9pt] %%% TYPESETTING HACK
 No (co)datatypes
   & 221 & 760 & \phantom{0}57 & 1038 \\
-Datatypes without cyclicity
+Datatypes without acyclicity
   & 227 & 765 & \phantom{0}57 & 1049 \\
-Datatypes with cyclicity
+Datatypes with acyclicity
   & 227 & 771 & \phantom{0}57 & 1055 \\
 Codatatypes without bisimilarity
   & 217 & 787 & \phantom{0}55 & 1059 \\
@@ -1666,7 +1666,7 @@ Due to the lack of machinery for reconstructing inferences about (co)datatypes
 in Isabelle, CVC4 is trusted as an oracle in these experiments.
 
 CVC4 was run on each problem several times, with the support for datatypes and
-codatatypes either enabled or disabled. The contributions of the cyclicity and
+codatatypes either enabled or disabled. The contributions of the acyclicity and
 bisimilarity rules were also measured, so find out whether these somewhat
 expensive rules are useful in practice. Even when the decision procedure is
 disabled, some of the generated axioms typically include basic properties of
