@@ -1315,7 +1315,7 @@ when $\M( t )$ is of the form $\mu x. \const{C}_i( \vec u )$.
 In the following, we consider only normal models.
 Thus, when constructing a model $\M$ for $\Ec$,
 it remains only to define how $\M$ interprets wrong-applied selector terms and variables.
-For the latter, this will be based on the mapping $\Val$ constructed in the second phase of our calculus.
+For the latter, this will be based on the mapping $\Val$ constructed in phase~2 of the calculus.
 We compute the \emph{completion} of $\Val$ for normal model $\M$, which we write as $\Val^\ast$,
 which we construct by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
@@ -1512,7 +1512,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
 We consider a normal model $\M$ 
 that interprets wrongly-applied selectors based on equality information in $\Fc$,
-and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from phase 2.
+and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from phase~2.
 For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
@@ -1641,8 +1641,8 @@ $(\const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \vee \ldots \vee t \teq \con
 to $F$.
 Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
 All other rules add equalities to the internal state of the theory solver.
-The rules in phase 1 (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly, 
-that is for partial satisfying assignments $M$, while the rules in phase 2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$, 
+The rules in phase~1 (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly, 
+that is for partial satisfying assignments $M$, while the rules in phase~2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$, 
 and in that order.
 
     * sharing is caring
