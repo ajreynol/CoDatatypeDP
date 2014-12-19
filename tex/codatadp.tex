@@ -124,7 +124,7 @@
 %\newcommand{\Varec}[1]{\Var{\ec{#1}}}
 \newcommand{\Varec}[1]{\widetilde{#1}}
 \newcommand{\VAREC}[1]{\widetilde{\vphantom{\scriptstyle x^i}\smash{#1}}}
-\newcommand{\nf}[1]{{#1}\!\!\downarrow}
+\newcommand{\nf}[1]{{{#1}{\downarrow}}}
 \newcommand{\aequiv}{\mathrel{=_\alpha}}
 \newcommand{\vsim}{\aequiv}
 \newcommand{\vsimv}[1]{\mathrel{=^{#1}_\alpha}}
@@ -1281,14 +1281,14 @@ we say $u$ is a \emph{bisimilar subterm} of $t$ if it is of the form
 $\MU y.\; \const{C}( u_1, \ldots, u_n )$ and $t\interp{ t_i } \aequiv t\interp{ u_i }$ for $i = 1,\ldots, n$.
 The term $t$ is \emph{normal} if it does not contain a strict, bisimilar subterm
 and all of its strict subterms are also normal.
-For example, the $\mu$-term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is subnormal,
+For example, the $\mu$-term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal,
 since $\MU y.\; \const{C}( y )$ is a bisimilar subterm of $t$.
 In particular, note that their arguments have the same interpretation in $t$,
 that is,
 $t\interp{\MU y.\; \const{C}( y )}^\emptyset =$
 $\MU y.\; \const{C}( t\interp{y}^{\{y\}} ) =$
 $\MU y.\; \const{C}( y )$
-is syntactically equivalent to
+is $\alpha$-equivalent to
 $t\interp{y}^\emptyset =$
 $\MU y.\; \const{C}( t\interp{y}^{\{y\}} ) =$
 $\MU y.\; \const{C}( y )$.
@@ -1300,13 +1300,12 @@ $\MU y.\; \const{C}( t\interp{x}^{\{y\}} ) =$
 $\MU y.\; \const{C}( t\interp{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\{y\}} ) =$
 $\MU y.\; \const{C}( \MU x.\; \const{C}( t\interp{\MU y.\; \const{C}( x )}^{\{x,y\}} ) ) =$
 $\MU y.\; \const{C}( \MU x.\; \const{C}( y ) )$
-is syntactically equivalent to $t\interp{x}^\emptyset = t$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
+is $\alpha$-equivalent to $t\interp{x}^\emptyset = t$.
+% for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
-For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
-(which we call the \emph{normal form} of $t$)
-that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$,
-(which we call the \emph{normal form} of $t$)
-that is a renaming of $t$ by replacing all of the bisimilar subterms of $t$ with $x$,
+For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
+recursively construct the \emph{normal form} $\nf{t}$ of $t$,
+that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$
 %and by replacing all of the nonnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
 For example, $\nf{(\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ))} = \MU x.\; \const{C}( x )$.
@@ -1459,7 +1458,7 @@ $\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
 $\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
 $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
 to ${\Varec{x}}$.
-Legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain subnormal terms.
+Legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain abnormal terms.
 After applying the substitution for the third term mentioned above,
 $\Val \ec{w_1}$ is $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
 which has normal form
