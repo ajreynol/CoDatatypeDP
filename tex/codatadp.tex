@@ -1420,15 +1420,15 @@ w_1 \teq \const{C}( x ),\;
 w_2 \teq \const{E}( w_3 ),\;
 x \not\teq y_2\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains
-\[\begin{array}{r@{}c@{}r@{\;}l@{}ll@{\qquad}r@{}c@{}l@{\;}l}
-\Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{C}( & \MU {\Varec{y_2}}. & \const{D}( {\Varec{x}} ) ) &
-\Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{C}( {\Varec{x}} )      \\
-\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{@{}l@{}}{\const{D}( {\Varec{x}} )}      & &
-\Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{E}( {\Varec{w_3}} ) \\
-\Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{E}( & \MU {\Varec{z_2}}. & \const{C}( {\Varec{z_1}} ) ) &
-\Val \ec{w_3} & = & {\Varec{w_3}} \\
-\Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{C}( & \MU {\Varec{z_1}}. & \const{E}( {\Varec{z_2}} ) ) &
-\Val \ec{x} & = & {\Varec{x}}
+\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}ll}
+\Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{C}( {\Varec{x}} ) &
+\Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{C}( & \MU {\Varec{y_2}}. & \const{D}( {\Varec{x}} ) ) \\
+\Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{E}( {\Varec{w_3}} ) &
+\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{@{}l@{}}{\const{D}( {\Varec{x}} )} \\
+\Val \ec{w_3} & = & {\Varec{w_3}} &&
+\Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{E}( & \MU {\Varec{z_2}}. & \const{C}( {\Varec{z_1}} ) ) \\
+\Val \ec{x} & = & {\Varec{x}} &&
+\Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{C}( & \MU {\Varec{z_1}}. & \const{E}( {\Varec{z_2}} ) )
 \end{array}\]
 %
 To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, ${\Varec{x}}$ and ${\Varec{w_3}}$.
