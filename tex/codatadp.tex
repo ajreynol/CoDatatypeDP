@@ -1213,7 +1213,7 @@ for $i \geq 0$ let $\SSSS {i+1}_t =$ $\SSSS i_t \mathrel\cup \{ \const s( u ) \m
 and let $\SSSS \ast_t$ be the fixed point of this sequence.
 We know this is a finite set for each $t$ since the values of the type of $t$ are of finite size.
 Let $\SSSS \ast$ be the union of $\SSSS \ast_t$ for all $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \ast,\, \const C_i \in \Ctr^\delta \}$.
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_i( \const s^1_i( t ), \ldots, \const s^{n_i}_i( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \ast,\, \const C_i \in \Ctr^\delta \}$.
 In a derivation tree with root node~$\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
@@ -1237,9 +1237,9 @@ For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values 
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
-by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) )$ is unsatisfiable
+by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{n_i}_i( t ) )$ is unsatisfiable
 for each $\const C_i \in \Ctr^\delta$.
-Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) )$,
+Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{n_i}_i( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \mathrel\cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
@@ -1679,7 +1679,7 @@ Thus, the rules of the calculus are implemented as follows.
 For all rules with conclusion $\bot$,
 we report the union of the explanations for all premises is $\thD$-unsatisfiable.
 For the \rn{Split} rule, we add a clause of the form
-$(\const{C}_1( \const s^1_1( t ), \ldots, \const s^{a_1}_1( t ) ) \vee \ldots \vee t \teq \const{C}_n( \const s^1_n( t ), \ldots, \const s^{a_n}_n( t ) ))$
+$(\const{C}_1( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) ) \vee \ldots \vee t \teq \const{C}_m( \const s^1_m( t ), \ldots, \const s^{n_m}_m( t ) ))$
 to $F$.
 Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
 All other rules add equalities to the internal state of the theory solver.
