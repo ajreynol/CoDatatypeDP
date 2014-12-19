@@ -24,6 +24,13 @@
 \usepackage{url}
 \usepackage[all]{xy}
 
+\newcommand\MIDRULE{
+\\[-1pt] %%% TYPESETTING HACK
+\midrule
+%$\enatT$
+\\[-11pt] %%% TYPESETTING HACK
+}
+
 \def\thewordpaper{paper}
 \newcommand\dotReportFootnote[1]{.}
 
@@ -977,13 +984,12 @@ it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
 it contains an occurrence of a bound variable.
 The notation $t \aequiv u$, expressing $\alpha$-\emph{equivalence},
 indicates that the $\mu$-terms $t$ and $u$
-are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables.
-For example, 
+are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables---e.g.,
 %$\mu x. \const{C}( x ) \aequiv \mu y. \const{C}( y )$ and
-$\mu x.\; \const{D}( y, x ) \aequiv \mu z.\; \const{D}( y, z )$,
+$\mu x.\; \const{D}( y, x ) \aequiv \mu z.\; \const{D}( y, z )$\begin{report},
 but
 $\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{D}( y, x ) \not\aequiv \mu x.\; \const{D}( z, x )
-\not\aequiv \mu y.\; \const{D}( y, x )$.
+\not\aequiv \mu y.\; \const{D}( y, x )$\end{report}.
 Two $\mu$-terms can represent the same value while not being $\alpha$-equivalent---e.g.,
 $\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{C}( \const{C}( x ) )$.
 %, or informally are \emph{observationally equivalent}.
@@ -1010,7 +1016,7 @@ The mapping $\Val$ is then modified by applying the following rule exhaustively:
   \Val := \Val \{ \Var{\ec{x}} \mapsto \mu \Var{\ec{x}}.\; \const{C}( \Var{\ec{t_1}}, \ldots, \Var{\ec{t_n}} ) \}
 }
 \)
-\rn{Refine}}
+\rn{Update}}
 \]
 $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
 It is straightforward to see that the height of terms produced as a result of this update
@@ -1018,29 +1024,29 @@ is bounded by the number of equivalence classes of $\Ec$,
 and thus the construction of $\Val$ will terminate.
 
 \begin{example}
-Say that $\Ec$ contains (distinct) equivalence classes $\ec{x}$, $\ec{y}$, $\ec{z}$ and $\ec{w}$ 
+Suppose that $\Ec$ contains distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and $\ec{z}$
 where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$ for some $\const{C} \in \Ctr$.
-A possible sequence of updates applied to $\Val$ is shown below.
-In the first column, we show the equivalence class that was considered,
-and in the second column, we show the content of $\Val$.
-\[\begin{array}{|l|@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l|}
-\hline
-\text{Eqc} & \multicolumn{3}{c}{\Val} & \ 
-\\
-\hline
+A possible sequence of \rn{Update} rule applications is presented below.
+\[\begin{array}{l@{\hspace{1em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
+%\hline
+%\text{Step} & \multicolumn{3}{l}{\text{Mapping }\Val}
+%\MIDRULE
+\text{1. Initial:}
 & \{ & \ec{x} \mapsto \Var{\ec{x}}, & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \Var{\ec{y}}, & \ec{w} \mapsto \Var{\ec{w}} & \} \\
-\ec{x}
+&    & \ec{y} \mapsto \Var{\ec{y}}, & \ec{w} \mapsto \Var{\ec{w}} & \} \\[\jot]
+\text{2. Update w.r.t.\ }\ec{x}\text{:}
 & \{ & \ec{x} \mapsto \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \Var{\ec{y}} ), & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \Var{\ec{y}}, & \ec{w} \mapsto \Var{\ec{w}} & \} \\
-\ec{y}
+&    & \ec{y} \mapsto \Var{\ec{y}}, & \ec{w} \mapsto \Var{\ec{w}} & \} \\[\jot]
+\text{3. Update w.r.t.\ }\ec{y}\text{:}
 & \{ & \ec{x} \mapsto \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \Var{\ec{x}} ) ), & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \Var{\ec{x}} ), & \ec{w} \mapsto \Var{\ec{w}} & \} \\
-\ec{x}
+&    & \ec{y} \mapsto \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \Var{\ec{x}} ), & \ec{w} \mapsto \Var{\ec{w}} & \} \\[\jot]
+\text{4. Update w.r.t.\ }\ec{x}\text{:}
 & \{ & \ec{x} \mapsto \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \Var{\ec{x}} ) ), & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \Var{\ec{y}} ) ), & \ec{w} \mapsto \Var{\ec{w}} & \} \\
-\hline
+&    & \ec{y} \mapsto \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \Var{\ec{y}} ) ), & \ec{w} \mapsto \Var{\ec{w}} & \}
+%\hline
 \end{array}\]
+%The first column shows the equivalence class that was considered;
+%the second column shows the content of $\Val$.
 This indicates that the values for $x$ (resp. $y$) in models of $\Ec$
 are of the form $\const{C}( \Var{\ec{w}}, \const{C}( \Var{\ec{z}}, \ldots ))$ (resp. $\const{C}( \Var{\ec{z}}, \const{C}( \Var{\ec{w}}, \ldots ))$) 
 for some value of $\Var{\ec{w}}$ and $\Var{\ec{z}}$.
@@ -1631,10 +1637,7 @@ that is for partial satisfying assignments $M$, while phase~2 and the \rn{Split}
 \normalsize
 \begin{center}\begin{tabular}{l@{\kern1.5em}c@{\kern.5em}c@{\kern.5em}c@{\kern1.5em}c}
   & \HD{Distro} & \HD{AFP} & \HD{\gandl} & All
-\\[1pt] %%% TYPESETTING HACK
-\midrule
-%$\enatT$
-\\[-9pt] %%% TYPESETTING HACK
+\MIDRULE
 No (co)datatypes
   & 221 & 760 & \phantom{0}57 & 1038 \\
 Datatypes without acyclicity
