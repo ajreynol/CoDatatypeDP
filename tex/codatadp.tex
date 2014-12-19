@@ -85,9 +85,9 @@
 %%% e.g. a filled black square. But if the example are short enough, which
 %%% they currently are, we could live with nothing.
 %%%
-%\newcommand\xend{{\hfill\footnotesize$\blacksquare$}}
+\newcommand\xend{{\hfill$\scriptstyle\blacksquare$}}
 %\newcommand\xend{{\qed}}
-\newcommand\xend{{}}
+%\newcommand\xend{{}}
 
 %\renewcommand{\vec}[1]{\mathbf{#1}}
 \renewcommand{\vec}[1]{\bar #1}
@@ -1428,9 +1428,9 @@ After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains
 \Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{E}( & \MU {\Varec{z_2}}. & \const{C}( {\Varec{z_1}} ) ) &
 \Val \ec{w_3} & = & {\Varec{w_3}} \\
 \Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{C}( & \MU {\Varec{z_1}}. & \const{E}( {\Varec{z_2}} ) ) &
-\Val \ec{x} & = & {\Varec{x}} \\
+\Val \ec{x} & = & {\Varec{x}}
 \end{array}\]
-
+%
 To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, ${\Varec{x}}$ and ${\Varec{w_3}}$.
 The content of the set $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$ is $\alpha$-equivalent to
 \[%\begin{array}{c}
