@@ -29,6 +29,8 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
+\newcommand\MU{\mu\vvthinspace}
+
 %%% not part of shared counter
 \spnXwtheorem{examplex}{Example}{\itshape}{\rmfamily}
 
@@ -141,6 +143,7 @@
 \newcommand\Sel{\Funcs_{\mathrm{sel}}}
 %\newcommand\Plainfuncs{\Funcs_{\mathrm{other}}}
 
+\newcommand\vvthinspace{\kern+0.041667em}
 \newcommand\vthinspace{\kern+0.083333em}
 \newcommand\negvthinspace{\kern-0.083333em}
 
@@ -316,7 +319,7 @@ to enumerate them.} This is necessary both for finite model finding (modulo theo
 and for theory combinations. The $\mu$-binder notation associates a name with
 a (sub)term; it is used to represent cyclic values in the generated models and
 in the metatheory. For example,
-the $\mu$-term $\const{SCons}(1,\: \mu s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
+the $\mu$-term $\const{SCons}(1,\: \MU s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
 stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
 
 %%% 1090909 is a prime number
@@ -371,7 +374,7 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %  * consider a natural fragment---datatypes as supported in modern SMT solvers
 %    and the SMT-LIB 2 standard, and codatatypes as their duals
 %    * mutual recursion, but no polymorphism, nested recursion
-%  * integrated with Nelson-Oppen
+%  * integrated with Nelson--Oppen
 
 % * SMT-Lib
 
@@ -734,7 +737,7 @@ TODO: State more precisely and proof?
 Some codatatypes are so degenerate as to have infinite values
 even though they are finite. The simplest example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
-only value is $\mu a.\; A(a)$. Other specimens are
+only value is $\MU a.\; A(a)$. Other specimens are
 \begin{paper}%
 \vthinspace$\keyw{codatatype}~\ty{b} = \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit})
 ~\keyw{and}~ \ty{c} = \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})$,
@@ -965,7 +968,7 @@ denote the equivalence class in $\Ec$ that contains $t$.
   t : \delta
   \quad
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
-  \Val \ec{t} = \mu x.\; u
+  \Val \ec{t} = \MU x.\; u
   \quad
   x \in \FV( u )
 }{
@@ -999,7 +1002,7 @@ The rules of the second phase contain premises that involve a mapping $\Val$
 that associates a $\mu$-term as representative with each equivalence class.
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
-% for example, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
+% for example, $\MU x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
 A $\mu$-term $t$ of type $\tau$ describes a class of values of
 $\tau$ that terms in that equivalence class can take in the models of $\Ec$;
 %either in the case when $\tau$ is a codatatype or datatype type,
@@ -1007,7 +1010,7 @@ when $\tau \in \Data$, a cyclic $t$ describes an infeasible class of values.
 %$\tau \not\in \Codata$.
 Formally, $\mu$-terms are defined recursively as being either a variable $x$
 or a node of the form
-$\mu x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
+$\MU x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ with the expected types.
 The variable $x$ need not occur freely under the binder's body, in which case the
 binder can be omitted.
@@ -1016,7 +1019,7 @@ $\FV( u )$ denotes the variables occurring freely in $u$.
 
 %%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
 %
-%For uniformity, we also consider $%\mu x.\;
+%For uniformity, we also consider $%\MU x.\;
 %\const{c}$ to be a $\mu$-term if $\const{c}$ is a constant of type $\tau \in \Nondata$.
 
 %%% I think this should be clear enough from the "Conventions" paragraph at the
@@ -1025,7 +1028,7 @@ $\FV( u )$ denotes the variables occurring freely in $u$.
 % which we define recursively:
 %if $\const{C} : \vec \tau \rightarrow \upsilon$
 %and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
-%then $\mu x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
+%then $\MU x. \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
 
 A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
 it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
@@ -1033,13 +1036,13 @@ it contains an occurrence of a bound variable.
 The notation $t \aequiv u$, expressing $\alpha$-\emph{equivalence},
 indicates that the $\mu$-terms $t$ and $u$
 are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables---e.g.,
-%$\mu x. \const{C}( x ) \aequiv \mu y. \const{C}( y )$ and
-$\mu x.\; \const{D}( y, x ) \aequiv \mu z.\; \const{D}( y, z )$\begin{report},
+%$\MU x. \const{C}( x ) \aequiv \MU y. \const{C}( y )$ and
+$\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$\begin{report},
 but
-$\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{D}( y, x ) \not\aequiv \mu x.\; \const{D}( z, x )
-\not\aequiv \mu y.\; \const{D}( y, x )$\end{report}.
+$\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
+\not\aequiv \MU y.\; \const{D}( y, x )$\end{report}.
 Two $\mu$-terms can represent the same value while not being $\alpha$-equivalent---e.g.,
-$\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{C}( \const{C}( x ) )$.
+$\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{C}( \const{C}( x ) )$.
 %, or informally are \emph{observationally equivalent}.
 %For convienience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
@@ -1061,7 +1064,7 @@ The mapping $\Val$ is then modified by applying the following unfolding rule exh
   \quad
   \const{C} \in \Ctr
 }{
-  \Val := \Val \{ {\Varec{x}} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}
+  \Val := \Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}
 }
 \)
 \rn{Unfold}}
@@ -1079,11 +1082,11 @@ trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
 \item \noindent\rlap{Initially:}\phantom{Unfold $\Varec{x}$:\enskip}$\{  \}$
-\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
-\item \noindent\rlap{Unfold $\Varec{y}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
-  \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
-\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
-  \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
+\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
+\item \noindent\rlap{Unfold $\Varec{y}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+  \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
+\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+  \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
 \end{enumerate}
 %
 This indicates that the values for $x$ and $y$ in models of $\Ec$
@@ -1094,7 +1097,7 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \end{examplex}
 
 Given $\Val$, the rules for acyclicity and uniqueness can be stated as follows.
-For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x.\; u$ are cyclic,
+For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \MU x.\; u$ are cyclic,
 as indicated by the assumption $x \in \FV( u )$,
 then we can conclude that $\Ec$ is unsatisfiable.
 For uniqueness, if there are two equivalence classes $\ec{t}$ and $\ec{u}$
@@ -1114,9 +1117,9 @@ $\{ x,\, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
 Constructing $\Val$ as described above yields
 \[\begin{array}{rcrlrl}
 \Val \ec{x} & \,=\, &
-\mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, & \smash{\mu {\vthinspace\VAREC{\const{C}(y, x)}}}. & \const{C}( {\Varec{y}},\, {\Varec{x}} ) ) \\
+\MU {\Varec{x}}. & \const{C}( {\Varec{y}},\, & \smash{\MU {\VAREC{\const{C}(y, x)}}}. & \const{C}( {\Varec{y}},\, {\Varec{x}} ) ) \\
 \Val \ec{\const{C}(y,x)} & = &
-\mu {\vthinspace\VAREC{\const{C}(y,x)}}. & \const{C}( {\Varec{y}},\, & \mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, {\VAREC{\const{C}(y,x)}} ) )
+\MU {\VAREC{\const{C}(y,x)}}. & \const{C}( {\Varec{y}},\, & \MU {\Varec{x}}. & \const{C}( {\Varec{y}},\, {\VAREC{\const{C}(y,x)}} ) )
 \end{array}\]
 Since $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are $\alpha$-equivalent,
 %for the renaming
@@ -1246,59 +1249,59 @@ First, we require additional terminology concerning $\mu$-terms.
 
 For a $\mu$-term $t_1$ with subterm $t_2$,
 the \emph{interpretation of $t_2$ in $t_1$} is the $\mu$-term $t_1\interp{t_2}^\emptyset$ as returned by the following recursive procedure,
-where $x \mapsto \mu x. \const{C}( \vec u ) \in t_1$ indicates that $\mu x. \const{C}( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
+where $x \mapsto \MU x. \const{C}( \vec u ) \in t_1$ indicates that $\MU x. \const{C}( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
 \[\begin{array}{r@{}c@{}l}
 t_1\interp{x}^M & {} \,=\, {} &
 \textstyle\begin{cases}
-    \mu x.\; \const{C}( t_1\interp{ \vec u}^{M \cup \{ x \}}) & \text{if }x \not\in M, x \mapsto \mu x. \const{C}( \vec u ) \in t_1  \\[-\jot]
+    \MU x.\; \const{C}( t_1\interp{ \vec u}^{M \cup \{ x \}}) & \text{if }x \not\in M, x \mapsto \MU x. \const{C}( \vec u ) \in t_1  \\[-\jot]
     x & \text{otherwise}
 \end{cases} \\
-t_1\interp{\mu x. \const{C}( \vec u )}^M & = &
+t_1\interp{\MU x. \const{C}( \vec u )}^M & = &
 \textstyle\begin{cases}
-    \mu x. \const{C}( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & \text{if }x \not\in M \\[-\jot]
+    \MU x. \const{C}( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & \text{if }x \not\in M \\[-\jot]
     x & \text{otherwise}
 \end{cases}
 \end{array}\]
 We often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
 
-Given a $\mu$-term $t_1$ of the form $\mu x. \const{C}( u_1, \ldots, u_n )$ with subterm $t_2$,
+Given a $\mu$-term $t_1$ of the form $\MU x. \const{C}( u_1, \ldots, u_n )$ with subterm $t_2$,
 we say $t_2$ is a \emph{bisimilar subterm} of $t_1$ if and only if it is of the form
-$\mu y. \const{C}( v_1, \ldots, v_n )$ and $t_1\interp{ u_i } \aequiv t_1\interp{ v_i }$ for $i = 1,\ldots, n$.
-We say $t_1$ is \emph{normal} if and only if it does not contain a strict bisimilar subterm
+$\MU y. \const{C}( v_1, \ldots, v_n )$ and $t_1\interp{ u_i } \aequiv t_1\interp{ v_i }$ for $i = 1,\ldots, n$.
+The term $t_1$ is \emph{normal} if it does not contain a strict, bisimilar subterm
 and all of its strict subterms are also normal.
-For instance, the $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( y ) )$ is not normal,
-since $\mu y. \const{C}( y )$ is a bisimilar subterm of $t_1$.
+For example, the $\mu$-term $t_1$ of the form $\MU x. \const{C}( \MU y. \const{C}( y ) )$ is not normal,
+since $\MU y. \const{C}( y )$ is a bisimilar subterm of $t_1$.
 In particular, note that their arguments have the same interpretation in $t_1$,
 that is,
-$t_1\interp{\mu y. \const{C}( y )}^\emptyset =$
-$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$
-$\mu y. \const{C}( y )$
+$t_1\interp{\MU y. \const{C}( y )}^\emptyset =$
+$\MU y. \const{C}( t_1\interp{y}^{\{y\}} ) =$
+$\MU y. \const{C}( y )$
 is syntactically equivalent to
 $t_1\interp{y}^\emptyset =$
-$\mu y. \const{C}( t_1\interp{y}^{\{y\}} ) =$
-$\mu y. \const{C}( y )$.
-The $\mu$-term $t_1$ of the form $\mu x. \const{C}( \mu y. \const{C}( x ) )$ is also not normal,
-since $\mu y. \const{C}( x )$ is a bisimilar subterm of $t_1$,
+$\MU y. \const{C}( t_1\interp{y}^{\{y\}} ) =$
+$\MU y. \const{C}( y )$.
+The $\mu$-term $t_1$ of the form $\MU x. \const{C}( \MU y. \const{C}( x ) )$ is also not normal,
+since $\MU y. \const{C}( x )$ is a bisimilar subterm of $t_1$,
 noting that
-$t_1\interp{\mu y. \const{C}( x )}^\emptyset =$
-$\mu y. \const{C}( t_1\interp{x}^{\{y\}} ) =$
-$\mu y. \const{C}( t_1\interp{\mu x. \const{C}( \mu y. \const{C}( x ) ) }^{\{y\}} ) =$
-$\mu y. \const{C}( \mu x. \const{C}( t_1\interp{\mu y. \const{C}( x )}^{\{x,y\}} ) ) =$
-$\mu y. \const{C}( \mu x. \const{C}( y ) )$
+$t_1\interp{\MU y. \const{C}( x )}^\emptyset =$
+$\MU y. \const{C}( t_1\interp{x}^{\{y\}} ) =$
+$\MU y. \const{C}( t_1\interp{\MU x. \const{C}( \MU y. \const{C}( x ) ) }^{\{y\}} ) =$
+$\MU y. \const{C}( \MU x. \const{C}( t_1\interp{\MU y. \const{C}( x )}^{\{x,y\}} ) ) =$
+$\MU y. \const{C}( \MU x. \const{C}( y ) )$
 is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
-For any $\mu$-term $t$ of the form $\mu x. C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
+For any $\mu$-term $t$ of the form $\MU x. C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
 (which we call the \emph{normal form} of $t$)
 that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$,
 (which we call the \emph{normal form} of $t$)
 that is a renaming of $t$ by replacing all of the bisimilar subterms of $t$ with $x$,
 %and by replacing all of the nonnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
-For instance, $\nf{(\mu x. \const{C}( \mu y. \const{C}( x ) ))} = \mu x. \const{C}( x )$.
+For example, $\nf{(\MU x. \const{C}( \MU y. \const{C}( x ) ))} = \MU x. \const{C}( x )$.
 
 \begin{lemma}
 \label{lem:mu-norm-arg}
-If $\vec u$ are normal, then if $t = \nf{(\mu x. \const{C}( \vec u ) )} = \mu x. \const{C}( \vec w )$,
+If $\vec u$ are normal, then if $t = \nf{(\MU x. \const{C}( \vec u ) )} = \MU x. \const{C}( \vec w )$,
 then $\vec u \vsim t\interp{\vec w}$.
 \end{lemma}
 \begin{proof}
@@ -1308,7 +1311,7 @@ then $\vec u \vsim t\interp{\vec w}$.
 
 \begin{lemma}
 \label{lem:mu-cong}
-If $t_u = \mu x. \const{C}( \vec u )$ and $t_w = \mu y. \const{C}( \vec w )$ are normal,
+If $t_u = \MU x. \const{C}( \vec u )$ and $t_w = \MU y. \const{C}( \vec w )$ are normal,
 then $t_u\interp{ \vec u } \vsim t_w\interp{ \vec w }$ if and only if $t_u \vsim t_w$.
 \end{lemma}
 \begin{proof}
@@ -1337,13 +1340,13 @@ and acyclic when $\tau \not\in \Codata$,
 for all constructor terms $\const{C}( \vec t \,)$ of type $\tau$,
 $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
-$\nf{(\mu x. \const{C}( \M( \vec t \,) ))}$ where $x$ is fresh, and
+$\nf{(\MU x. \const{C}( \M( \vec t \,) ))}$ where $x$ is fresh, and
 \item
 for all selector terms $s^j_i( t )$ of type $\tau$,% for some $\vec u$,
 $\M( s^j_i( t ) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\M( t )\interp{u_j}$
-when $\M( t )$ is of the form $\mu x. \const{C}_i( \vec u )$.
+when $\M( t )$ is of the form $\MU x. \const{C}_i( \vec u )$.
 \end{enumerate}
 \end{definition}
 
@@ -1355,15 +1358,15 @@ We compute the \emph{completion} of $\Val$ for normal model $\M$, which we write
 which we construct by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
 First, we need the following definition.
-We say that $t \vsimv{x} s$ if and only if $\mu$-terms $t$ and $s$ are syntactically equivalent
+We write $t \vsimv{x} s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent
 for some renaming that avoids capturing any variable other than $x$.
-For instance,
-$\mu x. \const{D}( x ) \vsimv{y} \mu x. \const{D}( y )$,
-$\mu x. \const{C}( x, x ) \vsimv{x} \mu y. \const{C}( x, y )$ and
-$\mu x. \const{C}( z, x ) \vsimv{z} \mu y. \const{C}( z, y )$,
+For example,
+$\MU x. \const{D}( x ) \vsimv{y} \MU x. \const{D}( y )$,
+$\MU x. \const{C}( x, x ) \vsimv{x} \MU y. \const{C}( x, y )$ and
+$\MU x. \const{C}( z, x ) \vsimv{z} \MU y. \const{C}( z, y )$,
 but
-$\mu x. \const{D}( x ) \not\vsimv{x} \mu x. \const{D}( y )$ and
-$\mu x. \const{C}( x, x ) \not\vsimv{y} \mu y. \const{C}( x, y )$.
+$\MU x. \const{D}( x ) \not\vsimv{x} \MU x. \const{D}( y )$ and
+$\MU x. \const{C}( x, x ) \not\vsimv{y} \MU y. \const{C}( x, y )$.
 For a variable $x$ of type $\tau$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
 such that $v \vsimv{x} t_1\interp{t_2}$ for some term $t_1$ with subterm $t_2$ occurring in the range of $\Val$.
@@ -1373,13 +1376,13 @@ We construct $\Val^\ast$ by exhaustively applying the following update to $\Val$
 \inferrule{
   x : \tau \in \FV( \Val )
   \quad
-  (\mu x. t) \aequiv v
+  (\MU x. t) \aequiv v
   \quad
   v \in \M( \tau )
   \quad
   v \not\in \mathcal{T}^\M_x(\Val)
 }{
-  \Val := \nf{(\Val \{ x \mapsto \mu x. t \})}
+  \Val := \nf{(\Val \{ x \mapsto \MU x. t \})}
 }
 \)
 
@@ -1404,13 +1407,13 @@ $x \not\teq y_2$,
 $\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{2.0em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-\Val \ec{y_1} & = & \mu {\Varec{y_1}}. & \const{A}( & \mu {\Varec{y_2}}. & \const{B}( {\Varec{x}} ) ) &
-\Val \ec{w_1} & = & \mu {\Varec{w_1}}. & \const{A}( {\Varec{x}} )      & \\
-\Val \ec{y_2} & = & \mu {\Varec{y_2}}. & \multicolumn{2}{l}{\const{B}( {\Varec{x}} )}      & &
-\Val \ec{w_2} & = & \mu {\Varec{w_2}}. & \const{C}( {\Varec{w_3}} ) \\
-\Val \ec{z_1} & = & \mu {\Varec{z_1}}. & \const{C}( & \mu {\Varec{z_2}}. & \const{A}( {\Varec{z_1}} ) ) &
+\Val \ec{y_1} & = & \MU {\Varec{y_1}}. & \const{A}( & \MU {\Varec{y_2}}. & \const{B}( {\Varec{x}} ) ) &
+\Val \ec{w_1} & = & \MU {\Varec{w_1}}. & \const{A}( {\Varec{x}} )      & \\
+\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{l}{\const{B}( {\Varec{x}} )}      & &
+\Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{C}( {\Varec{w_3}} ) \\
+\Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{C}( & \MU {\Varec{z_2}}. & \const{A}( {\Varec{z_1}} ) ) &
 \Val \ec{w_3} & = & {\Varec{w_3}} \\
-\Val \ec{z_2} & = & \mu {\Varec{z_2}}. & \const{A}( & \mu {\Varec{z_1}}. & \const{C}( {\Varec{z_2}} ) ) &
+\Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{A}( & \MU {\Varec{z_1}}. & \const{C}( {\Varec{z_2}} ) ) &
 \Val \ec{x} & = & {\Varec{x}} \\
 \end{array}\]
 
@@ -1418,42 +1421,42 @@ To construct a completion of $\Val$, we must choose values for the free variable
 The content of the set $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$ is $\alpha$-equivalent to:
 \[%\begin{array}{c}
 \{
-\mu x. \const{A}( \const{B}( x )),
-\const{A}( \mu y. \const{B}( y )),
-\mu x. \const{B}( x ),
-\mu x. \const{C}( \const{A}( x )),
-\mu x. \const{A}( \const{C}( x )),
-\mu x. \const{A}( x )
+\MU x. \const{A}( \const{B}( x )),
+\const{A}( \MU y. \const{B}( y )),
+\MU x. \const{B}( x ),
+\MU x. \const{C}( \const{A}( x )),
+\MU x. \const{A}( \const{C}( x )),
+\MU x. \const{A}( x )
 \}
 %\end{array}
 \]
 Consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$,
-for instance, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
+for example, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
 Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\M$ to be inconsistent.
-For instance, say we assign $\mu {\Varec{x}}. \const{B}( {\Varec{x}} )$ for ${\Varec{x}}$.
-After this substitution, $\Val \ec{y_2}$ is $\mu {\Varec{y_2}}. \const{B}( \mu {\Varec{x}}. \const{B}( {\Varec{x}} ) )$,
-which has normal form $\mu {\Varec{y_2}}. \const{B}( {\Varec{y_2}} )$,
-which is $\alpha$-equivalent to $\mu {\Varec{x}}. \const{B}( {\Varec{x}} )$.
+For example, say we assign $\MU {\Varec{x}}. \const{B}( {\Varec{x}} )$ for ${\Varec{x}}$.
+After this substitution, $\Val \ec{y_2}$ is $\MU {\Varec{y_2}}. \const{B}( \MU {\Varec{x}}. \const{B}( {\Varec{x}} ) )$,
+which has normal form $\MU {\Varec{y_2}}. \const{B}( {\Varec{y_2}} )$,
+which is $\alpha$-equivalent to $\MU {\Varec{x}}. \const{B}( {\Varec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
 Inversely, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
 then the values in the range of $\Val$ remain $\alpha$-disequivalent.
-For instance, we may assign values such as 
-$\mu {\Varec{x}}. \const{C}( {\Varec{x}} )$,
-$\mu {\Varec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, or
-$\mu {\Varec{x}}. \const{B}( \const{A}( {\Varec{x}} ) )$
+For example, we may assign values such as 
+$\MU {\Varec{x}}. \const{C}( {\Varec{x}} )$,
+$\MU {\Varec{x}}. \const{C}( \MU x_1. \const{A}( x_1) )$, or
+$\MU {\Varec{x}}. \const{B}( \const{A}( {\Varec{x}} ) )$
 to ${\Varec{x}}$.
 Legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain non-normal terms.
 After applying the substitution for the third term mentioned above,
-$\Val \ec{w_1}$ is $\mu {\Varec{w_1}}. \const{A}( \mu {\Varec{x}}. \const{B}( \const{A}( {\Varec{x}} ) ) )$,
+$\Val \ec{w_1}$ is $\MU {\Varec{w_1}}. \const{A}( \MU {\Varec{x}}. \const{B}( \const{A}( {\Varec{x}} ) ) )$,
 which has normal form
-$\mu {\Varec{w_1}}. \const{A}( \mu {\Varec{x}}. \const{B}( {\Varec{w_1}} ) )$.
+$\MU {\Varec{w_1}}. \const{A}( \MU {\Varec{x}}. \const{B}( {\Varec{w_1}} ) )$.
 \xend
 \end{examplex}
 
 %We first state the following properties of $\Val^\ast$.
-%where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
+%where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\MU x. u$.
 
 \begin{lemma}
 \label{lem:model-completion}
@@ -1462,14 +1465,14 @@ and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
 \begin{enumerate}
 \item $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$,
 \item
-All subterms $\mu {\Varec{x}}. t$ of $\Val^\ast \ec{y}$ are such that
-$\Val^\ast \ec{y} \interp{ \mu {\Varec{x}}. t } = \Val^\ast \ec{x}$. 
+All subterms $\MU {\Varec{x}}. t$ of $\Val^\ast \ec{y}$ are such that
+$\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}. t } = \Val^\ast \ec{x}$. 
 %If $\const{C}( t_1, \ldots, t_n ) \in \ec{x}$,
-%then all subterms $\mu v_{\ec{x}}. u$ occurring in $\Val^\ast \ec{y}$ 
-%are of the form $\mu v_{\ec{x}}. \const{C}( w_1, \ldots, w_n )$,
+%then all subterms $\MU v_{\ec{x}}. u$ occurring in $\Val^\ast \ec{y}$ 
+%are of the form $\MU v_{\ec{x}}. \const{C}( w_1, \ldots, w_n )$,
 %where 
 %and $\Val^\ast \ec{y} \interp{ w_i } = \Val^\ast \ec{t_i}$ for $i = 1, \ldots, n$.
-%If $\Val^\ast \ec{x}$ contains a subterm of the form $\mu v_{\ec{x}}. \const{C}( w_1, \ldots, w_n )$,
+%If $\Val^\ast \ec{x}$ contains a subterm of the form $\MU v_{\ec{x}}. \const{C}( w_1, \ldots, w_n )$,
 %and $\muvar( w_i ) = v_{\ec{t_i}}$ for $i = 1, \ldots, n$,
 %\item
 %$t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
@@ -1512,19 +1515,19 @@ and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not app
 Thus, 
 if $\const{C}_i( t_1, \ldots, t_n ) \in \ec{z}$,
 $\Val$ was constructed by applying a sequence of substitutions
-where ${\Varec{z}}$ was replaced only by $\mu {\Varec{z}}. \const{C}_i( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )$.
-Assume $\Val \ec{y}$ has a subterm $\mu {\Varec{x}}. \const{C}( \vec t )$.
-We first show that our construction of $\Val$ is such that $\Val \ec{x} = \Val \ec{y}\interp{ \mu {\Varec{x}}. t }$.
-Notice that both $\Val \ec{x}$ and the subterm $\mu {\Varec{x}}. t$ of $\Val \ec{y}$ were
+where ${\Varec{z}}$ was replaced only by $\MU {\Varec{z}}. \const{C}_i( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )$.
+Assume $\Val \ec{y}$ has a subterm $\MU {\Varec{x}}. \const{C}( \vec t )$.
+We first show that our construction of $\Val$ is such that $\Val \ec{x} = \Val \ec{y}\interp{ \MU {\Varec{x}}. t }$.
+Notice that both $\Val \ec{x}$ and the subterm $\MU {\Varec{x}}. t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
-We show that $\Val \ec{x} \interp{ \Val \ec{x} } = \Val \ec{y} \interp{ \mu {\Varec{x}}.t }$.
+We show that $\Val \ec{x} \interp{ \Val \ec{x} } = \Val \ec{y} \interp{ \MU {\Varec{x}}.t }$.
 \rem{TODO}
-%Thus, the set of subterms which $\Val \ec{x}$ and $\mu v_{\ec{x}}. t$ differ 
-%of the form $\mu {\Varec{z}}. u$ and $v_{\ec{z}}$ respectively, where $v_{\ec{z}}$ is a bound variable in $\Val \ec{y}$.
-%In the latter case, $\Val \ec{y} \interp{ {\Varec{z}} } = \mu {\Varec{z}}. \const{C}( \Val \ec{y} \interp{\vec u} )$,
-%where $\mu v_{\ec{z}}. u$ and $\mu v_{\ec{z}}. u'$ were constructed by applying a sequence of substitutions of the form above to $v_{\ec{z}}$.
+%Thus, the set of subterms which $\Val \ec{x}$ and $\MU v_{\ec{x}}. t$ differ 
+%of the form $\MU {\Varec{z}}. u$ and $v_{\ec{z}}$ respectively, where $v_{\ec{z}}$ is a bound variable in $\Val \ec{y}$.
+%In the latter case, $\Val \ec{y} \interp{ {\Varec{z}} } = \MU {\Varec{z}}. \const{C}( \Val \ec{y} \interp{\vec u} )$,
+%where $\MU v_{\ec{z}}. u$ and $\MU v_{\ec{z}}. u'$ were constructed by applying a sequence of substitutions of the form above to $v_{\ec{z}}$.
 Since $\Val^\ast$ is obtained by applying the same substitutions and normalizations to all terms in the range of $\Val$,
-we have $\Val^\ast \ec{y} \interp{ \mu {\Varec{x}}. t} = \Val^\ast \ec{x}$.
+we have $\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}. t} = \Val^\ast \ec{x}$.
 
 To show 3,
 first note that since \rn{Unique} does not apply,
@@ -1565,10 +1568,10 @@ which since $\M$ is normal, implies $\M \models t_1 \teq t_2$.
 If $t$ is a variable, then $\M( t ) \vsim \Val^\ast \ec{ t }$ by construction.
 
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
-then $\M( t )$ is $\alpha$-equivalent with $\nf{(\mu x. \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) )}$ for fresh $x$,
-which by the induction hypothesis is $\alpha$-equivalent with $\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
+then $\M( t )$ is $\alpha$-equivalent with $\nf{(\MU x. \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) )}$ for fresh $x$,
+which by the induction hypothesis is $\alpha$-equivalent with $\nf{(\MU x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
 By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{t}$ is a term
-$t_w$ of the form $\mu {\Varec{t}}. \const{C}( w_1, \ldots, w_n )$
+$t_w$ of the form $\MU {\Varec{t}}. \const{C}( w_1, \ldots, w_n )$
 where $t_w\interp{w_i} = \Val^\ast \ec{u_i}$ for $i = 1, \ldots, n$.
 For each $i = 1, \ldots, n$, let $u_i'$ be the $i^{th}$ argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$,
@@ -1581,7 +1584,7 @@ If $t$ is a selector term of the form $s^j_k( u )$,
 since \rn{Split} does not apply,
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) )$ for some $i$.
 By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{u}$ is a term $t_w$ of the form
-$\mu {\Varec{u}}. C_i( w_1, \ldots, w_n )$,
+$\MU {\Varec{u}}. C_i( w_1, \ldots, w_n )$,
 where $t_w \interp{ w_j } = \Val^\ast \ec{ s^j_k( u )}$. 
 If $k = i$, then $\M( t )$ is $\alpha$-equivalent with $t_w\interp{w_j} = \Val^\ast \ec{ s^j_k( u )}$,
 which is $\Val^\ast \ec{t}$.
@@ -1644,7 +1647,7 @@ Given a theory $T = T_1 \cup \ldots T_n$ and a input set of clauses $F$ in CNF,
 the DPLL(T) \rem{CDCL(T)?} procedure
 (incrementally) builds partial assignments from the atomic formulas of $F$ to truth values such that no clause in $F$ is falsified.
 We may interpret this partial assignment as a set of literals where $a \in M$ for all atoms $a$ that it assigned the value $\top$, and $\neg a \in M$ for all atoms that it assigns the value $\bot$.
-Then, at a high level, by the Nelson-Oppen combination framework,
+Then, at a high level, by the Nelson--Oppen combination framework,
 each $T_i$-solver for $i = 1, \ldots, n$ takes as input a combination of (1) the purified form of $T_i$-constraints occurring in $M$ where terms containing symbols not belonging to $T_i$ are replaced by fresh variables of the same type,
 (2) additional equalities and disequalities between variables of types not belonging to $T_i$.
 Let us call this set $M_i$.
@@ -1659,7 +1662,7 @@ For each equality added to $\Ec$, we associate a set of equalities from $M_i$ th
 which we call its \emph{explanation}.
 Similarly, each $\Val \ec{x}$ is also associated an explanation, that is,
 a set of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of $\Ec$ are of the form $\Val \ec{x}$.
-For instance, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \mu {\Varec{x}}. \const{C}( {\Varec{x}} )$.
+For example, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \MU {\Varec{x}}. \const{C}( {\Varec{x}} )$.
 Thus, the rules of the calculus are implemented as follows.
 For all rules with conclusion $\bot$,
 we report the union of the explanations for all premises is $\thD$-unsatisfiable.
@@ -1672,7 +1675,7 @@ The rules in phase~1 (along with the optimization for collapsing selectors) and 
 that is for partial satisfying assignments $M$, while the rules in phase~2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$,
 and in that order.
 
-    * sharing is caring
+    * sharing is caring (let's cite it for a change)
     * theory combination more complicated (and Theorem Completeness too weak)
 
 
