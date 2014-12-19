@@ -1420,10 +1420,10 @@ w_1 \teq \const{C}( x ),\;
 w_2 \teq \const{E}( w_3 ),\;
 x \not\teq y_2\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains
-\[\begin{array}{r@{}c@{}rlll@{\qquad}r@{}c@{}lllll}
+\[\begin{array}{r@{}c@{}r@{\;}l@{}ll@{\qquad}r@{}c@{}l@{\;}l}
 \Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{C}( & \MU {\Varec{y_2}}. & \const{D}( {\Varec{x}} ) ) &
-\Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{C}( {\Varec{x}} )      & \\
-\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{l}{\const{D}( {\Varec{x}} )}      & &
+\Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{C}( {\Varec{x}} )      \\
+\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{@{}l@{}}{\const{D}( {\Varec{x}} )}      & &
 \Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{E}( {\Varec{w_3}} ) \\
 \Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{E}( & \MU {\Varec{z_2}}. & \const{C}( {\Varec{z_1}} ) ) &
 \Val \ec{w_3} & = & {\Varec{w_3}} \\
@@ -1435,17 +1435,17 @@ To construct a completion of $\Val$, we must choose values for the free variable
 The content of the set $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$ is $\alpha$-equivalent to
 \[%\begin{array}{c}
 \{
-\MU x.\; \const{C}( \const{D}( x )),
-\const{C}( \MU y.\; \const{D}( y )),
-\MU x.\; \const{D}( x ),
-\MU x.\; \const{E}( \const{C}( x )),
-\MU x.\; \const{C}( \const{E}( x )),
+\MU x.\; \const{C}( \const{D}( x )),\;
+\const{C}( \MU y.\; \const{D}( y )),\;
+\MU x.\; \const{D}( x ),\;
+\MU x.\; \const{E}( \const{C}( x )),\;
+\MU x.\; \const{C}( \const{E}( x )),\;
 \MU x.\; \const{C}( x )
 \}
 %\end{array}
 \]
 Consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$,
-for example, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
+for example, $x$ is interpreted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
 Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\M$ to be inconsistent.
