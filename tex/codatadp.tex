@@ -1293,27 +1293,27 @@ is $\alpha$-equivalent to
 $t\interp{y}^\emptyset =$
 $\MU y.\; \const{C}( t\interp{y}^{\{y\}} ) =$
 $\MU y.\; \const{C}( y )$.
-The $\mu$-term $t$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also not normal,
+The $\mu$-term $t$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
 since $\MU y.\; \const{C}( x )$ is a bisimilar subterm of $t$,
 noting that
-$t\interp{\MU y.\; \const{C}( x )}^\emptyset =$
-$\MU y.\; \const{C}( t\interp{x}^{\{y\}} ) =$
-$\MU y.\; \const{C}( t\interp{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\{y\}} ) =$
-$\MU y.\; \const{C}( \MU x.\; \const{C}( t\interp{\MU y.\; \const{C}( x )}^{\{x,y\}} ) ) =$
-$\MU y.\; \const{C}( \MU x.\; \const{C}( y ) )$
+$t\interp{\MU y.\; \const{C}( x )}^\emptyset =
+\MU y.\; \const{C}( t\interp{x}^{\{y\}} ) =
+\MU y.\; \const{C}( t\interp{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\{y\}} ) =
+\MU y.\; \const{C}( \MU x.\; \const{C}( t\interp{\MU y.\; \const{C}( x )}^{\{x,y\}} ) ) =
+\MU y.\allowbreak\; \const{C}( \MU x.\; \const{C}( y ) )$
 is $\alpha$-equivalent to $t\interp{x}^\emptyset = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
-recursively construct the \emph{normal form} $\nf{t}$ of $t$,
-that is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$
-%and by replacing all of the nonnormal subterms of $t$ with their corresponding normal forms.
+recursively construct its \emph{normal form} $\nf{t}$,
+which is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$
+%and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
 For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
 \begin{lemma}
 \label{lem:mu-norm-arg}
-If $\vec u$ are normal and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
+If $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
 then $\vec u \vsim t\interp{\vec w}$.
 \end{lemma}
 \begin{proof}
@@ -1323,39 +1323,40 @@ then $\vec u \vsim t\interp{\vec w}$.
 
 \begin{lemma}
 \label{lem:mu-cong}
-If $t_u = \MU x.\; \const{C}( \vec u )$ and $t_w = \MU y.\; \const{C}( \vec w )$ are normal,
+If $t_u = \MU x.\; \const{C}( \vec u )$ and $t_w = \MU y.\; \const{C}( \vec w )$ are in normal form,
 then $t_u\interp{ \vec u } \vsim t_w\interp{ \vec w }$ if and only if $t_u \vsim t_w$.
 \end{lemma}
 \begin{proof}
 \rem{TODO}
 \end{proof}
 
-We now define a class of models that we consider for a saturated set of equalities $\Ec$.
-In the following, we write $\M( \tau )$ to denote the interpretation type $\tau$ in $\M$,
+We now define a class of models that we consider for a saturated set of equalities~$\Ec$.
+Let $\M( \tau )$ denote the interpretation type $\tau$ in $\M$,
 that is, a set of domain elements for that type.
-We write $\M( t )$ for a term $t$ to denote the interpretation of $t$ in $\M$,
+For a term $t$, let $\M( t )$ denote the interpretation of $t$ in $\M$,
 that is, an element of $\M( \tau )$ where $\tau$ is the type of $t$.
-\rem{Clarify that non-codatatype terms are interpreted as $\mu$-terms, although dropping the $\mu$'s gives the standard representation?}
+\rem{Clarify that non-codatatype terms are interpreted as $\mu$-terms, although dropping the $\mu$'s gives the standard representation?
+(GOOD IDEA. A BIT OF REDUNDANCY CANNOT HURT.)}
 
 \begin{definition}[Normal Model]
 \afterDot%
 \label{def:norm-model}%
 \rm
-A model $\M$ is \emph{normal} if and only if:
+A model $\M$ is \emph{normal} if these conditions are met:
 \begin{enumerate}
 \item
-for all types $\tau$,
+For all types $\tau$,
 $\M( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
 unique up to renaming of $\mu$-bound variables,
-and acyclic when $\tau \not\in \Codata$,
+and acyclic when $\tau \not\in \Codata$.
 \item
-for all constructor terms $\const{C}( \vec t \,)$ of type $\tau$,
+For all constructor terms $\const{C}( \vec t \,)$ of type $\tau$,
 $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
-$\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$ where $x$ is fresh, and
+$\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$ where $x$ is fresh.
 \item
-for all selector terms $\const s^j_i( t )$ of type $\tau$,% for some $\vec u$,
-$\M( \const s^j_i( t ) )$ is the value
+For all selector terms $\const s^k_i( t )$ of type $\tau$, % for some $\vec u$,
+$\M( \const s^k_i( t ) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\M( t )\interp{u_j}$
 when $\M( t )$ is of the form $\MU x.\; \const{C}_i( \vec u )$.
@@ -1364,12 +1365,12 @@ when $\M( t )$ is of the form $\MU x.\; \const{C}_i( \vec u )$.
 
 In the following, we consider only normal models.
 Thus, when constructing a model $\M$ for $\Ec$,
-it remains only to define how $\M$ interprets wrong-applied selector terms and variables.
+it remains only to define how $\M$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ constructed in phase~2 of the calculus.
-We compute the \emph{completion} of $\Val$ for normal model $\M$, which we write as $\Val^\ast$,
-which we construct by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
+We compute the \emph{completion} $\Val^\ast$ of $\Val$ for normal model $\M$
+by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
-First, we need the following definition.
+%First, we need the following definition.
 We write $t \vsimv{x} s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent
 for some renaming that avoids capturing any variable other than $x$.
 For example,
@@ -1382,13 +1383,14 @@ $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
 For a variable $x$ of type $\tau$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
 such that $v \vsimv{x} t_1\interp{t_2}$ for some term $t_1$ with subterm $t_2$ occurring in the range of $\Val$.
-We construct $\Val^\ast$ by exhaustively applying the following update to $\Val$:
 
-\(
+We construct $\Val^\ast$ by exhaustively applying the following rule to $\Val$:
+\[
+\hbox{\(
 \inferrule{
   x : \tau \in \FV( \Val )
   \quad
-  (\MU x.\; t) \aequiv v
+  \MU x.\; t \aequiv v
   \quad
   v \in \M( \tau )
   \quad
@@ -1397,7 +1399,9 @@ We construct $\Val^\ast$ by exhaustively applying the following update to $\Val$
   \Val := \nf{\Val \{ x \mapsto \MU x.\; t \}}
 }
 \)
-
+\rn{Assign}}
+\]
+%
 In this update, we choose an unassigned variable in $\Val$
 and assign it a value that is not $\alpha$-equivalent to one occurring in $\mathcal{T}^\M_x(\Val)$.
 Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $\FV( \Val )$,
@@ -1567,7 +1571,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
 We consider a normal model $\M$
-that interprets wrongly-applied selectors based on equality information in $\Fc$,
+that interprets wrongly applied selectors based on equality information in $\Fc$,
 and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from phase~2.
 For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\Val^\ast \ec{x}$ for each variable $x$ in $\mathcal{T}(\Fc)$.
 
@@ -1602,7 +1606,7 @@ If $k = i$, then $\M( t )$ is $\alpha$-equivalent with $t_w\interp{w_j} = \Val^\
 which is $\Val^\ast \ec{t}$.
 If $k \neq i$, we interpret $\const s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
 Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3,
-pairs of wrongly-applied selectors are assigned the same value if and only if they reside in the same equivalence class,
+pairs of wrongly applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
