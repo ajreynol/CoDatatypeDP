@@ -432,7 +432,7 @@ because they can be abstracted away as variables when combining theories.
 Exceptionally, it is convenient to use natural number
 constants ($0$, $1$, \ldots)\ in examples.
 
-\paragraph{Specifications.}
+%\paragraph{Specifications.}
 In an SMT problem, the signature is normally given by specifying the
 uninterpreted types in any order, the (co)datatypes with their constructors
 and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
@@ -513,6 +513,31 @@ This rules out non-well-founded specifications such as
 For codatatypes, no admissibility check is necessary because there is always a term,
 finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop}.
 \end{report}
+
+A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
+type of an argument to one of $\delta$'s constructors. Semantically, a set of
+types is mutually (co)recursive if and only if the associated dependency graph
+is strongly connected. Types can be declared together as mutually
+(co)recursive even if they are not actually (co)recursive, but the
+semantic notion is more precise and is the one that interests us.
+%
+In addition, nothing forbids non(co)recursive specifications
+such~as
+\begin{paper}%
+\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} = \const{None} \mid \const{Some}(\tau)$.%
+\end{paper}%
+\begin{report}%
+\[\begin{aligned}[t]
+      \keyw{datatype}\;\, \ty{option}_{\,\tau} & \,=\, \const{None} \mid \const{Some}(\tau) \\[-.5\jot]
+      \keyw{codatatype}\; \,\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
+\end{aligned}
+\]
+At the semantic level, it makes no difference whether such types are
+introduced as datatypes or as codatatypes.
+\end{report}%
+%Without loss of generality, we consider that these types are datatypes
+%instead of codatatypes.
+
 %Given the specification
 %
 %\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\:\ty{stream})\]
@@ -520,7 +545,7 @@ finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop
 %the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 %nonemptiness.
 
-\paragraph{Characterization.}
+%\paragraph{Characterization.}
 Datatypes can be defined semantically as the initial model of the
 selector--constructor equations. This is the view followed by Barrett et al.\
 \cite{barrett-et-al-2010}.
@@ -636,46 +661,21 @@ For example, $\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable
 function space $\ty{nat} \to \ty{int}$.
 \end{report}
 
-% TODO: where does this go?
-%      * when looking at the universal ground (?) theory:
+TODO: Andy, introduce theory here. There were some ideas below in the comments
+you might want to mention either here or in Section 3. I'm not sure what's the
+best way to justify it though, but for the conference at least we can just
+claim it. (we won't have the place for a proof anyway).
+
+%    * when looking at the ground theory:
 %        enough to consider acyclicity -- no way to specify infinite objects
 %        otherwise
 
 %    * codatatypes:
-%      * coinduction axiom (schema)
-%        * consequence: infinite objects are allowed, but
-%          two objects yielding the same observations must be equal
+%      * when looking at the ground theory, enough to
+%        consider bisimilarity -- no way to express that certain infinite
+%        acyclic objects do not exist
 
-%      * again: when looking at the universal ground (?) theory, enough to
-%        consider bisimilarity/bisimulation
-
-% specifies the 
-
-\paragraph{Special Cases.}
-A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
-type of an argument to one of $\delta$'s constructors. Semantically, a set of
-types is mutually (co)recursive if and only if the associated dependency graph
-is strongly connected. Types can be declared together as mutually
-(co)recursive even if they are not actually (co)recursive; however, the
-semantic notion is more precise and is the one that interests us.
-%
-In addition, nothing forbids non(co)recursive specifications
-such~as
-\begin{paper}%
-\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} = \const{None} \mid \const{Some}(\tau)$.%
-\end{paper}%
-\begin{report}%
-\[\begin{aligned}[t]
-      \keyw{datatype}\;\, \ty{option}_{\,\tau} & \,=\, \const{None} \mid \const{Some}(\tau) \\[-.5\jot]
-      \keyw{codatatype}\; \,\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
-\end{aligned}
-\]
-At the semantic level, it makes no difference whether such types are
-introduced as datatypes or as codatatypes.
-\end{report}%
-%Without loss of generality, we consider that these types are datatypes
-%instead of codatatypes.
-
+%\paragraph{Special Cases.}
 Some codatatypes are so degenerate as to have infinite values
 even though they are finite. The simplest example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
