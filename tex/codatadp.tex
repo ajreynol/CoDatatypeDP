@@ -178,7 +178,7 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 Codatatypes naturally capture potentially infinite data structures and
 processes. We present a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
-uniqueness rule that identifies bisimilar values, also in the presence of cyclic
+uniqueness rule that identifies observationally equal values, also in the presence of cyclic
 ($\omega$-regular) data. The procedure decides ground and universal
 problems and is composable via the Nelson--Oppen method. It has been
 implemented in the latest version of CVC4, a state-of-the-art SMT solver. An
@@ -272,12 +272,13 @@ For example, the type
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
 corresponding datatype would be rejected as non-well-founded \cite{blanchette-et-al-2015-esop}.
 
-Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
+Second, \emph{a uniqueness rule replaces the acyclicity rule of datatypes.}
 Cyclic constraints such as
 $\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes but satisfiable for codatatypes.
-The uniqueness principle states that two values having the same (possibly
-infinite) expansion must be equal; from $\const{x} \teq \const{S}(\const{y})$ and
+However, the uniqueness principle states that two bisimilar values---i.e., two values
+having the same possibly infinite expansion---must be equal; from $\const{x}
+\teq \const{S}(\const{y})$ and
 $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
 The acyclicity and uniqueness rules are needed to ensure completeness on
 ground problems and the absence of spurious models. They cannot be replaced by
