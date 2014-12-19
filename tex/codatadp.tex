@@ -178,7 +178,7 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 Codatatypes naturally capture potentially infinite data structures and
 processes. We present a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
-bisimilarity rule that identifies equal values, also in the presence of cyclic
+uniqueness rule that identifies bisimilar values, also in the presence of cyclic
 ($\omega$-regular) data. The procedure decides ground and universal
 problems and is composable via the Nelson--Oppen method. It has been
 implemented in the latest version of CVC4, a state-of-the-art SMT solver. An
@@ -272,17 +272,17 @@ For example, the type
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
 corresponding datatype would be rejected as non-well-founded \cite{blanchette-et-al-2015-esop}.
 
-Second, \emph{a bisimilarity rule takes the place of the acyclicity rule of datatypes.}
+Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
 Cyclic constraints such as
 $\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes but satisfiable for codatatypes.
-The bisimilarity principle states that two values having the same (possibly
+The uniqueness principle states that two values having the same (possibly
 infinite) expansion must be equal; from $\const{x} \teq \const{S}(\const{y})$ and
 $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
-The acyclicity and bisimilarity rules are needed to ensure completeness on
+The acyclicity and uniqueness rules are needed to ensure completeness on
 ground problems and the absence of spurious models. They cannot be replaced by
 finite axiomatizations, so they naturally belong in a decision procedure.
-%    * in particular, acyclicity and bisimilarity are necessary for some proofs
+%    * in particular, acyclicity and uniqueness are necessary for some proofs
 %%      (and cannot be axiomatized finitely)
 %    * and for model finding, without them we quickly get spurious models
 %    * explain how finite model finding works
@@ -694,9 +694,9 @@ and $\thD$-unsatisfiable otherwise.
 When looking at the ground theory, induction can be replaced by the acyclicity
 axiom schema, which states that any ground constructor term cannot be equal to
 a variable it contains \cite{xxx}. Dually, coinduction can be replaced by the
-bisimilarity axiom schema, which asserts that (co)recursive definitions giving
+uniqueness axiom schema, which asserts that (co)recursive definitions giving
 rise to the same infinite expansion---e.g., $x \teq \const{C}(x)$ and $y \teq
-\const{C}(\const{C}(y))$---must be identical.
+\const{C}(\const{C}(y))$---must be equal.
 
 \begin{report}
 TODO: State more precisely and proof?
@@ -708,7 +708,7 @@ TODO: State more precisely and proof?
 
 %    * codatatypes:
 %      * when looking at the ground theory, enough to
-%        consider bisimilarity -- no way to express that certain infinite
+%        consider uniqueness -- no way to express that certain infinite
 %        acyclic objects do not exist
 
 %\paragraph{Special Cases.}
@@ -815,7 +815,7 @@ we may without loss of completeness treat all other types as infinite.
 The calculus consists of three sets of rules (\figuresname~\ref{fig:cc-rules} to
 \ref{fig:split-rule}) corresponding to three successive phases. The first
 phase computes the bidirectional closure of $\Ec$. The second phase makes
-inferences based on acyclicity (for datatypes) and bisimilarity (for
+inferences based on acyclicity (for datatypes) and uniqueness (for
 codatatypes). The third phase performs case splitting on constructors for
 various terms in $\tEc$.
 %Following the conventions from~\cite{},
@@ -836,7 +836,7 @@ further) before the next phase can begin.
 %constraints added to $\Ec$ are normalized in this manner.
 %We present the calculus in three steps.
 %In the first step, we compute the bidirectional closure of $\Ec$;
-%in the second step, we make inferences based on cyclicity and bisimilarity;
+%in the second step, we make inferences based on cyclicity and uniqueness;
 %and in the third step, %(when necessary),
 %we branch on constructor types for various terms in $\tEc$.
 %Following the conventions from~\cite{},
@@ -966,14 +966,14 @@ denote the equivalence class in $\Ec$ that contains $t$.
  \Ec := \Ec,\: t \teq u
 }
 \)
-\rn{Bisimilar}
+\rn{Unique}
 \end{tabular}
-\caption{\,Derivation rules for acyclicity and bisimilarity%.
+\caption{\,Derivation rules for acyclicity and uniqueness%.
 }
 \label{fig:ab-rules}
 \end{figure}
 
-\paragraph{Phase 2: Applying Acyclicity and Bisimilarity.}
+\paragraph{Phase 2: Applying Acyclicity and Uniqueness.}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 The rules of the second phase contain premises that involve a mapping $\Val$
 that associates a $\mu$-term as representative with each equivalence class.
@@ -1073,14 +1073,14 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 $\Box$
 \end{example}
 
-Given $\Val$, the rules for acyclicity and bisimilarity can be stated as follows.
+Given $\Val$, the rules for acyclicity and uniqueness can be stated as follows.
 For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x.\; u$ are cyclic,
 as indicated by the assumption $x \in \FV( u )$,
 then we can conclude that $\Ec$ is unsatisfiable.
-For bisimilarity, if there are two equivalence classes $\ec{t}$ and $\ec{u}$
+For uniqueness, if there are two equivalence classes $\ec{t}$ and $\ec{u}$
 of codatatype type whose classes of values $\Val \ec{t}$ and $\Val \ec{u}$ are equivalent for a capture-avoiding renaming of $\mu$-bound variables,
 then we can conclude $t \teq u$.
-We demonstrate the bisimilarity rule concretely with the following example.
+We demonstrate the uniqueness rule concretely with the following example.
 
 \begin{example}
 Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
@@ -1202,11 +1202,11 @@ for each $C_i \in \Ctr^\tau$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
-whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Bisimilar}, or \rn{Singleton}.
+whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
-For \rn{Bisimilar}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
+For \rn{Unique}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
 For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
 By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is $\thD$-unsatisfiable,
 and thus $\Ec$ is $\thD$-unsatisfiable.
@@ -1489,7 +1489,7 @@ we have that $\Val' \ec{x} \interp{w_i} = \Val' \ec{t_i}$,
 and hence $\Val^\ast \ec{x} \interp{w_i} = \Val^\ast \ec{t_i}$.
 
 To show 3,
-first note that since \rn{Bisimilar} does not apply,
+first note that since \rn{Unique} does not apply,
 $\Val \ec{x} \sim \Val \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 Since \rem{TODO}
 we have $\nf{(\Val \ec{x})} \sim \nf{(\Val \ec{y})}$ if and only if $\ec{x} = \ec{y}$.
@@ -1669,9 +1669,9 @@ Datatypes without acyclicity
   & 227 & 765 & \phantom{0}57 & 1049 \\
 Datatypes with acyclicity
   & 227 & 771 & \phantom{0}57 & 1055 \\
-Codatatypes without bisimilarity
+Codatatypes without uniqueness
   & 217 & 787 & \phantom{0}55 & 1059 \\
-Codatatypes with bisimilarity
+Codatatypes with uniqueness
   & 218 & 787 & \phantom{0}58 & 1063 \\
 Full (co)datatypes
   & 224 & 798 & \phantom{0}58 & 1080 \\[\jot]
@@ -1705,7 +1705,7 @@ in Isabelle, CVC4 is trusted as an oracle in these experiments.
 
 CVC4 was run on each problem several times, with the support for datatypes and
 codatatypes either enabled or disabled. The contributions of the acyclicity and
-bisimilarity rules were also measured, so find out whether these somewhat
+uniqueness rules were also measured, so find out whether these somewhat
 expensive rules are useful in practice. Even when the decision procedure is
 disabled, some of the generated axioms typically include basic properties of
 constructors and selectors, which the decision procedure would recognize as
@@ -1736,7 +1736,7 @@ comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}.
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
 
-Among the four bisimilarity proofs, three corresponded to one-line
+Among the four uniqueness proofs, three corresponded to one-line
 proofs in Isabelle, of the form \keyw{by}~\textit{coinduction}~\textit{auto}
 \cite{blanchette-et-al-2014-impl}. The fourth proof was somewhat more elaborate:
 %
@@ -1761,11 +1761,8 @@ contribution has been the support for codatatypes. These are not very
 difficult per se, but there are tricky corner cases to take care of if we care
 about completeness (which we do).
 %% alliteration
-On the practical side, we obtained
-interesting results on benchmarks generated from Isabelle theories, including
-some rather
-%mind-boggling
-puzzling bisimulation proofs.
+On the practical side, we obtained respectable results on benchmarks generated
+from Isabelle theories.
 
 This work is part of a larger program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
