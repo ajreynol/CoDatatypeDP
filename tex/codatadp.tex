@@ -692,14 +692,14 @@ function space $\ty{nat} \to \ty{int}$.
 %best way to justify it though, but for the conference at least we can just claim it. (we
 %won't have the place for a proof anyway).
 
-Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory} of (co-)datatypes,
+Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory} of (co)datatypes,
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
 namely the ones that satisfy the axioms mentioned in this section.
 In particular, this means that each interpretation in $\mathbf{I}$ has a fixed interpretation
-for constructor terms and correctly-applied selector terms, but may differ on its interpretation for
-wrongly-applied selector terms and variables.
-A formula $\varphi$ is $\thD$-satisfiable if there is an interpretation in $\mathbf{I}$ that satisfies $\varphi$,
-and $\thD$-unsatisfiable otherwise.
+for constructor terms and correctly applied selector terms, but may differ on its interpretation for
+wrongly applied selector terms and variables.
+A formula $\varphi$ is $\thD$-satisfiable if there exists an interpretation in $\mathbf{I}$ that satisfies $\varphi$;
+otherwise, it is $\thD$-unsatisfiable.
 \rem{more?}
 
 When looking at the ground theory, induction can be replaced by the acyclicity
@@ -1098,7 +1098,7 @@ We demonstrate the uniqueness rule concretely with the following example.
 %% unless it's a constant, it doesn't have a (first-order) type. So I'm rephrasing.
 
 \begin{example}
-Let $\const{C} : $ $\tau_1 \times \tau_2 \rightarrow \tau_2$ be a constructor,
+Let $\const{C} : $ $\tau \times \delta \rightarrow \delta$ be a constructor,
 and let $\Ec = \{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
 After phase~1, the equivalence classes of $\Ec$ are
 $\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
@@ -1158,7 +1158,7 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 \paragraph{Phase 3: Branching.}
 In the third phase,
 the \rn{Singleton} rule handles the case when there are two terms from $\tEc$
-having a co-recursive singleton type, in which case they must be equivalent.
+having a corecursive singleton type, in which case they must be equivalent.
 Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type,
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$),
 which is enforced by the rule \rn{Split}.
