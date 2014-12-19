@@ -1172,11 +1172,11 @@ A node is \emph{saturated} if no nonredundant application of a rule can be appli
 If there exists a closed derivation tree with root node $\Ec$, then we conclude that $\Ec$ is $\thD$-unsatisfiable.
 If there exists a derivation tree with root node $\Ec$ that contains a saturated node, then we conclude that $\Ec$ is $\thD$-satisfiable.
 
-\begin{lemma}[Termination]%
-\label{lem:t}%
+\begin{theorem}[Termination]%
+\label{thm:t}%
 \afterDot
 All derivation trees are finite.
-\end{lemma}
+\end{theorem}
 \begin{proof}
 Consider a derivation tree with root node $\Ec$.
 Let $S$ be the set of terms occurring as the argument of a selector in $\tEc$.
@@ -1196,11 +1196,11 @@ which is finite since $\tcEc$ is finite.
 \qed
 \end{proof}
 
-\begin{lemma}[Refutation Soundness]%
-\label{lem:rs}%
+\begin{theorem}[Refutation Soundness]%
+\label{thm:rs}%
 \afterDot
 If there exists a closed derivation tree with root node\/ $\Ec$, then\/ $\Ec$ is $\thD$-unsatisfiable.
-\end{lemma}
+\end{theorem}
 \begin{proof}
 We prove this by structural induction on the (closed) derivation tree with root node $\Ec$.
 First, if the derivation tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
@@ -1227,7 +1227,7 @@ and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
 \end{proof}
 
-It remains to show the converse of the previous lemma: When a derivation tree
+It remains to show the converse of the previous theorem: When a derivation tree
 with root node $\Ec$ contains a saturated node, then $\Ec$ is
 $\thD$-satisfiable.
 To do so, we exhibit a particular model $\M$ of $\thD$ that satisfies $\Ec$.
@@ -1529,11 +1529,11 @@ which is non-empty by assumption.
 \qed
 \end{proof}
 
-\begin{lemma}[Solution Soundness]%
-\label{lem:ss}%
+\begin{theorem}[Solution Soundness]%
+\label{thm:ss}%
 \afterDot
 If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is $\thD$-satisfiable.
-\end{lemma}
+\end{theorem}
 \begin{proof}
 Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where
@@ -1590,7 +1590,7 @@ and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 \qed
 \end{proof}
 
-By Lemmas~\ref{lem:t},~\ref{lem:rs}, and~\ref{lem:ss}, the calculus is sound and complete for $\thD$.
+By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the calculus is sound and complete for $\thD$.
 
 \section{Extension to Quantified Formulas}
 \label{sec:extension-to-quantified-formulas}
