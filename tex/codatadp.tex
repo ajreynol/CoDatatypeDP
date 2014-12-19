@@ -1236,11 +1236,17 @@ First, we require additional terminology concerning $\mu$-terms.
 For a $\mu$-term $t_1$ with subterm $t_2$,
 the \emph{interpretation of $t_2$ in $t_1$} is the $\mu$-term $t_1\interp{t_2}^\emptyset$ as returned by the following recursive procedure,
 where $x \mapsto \mu x. \const{C}( \vec u ) \in t_1$ indicates that $\mu x. \const{C}( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
-\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-t_1\interp{x}^M & = & \mu x. \const{C}( t_1\interp{ \vec u}^{M \cup \{ x \}}) & x \not\in M, x \mapsto \mu x. \const{C}( \vec u ) \in t_1  \\
-t_1\interp{x}^M & = & x & \text{otherwise} \\
-t_1\interp{\mu x. \const{C}( \vec u )}^M & = & \mu x. \const{C}( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & x \not\in M \\
-t_1\interp{\mu x. \const{C}( \vec u )}^M & = & x & \text{otherwise}
+\[\begin{array}{r@{}c@{}l}
+t_1\interp{x}^M & {} \,=\, {} &
+\textstyle\begin{cases}
+    \mu x.\; \const{C}( t_1\interp{ \vec u}^{M \cup \{ x \}}) & \text{if }x \not\in M, x \mapsto \mu x. \const{C}( \vec u ) \in t_1  \\[-\jot]
+    x & \text{otherwise}
+\end{cases} \\
+t_1\interp{\mu x. \const{C}( \vec u )}^M & = &
+\textstyle\begin{cases}
+    \mu x. \const{C}( t_1\interp{ \vec u }^{M \cup \{ x \}} ) & \text{if }x \not\in M \\[-\jot]
+    x & \text{otherwise}
+\end{cases}
 \end{array}\]
 We often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
 
