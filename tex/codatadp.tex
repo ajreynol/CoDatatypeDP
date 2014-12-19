@@ -115,7 +115,7 @@
 \newcommand{\ror}{\kern.45em \parallel \kern.45em}
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
-\newcommand{\interp}[1]{[\![ #1 ]\!]}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
 \newcommand{\ec}[1]{[#1]}
 \newcommand{\M}{\mathcal{M}}
@@ -1233,7 +1233,7 @@ If the tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
 then $\Ec$ is $\thD$-unsatisfiable.
 For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
-For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
+For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that $t$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
@@ -1242,13 +1242,13 @@ for each $\const C_i \in \Ctr^\delta$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{n_i}_i( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
-whose root node is $\Ec \mathrel\cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
-In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
+whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
+In all cases, we have that $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
-For \rn{Unique}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
-For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
-By the induction hypothesis, we have $\Ec \mathrel\cup t_1 \teq t_2$ is $\thD$-unsatisfiable,
+For \rn{Unique}, our construction of $\Val$ indicates that the value of $t$ and $u$ are equivalent in all models of $\Ec$.
+For \rn{Singleton}, $t$~and~$u$ must have the same value since the cardinality of their type is $1$.
+By the induction hypothesis, we have $\Ec \mathrel\cup t \teq u$ is $\thD$-unsatisfiable,
 and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
 \end{proof}
@@ -1256,51 +1256,51 @@ and thus $\Ec$ is $\thD$-unsatisfiable.
 It remains to show the converse of the previous theorem: When a derivation tree
 with root node $\Ec$ contains a saturated node, then $\Ec$ is
 $\thD$-satisfiable.
-To do so, we exhibit a particular model $\M$ of $\thD$ that satisfies $\Ec$.
-First, we require additional terminology concerning $\mu$-terms.
+To do so, we exhibit a specific model $\M$ of $\thD$ that satisfies $\Ec$.
 
-For a $\mu$-term $t_1$ with subterm $t_2$,
-the \emph{interpretation of $t_2$ in $t_1$} is the $\mu$-term $t_1\interp{t_2}^\emptyset$ as returned by the following recursive procedure,
-where $x \mapsto \MU x.\; \const{C}( \vec u ) \in t_1$ indicates that $\MU x.\; \const{C}( \vec u )$ is the subterm of $t_1$ that binds this occurrence of variable $x$.
+First, we need additional terminology concerning $\mu$-terms.
+For a $\mu$-term $t$ with subterm $u$,
+the \emph{interpretation of\/ $u$ in\/ $t$} is the $\mu$-term $t\interp{u}^\emptyset$ as returned by the following recursive procedure,
+where $x \mapsto \MU x.\; \const{C}( \vec u ) \in t$ indicates that $\MU x.\; \const{C}( \vec u )$ is the subterm of $t$ that binds this occurrence of variable $x$:
 \[\begin{array}{r@{}c@{}l}
-t_1\interp{x}^M & {} \,=\, {} &
+t\interp{x}^M & {} \,=\, {} &
 \textstyle\begin{cases}
-    \MU x.\; \const{C}( t_1\interp{ \vec u}^{M \mathrel\cup \{ x \}}) & \text{if }x \not\in M, x \mapsto \MU x.\; \const{C}( \vec u ) \in t_1  \\[-\jot]
+    \MU x.\; \const{C}( t\interp{ \vec u}^{M \mathrel\cup \{ x \}}) & \text{if }x \not\in M, x \mapsto \MU x.\; \const{C}( \vec u ) \in t  \\[-\jot]
     x & \text{otherwise}
 \end{cases} \\
-t_1\interp{\MU x.\; \const{C}( \vec u )}^M & = &
+t\interp{\MU x.\; \const{C}( \vec u )}^M & = &
 \textstyle\begin{cases}
-    \MU x.\; \const{C}( t_1\interp{ \vec u }^{M \mathrel\cup \{ x \}} ) & \text{if }x \not\in M \\[-\jot]
+    \MU x.\; \const{C}( t\interp{ \vec u }^{M \mathrel\cup \{ x \}} ) & \text{if }x \not\in M \\[-\jot]
     x & \text{otherwise}
 \end{cases}
 \end{array}\]
-We often write $t_1\interp{t_2}$ as shorthand for $t_1\interp{t_2}^\emptyset$.
+We write $t\interp{u}$ to abbreviate $t\interp{u}^\emptyset$.
 
-Given a $\mu$-term $t_1$ of the form $\MU x.\; \const{C}( u_1, \ldots, u_n )$ with subterm $t_2$,
-we say $t_2$ is a \emph{bisimilar subterm} of $t_1$ if and only if it is of the form
-$\MU y.\; \const{C}( v_1, \ldots, v_n )$ and $t_1\interp{ u_i } \aequiv t_1\interp{ v_i }$ for $i = 1,\ldots, n$.
-The term $t_1$ is \emph{normal} if it does not contain a strict, bisimilar subterm
+Given a $\mu$-term $t$ of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$ with subterm $u$,
+we say $u$ is a \emph{bisimilar subterm} of $t$ if it is of the form
+$\MU y.\; \const{C}( u_1, \ldots, u_n )$ and $t\interp{ t_i } \aequiv t\interp{ u_i }$ for $i = 1,\ldots, n$.
+The term $t$ is \emph{normal} if it does not contain a strict, bisimilar subterm
 and all of its strict subterms are also normal.
-For example, the $\mu$-term $t_1$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is not normal,
-since $\MU y.\; \const{C}( y )$ is a bisimilar subterm of $t_1$.
-In particular, note that their arguments have the same interpretation in $t_1$,
+For example, the $\mu$-term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is subnormal,
+since $\MU y.\; \const{C}( y )$ is a bisimilar subterm of $t$.
+In particular, note that their arguments have the same interpretation in $t$,
 that is,
-$t_1\interp{\MU y.\; \const{C}( y )}^\emptyset =$
-$\MU y.\; \const{C}( t_1\interp{y}^{\{y\}} ) =$
+$t\interp{\MU y.\; \const{C}( y )}^\emptyset =$
+$\MU y.\; \const{C}( t\interp{y}^{\{y\}} ) =$
 $\MU y.\; \const{C}( y )$
 is syntactically equivalent to
-$t_1\interp{y}^\emptyset =$
-$\MU y.\; \const{C}( t_1\interp{y}^{\{y\}} ) =$
+$t\interp{y}^\emptyset =$
+$\MU y.\; \const{C}( t\interp{y}^{\{y\}} ) =$
 $\MU y.\; \const{C}( y )$.
-The $\mu$-term $t_1$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also not normal,
-since $\MU y.\; \const{C}( x )$ is a bisimilar subterm of $t_1$,
+The $\mu$-term $t$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also not normal,
+since $\MU y.\; \const{C}( x )$ is a bisimilar subterm of $t$,
 noting that
-$t_1\interp{\MU y.\; \const{C}( x )}^\emptyset =$
-$\MU y.\; \const{C}( t_1\interp{x}^{\{y\}} ) =$
-$\MU y.\; \const{C}( t_1\interp{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\{y\}} ) =$
-$\MU y.\; \const{C}( \MU x.\; \const{C}( t_1\interp{\MU y.\; \const{C}( x )}^{\{x,y\}} ) ) =$
+$t\interp{\MU y.\; \const{C}( x )}^\emptyset =$
+$\MU y.\; \const{C}( t\interp{x}^{\{y\}} ) =$
+$\MU y.\; \const{C}( t\interp{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\{y\}} ) =$
+$\MU y.\; \const{C}( \MU x.\; \const{C}( t\interp{\MU y.\; \const{C}( x )}^{\{x,y\}} ) ) =$
 $\MU y.\; \const{C}( \MU x.\; \const{C}( y ) )$
-is syntactically equivalent to $t_1\interp{x}^\emptyset = t_1$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
+is syntactically equivalent to $t\interp{x}^\emptyset = t$ for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we may recursively construct a normal $\mu$-term $\nf{t}$
 (which we call the \emph{normal form} of $t$)
@@ -1459,7 +1459,7 @@ $\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
 $\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
 $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
 to ${\Varec{x}}$.
-Legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain non-normal terms.
+Legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain subnormal terms.
 After applying the substitution for the third term mentioned above,
 $\Val \ec{w_1}$ is $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
 which has normal form
