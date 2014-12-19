@@ -144,6 +144,7 @@
 \urlstyle{ttstyle}
 
 \global\def\figurename{Figure}
+\global\def\figuresname{Figures}
 
 \DeclareSymbolFont{letters}{OML}{txmi}{m}{it}
 
@@ -801,7 +802,7 @@ Moreover, since the constraints are ground, they cannot entail an upper bound
 on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
 we may without loss of completeness treat all other types as infinite.
 
-The calculus consists of three sets of rules (Figures \ref{fig:cc-rules} to
+The calculus consists of three sets of rules (\figuresname~\ref{fig:cc-rules} to
 \ref{fig:split-rule}) corresponding to three successive phases. The first
 phase computes the bidirectional closure of $\Ec$. The second phase makes
 inferences based on acyclicity (for datatypes) and bisimilarity (for
@@ -914,9 +915,9 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  \tau \in \Data
+  \delta \in \Data
   \quad
-  t : \tau
+  t : \delta
   \quad
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
   \Val \ec{t} = \mu x.\; u
@@ -930,9 +931,9 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \\[4\jot]
 \(
 \inferrule{
- \tau \in \Codata
+ \delta \in \Codata
  \quad
- t, u : \tau
+ t, u : \delta
  \quad
  %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
  \Val \ec{t} \aequiv \Val \ec{u}
@@ -1028,25 +1029,25 @@ and thus the construction of $\Val$ will terminate.
 \begin{example}
 Suppose that $\Ec$ contains distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and $\ec{z}$
 where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$ for some $\const{C} \in \Ctr$.
-A possible sequence of \rn{Update} rule applications is presented below, omitting
+A possible sequence of \rn{Update} rule applications is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
 \item \noindent\rlap{Initial state:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{  \}$
 \item \noindent\rlap{Update w.r.t.\ $\ec{x}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \}$
 \item \noindent\rlap{Update w.r.t.\ $\ec{y}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
-  \ec{y} \mapsto \mu {\Varec{y}}. \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
+  \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
 \item \noindent\rlap{Update w.r.t.\ $\ec{x}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
   \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
 \end{enumerate}
 %
 This indicates that the values for $x$ and $y$ in models of $\Ec$
-are of the form $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \ldots ))$
-and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))$,
-respectively, for some value of ${\Varec{w}}$ and ${\Varec{z}}$.
+are of the forms $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots ))))$
+and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))))$,
+respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \end{example}
 
-Given $\Val$, the rules for acyclicity and bisimilarity (Figure~\ref{fig:ab-rules}) can be stated as follows.
+Given $\Val$, the rules for acyclicity and bisimilarity can be stated as follows.
 For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x.\; u$ are cyclic,
 as indicated by the assumption $x \in \FV( u )$,
 then we can conclude that $\Ec$ is unsatisfiable.
@@ -1058,7 +1059,7 @@ We demonstrate the bisimilarity rule concretely with the following example.
 \begin{example}
 Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
 and let $\Ec$ be the set $\{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
-After applying the rules in Figure~\ref{fig:cc-rules} to completion, the equivalence classes of $\Ec$ are
+After phase~1, the equivalence classes of $\Ec$ are
 $\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
 We then construct $\Val$ using the aforementioned phases, after which we obtain:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l}
@@ -1113,10 +1114,9 @@ are equivalent for any value of ${\Varec{y}}$.
 \end{figure}
 
 \paragraph{Phase 3: Branching.}
-If neither a rule from Figure \ref{fig:cc-rules}~or~\ref{fig:ab-rules} applies to $\Ec$, 
-the rules from Figure~\ref{fig:split-rule} are applied.
-The \rn{Singleton} rule handles the case when there are two terms from $\tEc$ having a co-recursive singleton type,
-in which case they must be equivalent.
+In the third phase,
+the \rn{Singleton} rule handles the case when there are two terms from $\tEc$
+having a co-recursive singleton type, in which case they must be equivalent.
 Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type, 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
 which is enforced by the rule \rn{Split}.
