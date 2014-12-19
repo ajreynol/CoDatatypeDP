@@ -775,8 +775,8 @@ as a conjunction.
 We write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
-are simplified to $t_i$, and moreover assume that all %additional
-constraints added to $\Ec$ are normalized in this manner.
+are simplified to $t_k$. All constraints added to $\Ec$ are also implicitly
+normalized in this manner.
 
 To simplify the presentation, we make the following assumptions about $\Sig$.
 First, all codatatypes in $\Codata$ are corecursive. This is not restrictive
@@ -790,11 +790,13 @@ Moreover, since the constraints are ground, they cannot entail an upper bound
 on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
 we may without loss of completeness treat all other types as infinite.
 
-We present the calculus in three steps.
-In the first step, we compute the bidirectional closure of $\Ec$;
-in the second step, we make inferences based on cyclicity and bisimilarity;
-and in the third step, %(when necessary),
-we branch on constructor types for various terms in $\tEc$.
+The calculus consists of three sets of rules corresponding to three
+successive phases.
+The first phase computes the bidirectional closure of $\Ec$.
+The second phase makes inferences based on cyclicity (for datatypes)
+and bisimilarity (for codatatypes).
+The third phase performs case splitting on constructors
+for various terms in $\tEc$.
 Following the conventions from~\cite{}, 
 the derivation rules of our calculus are given in \emph{guarded assignment form},
 where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
