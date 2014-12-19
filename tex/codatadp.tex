@@ -1364,14 +1364,14 @@ when $\M( t )$ is of the form $\MU x.\; \const{C}_i( \vec u )$.
 \end{definition}
 
 In the following, we consider only normal models.
-Thus, when constructing a model $\M$ for $\Ec$,
+When constructing a model $\M$ for $\Ec$,
 it remains only to define how $\M$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ constructed in phase~2 of the calculus.
 We compute the \emph{completion} $\Val^\ast$ of $\Val$ for normal model $\M$
 by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
 %First, we need the following definition.
-We write $t \vsimv{x} s$ if $\mu$-terms $t$ and $s$ are syntactically equivalent
+We write $t \vsimv{x} u$ if $\mu$-terms $t$ and $u$ are syntactically equivalent
 for some renaming that avoids capturing any variable other than $x$.
 For example,
 $\MU x.\; \const{D}( x ) \vsimv{y} \MU x.\; \const{D}( y )$,
@@ -1380,9 +1380,9 @@ $\MU x.\; \const{C}( z, x ) \vsimv{z} \MU y.\; \const{C}( z, y )$,
 but
 $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
-For a variable $x$ of type $\tau$ and a fixed normal model $\M$,
+For a variable $x : \tau$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
-such that $v \vsimv{x} t_1\interp{t_2}$ for some term $t_1$ with subterm $t_2$ occurring in the range of $\Val$.
+such that $v \vsimv{x} t\interp{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
 
 We construct $\Val^\ast$ by exhaustively applying the following rule to $\Val$:
 \[
@@ -1402,9 +1402,9 @@ We construct $\Val^\ast$ by exhaustively applying the following rule to $\Val$:
 \rn{Assign}}
 \]
 %
-In this update, we choose an unassigned variable in $\Val$
-and assign it a value that is not $\alpha$-equivalent to one occurring in $\mathcal{T}^\M_x(\Val)$.
-Since this update removes one variable from the set $FV( \Val )$ and does not add any variables to $\FV( \Val )$,
+The rule chooses an unassigned variable in $\Val$
+and assigns it a value that is not $\alpha$-equivalent to one occurring in $\mathcal{T}^\M_x(\Val)$.
+Since this update removes one variable from the set $\FV( \Val )$ and does not add any variables to $\FV( \Val )$,
 it can only be applied a finite number of times.
 After assigning this value, we normalize all terms in the range of $\Val$.
 %We then let $\Val^\ast \ec{x}$ be $\nf{\Val' \ec{x}}$ for all $\ec{x}$.
