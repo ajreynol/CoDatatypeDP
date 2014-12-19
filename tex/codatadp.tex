@@ -24,6 +24,14 @@
 \usepackage{url}
 \usepackage[all]{xy}
 
+\makeatletter
+\def\spnXwtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}%
+                         \@addtoreset{#1}{chapter}}%
+\makeatother
+
+%%% not part of shared counter
+\spnXwtheorem{examplex}{Example}{\itshape}{\rmfamily}
+
 \newcommand\MIDRULE{
 \\[-1pt] %%% TYPESETTING HACK
 \midrule
@@ -750,7 +758,7 @@ characterize this degenerate case:
 
 % In other words, all finite corecursive codatatypes are corecursive singletons.
 
-\begin{lemma}[Corecursive Singletons]%
+\begin{lemma}%[Corecursive Singletons]%
 \label{lem:corecursive-singletons}%
 \afterDot
 Let $\delta$ be a corecursive codatatype. The domain interpreting $\delta$ is
@@ -1062,7 +1070,7 @@ It is easy to see that the height of terms produced as a result of the unfolding
 is bounded by the number of equivalence classes of $\Ec$,
 and thus the construction of $\Val$ will terminate.
 
-\begin{example}
+\begin{examplex}
 Suppose that $\Ec$ contains distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and $\ec{z}$
 where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$ for some $\const{C} \in \Ctr$.
 A possible sequence of \rn{Unfold} rule applications is given below, omitting
@@ -1082,7 +1090,7 @@ are of the forms $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\V
 and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))))$,
 respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \xend
-\end{example}
+\end{examplex}
 
 Given $\Val$, the rules for acyclicity and uniqueness can be stated as follows.
 For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x.\; u$ are cyclic,
@@ -1097,7 +1105,7 @@ We demonstrate the uniqueness rule concretely with the following example.
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
 %% unless it's a constant, it doesn't have a (first-order) type. So I'm rephrasing.
 
-\begin{example}
+\begin{examplex}
 Let $\const{C} : $ $\tau \times \delta \rightarrow \delta$ be a constructor,
 and let $\Ec = \{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
 After phase~1, the equivalence classes of $\Ec$ are
@@ -1105,9 +1113,9 @@ $\{ x,\, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
 Constructing $\Val$ as described above yields
 \[\begin{array}{rcrlrl}
 \Val \ec{x} & \,=\, &
-\mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, & \mu {\VAREC{\const{C}(y, x)}}. & \const{C}( {\Varec{y}},\, {\Varec{x}} ) ) \\
+\mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, & \smash{\mu {\vthinspace\VAREC{\const{C}(y, x)}}}. & \const{C}( {\Varec{y}},\, {\Varec{x}} ) ) \\
 \Val \ec{\const{C}(y,x)} & = &
-\mu {\VAREC{\const{C}(y,x)}}. & \const{C}( {\Varec{y}},\, & \mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, {\VAREC{\const{C}(y,x)}} ) )
+\mu {\vthinspace\VAREC{\const{C}(y,x)}}. & \const{C}( {\Varec{y}},\, & \mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, {\VAREC{\const{C}(y,x)}} ) )
 \end{array}\]
 Since $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are $\alpha$-equivalent,
 %for the renaming
@@ -1116,7 +1124,7 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 %Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$
 %are equivalent for any value of ${\Varec{y}}$.
 \xend
-\end{example}
+\end{examplex}
 
 \begin{figure}[t]
 \normalsize
@@ -1124,11 +1132,11 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  t : \tau \in \tEc
+  t : \delta \in \tEc
   \quad
-  ( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\tau )
+  ( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta )
   \text{ or }
-  ( \tau \in \Data \text{ and } \tau \text{ finite} )
+  ( \delta \in \Data \text{ and } \delta \text{ finite} )
 }{
   \Ec := \Ec,\: t \teq \const{C}_1(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec,\: t \teq \const{C}_m(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) )
 }
@@ -1137,11 +1145,11 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 \\[5\jot]
 \(
 \inferrule{
-  \tau \in \Codata
+  \delta \in \Codata
   \quad
-  \left|\tau\right| = 1
+  \left|\delta\right| = 1
   \quad
-  t, u : \tau \in \tEc
+  t, u : \delta \in \tEc
 }{
   \Ec := \Ec,\: t \teq u
 }
@@ -1156,8 +1164,8 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 \end{figure}
 
 \paragraph{Phase 3: Branching.}
-Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type,
-the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$).
+If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
+the equivalence class of $t$ must contain an application of one of the constructors of $\delta$ (where $\Ctr^\delta = \{ \const{C}_1, \ldots \const{C}_m \}$).
 This is enforced in the third phase by the \rn{Split} rule.
 The \rn{Singleton} rule handles the degenerate case where two terms from $\tEc$
 have a corecursive singleton type, in which case they must be equivalent.
@@ -1379,7 +1387,7 @@ it can only be applied a finite number of times.
 After assigning this value, we normalize all terms in the range of $\Val$.
 %We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
 
-\begin{example}
+\begin{examplex}
 Let $\tau$ be a type in $\Codata$ with three constructors $\const{A}$, $\const{B}$ and $\const{C}$ each having type $\tau \rightarrow \tau$.
 Let $\Ec$ be the set
 $\{$
@@ -1439,7 +1447,7 @@ $\Val \ec{w_1}$ is $\mu {\Varec{w_1}}. \const{A}( \mu {\Varec{x}}. \const{B}( \c
 which has normal form
 $\mu {\Varec{w_1}}. \const{A}( \mu {\Varec{x}}. \const{B}( {\Varec{w_1}} ) )$.
 \xend
-\end{example}
+\end{examplex}
 
 %We first state the following properties of $\Val^\ast$.
 %where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\mu x. u$.
