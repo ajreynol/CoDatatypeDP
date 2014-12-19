@@ -1404,23 +1404,21 @@ We construct $\Val^\ast$ by exhaustively applying the following rule to $\Val$:
 %
 In this update, we choose an unassigned variable in $\Val$
 and assign it a value that is not $\alpha$-equivalent to one occurring in $\mathcal{T}^\M_x(\Val)$.
-Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $\FV( \Val )$,
+Since this update removes one variable from the set $FV( \Val )$ and does not add any variables to $\FV( \Val )$,
 it can only be applied a finite number of times.
 After assigning this value, we normalize all terms in the range of $\Val$.
 %We then let $\Val^\ast \ec{x}$ be $\nf{\Val' \ec{x}}$ for all $\ec{x}$.
 
 \begin{examplex}
-Let $\tau$ be a type in $\Codata$ with three constructors $\const{C}$, $\const{D}$, and $\const{E}$ each having type $\tau \rightarrow \tau$.
+Let $\delta$ be a codatatype with three constructors $\const{C}, \const{D}, \const{E} :\delta \rightarrow \delta$.
 Let $\Ec$ be the set
-$\{$
-$y_1 \teq \const{C}( y_2 )$,
-$y_2 \teq \const{D}( x )$,
-$z_1 \teq \const{E}( z_2 )$,
-$z_2 \teq \const{C}( z_1 )$,
-$w_1 \teq \const{C}( x )$,
-$w_2 \teq \const{E}( w_3 )$,
-$x \not\teq y_2$,
-$\}$.
+$\{y_1 \teq \const{C}( y_2 ),\;
+y_2 \teq \const{D}( x ),\;
+z_1 \teq \const{E}( z_2 ),\;
+z_2 \teq \const{C}( z_1 ),\;
+w_1 \teq \const{C}( x ),\;
+w_2 \teq \const{E}( w_3 ),\;
+x \not\teq y_2\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains
 \[\begin{array}{r@{}c@{}rlll@{\qquad}r@{}c@{}lllll}
 \Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{C}( & \MU {\Varec{y_2}}. & \const{D}( {\Varec{x}} ) ) &
@@ -1569,7 +1567,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where
 %all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
-%The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding additional equalities to $\Fc$.
+%The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
 We consider a normal model $\M$
 that interprets wrongly applied selectors based on equality information in $\Fc$,
 and interprets the variables of $\Fc$ based on the completion $\Val^\ast$ of the mapping $\Val$ from phase~2.
@@ -1668,8 +1666,8 @@ each $T_i$-solver for $i = 1, \ldots, n$ takes as input a combination of (1) the
 (2) additional equalities and disequalities between variables of types not belonging to $T_i$.
 Let us call this set $M_i$.
 Each $T_i$ solver either
-reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case $\neg C$ is added as a additional clause to $F$,
-adds an additional clause $C$ to $F$,
+reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case $\neg C$ is added to $F$,
+adds a clause $C$ to $F$,
 or does nothing.
 When $M$ is a complete assignment for $F$, a theory solver can only choose to do nothing when $M_i$ is indeed $T_i$-satisfiable.
 
