@@ -27,6 +27,8 @@
 \def\thewordpaper{paper}
 \newcommand\dotReportFootnote[1]{.}
 
+\newcommand\FV{\mathrm{FV}}
+
 \newcommand\afterDot{\;} %%% Too little space by default after "Lemma Foo."
 
 \begin{report}
@@ -789,13 +791,12 @@ Moreover, since the constraints are ground, they cannot entail an upper bound
 on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
 we may without loss of completeness treat all other types as infinite.
 
-The calculus consists of three sets of rules corresponding to three
-successive phases.
-The first phase computes the bidirectional closure of $\Ec$.
-The second phase makes inferences based on acyclicity (for datatypes)
-and bisimilarity (for codatatypes).
-The third phase performs case splitting on constructors
-for various terms in $\tEc$.
+The calculus consists of three sets of rules (Figures \ref{fig:cc-rules} to
+\ref{fig:split-rule}) corresponding to three successive phases. The first
+phase computes the bidirectional closure of $\Ec$. The second phase makes
+inferences based on acyclicity (for datatypes) and bisimilarity (for
+codatatypes). The third phase performs case splitting on constructors for
+various terms in $\tEc$.
 %Following the conventions from~\cite{}, 
 %The derivation rules are given in \relax{guarded assignment form},
 %where
@@ -805,7 +806,9 @@ or is $\bot$.
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$,
-denoting nondeterministic branching.
+denoting nondeterministic branching. The rules associated with a phase are
+applied until saturation (i.e., until no rule can be applied to extend~$\Ec$
+further) before the next phase can begin.
 
 \begin{figure}[t]
 \normalsize
@@ -863,7 +866,7 @@ denoting nondeterministic branching.
   \Ec := \Ec,\: \vec t \teq \vec u
 }
 \)
-\rn{Decomp} 
+\rn{Inject} 
 \qquad
 \(
 \inferrule{
@@ -882,12 +885,18 @@ denoting nondeterministic branching.
 \end{figure}
 
 \paragraph{Phase 1: Computing the Bidirectional Closure.}
-Figure~\ref{fig:cc-rules} gives the basic rules of the calculus.
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
-whereas the \rn{Decomp} and \rn{Clash} rules together compute (downward) unification.
-For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Decomp},
+whereas the \rn{Inject} and \rn{Clash} rules together compute (downward) unification.
+For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Inject},
 and failures to unify equated terms are recognized by \rn{Clash}.
 The rule \rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
+
+At the end of this phase, $\Ec$ induces an equivalence
+relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and
+only if $t \teq u \in \Ec$.
+Thus, we can regard $\Ec$ as a set of
+equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
+denote the equivalence class in $\Ec$ that contains $t$.
 
 \begin{figure}[t]
 \normalsize
@@ -902,7 +911,7 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
   \Val \ec{t} = \mu x.\; u
   \quad
-  x \in FV( u )
+  x \in \FV( u )
 }{
   \bot
 }
@@ -916,28 +925,22 @@ The rule \rn{Conflict} recognizes when an equality and its negation both occur i
  t, u : \tau
  \quad
  %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
- \Val \ec{t} \vsim \Val \ec{u}
+ \Val \ec{t} \aequiv \Val \ec{u}
 }{
  \Ec := \Ec,\: t \teq u
 }
 \)
 \rn{Bisimilar}
 \end{tabular}
-\caption{\,Directional rules for acyclicity and bisimilarity%.
+\caption{\,Derivation rules for acyclicity and bisimilarity%.
 }
 \label{fig:ab-rules}
 \end{figure}
 
 \paragraph{Phase 2: Applying Acyclicity and Bisimilarity.}
-In the second phase,
-we assume that $\Ec$ is saturated with respect to the rules in Figure~\ref{fig:cc-rules}---that is,
-no rule can be applied to extend~$\Ec$ further.
-When this is the case, it is easy to see that $\Ec$ induces an equivalence relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and only if $t \teq u \in \Ec$.
-Thus, we can consider $\Ec$ as a set of equivalence classes of terms. 
-For a term $t \in \tEc$, we write $\ec{t}$ to denote the equivalence class in $\Ec$ that contains $t$.
-
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
-The rules of this phase contain premises that involve a mapping $\Val$ from equivalence classes to terms containing $\mu$-bindings.
+The rules of the second phase contain premises that involve a mapping $\Val$
+that associates a potentially cyclic $\mu$-term as representative with each equivalence class.
 Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
 % for example, $\mu x. \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
@@ -945,8 +948,8 @@ Formally, $\mu$-terms are defined recursively as being either a variable $x$
 or a node of the form
 $\mu x.\; \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ with the expected types.
-The variable $x$ need not occur under the binder's body, in which case the $\mu$-prefix
-is optional.
+The variable $x$ need not occur under the binder's body, in which case the
+binder can be omitted.
 
 %%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
 %
@@ -973,14 +976,14 @@ $\mu x.\; \const{D}( y, x ) \aequiv \mu z.\; \const{D}( y, z )$,
 but
 $\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{D}( y, x ) \not\aequiv \mu x.\; \const{D}( z, x )
 \not\aequiv \mu y.\; \const{D}( y, x )$.
-Two $\mu$-terms may represent the same value while not being $\alpha$-equivalent, as in
-$\mu x.\; \const{C}( \const{C}( x ) ) \not\aequiv \mu x.\; \const{C}( x )$.
+Two $\mu$-terms can represent the same value while not being $\alpha$-equivalent---e.g.,
+$\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{C}( \const{C}( x ) )$.
 %, or informally are \emph{observationally equivalent}.
 %For convienience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
-Intuitively, a $\mu$-term $t$ of type $\tau$ describes a class of values of $\tau$, 
+Intuitively, a $\mu$-term $t$ of type $\tau$ describes a class of values of $\tau$,
 %either in the case when $\tau$ is a codatatype or datatype type,
 where a cyclic $t$ describes an infeasible class of values when
 %$\tau \not\in \Codata$.
@@ -994,7 +997,7 @@ in other words, there are initially no constraints on the values for any equival
 Then, $\Val$ is modified by applying the following update exhaustively:
 \[
 \inferrule{
-  v_{\ec{x}} \in FV( \Val )
+  v_{\ec{x}} \in \FV( \Val )
   \quad
   \const{C}( t_1, \ldots, t_n ) \in \ec{x}
   \quad
@@ -1003,8 +1006,8 @@ Then, $\Val$ is modified by applying the following update exhaustively:
   \Val := \Val \{ v_{\ec{x}} \mapsto \mu v_{\ec{x}}. \const{C}( v_{\ec{t_1}}, \ldots, v_{\ec{t_n}} ) \}
 }
 \]
-Here, we write $FV( \Val )$ to denote the \emph{free variables} occurring in $\Val$, which
-excludes variables that occur beneath $\mu$-binders.
+We write $\FV( \Val )$ to denote the \relax{free variables} occurring in $\Val$, which
+exclude variables that occur beneath $\mu$-binders.
 It is straightforward to see that the height of terms produced as a result of this update
 is bounded by the number of equivalence classes of $\Ec$,
 and thus our construction of $\Val$ is terminating.
@@ -1041,7 +1044,7 @@ for some value of $v_{\ec{w}}$ and $v_{\ec{z}}$.
 
 Given $\Val$, the rules for acyclicity and bisimilarity (Figure~\ref{fig:ab-rules}) can be stated as follows.
 For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \mu x.\; u$ are cyclic,
-as indicated by the assumption $x \in FV( u )$,
+as indicated by the assumption $x \in \FV( u )$,
 then we can conclude that $\Ec$ is unsatisfiable.
 For bisimilarity, if there are two equivalence classes $\ec{t}$ and $\ec{u}$ 
 of codatatype type whose classes of values $\Val \ec{t}$ and $\Val \ec{u}$ are equivalent for a capture-avoiding renaming of $\mu$-bound variables,
@@ -1168,10 +1171,10 @@ for each $C_i \in \Ctr^\tau$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
 we know $\Ec$ is unsatisfiable in $\thD$.
 Otherwise, the child of $\Ec$ is a closed derivation tree 
-whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Decomp}, \rn{Bisimilar}, or \rn{Singleton}.
+whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Bisimilar}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
-For \rn{Decomp}, this is a consequence of injectivity.
+For \rn{Inject}, this is a consequence of injectivity.
 For \rn{Bisimilar}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
 For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
 By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is unsatisfiable in $\thD$, 
@@ -1298,7 +1301,7 @@ We first construct a mapping $\Val'$ by exhaustively applying the following upda
 
 \(
 \inferrule{
-  x : \tau \in FV( \Val ) 
+  x : \tau \in \FV( \Val ) 
   \quad
   (\mu x. t) \sim v
   \quad
@@ -1312,7 +1315,7 @@ We first construct a mapping $\Val'$ by exhaustively applying the following upda
 
 In this update, we choose an unassigned variable in $\Val$
 and assign it a value that is not bisimilar to one occurring in $\mathcal{T}^\M_x(\Val)$.
-Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
+Since this update removes one variable from the set $\FV( \Val )$ and does not add any additional variables to $\FV( \Val )$, 
 it can only be applied a finite number of times.
 We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
 
@@ -1427,7 +1430,7 @@ first note that since \rn{Clash} does not apply to $\Ec$,
 for all equivalence classes $\ec{y}$,
 each pair of constructor terms $\const{C}_i( \vec t )$ and $\const{C}_j( \vec u )$ in $\ec{y}$
 are such that $i = j$ since \rn{Clash} does not apply to $\Ec$,
-and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not apply to $\Ec$.
+and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply to $\Ec$.
 Thus, 
 if $\const{C}_i( t_1, \ldots, t_n ) \in \ec{y}$,
 $\Val$ was constructed by applying a sequence of substitutions
@@ -1493,7 +1496,7 @@ where $t_w\interp{w_i} = \Val^\ast \ec{u_i}$ for $i = 1, \ldots, n$.
 For each $i = 1, \ldots, n$, let $u_i'$ be the $i^{th}$ argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$.
 %Say that $\muvar( w_i ) = v_{\ec{y_i}}$.
-%Due to our construction of $\Val^\ast$ and since \rn{Decomp} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$,
+%Due to our construction of $\Val^\ast$ and since \rn{Inject} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$,
 %and thus $t_u\interp{u_i'} \vsim \Val^\ast \ec{y_i}$.
 %By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{ y_i } = t_w\interp{ w_i }$,
 and thus $t_u\interp{u_i'} \vsim t_w\interp{ w_i }$. % for each $i = 1, \ldots, n$.
@@ -1507,7 +1510,7 @@ $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) 
 By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{u}$ is a term $t_w$ of the form
 $\mu v_{\ec{u}}. C_i( w_1, \ldots, w_n )$,
 where $t_w \interp{ w_j } = \Val^\ast \ec{ s^j_k( u )}$. 
-%By our construction of $\Val^\ast$ and since \rn{Decomp} and \rn{Clash} do not apply to $\Fc$, 
+%By our construction of $\Val^\ast$ and since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
 %$\Val^\ast \ec{ u }$ must be of the form $t_u = \mu v_{\ec{u}}. C_i( u_1, \ldots, u_n )$,
 %where $\muvar( u_1 ) = v_{\ec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = v_{\ec{s^n_i( u )}}$,
 %and $\M( u )$ is of the form $t_w = \mu x. C_i( w_1, \ldots, w_n )$,
@@ -1561,7 +1564,7 @@ We have found that this leads to better performance since this reduction introdu
 Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
 if $s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor 
-$\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Decomp} before inferring this equality.  
+$\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.  
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
 In particular, we 
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
