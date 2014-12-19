@@ -1478,10 +1478,10 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 \begin{lemma}
 \label{lem:model-completion}
 If $\Val$ is constructed for a saturated set $\Ec$
-and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then
+and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, the following holds:
 \begin{enumerate}
-\item $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
-\item
+\item[\rm 1.] $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
+\item[\rm 2.]
 All subterms $\MU {\Varec{x}}.\; t$ of $\Val^\ast \ec{y}$ are such that
 $\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}.\; t } = \Val^\ast \ec{x}$. 
 %If $\const{C}( t_1, \ldots, t_n ) \in \ec{x}$,
@@ -1494,7 +1494,7 @@ $\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}.\; t } = \Val^\ast \ec{x}$.
 %\item
 %$t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
 %for all $t_1$ with subterm $t_2$ in the range of $\Val^\ast$ where $\muvar(t_2)={\Varec{x}}$,
-\item
+\item[\rm 3.]
 $\Val^\ast \ec{x} \vsim \Val^\ast \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
@@ -1507,7 +1507,7 @@ Consider the case when $\tau$ is finite.
 By assumption, $\tau \not\in \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
 If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\ref{lem:corecursive-singletons},
-the cardinality of $\tau$ must be one.
+the cardinality of $\tau$ must be $1$.
 Since \rn{Singleton} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
 and thus there are no terms in $\mathcal{T}^\M_x(\Val^\ast)$ of type $\tau$.
