@@ -94,10 +94,12 @@
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
 \newcommand{\interp}[1]{[\![ #1 ]\!]}
 \newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
-\newcommand{\ec}[1]{ [ #1 ] }
+\newcommand{\ec}[1]{[#1]}
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\Val}{\mathcal{A}}
 \newcommand{\Var}{\mathcal{V}}
+%\newcommand{\Varec}[1]{\Var{\ec{#1}}}
+\newcommand{\Varec}[1]{\widetilde{#1}}
 \newcommand{\nf}[1]{{#1}\!\!\downarrow}
 \newcommand{\vsim}{\sim}
 \newcommand{\aequiv}{\mathrel{=_\alpha}}
@@ -999,21 +1001,21 @@ $\mu x.\; \const{C}( x ) \not\aequiv \mu x.\; \const{C}( \const{C}( x ) )$.
 
 The mapping $\Val$ is computed as follows.
 %
-For each equivalence class $\ec{x}$, we associate a fresh variable $\Var{\ec{x}}$ of the same type as $x$
+For each equivalence class $\ec{x}$, we associate a fresh variable ${\Varec{x}}$ of the same type as $x$
 %not occurring in $\tEc$,
-and let $\Val\ec{x} = \Var{\ec{x}}$.
+and let $\Val\ec{x} = {\Varec{x}}$.
 Thus, there are initially no constraints on the values for any equivalence class $\ec{x}$.
 The mapping $\Val$ is then modified by applying the following rule exhaustively:
 \[
 \hbox{\(
 \inferrule{
-  \Var{\ec{x}} \in \FV( \Val )
+  {\Varec{x}} \in \FV( \Val )
   \quad
   \const{C}( t_1, \ldots, t_n ) \in \ec{x}
   \quad
   \const{C} \in \Ctr
 }{
-  \Val := \Val \{ \Var{\ec{x}} \mapsto \mu \Var{\ec{x}}.\; \const{C}( \Var{\ec{t_1}}, \ldots, \Var{\ec{t_n}} ) \}
+  \Val := \Val \{ {\Varec{x}} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}
 }
 \)
 \rn{Update}}
@@ -1026,31 +1028,22 @@ and thus the construction of $\Val$ will terminate.
 \begin{example}
 Suppose that $\Ec$ contains distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and $\ec{z}$
 where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$ for some $\const{C} \in \Ctr$.
-A possible sequence of \rn{Update} rule applications is presented below.
-\[\begin{array}{l@{\hspace{1em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-%\hline
-%\text{Step} & \multicolumn{3}{l}{\text{Mapping }\Val}
-%\MIDRULE
-\text{1. Initial:}
-& \{ & \ec{x} \mapsto \Var{\ec{x}}, & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \Var{\ec{y}}, & \ec{w} \mapsto \Var{\ec{w}} & \} \\[\jot]
-\text{2. Update w.r.t.\ }\ec{x}\text{:}
-& \{ & \ec{x} \mapsto \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \Var{\ec{y}} ), & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \Var{\ec{y}}, & \ec{w} \mapsto \Var{\ec{w}} & \} \\[\jot]
-\text{3. Update w.r.t.\ }\ec{y}\text{:}
-& \{ & \ec{x} \mapsto \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \Var{\ec{x}} ) ), & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \Var{\ec{x}} ), & \ec{w} \mapsto \Var{\ec{w}} & \} \\[\jot]
-\text{4. Update w.r.t.\ }\ec{x}\text{:}
-& \{ & \ec{x} \mapsto \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \Var{\ec{x}} ) ), & \ec{z} \mapsto \Var{\ec{z}}, & \\
-&    & \ec{y} \mapsto \mu \Var{\ec{y}}. \const{C}( \Var{\ec{z}}, \mu \Var{\ec{x}}. \const{C}( \Var{\ec{w}}, \Var{\ec{y}} ) ), & \ec{w} \mapsto \Var{\ec{w}} & \}
-%\hline
-\end{array}\]
-%The first column shows the equivalence class that was considered;
-%the second column shows the content of $\Val$.
-This indicates that the values for $x$ (resp. $y$) in models of $\Ec$
-are of the form $\const{C}( \Var{\ec{w}}, \const{C}( \Var{\ec{z}}, \ldots ))$ (resp. $\const{C}( \Var{\ec{z}}, \const{C}( \Var{\ec{w}}, \ldots ))$) 
-for some value of $\Var{\ec{w}}$ and $\Var{\ec{z}}$.
-\qed
+A possible sequence of \rn{Update} rule applications is presented below, omitting
+trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
+%
+\begin{enumerate}
+\item \noindent\rlap{Initial state:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{  \}$
+\item \noindent\rlap{Update w.r.t.\ $\ec{x}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \}$
+\item \noindent\rlap{Update w.r.t.\ $\ec{y}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+  \ec{y} \mapsto \mu {\Varec{y}}. \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
+\item \noindent\rlap{Update w.r.t.\ $\ec{x}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+  \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
+\end{enumerate}
+%
+This indicates that the values for $x$ and $y$ in models of $\Ec$
+are of the form $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \ldots ))$
+and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))$,
+respectively, for some value of ${\Varec{w}}$ and ${\Varec{z}}$.
 \end{example}
 
 Given $\Val$, the rules for acyclicity and bisimilarity (Figure~\ref{fig:ab-rules}) can be stated as follows.
@@ -1070,15 +1063,15 @@ $\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
 We then construct $\Val$ using the aforementioned phases, after which we obtain:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l}
 \Val \ec{x} & = & 
-\mu \Var{\ec{x}}. & \const{C}( \Var{\ec{y}}, & \mu \Var{\ec{\const{C}(y,x)}}. & \const{C}( \Var{\ec{y}}, \Var{\ec{x}} ) ) \\
+\mu {\Varec{x}}. & \const{C}( {\Varec{y}}, & \mu {\Varec{\const{C}(y,x)}}. & \const{C}( {\Varec{y}}, {\Varec{x}} ) ) \\
 \Val \ec{\const{C}(y,x)} & = & 
-\mu \Var{\ec{\const{C}(y,x)}}. & \const{C}( \Var{\ec{y}}, & \mu \Var{\ec{x}}. & \const{C}( \Var{\ec{y}}, \Var{\ec{\const{C}(y,x)}} ) )
+\mu {\Varec{\const{C}(y,x)}}. & \const{C}( {\Varec{y}}, & \mu {\Varec{x}}. & \const{C}( {\Varec{y}}, {\Varec{\const{C}(y,x)}} ) )
 \end{array}\]
 Notice that $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are syntactically equivalent for the renaming
-$\{ \Var{\ec{x}} \mapsto \Var{\ec{\const{C}(y,x)}}, \Var{\ec{\const{C}(y,x)}} \mapsto \Var{\ec{x}} \}$,
+$\{ {\Varec{x}} \mapsto {\Varec{\const{C}(y,x)}}, {\Varec{\const{C}(y,x)}} \mapsto {\Varec{x}} \}$,
 and thus our calculus may infer $x \teq \const{C}(y,x)$.
 Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$ 
-are equivalent for any value of $\Var{\ec{y}}$.
+are equivalent for any value of ${\Varec{y}}$.
 \qed
 \end{example}
 
@@ -1088,12 +1081,13 @@ are equivalent for any value of $\Var{\ec{y}}$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  t, u : \tau \in \tEc
+  \tau \in \Codata
   \quad
-  \tau \in \Codata,
-  \mid \tau \mid = 1
+  \left|\tau\right| = 1
+  \quad
+  t, u : \tau \in \tEc
 }{
-  \Ec := \Ec, t \teq u
+  \Ec := \Ec,\: t \teq u
 }
 \)
 \rn{Singleton}
@@ -1106,7 +1100,7 @@ are equivalent for any value of $\Var{\ec{y}}$.
   \text{ or } 
   ( \tau \in \Data, \tau \text{ finite } )
 }{
-  \Ec := \Ec, t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \ldots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ) 
+  \Ec := \Ec,\: t \teq \const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec, t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ) 
 }
 \)
 \rn{Split} 
@@ -1121,7 +1115,7 @@ are equivalent for any value of $\Var{\ec{y}}$.
 \paragraph{Phase 3: Branching.}
 If neither a rule from Figure \ref{fig:cc-rules}~or~\ref{fig:ab-rules} applies to $\Ec$, 
 the rules from Figure~\ref{fig:split-rule} are applied.
-The rule \rn{Singleton} handles the case when there are two terms from $\tEc$ having a co-recursive singleton type,
+The \rn{Singleton} rule handles the case when there are two terms from $\tEc$ having a co-recursive singleton type,
 in which case they must be equivalent.
 Otherwise, in the case there is a selector term applied to $t$, or if $t$ has a finite datatype type, 
 then the equivalence class of $t$ must contain an application of one of the constructors of $\tau$ (where $\Ctr^\tau = \{ C_1, \ldots C_n \}$), 
@@ -1344,18 +1338,18 @@ $x \not\teq y_2$,
 $\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains:
 \[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{2.0em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l@{\hspace{.5em}}l}
-\Val \ec{y_1} & = & \mu \Var{\ec{y_1}}. & \const{A}( & \mu \Var{\ec{y_2}}. & \const{B}( \Var{\ec{x}} ) ) &
-\Val \ec{w_1} & = & \mu \Var{\ec{w_1}}. & \const{A}( \Var{\ec{x}} )      & \\ 
-\Val \ec{y_2} & = & \mu \Var{\ec{y_2}}. & \multicolumn{2}{l}{\const{B}( \Var{\ec{x}} )}      & &
-\Val \ec{w_2} & = & \mu \Var{\ec{w_2}}. & \const{C}( \Var{\ec{w_3}} ) \\
-\Val \ec{z_1} & = & \mu \Var{\ec{z_1}}. & \const{C}( & \mu \Var{\ec{z_2}}. & \const{A}( \Var{\ec{z_1}} ) ) &
-\Val \ec{w_3} & = & \Var{\ec{w_3}} \\
-\Val \ec{z_2} & = & \mu \Var{\ec{z_2}}. & \const{A}( & \mu \Var{\ec{z_1}}. & \const{C}( \Var{\ec{z_2}} ) ) & 
-\Val \ec{x} & = & \Var{\ec{x}} \\
+\Val \ec{y_1} & = & \mu {\Varec{y_1}}. & \const{A}( & \mu {\Varec{y_2}}. & \const{B}( {\Varec{x}} ) ) &
+\Val \ec{w_1} & = & \mu {\Varec{w_1}}. & \const{A}( {\Varec{x}} )      & \\ 
+\Val \ec{y_2} & = & \mu {\Varec{y_2}}. & \multicolumn{2}{l}{\const{B}( {\Varec{x}} )}      & &
+\Val \ec{w_2} & = & \mu {\Varec{w_2}}. & \const{C}( {\Varec{w_3}} ) \\
+\Val \ec{z_1} & = & \mu {\Varec{z_1}}. & \const{C}( & \mu {\Varec{z_2}}. & \const{A}( {\Varec{z_1}} ) ) &
+\Val \ec{w_3} & = & {\Varec{w_3}} \\
+\Val \ec{z_2} & = & \mu {\Varec{z_2}}. & \const{A}( & \mu {\Varec{z_1}}. & \const{C}( {\Varec{z_2}} ) ) & 
+\Val \ec{x} & = & {\Varec{x}} \\
 \end{array}\]
 
-To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, $\Var{\ec{x}}$ and $\Var{\ec{w_3}}$.
-The content of the set $\mathcal{T}^\M_{\Var{\ec{x}}}( \Val )$ is $\alpha$-equivalent to:
+To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, ${\Varec{x}}$ and ${\Varec{w_3}}$.
+The content of the set $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$ is $\alpha$-equivalent to:
 \[%\begin{array}{c}
 \{
 \mu x. \const{A}( \mu y. \const{B}( x )),
@@ -1369,24 +1363,24 @@ The content of the set $\mathcal{T}^\M_{\Var{\ec{x}}}( \Val )$ is $\alpha$-equiv
 \]
 Now, consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$,
 for instance, $x$ is interpretted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
-Assigning a value for $\Var{\ec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{\Var{\ec{x}}}( \Val )$
+Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent, 
 which in turn may cause $\M$ to be inconsistent.
-For instance, say we assign $\mu \Var{\ec{x}}. \const{B}( \Var{\ec{x}} )$ for $\Var{\ec{x}}$.
-After this substitution, $\Val \ec{y_2}$ is $\mu \Var{\ec{y_2}}. \const{B}( \mu \Var{\ec{x}}. \const{B}( \Var{\ec{x}} ) )$, 
-which has normal form $\mu \Var{\ec{y_2}}. \const{B}( \Var{\ec{y_2}} )$,
-which is $\alpha$-equivalent to $\mu \Var{\ec{x}}. \const{B}( \Var{\ec{x}} )$.
+For instance, say we assign $\mu {\Varec{x}}. \const{B}( {\Varec{x}} )$ for ${\Varec{x}}$.
+After this substitution, $\Val \ec{y_2}$ is $\mu {\Varec{y_2}}. \const{B}( \mu {\Varec{x}}. \const{B}( {\Varec{x}} ) )$, 
+which has normal form $\mu {\Varec{y_2}}. \const{B}( {\Varec{y_2}} )$,
+which is $\alpha$-equivalent to $\mu {\Varec{x}}. \const{B}( {\Varec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
-Inversely, if the value assigned to $\Var{\ec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{\Var{\ec{x}}}( \Val )$,
+Inversely, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
 then the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For instance, we may assign values such as 
-$\mu \Var{\ec{x}}. \const{C}( \Var{\ec{x}} )$,
-$\mu \Var{\ec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, and
-$\mu \Var{\ec{x}}. \const{B}( \mu x_1. \const{A}( \Var{\ec{x}} ) )$
-to $\Var{\ec{x}}$.
-Notice that legal substitutions for $\Var{\ec{x}}$ may cause the range of $\Val$ to contain non-normal terms,
+$\mu {\Varec{x}}. \const{C}( {\Varec{x}} )$,
+$\mu {\Varec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, and
+$\mu {\Varec{x}}. \const{B}( \mu x_1. \const{A}( {\Varec{x}} ) )$
+to ${\Varec{x}}$.
+Notice that legal substitutions for ${\Varec{x}}$ may cause the range of $\Val$ to contain non-normal terms,
 as in after applying the third substitution mentioned above,
-$\Val \ec{w_1}$ is $\mu \Var{\ec{w_1}}. \const{A}( \mu \Var{\ec{x}}. \const{B}( \mu x_1. \const{A}( \Var{\ec{x}} ) ) )$.
+$\Val \ec{w_1}$ is $\mu {\Varec{w_1}}. \const{A}( \mu {\Varec{x}}. \const{B}( \mu x_1. \const{A}( {\Varec{x}} ) ) )$.
 $\Box$
 \end{example}
 
@@ -1401,21 +1395,21 @@ and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
 \item $\Val^\ast \ec{x}$ is bisimilar with a value in $\M( \tau )$, for all $\ec{x}$ of type $\tau$ of $\Ec$,
 \item
 If $\const{C}( t_1, \ldots, t_n ) \in \ec{x}$,
-then $\Val^\ast \ec{x} = \mu \Var{\ec{x}}. \const{C}( w_1, \ldots, w_n )$
+then $\Val^\ast \ec{x} = \mu {\Varec{x}}. \const{C}( w_1, \ldots, w_n )$
 and $\Val^\ast \ec{x} \interp{ w_i } = \Val^\ast \ec{t_i}$ for $i = 1, \ldots, n$.
-%and $\muvar( w_i ) = \Var{\ec{t_i}}$ for $i = 1, \ldots, n$,
+%and $\muvar( w_i ) = {\Varec{t_i}}$ for $i = 1, \ldots, n$,
 %\item
 %$t_1 \interp{ t_2 } = \Val^\ast \ec{x}$
-%for all $t_1$ with subterm $t_2$ in the range of $\Val^\ast$ where $\muvar(t_2)=\Var{\ec{x}}$,
+%for all $t_1$ with subterm $t_2$ in the range of $\Val^\ast$ where $\muvar(t_2)={\Varec{x}}$,
 \item 
 $\Val^\ast \ec{x} \vsim \Val^\ast \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 To show 1, we first show that $\Val^\ast$ contains no free variables.
-Assume by contradiction that $\Val^\ast$ contained a free variable $\Var{\ec{y}}$ for some $\ec{y}$ of type $\tau$.
+Assume by contradiction that $\Val^\ast$ contained a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
 Then it must be the case that $\ec{y}$ does not contain a constructor term,
-or else $\Var{\ec{y}}$ would not occur as a free variable in $\Val$.
+or else ${\Varec{y}}$ would not occur as a free variable in $\Val$.
 Consider the case when $\tau$ is finite.
 By assumption, $\tau \not\in \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
@@ -1424,11 +1418,11 @@ the cardinality of $\tau$ must be one.
 Since \rn{Singleton} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
 and thus there are no terms in $\mathcal{T}^\M_x(\Val^\ast)$ of type $\tau$.
-This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to $\Var{\ec{x}}$.
+This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to ${\Varec{x}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction, 
 since there are only a finite number of closed terms in $\mathcal{T}^\M_x(\Val^\ast)$,
-and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_x(\Val^\ast)$ to $\Var{\ec{y}}$.
+and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_x(\Val^\ast)$ to ${\Varec{y}}$.
 By construction, $\Val^\ast \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
 Moreover, our construction of $\Val^\ast$ applies substitutions of the form 
@@ -1445,17 +1439,17 @@ and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not app
 Thus, 
 if $\const{C}_i( t_1, \ldots, t_n ) \in \ec{y}$,
 $\Val$ was constructed by applying a sequence of substitutions
-that replace $\Var{\ec{y}}$ by $\mu \Var{\ec{y}}. \const{C}_i( \Var{\ec{t_1}}, \ldots, \Var{\ec{t_n}} )$.
+that replace ${\Varec{y}}$ by $\mu {\Varec{y}}. \const{C}_i( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )$.
 Now, say that $\const{C}( t_1, \ldots, t_n )$ occurs in some equivalence class $\ec{x}$.
-Then $\Val \ec{x}$ must be of the form $\mu \Var{\ec{x}}. \const{C}_i( w_1, \ldots, w_n )$,
+Then $\Val \ec{x}$ must be of the form $\mu {\Varec{x}}. \const{C}_i( w_1, \ldots, w_n )$,
 where for each $i=1,\ldots,n$, $w_i$ was obtained by applying a sequence of substitutions
-of the form mentioned above to $\Var{\ec{t_i}}$.
-%Each $w_i$ is either $\Var{\ec{x}}$,
-%a variable $\Var{\ec{y}}$ where $\ec{y}$ does not contain a constructor,
-%or a term of the form $\mu \Var{\ec{y}}. \const{C}_j( \vec u )$.
+of the form mentioned above to ${\Varec{t_i}}$.
+%Each $w_i$ is either ${\Varec{x}}$,
+%a variable ${\Varec{y}}$ where $\ec{y}$ does not contain a constructor,
+%or a term of the form $\mu {\Varec{y}}. \const{C}_j( \vec u )$.
 While interpreting $w_i$ in $\Val \ec{x}$,
-all free occurrences of $\Var{\ec{x}}$ in $\Val \ec{x} \interp{w_i}$ are replaced by $\Val \ec{x}$. \rem{better formalize.}
-Thus, since $\Val \ec{x} \interp{w_i}$ and $\Val \ec{t_i}$ are obtained by applying the same sequence of substitutions to $\Var{\ec{t_i}}$,
+all free occurrences of ${\Varec{x}}$ in $\Val \ec{x} \interp{w_i}$ are replaced by $\Val \ec{x}$. \rem{better formalize.}
+Thus, since $\Val \ec{x} \interp{w_i}$ and $\Val \ec{t_i}$ are obtained by applying the same sequence of substitutions to ${\Varec{t_i}}$,
 we have $\Val \ec{w_i} = \Val \ec{x} \interp{ w_i }$.
 Since $\Val'$ is obtained by applying the same substitution to all terms in the range of $\Val$,
 we have that $\Val' \ec{x} \interp{w_i} = \Val' \ec{t_i}$,
@@ -1501,12 +1495,12 @@ then $\M( t )$ is bisimilar with $\nf{(\mu x. \const{C}( \M( u_1 ), \ldots, \M( 
 which by the induction hypothesis is bisimilar with $\nf{(\mu x. \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } ) )}$, call this term $t_u$.
 By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{t}$ is a term
 %Since \rn{Clash} does not apply to $\Fc$, then $\Val^\ast \ec{t}$ must be a term
-$t_w$ of the form $\mu \Var{\ec{t}}. \const{C}( w_1, \ldots, w_n )$
+$t_w$ of the form $\mu {\Varec{t}}. \const{C}( w_1, \ldots, w_n )$
 where $t_w\interp{w_i} = \Val^\ast \ec{u_i}$ for $i = 1, \ldots, n$.
 %that is, an application of the same constructor.
 For each $i = 1, \ldots, n$, let $u_i'$ be the $i^{th}$ argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$.
-%Say that $\muvar( w_i ) = \Var{\ec{y_i}}$.
+%Say that $\muvar( w_i ) = {\Varec{y_i}}$.
 %Due to our construction of $\Val^\ast$ and since \rn{Inject} does not apply to $\Fc$, we have $\ec{u_i} = \ec{y_i}$,
 %and thus $t_u\interp{u_i'} \vsim \Val^\ast \ec{y_i}$.
 %By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{ y_i } = t_w\interp{ w_i }$,
@@ -1519,11 +1513,11 @@ If $t$ is a selector term of the form $s^j_k( u )$,
 since \rn{Split} does not apply, 
 $\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) )$ for some $i$.
 By Lemma~\ref{lem:model-completion}.2, $\Val^\ast \ec{u}$ is a term $t_w$ of the form
-$\mu \Var{\ec{u}}. C_i( w_1, \ldots, w_n )$,
+$\mu {\Varec{u}}. C_i( w_1, \ldots, w_n )$,
 where $t_w \interp{ w_j } = \Val^\ast \ec{ s^j_k( u )}$. 
 %By our construction of $\Val^\ast$ and since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
-%$\Val^\ast \ec{ u }$ must be of the form $t_u = \mu \Var{\ec{u}}. C_i( u_1, \ldots, u_n )$,
-%where $\muvar( u_1 ) = \Var{\ec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = \Var{\ec{s^n_i( u )}}$,
+%$\Val^\ast \ec{ u }$ must be of the form $t_u = \mu {\Varec{u}}. C_i( u_1, \ldots, u_n )$,
+%where $\muvar( u_1 ) = {\Varec{s^1_i(u)}}$, $\ldots$, $\muvar(u_n) = {\Varec{s^n_i( u )}}$,
 %and $\M( u )$ is of the form $t_w = \mu x. C_i( w_1, \ldots, w_n )$,
 %which by the induction hypothesis is bisimilar with $\Val^\ast \ec{u}$.
 If $k = i$, then $\M( t )$ is bisimilar with $t_w\interp{w_j} = \Val^\ast \ec{ s^j_k( u )}$,
@@ -1607,7 +1601,7 @@ For each equality added to $\Ec$, we associate a set of equalities from $M_i$ th
 which we call its \emph{explanation}.
 Similarly, each $\Val \ec{x}$ is also associated an explanation, that is, 
 a set of equalities from $M_i$ that $\thD$-entail that the values of $\ec{x}$ in models of $\Ec$ are of the form $\Val \ec{x}$.
-For instance, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \mu \Var{\ec{x}}. \const{C}( \Var{\ec{x}} )$.
+For instance, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \mu {\Varec{x}}. \const{C}( {\Varec{x}} )$.
 Thus, the rules of the calculus are implemented as follows.
 For all rules with conclusion $\bot$,
 we report the union of the explanations for all premises is $\thD$-unsatisfiable.
