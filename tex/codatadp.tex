@@ -424,9 +424,9 @@ applying the $n$-ary function symbol
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
 %
-Finally, the notation $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$
+Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$\begin{report}
 and $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
-$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
+$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$\end{report}.
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
@@ -790,10 +790,10 @@ that the type has at most one value.
 
 The decision procedure for the ground theory of (co)datatypes $\thD$ determines the
 $\thD$-satisfiability of sets of ground constraints over a fixed
-signature~$\Sig$. It is presented as a calculus, whose rules can be applied in
+signature~$\Sig$. It is formulated as a calculus, whose rules can be applied in
 any order until saturation.
-
-The derivation rules operate on a set $\Ec$ of equalities and disequalities
+%
+The rules operate on a set $\Ec$ of equalities and disequalities
 between $\Sig$-terms, where $\Ec$ is interpreted as a conjunction.
 We write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
@@ -811,10 +811,10 @@ having finite cardinality~$n$
 can be replaced by an enumeration datatype with $n$~nullary constructors.
 Moreover, since the constraints are ground, they cannot entail an upper bound
 on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
-we may without loss of completeness treat all other types as infinite.
+we may without loss of generality or completeness treat all types in $\Nondata$ as infinite.
 
-The calculus consists of three sets of rules (\figuresname~\ref{fig:cc-rules} to
-\ref{fig:split-rule}) corresponding to three successive phases. The first
+The calculus consists of three sets of rules, given in \figuresname~\ref{fig:cc-rules} to
+\ref{fig:split-rule}, corresponding to three successive phases. The first
 phase computes the bidirectional closure of $\Ec$. The second phase makes
 inferences based on acyclicity (for datatypes) and uniqueness (for
 codatatypes). The third phase performs case splitting on constructors for
