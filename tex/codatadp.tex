@@ -1384,19 +1384,19 @@ For a variable $x : \tau$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
 such that $v \vsimv{x} t\interp{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
 
-We construct $\Val^\ast$ by exhaustively applying the following rule to $\Val$:
+We construct $\Val^\ast$ by exhaustively applying the following rule to $\nf{\Val}$:
 \[
 \hbox{\(
 \inferrule{
-  x : \tau \in \FV( \Val )
+  {\Varec{x}} : \tau \in \FV( \Val )
   \quad
-  \MU x.\; t \aequiv v
+  \MU {\Varec{x}}.\; t \aequiv v
   \quad
   v \in \M( \tau )
   \quad
-  v \not\in \mathcal{T}^\M_x(\Val)
+  v \not\in \mathcal{T}^\M_{\Varec{x}}(\Val)
 }{
-  \Val := \nf{\Val \{ x \mapsto \MU x.\; t \}}
+  \Val := \nf{\Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t \}}
 }
 \)
 \rn{Assign}}
@@ -1407,7 +1407,6 @@ and assigns it a value that is not $\alpha$-equivalent to one occurring in $\mat
 Since this update removes one variable from the set $\FV( \Val )$ and does not add any variables to $\FV( \Val )$,
 it can only be applied a finite number of times.
 After assigning this value, we normalize all terms in the range of $\Val$.
-%We then let $\Val^\ast \ec{x}$ be $\nf{\Val' \ec{x}}$ for all $\ec{x}$.
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C}, \const{D}, \const{E} :\delta \rightarrow \delta$.
@@ -1464,7 +1463,7 @@ $\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
 $\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
 $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
 to ${\Varec{x}}$.
-Legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain abnormal terms.
+Legal substitutions for ${\Varec{x}}$ may cause the range of $\Val$ to contain abnormal terms.
 After applying the substitution for the third term mentioned above,
 $\Val \ec{w_1}$ is $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
 which has normal form
@@ -1472,8 +1471,8 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 \xend
 \end{examplex}
 
-%We first state the following properties of $\Val^\ast$.
-%where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or $x$ if $t$ is of the form $\MU x.\; u$.
+We first state the following properties of $\Val^\ast$,
+where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or ${\Varec{x}}$ if $t$ is of the form $\MU {\Varec{x}}.\; u$.
 
 \begin{lemma}
 \label{lem:model-completion}
@@ -1482,8 +1481,8 @@ and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, the following h
 \begin{enumerate}
 \item[\rm 1.] $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
 \item[\rm 2.]
-All subterms $\MU {\Varec{x}}.\; t$ of $\Val^\ast \ec{y}$ are such that
-$\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}.\; t } = \Val^\ast \ec{x}$. 
+All subterms $t$ of $\Val^\ast \ec{y}$ with $\muvar(t) = {\Varec{x}}$ are such that
+$\Val^\ast \ec{y} \interp{ t } = \Val^\ast \ec{x}$. 
 %If $\const{C}( t_1, \ldots, t_n ) \in \ec{x}$,
 %then all subterms $\MU v_{\ec{x}}.\; u$ occurring in $\Val^\ast \ec{y}$ 
 %are of the form $\MU v_{\ec{x}}.\; \const{C}( w_1, \ldots, w_n )$,
@@ -1523,39 +1522,74 @@ $\{ y \mapsto t \}$, where $t$ is acyclic when the type of $y$ is not a codataty
 Thus, $\Val^\ast \ec{x}$ is acyclic when $\tau \not\in \Codata$.
 Therefore, by definition, $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
 
-To show 2,
-first note that since \rn{Clash} does not apply to $\Ec$,
+We first show that 2 and 3 hold initially for $\Val$.
+Since \rn{Clash} does not apply to $\Ec$,
 for all equivalence classes $\ec{z}$,
 each pair of constructor terms $\const{C}_j( \vec t )$ and $\const{C}_{j'}( \vec u )$ in $\ec{z}$
 are such that $j = j'$ since \rn{Clash} does not apply to $\Ec$,
 and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not apply to $\Ec$.
 Thus, 
-if $\const{C}_j( t_1, \ldots, t_n ) \in \ec{z}$,
 $\Val$ was constructed by applying a sequence of substitutions
-where ${\Varec{z}}$ was replaced only by $\MU {\Varec{z}}.\; \const{C}_j( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )$.
-Assume $\Val \ec{y}$ has a subterm $\MU {\Varec{x}}.\; \const{C}( \vec t )$.
-We first show that our construction of $\Val$ is such that $\Val \ec{x} = \Val \ec{y}\interp{ \MU {\Varec{x}}.\; t }$.
-Notice that both $\Val \ec{x}$ and the subterm $\MU {\Varec{x}}.\; t$ of $\Val \ec{y}$ were
+where all substitutions for each variable ${\Varec{z}}$ 
+were uniquely of the form $\{ {\Varec{z}} \mapsto \const{C}_j( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}$
+for $\ec{z}$ that contain a constructor $\const{C}_j( t_1, \ldots, t_n )$.
+Say $\Val \ec{y}$ has a subterm $t$ where $\muvar(t) = {\Varec{x}}$.
+Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
-We show that $\Val \ec{x} \interp{ \Val \ec{x} } = \Val \ec{y} \interp{ \MU {\Varec{x}}.t }$.
-\rem{TODO}
+Moreover, free variables ${\Varec{z}}$ in $\MU {\Varec{x}}.\; t$ that are bound in $\Val \ec{y}$ are interpreted in 
+the expansion of $\Val \ec{y} \interp{ \MU {\Varec{x}}.\; t }$ as a term
+constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. \rem{more detail}
+Thus, we have
+$\Val \ec{y} \interp{ \MU {\Varec{x}}.\; t } = \Val \ec{x} \interp{ \Val \ec{x} } = \Val \ec{x}$, and thus 2 holds for $\Val$.
+Statement 3 holds for $\Val$ since \rn{Unique} does not apply.
+
+We now show that $\Val = \nf{(\Val)}$.
+Assume by contradition $\Val \ec{x} \neq \nf{(\Val \ec{x})}$ for some $\Val \ec{x}$ of minimal size.
+We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
+Due to our construction of $\Val$, 
+we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for $i = 1, \ldots, n$.
+Since $\Val \ec{x}$ is a minimal, it
+contain a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
+where $\Val \ec{x} \interp{ t_i } \aequiv \Val \ec{x} \interp{ u_i }$ for $i = 1, \ldots, n$.
+Due to our construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for $i = 1, \ldots, n$.
+Since \rn{Cong} does not apply to $\Ec$
+we have $\ec{w_j}$ and $\ec{z_j}$ are distinct for some $j$.
+By statement 2, $\Val \ec{x} \interp{ t_j } = \Val \ec{z_j}$
+and $\Val \ec{x} \interp{ u_j } = \Val \ec{w_j}$,
+which are not $\alpha$-equivalent by statement 3, contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a bisimilar subterm of $\Val \ec{x}$.
+Thus, $\Val = \nf{(\Val)}$, and statements 2 and 3 hold for $\nf{(\Val)}$.
+%For each $i = 1, \ldots, n$,
+%if ${\Varec{z_i}} = {\Varec{w_i}}$, then $w_i \teq z_i \in \Ec$.
+%If ${\Varec{z_i}} \neq {\Varec{w_i}}$, then by statement 2, $\Val \ec{x} \interp{ t_i } = \Val \ec{z_i}$
+%and $\Val \ec{x} \interp{ u_i } = \Val \ec{w_i}$.
+%By statement 3, we have that $\ec{z_i} = \ec{w_i}$, and thus $u_i \teq t_i \in \Ec$ for each $i = 1, \ldots, n$.
+%This is a contradiction since $\ec{x}$ and $\ec{y}$ are distinct, and \rn{Cong} does not apply to $\Ec$.
+%Thus, statements 2 and 3 hold for $\nf{(\Val)}$.
+
+We now show that if 2 and 3 hold for some $\Val_1$,
+then 2 and 3 also hold for $\nf{(\Val_1 \sigma)}$,
+where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t \}$,
+where $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val)$.
+
+
+%\rem{TODO}
 %Thus, the set of subterms which $\Val \ec{x}$ and $\MU v_{\ec{x}}.\; t$ differ 
 %of the form $\MU {\Varec{z}}.\; u$ and $v_{\ec{z}}$ respectively, where $v_{\ec{z}}$ is a bound variable in $\Val \ec{y}$.
 %In the latter case, $\Val \ec{y} \interp{ {\Varec{z}} } = \MU {\Varec{z}}.\; \const{C}( \Val \ec{y} \interp{\vec u} )$,
 %where $\MU v_{\ec{z}}.\; u$ and $\MU v_{\ec{z}}.\; u'$ were constructed by applying a sequence of substitutions of the form above to $v_{\ec{z}}$.
-Since $\Val^\ast$ is obtained by applying the same substitutions and normalizations to all terms in the range of $\Val$,
-we have $\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}.\; t} = \Val^\ast \ec{x}$.
+%Since $\Val^\ast$ is obtained by applying the same substitutions and normalizations to all terms in the range of $\Val$,
+%we have $\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}.\; t} = \Val^\ast \ec{x}$.
 
-To show 3,
-first note that since \rn{Unique} does not apply,
-$\Val \ec{x} \aequiv \Val \ec{y}$ if and only if $\ec{x} = \ec{y}$.
-Since \rem{TODO}
-we have $\nf{\Val \ec{x}} \aequiv \nf{\Val \ec{y}}$ if and only if $\ec{x} = \ec{y}$.
-We show that for any substitution $\sigma$ applied to $\Val$ while constructing its completion is such that
-$\nf{\Val \ec{x} \sigma} \aequiv \nf{\Val \ec{y} \sigma}$ if and only if $\ec{x} = \ec{y}$.
-\rem{TODO}
-Let $P$ be the set of positions for which $\Val \ec{x}$ and $\Val \ec{y}$ are not $\alpha$-equivalent,
-which is non-empty by assumption.
+%To show 3,
+%first note that since \rn{Unique} does not apply,
+%$\Val \ec{x} \aequiv \Val \ec{y}$ if and only if $\ec{x} = \ec{y}$.
+%Due to part 2, we have $\Val = \nf{(\Val)}$, and thus
+%$\nf{(\Val \ec{x})} \aequiv \nf{(\Val \ec{y})}$ if and only if $\ec{x} = \ec{y}$.
+%We show that for any substitution $\sigma$ applied to $\Val$ while constructing its completion is such that
+%$\nf{(\Val \ec{x} \sigma)} \aequiv \nf{(\Val \ec{y} \sigma)}$ if and only if $\ec{x} = \ec{y}$.
+%\rem{TODO}
+%Let $P$ be the set of positions for which $\Val \ec{x}$ and $\Val \ec{y}$ are not $\alpha$-equivalent,
+%which is non-empty by assumption.
 
 \qed
 \end{proof}
