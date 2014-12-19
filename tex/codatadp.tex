@@ -646,7 +646,7 @@ Datatypes are additionally characterized by an induction axiom schema\begin{repo
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{\strut$\bigwedge_{\,i,j}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k}\, \mathit{IH}_{i\negvthinspace j}^k[x_k]\bigr) \longrightarrow P_i[C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
+\AXC{\strut$\bigwedge_{\,i,j}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k}\, \mathit{IH}_{i\negvthinspace j}^k[x_k]\bigr) \longrightarrow P_i[\const C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
 \UIC{\strut$\bigwedge_{\,i}\, P_i[v_i]$}
 \DP
 \end{aligned}
@@ -1203,7 +1203,7 @@ for $i \geq 0$ let $S^{i+1}_t =$ $S^i_t \mathrel\cup \{ s( u ) \mid u : \upsilon
 and let $S^\ast_t$ be the fixed point of this sequence.
 We know this is a finite set for each $t$ since the values of the type of $t$ are of finite size.
 Let $S^\ast$ be the union of $S^\ast_t$ for all $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) ) \mid t : \tau \in S \mathrel\cup S^\ast, C_i \in \Ctr^\tau \}$.
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) ) \mid t : \tau \in S \mathrel\cup S^\ast, \const C_i \in \Ctr^\tau \}$.
 In a derivation tree with root node $\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and moreover thus contains an equality between two terms from $\tcEc$ not occurring in its parent node.
@@ -1227,9 +1227,9 @@ For \rn{Acyclic}, our construction of $\Val$ indicates that the class of values 
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
 whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\tau$,
-then by the induction hypothesis $\Ec \mathrel\cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
-for each $C_i \in \Ctr^\tau$.
-Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
+then by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) )$ is unsatisfiable
+for each $\const C_i \in \Ctr^\tau$.
+Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_i( \const s^1_i( t ), \ldots, \const s^{a_i}_i( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \mathrel\cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
@@ -1344,8 +1344,8 @@ $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{(\MU x. \const{C}( \M( \vec t \,) ))}$ where $x$ is fresh, and
 \item
-for all selector terms $s^j_i( t )$ of type $\tau$,% for some $\vec u$,
-$\M( s^j_i( t ) )$ is the value
+for all selector terms $\const s^j_i( t )$ of type $\tau$,% for some $\vec u$,
+$\M( \const s^j_i( t ) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\M( t )\interp{u_j}$
 when $\M( t )$ is of the form $\MU x. \const{C}_i( \vec u )$.
@@ -1582,15 +1582,15 @@ By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
 Since $\M( t ) \vsim t_u \vsim t_w = \Val^\ast \ec{t}$,
 we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 
-If $t$ is a selector term of the form $s^j_k( u )$,
+If $t$ is a selector term of the form $\const s^j_k( u )$,
 since \rn{Split} does not apply,
-$\ec{u}$ must contain a term of the form $C_i( s^1_i( u ), \ldots, s^{n}_i( u ) )$ for some $i$.
+$\ec{u}$ must contain a term of the form $\const C_i( \const s^1_i( u ), \ldots, \const s^{n}_i( u ) )$ for some $i$.
 By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{u}$ is a term $t_w$ of the form
-$\MU {\Varec{u}}. C_i( w_1, \ldots, w_n )$,
-where $t_w \interp{ w_j } = \Val^\ast \ec{ s^j_k( u )}$. 
-If $k = i$, then $\M( t )$ is $\alpha$-equivalent with $t_w\interp{w_j} = \Val^\ast \ec{ s^j_k( u )}$,
+$\MU {\Varec{u}}.\; \const C_i( w_1, \ldots, w_n )$,
+where $t_w \interp{ w_j } = \Val^\ast \ec{ \const s^j_k( u )}$. 
+If $k = i$, then $\M( t )$ is $\alpha$-equivalent with $t_w\interp{w_j} = \Val^\ast \ec{ \const s^j_k( u )}$,
 which is $\Val^\ast \ec{t}$.
-If $k \neq i$, then we interpret $s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
+If $k \neq i$, then we interpret $\const s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
 Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3,
 pairs of wrongly-applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
@@ -1629,12 +1629,12 @@ We first discuss several optimizations that are not reflected in the presentatio
 We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in~\cite{}.
 
 Discriminators are treated as predicate symbols, so a discriminator $\const{d}_i( t )$ is such that $\const{d}_i$
-is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_i( s^1_i( t ), \ldots, s^n_i( t ) )$.
+is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_i( \const s^1_i( t ), \ldots, \const s^n_i( t ) )$.
 We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
-if $s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor
-$\const{C}_i( \vec u )$, then we immediately infer $s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
+if $\const s^j_i( t )$ is a term in $\tEc$ and $t$ contains the constructor
+$\const{C}_i( \vec u )$, then we immediately infer $\const s^j_i( t ) \teq u_j$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
 In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
@@ -1669,7 +1669,7 @@ Thus, the rules of the calculus are implemented as follows.
 For all rules with conclusion $\bot$,
 we report the union of the explanations for all premises is $\thD$-unsatisfiable.
 For the \rn{Split} rule, we add a clause of the form
-$(\const{C}_1( s^1_1( t ), \ldots, s^{a_1}_1( t ) ) \vee \ldots \vee t \teq \const{C}_n( s^1_n( t ), \ldots, s^{a_n}_n( t ) ))$
+$(\const{C}_1( \const s^1_1( t ), \ldots, \const s^{a_1}_1( t ) ) \vee \ldots \vee t \teq \const{C}_n( \const s^1_n( t ), \ldots, \const s^{a_n}_n( t ) ))$
 to $F$.
 Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
 All other rules add equalities to the internal state of the theory solver.
