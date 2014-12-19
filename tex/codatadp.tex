@@ -70,7 +70,14 @@
 \newcommand\const[1]{\textsf{#1}}
 \newcommand\ty[1]{\textit{#1}}
 
-\newcommand\xend{{\hfill\footnotesize$\blacksquare$}}
+%%% @ANDY: I don't like using \qed or anything too similar (e.g. \Box) for
+%%% anything else than "quid erat demonstrandum". I'm open to other symbols,
+%%% e.g. a filled black square. But if the example are short enough, which
+%%% they currently are, we could live with nothing.
+%%%
+%\newcommand\xend{{\hfill\footnotesize$\blacksquare$}}
+%\newcommand\xend{{\qed}}
+\newcommand\xend{{}}
 
 %\renewcommand{\vec}[1]{\mathbf{#1}}
 \renewcommand{\vec}[1]{\bar #1}
@@ -102,6 +109,7 @@
 \newcommand{\Var}{\mathcal{V}}
 %\newcommand{\Varec}[1]{\Var{\ec{#1}}}
 \newcommand{\Varec}[1]{\widetilde{#1}}
+\newcommand{\VAREC}[1]{\widetilde{\vphantom{\scriptstyle x^i}\smash{#1}}}
 \newcommand{\nf}[1]{{#1}\!\!\downarrow}
 \newcommand{\aequiv}{\mathrel{=_\alpha}}
 \newcommand{\vsim}{\aequiv}
@@ -1034,7 +1042,7 @@ For each equivalence class $\ec{x}$, we associate a fresh variable ${\Varec{x}}$
 %not occurring in $\tEc$,
 and let $\Val\ec{x} = {\Varec{x}}$.
 Thus, there are initially no constraints on the values for any equivalence class $\ec{x}$.
-The mapping $\Val$ is then modified by applying the following rule exhaustively:
+The mapping $\Val$ is then modified by applying the following unfolding rule exhaustively:
 \[
 \hbox{\(
 \inferrule{
@@ -1047,25 +1055,25 @@ The mapping $\Val$ is then modified by applying the following rule exhaustively:
   \Val := \Val \{ {\Varec{x}} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}
 }
 \)
-\rn{Update}}
+\rn{Unfold}}
 \]
 $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
-It is straightforward to see that the height of terms produced as a result of this update
+It is easy to see that the height of terms produced as a result of the unfolding
 is bounded by the number of equivalence classes of $\Ec$,
 and thus the construction of $\Val$ will terminate.
 
 \begin{example}
 Suppose that $\Ec$ contains distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and $\ec{z}$
 where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$ for some $\const{C} \in \Ctr$.
-A possible sequence of \rn{Update} rule applications is given below, omitting
+A possible sequence of \rn{Unfold} rule applications is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
-\item \noindent\rlap{Initial state:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{  \}$
-\item \noindent\rlap{Update w.r.t.\ $\ec{x}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \}$
-\item \noindent\rlap{Update w.r.t.\ $\ec{y}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+\item \noindent\rlap{Initial state:}\phantom{Unfold $\Varec{x}$:\enskip}$\{  \}$
+\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \}$
+\item \noindent\rlap{Unfold $\Varec{y}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
   \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
-\item \noindent\rlap{Update w.r.t.\ $\ec{x}$:}\phantom{Update w.r.t.\ $\ec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
   \ec{y} \mapsto \mu {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \mu {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
 \end{enumerate}
 %
@@ -1085,23 +1093,28 @@ of codatatype type whose classes of values $\Val \ec{t}$ and $\Val \ec{u}$ are e
 then we can conclude $t \teq u$.
 We demonstrate the uniqueness rule concretely with the following example.
 
+%% @ANDY: Minor terminology point:
+%% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
+%% unless it's a constant, it doesn't have a (first-order) type. So I'm rephrasing.
+
 \begin{example}
-Let $\const{C}$ be a constructor of type $\tau_1 \times \tau_2 \rightarrow \tau_2$,
-and let $\Ec$ be the set $\{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
+Let $\const{C} : $ $\tau_1 \times \tau_2 \rightarrow \tau_2$ be a constructor,
+and let $\Ec = \{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
 After phase~1, the equivalence classes of $\Ec$ are
 $\{ x, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
-We then construct $\Val$ using the aforementioned phases, after which we obtain:
-\[\begin{array}{l@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l@{\hspace{.5em}}r@{\hspace{.5em}}l}
-\Val \ec{x} & = &
-\mu {\Varec{x}}. & \const{C}( {\Varec{y}}, & \mu {\Varec{\const{C}(y,x)}}. & \const{C}( {\Varec{y}}, {\Varec{x}} ) ) \\
+Constructing $\Val$ as described above yields
+\[\begin{array}{rcrlrl}
+\Val \ec{x} & \,=\, &
+\mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, & \mu {\VAREC{\const{C}(y, x)}}. & \const{C}( {\Varec{y}},\, {\Varec{x}} ) ) \\
 \Val \ec{\const{C}(y,x)} & = &
-\mu {\Varec{\const{C}(y,x)}}. & \const{C}( {\Varec{y}}, & \mu {\Varec{x}}. & \const{C}( {\Varec{y}}, {\Varec{\const{C}(y,x)}} ) )
+\mu {\VAREC{\const{C}(y,x)}}. & \const{C}( {\Varec{y}},\, & \mu {\Varec{x}}. & \const{C}( {\Varec{y}},\, {\VAREC{\const{C}(y,x)}} ) )
 \end{array}\]
-Notice that $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are syntactically equivalent for the renaming
-$\{ {\Varec{x}} \mapsto {\Varec{\const{C}(y,x)}}, {\Varec{\const{C}(y,x)}} \mapsto {\Varec{x}} \}$,
-and thus our calculus may infer $x \teq \const{C}(y,x)$.
-Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$
-are equivalent for any value of ${\Varec{y}}$.
+Since $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are $\alpha$-equivalent,
+%for the renaming
+%$\{ {\Varec{x}} \mapsto {\VAREC{\const{C}(y,x)}}, {\VAREC{\const{C}(y,x)}} \mapsto {\Varec{x}} \}$,
+the calculus can infer $x \teq \const{C}(y,x)$.
+%Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$
+%are equivalent for any value of ${\Varec{y}}$.
 \xend
 \end{example}
 
@@ -1126,7 +1139,7 @@ are equivalent for any value of ${\Varec{y}}$.
 \inferrule{
   t : \tau \in \tEc
   \quad
-  ( s( t ) \in \tEc \text{ and } s \in \Sel^\tau )
+  ( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\tau )
   \text{ or }
   ( \tau \in \Data \text{ and } \tau \text{ finite} )
 }{
@@ -1293,7 +1306,10 @@ We write $\M( t )$ for a term $t$ to denote the interpretation of $t$ in $\M$,
 that is, an element of $\M( \tau )$ where $\tau$ is the type of $t$.
 \rem{Clarify that non-codatatype terms are interpreted as $\mu$-terms, although dropping the $\mu$'s gives the standard representation?}
 
-\begin{definition}[Normal Model] \label{def:norm-model}
+\begin{definition}[Normal Model]
+\afterDot%
+\label{def:norm-model}%
+\rm
 A model $\M$ is \emph{normal} if and only if:
 \begin{enumerate}
 \item
