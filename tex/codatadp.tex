@@ -661,10 +661,20 @@ For example, $\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable
 function space $\ty{nat} \to \ty{int}$.
 \end{report}
 
-TODO: Andy, introduce theory here. There were some ideas below in the comments
-you might want to mention either here or in Section 3. I'm not sure what's the
-best way to justify it though, but for the conference at least we can just claim it. (we
-won't have the place for a proof anyway).
+%TODO: Andy, introduce theory here. There were some ideas below in the comments
+%you might want to mention either here or in Section 3. I'm not sure what's the
+%best way to justify it though, but for the conference at least we can just claim it. (we
+%won't have the place for a proof anyway).
+
+Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory} of (co-)datatypes,
+which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
+namely the ones that satisfy the axioms mentioned in this section.
+In particular, this means that each interpretation in $\mathbf{I}$ has a fixed interpretation
+for constructor terms and correctly-applied selector terms, but may differ on its interpretation for 
+wrongly-applied selector terms and variables.
+A formula $\varphi$ is $\thD$-satisfiable if there is an interpretation in $\mathbf{I}$ that satisfies $\varphi$,
+and $\thD$-unsatisfiable otherwise.
+\rem{more?}
 
 When looking at the ground theory, induction can be replaced by the acyclicity
 axiom schema, which states that any ground constructor term cannot be equal to
@@ -1138,12 +1148,12 @@ which is finite since $\tcEc$ is finite.
 \begin{lemma}[Refutation Soundness]%
 \label{lem:rs}%
 \afterDot
-If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is unsatisfiable in $\thD$.
+If there exists a closed derivation tree with root node $\Ec$, then $\Ec$ is $\thD$-unsatisfiable.
 \end{lemma}
 \begin{proof}
 We prove this by structural induction on the (closed) derivation tree with root node $\Ec$.
 First, if the derivation tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Cyclic},
-then $\Ec$ is unsatisfiable in $\thD$.
+then $\Ec$ is $\thD$-unsatisfiable.
 For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
 For \rn{Cyclic}, our construction of $\Val$ indicates that the class of values that $t_1$ can take in models of $\Ec$ is infeasible,
@@ -1153,7 +1163,7 @@ whose root node is the result of applying the rule \rn{Split} on term $t$ of typ
 then by the induction hypothesis $\Ec \cup t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$ is unsatisfiable
 for each $C_i \in \Ctr^\tau$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq C_i( s^1_i( t ), \ldots, s^{a_i}_i( t ) )$,
-we know $\Ec$ is unsatisfiable in $\thD$.
+we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree 
 whose root node is $\Ec \cup t_1 \teq t_2$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Decomp}, \rn{Bisimilar}, or \rn{Singleton}.
 In all cases, we have that $\Ec \models_{\thD} t_1 \teq t_2$.
@@ -1161,8 +1171,8 @@ For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equalit
 For \rn{Decomp}, this is a consequence of injectivity.
 For \rn{Bisimilar}, our construction of $\Val$ indicates that the value of $t_1$ and $t_2$ are equivalent in all models of $\Ec$.
 For \rn{Singleton}, clearly $t_1$ and $t_2$ must have the same value since the cardinality of their type is one.
-By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is unsatisfiable in $\thD$, 
-and thus $\Ec$ is unsatisfiable in $\thD$.
+By the induction hypothesis, we have $\Ec \cup t_1 \teq t_2$ is $\thD$-unsatisfiable, 
+and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
 \end{proof}
 
@@ -1285,7 +1295,7 @@ $\mu x. \const{C}( x, x ) \not\vsimv{y} \mu y. \const{C}( x, y )$.
 For a variable $x$ of type $\tau$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
 such that $v \vsimv{x} t_1\interp{t_2}$ for some term $t_1$ with subterm $t_2$ occurring in the range of $\Val$.
-We first construct a mapping $\Val'$ by exhaustively applying the following update to $\Val$:
+We construct $\Val^\ast$ by exhaustively applying the following update to $\Val$:
 
 \(
 \inferrule{
@@ -1297,7 +1307,7 @@ We first construct a mapping $\Val'$ by exhaustively applying the following upda
   \quad
   v \not\in \mathcal{T}^\M_x(\Val)
 }{
-  \Val := \Val \{ x \mapsto \mu x. t \}
+  \Val := \nf{(\Val \{ x \mapsto \mu x. t \})}
 }
 \)
 
@@ -1305,7 +1315,8 @@ In this update, we choose an unassigned variable in $\Val$
 and assign it a value that is not $\alpha$-equivalent to one occurring in $\mathcal{T}^\M_x(\Val)$.
 Since this update removes one variable from the set $FV( \Val )$ and does not add any additional variables to $FV( \Val )$, 
 it can only be applied a finite number of times.
-We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
+After assigning this value, we normalize all terms in the range of $\Val$.
+%We then let $\Val^\ast \ec{x}$ be $\nf{(\Val' \ec{x})}$ for all $\ec{x}$.
 
 \begin{example}
 Let $\tau$ be a type in $\Codata$ with three constructors $\const{A}$, $\const{B}$ and $\const{C}$ each having type $\tau \rightarrow \tau$.
@@ -1362,8 +1373,10 @@ $\mu v_{\ec{x}}. \const{C}( \mu x_1. \const{A}( x_1) )$, or
 $\mu v_{\ec{x}}. \const{B}( \const{A}( v_{\ec{x}} ) )$
 to $v_{\ec{x}}$.
 Notice that legal substitutions for $v_{\ec{x}}$ may cause the range of $\Val$ to contain non-normal terms,
-as in after applying the third substitution mentioned above,
-$\Val \ec{w_1}$ is $\mu v_{\ec{w_1}}. \const{A}( \mu v_{\ec{x}}. \const{B}( \const{A}( v_{\ec{x}} ) ) )$.
+as in after applying the substitution for the third term mentioned above,
+$\Val \ec{w_1}$ is $\mu v_{\ec{w_1}}. \const{A}( \mu v_{\ec{x}}. \const{B}( \const{A}( v_{\ec{x}} ) ) )$,
+which has normal form
+$\mu v_{\ec{w_1}}. \const{A}( \mu v_{\ec{x}}. \const{B}( v_{\ec{w_1}} ) )$.
 $\Box$
 \end{example}
 
@@ -1375,7 +1388,7 @@ We first state the following properties of $\Val^\ast$.
 If $\Val$ is constructed for a saturated $\Ec$,
 and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then:
 \begin{enumerate}
-\item $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, for all $\ec{x}$ of type $\tau$ of $\Ec$,
+\item $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$,
 \item
 If $\const{C}( t_1, \ldots, t_n ) \in \ec{x}$,
 then $\Val^\ast \ec{x} = \mu v_{\ec{x}}. \const{C}( w_1, \ldots, w_n )$
@@ -1452,7 +1465,7 @@ $\nf{(\Val \ec{x} \sigma)} \sim \nf{(\Val \ec{y} \sigma)}$ if and only if $\ec{x
 \begin{lemma}[Solution Soundness]%
 \label{lem:ss}%
 \afterDot
-If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is satisfiable in $\thD$.
+If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is $\thD$-satisfiable.
 \end{lemma}
 \begin{proof}
 Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
@@ -1469,7 +1482,7 @@ We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_
 We show,
 by structural induction on $t$,
 that $\M( t ) \aequiv \Val^\ast \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$,
-which since $\M$ is normal implies $\M \models t_1 \teq t_2$.
+which since $\M$ is normal, implies $\M \models t_1 \teq t_2$.
 
 If $t$ is a variable, then $\M( t ) \vsim \Val^\ast \ec{ t }$ by construction.
 
@@ -1516,8 +1529,8 @@ and thus this definition is well-defined.
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
-Since $\M( t_1 ) \vsim \Val^\ast \ec{t_1}$, $\M( t_2 ) \vsim \Val^\ast \ec{t_2}$
-and Lemma~\ref{lem:model-completion}.3, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
+Since $\M( t_1 ) \vsim \Val^\ast \ec{t_1}$ and $\M( t_2 ) \vsim \Val^\ast \ec{t_2}$,
+by Lemma~\ref{lem:model-completion}.3, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
@@ -1572,16 +1585,16 @@ each $T_i$-solver for $i = 1, \ldots, n$ takes as input a combination of (1) the
 (2) additional equalities and disequalities between variables of types not belonging to $T_i$.
 Let us call this set $M_i$.
 Each $T_i$ solver either 
-reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable in which case $\neg C$ is added as a additional clause to $F$,
+reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case $\neg C$ is added as a additional clause to $F$,
 adds an additional clause $C$ to $F$,
 or does nothing.
 When $M$ is a complete assignment for $F$, then a theory solver can only choose to do nothing when $M_i$ is indeed $T_i$-satisfiable.
 
 Assume $\Ec$ is initially the set $M_i$ described above.
-For each equality added to $\Ec$, we associate a set of equalities from $M_i$ that together $\thD$-entail $t \teq s$,
+For each equality added to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t \teq s$,
 which we call its \emph{explanation}.
 Similarly, each $\Val \ec{x}$ is also associated an explanation, that is, 
-a set of equalities from $M_i$ that $\thD$-entail that the values of $\ec{x}$ in models of $\Ec$ are of the form $\Val \ec{x}$.
+a set of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of $\Ec$ are of the form $\Val \ec{x}$.
 For instance, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \mu v_{\ec{x}}. \const{C}( v_{\ec{x}} )$.
 Thus, the rules of the calculus are implemented as follows.
 For all rules with conclusion $\bot$,
