@@ -1410,17 +1410,19 @@ After assigning this value, we normalize all terms in the range of $\Val$.
 %We then let $\Val^\ast \ec{x}$ be $\nf{\Val' \ec{x}}$ for all $\ec{x}$.
 
 \begin{examplex}
-Let $\delta$ be a codatatype with three constructors $\const{C}, \const{D}, \const{E} :\delta \rightarrow \delta$.
+Let $\delta$ be a codatatype with the constructors $\const{C}, \const{D}, \const{E} :\delta \rightarrow \delta$.
 Let $\Ec$ be the set
-$\{y_1 \teq \const{C}( y_2 ),\;
-y_2 \teq \const{D}( x ),\;
-z_1 \teq \const{E}( z_2 ),\;
-z_2 \teq \const{C}( z_1 ),\;
+$\{
 w_1 \teq \const{C}( x ),\;
 w_2 \teq \const{E}( w_3 ),\;
-x \not\teq y_2\}$.
+x \not\teq y_2,\;
+y_1 \teq \const{C}( y_2 ),\;
+y_2 \teq \const{D}( x ),\;
+z_1 \teq \const{E}( z_2 ),\;
+z_2 \teq \const{C}( z_1 )
+\}$.
 After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains
-\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}ll}
+\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
 \Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{C}( {\Varec{x}} ) &
 \Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{C}( & \MU {\Varec{y_2}}. & \const{D}( {\Varec{x}} ) ) \\
 \Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{E}( {\Varec{w_3}} ) &
@@ -1431,30 +1433,31 @@ After running the calculus to saturation on $\Ec$, the mapping $\Val$ contains
 \Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{C}( & \MU {\Varec{z_1}}. & \const{E}( {\Varec{z_2}} ) )
 \end{array}\]
 %
-To construct a completion of $\Val$, we must choose values for the free variables of $\Val$, ${\Varec{x}}$ and ${\Varec{w_3}}$.
-The content of the set $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$ is $\alpha$-equivalent to
+To construct a completion of $\Val$, we must choose values for the free variables of $\Val$,
+namely ${\Varec{w_3}}$ and ${\Varec{x}}$.
+The content of the set \smash{$\mathcal{T}^\M_{{\Varec{x}}}( \Val )$} is $\alpha$-equivalent to
 \[%\begin{array}{c}
 \{
+\MU x.\; \const{C}( x ),\;
 \MU x.\; \const{C}( \const{D}( x )),\;
-\const{C}( \MU y.\; \const{D}( y )),\;
-\MU x.\; \const{D}( x ),\;
-\MU x.\; \const{E}( \const{C}( x )),\;
+\const{C}( \MU x.\; \const{D}( x )),\;
 \MU x.\; \const{C}( \const{E}( x )),\;
-\MU x.\; \const{C}( x )
+\MU x.\; \const{D}( x ),\;
+\MU x.\; \const{E}( \const{C}( x ))
 \}
 %\end{array}
 \]
-Consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$,
-for example, $x$ is interpreted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$ and so on.
+Consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$:
+$x$ is interpreted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$, and so on.
 Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\M$ to be inconsistent.
-For example, say we assign $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$ for ${\Varec{x}}$.
+For example, assign $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$ for ${\Varec{x}}$.
 After this substitution, $\Val \ec{y_2}$ is $\MU {\Varec{y_2}}.\; \const{D}( \MU {\Varec{x}}.\; \const{D}( {\Varec{x}} ) )$,
 which has normal form $\MU {\Varec{y_2}}.\; \const{D}( {\Varec{y_2}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$.
-However, this contradicts the disequality $x \not\teq y_2$ in $\Ec$.
-Inversely, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
+However, this contradicts the disequality $x \not\teq y_2$ in~$\Ec$.
+On the other hand, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For example, we may assign values such as 
 $\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
@@ -1474,10 +1477,10 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 
 \begin{lemma}
 \label{lem:model-completion}
-If $\Val$ is constructed for a saturated $\Ec$,
+If $\Val$ is constructed for a saturated set $\Ec$
 and $\Val^\ast$ is a completion of $\Val$ for normal model $\M$, then
 \begin{enumerate}
-\item $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$,
+\item $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
 \item
 All subterms $\MU {\Varec{x}}.\; t$ of $\Val^\ast \ec{y}$ are such that
 $\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}.\; t } = \Val^\ast \ec{x}$. 
