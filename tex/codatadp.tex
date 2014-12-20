@@ -310,7 +310,8 @@ having the same possibly infinite expansion---must be equal; from $\const{x}
 \teq \const{S}(\const{y})$ and
 $\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
 The acyclicity and uniqueness rules are needed to ensure completeness on
-ground problems and the absence of spurious models. They cannot be replaced by
+ground problems. %and the absence of spurious models.
+They cannot be replaced by
 finite axiomatizations, so they naturally belong in a decision procedure.
 %    * in particular, acyclicity and uniqueness are necessary for some proofs
 %%      (and cannot be axiomatized finitely)
@@ -1075,7 +1076,8 @@ The mapping $\Val$ is then modified by applying the following unfolding rule exh
   \Val := \Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}
 }
 \)
-%\rn{Unfold}}
+%\rn{Unfold}
+}
 \]
 $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
 It is easy to see that the height of terms produced as a result of the unfolding
@@ -1399,7 +1401,8 @@ We construct $\Val^\ast$ by exhaustively applying the following rule to $\nf{\Va
   \Val := \nf{\Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t \}}
 }
 \)
-%\rn{Assign}}
+%\rn{Assign}
+}
 \]
 %
 The rule chooses an unassigned variable in $\Val$
@@ -1745,17 +1748,21 @@ and in that order.
   & \HD{Distro} & \HD{AFP} & \HD{\gandl} & All
 \MIDRULE
 No (co)datatypes
-  & 221 & 760 & \phantom{0}57 & 1038 \\
+  & 221 & 760 & \phantom{0}57 & 1038 \\[\jot]
+Datatype simplication only
+  &  \\
 Datatypes without acyclicity
-  & 227 & 765 & \phantom{0}57 & 1049 \\
+  & \bfseries 227 & 765 & \phantom{0}57 & 1049 \\
 Datatypes with acyclicity
-  & 227 & 771 & \phantom{0}57 & 1055 \\
+  & \bfseries 227 & 771 & \phantom{0}57 & 1055 \\[\jot]
+Codatatype simplication only
+  &  \\
 Codatatypes without uniqueness
   & 217 & 787 & \phantom{0}55 & 1059 \\
 Codatatypes with uniqueness
-  & 218 & 787 & \phantom{0}58 & 1063 \\
+  & 218 & 787 & \bfseries \phantom{0}58 & 1063 \\[\jot]
 Full (co)datatypes
-  & 224 & 798 & \phantom{0}58 & 1080 \\[\jot]
+  & 224 & \bfseries 798 & \bfseries \phantom{0}58 & \bfseries 1080 \\[\jot]
 Total number of goals
   & 879 & 2974\phantom{0} & 317 & 4170
 \end{tabular}\end{center}
@@ -1837,20 +1844,22 @@ where \const{X0} is defined as $\const{X0} =
 \label{sec:conclusion}
 
 We introduced a decision procedure for the ground theory of datatypes and
-codatatypes and implemented it in the SMT solver CVC4. Our main theoretical
-contribution has been the support for codatatypes. These are not very
-difficult per se, but there are tricky corner cases to take care of if we care
-about completeness (which we do).
+codatatypes and implemented it in the SMT solver CVC4. Our main
+contribution has been the support for codatatypes. Both the metatheory and
+the implementation rely heavily on $\mu$-terms to represent cyclic values,
+a complication specific to codatatypes.
+% are not very
+% difficult per se, but there are tricky corner cases to take care of if we care
+% about completeness (which we do).
 %% alliteration
-On the practical side, we obtained respectable results on benchmarks generated
-from Isabelle theories.
+On the practical side, we obtained respectable results on Isabelle benchmarks.
 
 This work is part of a larger program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, we want to implement proof
 reconstruction for CVC4's (co)datatype inferences in Isabelle. We also want to
 try out CVC4 for higher-order model finding in Isabelle, as an alternative to
-the counterexample generator Nitpick \cite{blanchette-nipkow-2010}. We also
+the counterexample generator Nitpick \cite{blanchette-nipkow-2010}. We
 see some opportunities to enrich SMT solvers with recursive and corecursive
 functions. Finally, it might be possible to go further in terms of supporting
 nested and mixed (co)recursion and quantified formulas over (co)datatypes in
@@ -1871,8 +1880,8 @@ it, both of which we are thankful for.
 Peter Gammie and Andreas Lochbihler shared their private
 theories with us so we could include them in the benchmarks.
 Andrei Popescu helped clarify our thoughts regarding the axiomatization of
-codatatypes. Dmitriy Traytel took part in discussions about special
-cases.
+codatatypes. Dmitriy Traytel took part in discussions about degenerate
+codatatypes.
 %
 Blanchette's research was partially supported by the Deutsche
 Forschungs\-gemein\-schaft (DFG) project
