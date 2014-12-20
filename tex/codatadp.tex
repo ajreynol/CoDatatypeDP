@@ -1076,6 +1076,7 @@ The mapping $\Val$ is then modified by applying the following unfolding rule exh
 }
 \)
 %\rn{Unfold}}
+}
 \]
 $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
 It is easy to see that the height of terms produced as a result of the unfolding
@@ -1237,7 +1238,7 @@ For \rn{Clash}, this is a consequence of distinctness.
 For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that $t$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
-whose root node is the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
+whose root nodes are the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
 by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) )$ is unsatisfiable
 for each $\const C_j \in \Ctr^\delta$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) )$,
@@ -1306,7 +1307,7 @@ is $\alpha$-equivalent to $t\interp{x}^\emptyset = t$.
 
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
 recursively construct its \emph{normal form} $\nf{t}$,
-which is a renaming of $v$ by replacing all of the bisimilar subterms of $t$ with $x$
+by replacing all of the bisimilar subterms of $t$ with $x$
 %and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
 For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
@@ -1321,14 +1322,14 @@ then $\vec u \vsim t\interp{\vec w}$.
 \rem{TODO}
 \end{proof}
 
-\begin{lemma}
-\label{lem:mu-cong}
-If $t_u = \MU x.\; \const{C}( \vec u )$ and $t_w = \MU y.\; \const{C}( \vec w )$ are in normal form,
-then $t_u\interp{ \vec u } \vsim t_w\interp{ \vec w }$ if and only if $t_u \vsim t_w$.
-\end{lemma}
-\begin{proof}
-\rem{TODO}
-\end{proof}
+%\begin{lemma}
+%\label{lem:mu-cong}
+%If $t_u = \MU x.\; \const{C}( \vec u )$ and $t_w = \MU y.\; \const{C}( \vec w )$ are in normal form,
+%then $t_u\interp{ \vec u } \vsim t_w\interp{ \vec w }$ if and only if $t_u \vsim t_w$.
+%\end{lemma}
+%\begin{proof}
+%\rem{TODO}
+%\end{proof}
 
 We now define a class of models that we consider for a saturated set of equalities~$\Ec$.
 Let $\M( \tau )$ denote the interpretation type $\tau$ in $\M$,
@@ -1400,6 +1401,7 @@ We construct $\Val^\ast$ by exhaustively applying the following rule to $\nf{\Va
 }
 \)
 %\rn{Assign}}
+}
 \]
 %
 The rule chooses an unassigned variable in $\Val$
@@ -1523,16 +1525,15 @@ Thus, $\Val^\ast \ec{x}$ is acyclic when $\tau \not\in \Codata$.
 Therefore, by definition, $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
 
 We first show that 2 and 3 hold initially for $\Val$.
-Since \rn{Clash} does not apply to $\Ec$,
-for all equivalence classes $\ec{z}$,
+For all equivalence classes $\ec{z}$,
 each pair of constructor terms $\const{C}_j( \vec t )$ and $\const{C}_{j'}( \vec u )$ in $\ec{z}$
 are such that $j = j'$ since \rn{Clash} does not apply to $\Ec$,
-and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Decomp} does not apply to $\Ec$.
+and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply to $\Ec$.
 Thus, 
 $\Val$ was constructed by applying a sequence of substitutions
-where all substitutions for each variable ${\Varec{z}}$ 
+where all substitutions for variables ${\Varec{z}}$ 
 were uniquely of the form $\{ {\Varec{z}} \mapsto \const{C}_j( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}$
-for $\ec{z}$ that contain a constructor $\const{C}_j( t_1, \ldots, t_n )$.
+when $\ec{z}$ contains a constructor $\const{C}_j( t_1, \ldots, t_n )$.
 Say $\Val \ec{y}$ has a subterm $t$ where $\muvar(t) = {\Varec{x}}$.
 Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
@@ -1558,39 +1559,35 @@ By statement 2, $\Val \ec{x} \interp{ t_j } = \Val \ec{z_j}$
 and $\Val \ec{x} \interp{ u_j } = \Val \ec{w_j}$,
 which are not $\alpha$-equivalent by statement 3, contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a bisimilar subterm of $\Val \ec{x}$.
 Thus, $\Val = \nf{(\Val)}$, and statements 2 and 3 hold for $\nf{(\Val)}$.
-%For each $i = 1, \ldots, n$,
-%if ${\Varec{z_i}} = {\Varec{w_i}}$, then $w_i \teq z_i \in \Ec$.
-%If ${\Varec{z_i}} \neq {\Varec{w_i}}$, then by statement 2, $\Val \ec{x} \interp{ t_i } = \Val \ec{z_i}$
-%and $\Val \ec{x} \interp{ u_i } = \Val \ec{w_i}$.
-%By statement 3, we have that $\ec{z_i} = \ec{w_i}$, and thus $u_i \teq t_i \in \Ec$ for each $i = 1, \ldots, n$.
-%This is a contradiction since $\ec{x}$ and $\ec{y}$ are distinct, and \rn{Cong} does not apply to $\Ec$.
-%Thus, statements 2 and 3 hold for $\nf{(\Val)}$.
 
-We now show that if 2 and 3 hold for some $\Val_1$,
+We now show that if statements 2 and 3 hold for some $\Val_1$,
 then 2 and 3 also hold for $\nf{(\Val_1 \sigma)}$,
-where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t \}$,
-where $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val)$.
-
-
-%\rem{TODO}
-%Thus, the set of subterms which $\Val \ec{x}$ and $\MU v_{\ec{x}}.\; t$ differ 
-%of the form $\MU {\Varec{z}}.\; u$ and $v_{\ec{z}}$ respectively, where $v_{\ec{z}}$ is a bound variable in $\Val \ec{y}$.
-%In the latter case, $\Val \ec{y} \interp{ {\Varec{z}} } = \MU {\Varec{z}}.\; \const{C}( \Val \ec{y} \interp{\vec u} )$,
-%where $\MU v_{\ec{z}}.\; u$ and $\MU v_{\ec{z}}.\; u'$ were constructed by applying a sequence of substitutions of the form above to $v_{\ec{z}}$.
-%Since $\Val^\ast$ is obtained by applying the same substitutions and normalizations to all terms in the range of $\Val$,
-%we have $\Val^\ast \ec{y} \interp{ \MU {\Varec{x}}.\; t} = \Val^\ast \ec{x}$.
-
-%To show 3,
-%first note that since \rn{Unique} does not apply,
-%$\Val \ec{x} \aequiv \Val \ec{y}$ if and only if $\ec{x} = \ec{y}$.
-%Due to part 2, we have $\Val = \nf{(\Val)}$, and thus
-%$\nf{(\Val \ec{x})} \aequiv \nf{(\Val \ec{y})}$ if and only if $\ec{x} = \ec{y}$.
-%We show that for any substitution $\sigma$ applied to $\Val$ while constructing its completion is such that
-%$\nf{(\Val \ec{x} \sigma)} \aequiv \nf{(\Val \ec{y} \sigma)}$ if and only if $\ec{x} = \ec{y}$.
-%\rem{TODO}
-%Let $P$ be the set of positions for which $\Val \ec{x}$ and $\Val \ec{y}$ are not $\alpha$-equivalent,
-%which is non-empty by assumption.
-
+where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \mu {\Varec{x}}. t \}$
+and $\mu {\Varec{x}}. t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val_1)$.
+To show 2,
+by assumption of 2 on $\Val_1$, we have $\Val_1 \ec{y} \interp{ t } = \Val_1 \ec{x}$ for
+all subterms $t$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
+Thus, $\Val_1 \sigma \ec{y} \interp{ t } = \Val_1 \sigma \ec{x}$ and
+$\nf{(\Val_1 \sigma)} \ec{y} \interp{ t } = \nf{(\Val_1 \sigma)} \ec{x}$.
+To show 3, 
+consider two distinct equivalence classes $\ec{x}$ and $\ec{y}$,
+and assume by contradiction that $\Val_1 \sigma \ec{x} \aequiv \Val_1 \sigma \ec{y}$.
+Due to statement 3 for $\Val_1$,
+$\ec{y}$ and $\ec{z}$ must have (minimal) subterms 
+where $t_1$ occurs in $\Val_1 \ec{y}$ the same position as $t_2$ occurs in $\Val_1 \ec{z}$,
+and $t_1 \not\aequiv t_2$.
+If $t_1$ and $t_2$ are distinct free variables,
+then $t_1 \sigma \not \aequiv t_2 \sigma$.
+If $t_1$ is of the form $\mu {\Varec{w_1}}. \const{C}( \vec t )$ 
+and $t_2$ is of the form $\mu {\Varec{w_2}}. \const{D}( \vec u )$,
+then $t_1 \sigma \not \aequiv t_2 \sigma$.
+Since $t_1$ and $t_2$ are minimal,
+$t_1$ must be of the form $\mu {\Varec{z}}. \const{C}( \vec t )$,
+and $t_2$ must be a free variable.
+If $t_2$ is not ${\Varec{x}}$,
+then $t_1 \sigma \not \aequiv t_2 \sigma$.
+Thus, $t_2$ is ${\Varec{x}}$.
+\rem{Must show positions do not collapse.}
 \qed
 \end{proof}
 
@@ -1627,8 +1624,8 @@ where $t_w\interp{w_i} = \Val^\ast \ec{u_i}$ for $i = 1, \ldots, n$.
 For each $i = 1, \ldots, n$, let $u_i'$ be the $i$\vvthinspace th argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$,
 and thus $t_u\interp{u_i'} \vsim t_w\interp{ w_i }$. % for each $i = 1, \ldots, n$.
-By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
-Since $\M( t ) \vsim t_u \vsim t_w = \Val^\ast \ec{t}$,
+%By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
+Thus, since $\M( t ) \vsim t_u \vsim t_w = \Val^\ast \ec{t}$,
 we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 
 If $t$ is a selector term of the form $\const s^j_k( u )$,
