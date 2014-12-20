@@ -1319,7 +1319,14 @@ If $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU 
 then $\vec u \vsim t\interp{\vec w}$.
 \end{lemma}
 \begin{proof}
-%Since $u_k$ is normal, $w_k$ is the result of replacing all subterms $v$ of $u_k$ such that $t\interp{v} \aequiv t$ with $x$.
+\rem{TODO}
+\end{proof}
+
+\begin{lemma}
+\label{lem:mu-norm-interp}
+If $t$ is normal and has subterm $u$, then $t \interp{u}$ is normal.
+\end{lemma}
+\begin{proof}
 \rem{TODO}
 \end{proof}
 
@@ -1512,16 +1519,16 @@ If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\r
 the cardinality of $\tau$ must be $1$.
 Since \rn{Singleton} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
-and thus there are no terms in $\mathcal{T}^\M_x(\Val^\ast)$ of type $\tau$.
-This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to ${\Varec{x}}$.
+and thus there are no terms in $\mathcal{T}^\M_{\Varec{y}}(\Val^\ast)$ of type $\tau$.
+This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to ${\Varec{y}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction,
-since there are only a finite number of closed terms in $\mathcal{T}^\M_x(\Val^\ast)$,
-and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_x(\Val^\ast)$ to ${\Varec{y}}$.
+since there are only a finite number of closed terms in $\mathcal{T}^\M_{\Varec{y}}(\Val^\ast)$,
+and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_{\Varec{y}}(\Val^\ast)$ to ${\Varec{y}}$.
 By construction, $\Val^\ast \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
 Moreover, our construction of $\Val^\ast$ applies substitutions of the form
-$\{ y \mapsto t \}$, where $t$ is acyclic when the type of $y$ is not a codatatype.
+$\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}}$ is not a codatatype.
 Thus, $\Val^\ast \ec{x}$ is acyclic when $\tau \not\in \Codata$.
 Therefore, by definition, $\Val^\ast \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
 
@@ -1538,11 +1545,11 @@ when $\ec{z}$ contains a constructor $\const{C}_j( t_1, \ldots, t_n )$.
 Say $\Val \ec{y}$ has a subterm $t$ where $\muvar(t) = {\Varec{x}}$.
 Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
-Moreover, free variables ${\Varec{z}}$ in $\MU {\Varec{x}}.\; t$ that are bound in $\Val \ec{y}$ are interpreted in 
-the expansion of $\Val \ec{y} \interp{ \MU {\Varec{x}}.\; t }$ as a term
+Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ are interpreted in 
+the expansion of $\Val \ec{y} \interp{ t }$ as a term
 constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. \rem{more detail}
 Thus, we have
-$\Val \ec{y} \interp{ \MU {\Varec{x}}.\; t } = \Val \ec{x} \interp{ \Val \ec{x} } = \Val \ec{x}$, and thus 2 holds for $\Val$.
+$\Val \ec{y} \interp{ t } = \Val \ec{x} \interp{ \Val \ec{x} } = \Val \ec{x}$, and thus 2 holds for $\Val$.
 Statement 3 holds for $\Val$ since \rn{Unique} does not apply.
 
 We now show that $\Val = \nf{(\Val)}$.
@@ -1551,7 +1558,7 @@ We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \l
 Due to our construction of $\Val$, 
 we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for $i = 1, \ldots, n$.
 Since $\Val \ec{x}$ is a minimal, it
-contain a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
+contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
 where $\Val \ec{x} \interp{ t_i } \aequiv \Val \ec{x} \interp{ u_i }$ for $i = 1, \ldots, n$.
 Due to our construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for $i = 1, \ldots, n$.
 Since \rn{Cong} does not apply to $\Ec$
@@ -1563,32 +1570,52 @@ Thus, $\Val = \nf{(\Val)}$, and statements 2 and 3 hold for $\nf{(\Val)}$.
 
 We now show that if statements 2 and 3 hold for some $\Val_1$,
 then 2 and 3 also hold for $\nf{(\Val_1 \sigma)}$,
-where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \mu {\Varec{x}}. t \}$
+where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \mu {\Varec{x}}. t \}$,
+${\Varec{x}} \in FV( \Val_1 )$,
 and $\mu {\Varec{x}}. t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val_1)$.
 To show 2,
-by assumption of 2 on $\Val_1$, we have $\Val_1 \ec{y} \interp{ t } = \Val_1 \ec{x}$ for
-all subterms $t$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
-Thus, $\Val_1 \sigma \ec{y} \interp{ t } = \Val_1 \sigma \ec{x}$ and
-$\nf{(\Val_1 \sigma)} \ec{y} \interp{ t } = \nf{(\Val_1 \sigma)} \ec{x}$.
+by assumption of 2 on $\Val_1$, we have $\Val_1 \ec{y} \interp{ u } = \Val_1 \ec{x}$ for
+all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
+Thus, $\Val_1 \sigma \ec{y} \interp{ u } = \Val_1 \sigma \ec{x}$ and
+$\nf{(\Val_1 \sigma)} \ec{y} \interp{ u } = \nf{(\Val_1 \sigma)} \ec{x}$.
 To show 3, 
-consider two distinct equivalence classes $\ec{x}$ and $\ec{y}$,
-and assume by contradiction that $\Val_1 \sigma \ec{x} \aequiv \Val_1 \sigma \ec{y}$.
+consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
+and assume by contradiction that $\nf{(\Val_1 \sigma)} \ec{y} \aequiv \nf{(\Val_1 \sigma)} \ec{z}$.
 Due to statement 3 for $\Val_1$,
 $\ec{y}$ and $\ec{z}$ must have (minimal) subterms 
-where $t_1$ occurs in $\Val_1 \ec{y}$ the same position as $t_2$ occurs in $\Val_1 \ec{z}$,
+where $t_1$ occurs in $\Val_1 \ec{y}$ the same position (call it $p$) as $t_2$ occurs in $\Val_1 \ec{z}$,
 and $t_1 \not\aequiv t_2$.
-If $t_1$ and $t_2$ are distinct free variables,
-then $t_1 \sigma \not \aequiv t_2 \sigma$.
-If $t_1$ is of the form $\mu {\Varec{w_1}}. \const{C}( \vec t )$ 
-and $t_2$ is of the form $\mu {\Varec{w_2}}. \const{D}( \vec u )$,
-then $t_1 \sigma \not \aequiv t_2 \sigma$.
+%We first show that $\nf{(\Val_1 \sigma)} \ec{y}$ (and for the same reasons, $\nf{(\Val_1 \sigma)} \ec{z}$)
+%also contains position $p$.
+%If this were not the case,
+%then without loss of generality we may assume
+%$\Val_1 \sigma \ec{y}$ contains a strict bisimilar subterm 
+%$\mu {\Varec{w}}. u$ that strictly contains $t_1 \sigma$.
+If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
+then $\nf{(\Val_1 \sigma)} \ec{y}$ (resp. $\nf{(\Val_1 \sigma)} \ec{z}$)
+contains $t_1$ (resp. $t_2$) at position $p$,
+and $\nf{(\Val_1 \sigma)} \ec{z}$ (resp. $\nf{(\Val_1 \sigma)} \ec{y}$) does not.
+If $t_1$ is of the form $\mu w_1. \const{C}( \vec t )$ 
+and $t_2$ is of the form $\mu w_2. \const{D}( \vec u )$,
+then the expansion \rem{define} of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
+are $\alpha$-disequivalent at position $p$.
 Since $t_1$ and $t_2$ are minimal,
-$t_1$ must be of the form $\mu {\Varec{z}}. \const{C}( \vec t )$,
-and $t_2$ must be a free variable.
-If $t_2$ is not ${\Varec{x}}$,
-then $t_1 \sigma \not \aequiv t_2 \sigma$.
-Thus, $t_2$ is ${\Varec{x}}$.
-\rem{Must show positions do not collapse.}
+say $t_1$ is of the form $\mu w. \const{C}( \vec t )$,
+and $t_2$ is ${\Varec{x}}$.
+Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\mu {\Varec{x}}. t$,
+we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
+or else the expansion of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
+are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
+Since $\Val_1 \ec{y} \interp{t_1}$ is normal,
+there is a closed $\mu$-term $v \in \mathcal{T}^\M_{\Varec{x}}( \Val_1 )$
+such that $v \vsimv{\Varec{x}} \Val_1 \ec{y} \interp{t_1}$.
+Thus, by assumption on our selection of $\mu {\Varec{x}}. t$,
+we have $\mu {\Varec{x}}. t \not\vsimv{\Varec{x}} \Val_1 \ec{y} \interp{t_1}$,
+which implies that the expansion of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
+are $\alpha$-disequivalent at position $p$.
+
+Thus, by induction on the number of applications of the above rule used to obtain $\Val^\ast$,
+we have that $\Val^\ast$ satisfies statements 2 and 3.
 \qed
 \end{proof}
 
