@@ -1306,7 +1306,6 @@ $t\interp{\MU y.\; \const{C}( x )}^\emptyset =
 \MU y.\allowbreak\; \const{C}( \MU x.\; \const{C}( y ) )$
 is $\alpha$-equivalent to $t\interp{x}^\emptyset = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
-
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
 recursively construct its \emph{normal form} $\nf{t}$,
 by replacing all of the bisimilar subterms of $t$ with $x$
@@ -1314,6 +1313,7 @@ by replacing all of the bisimilar subterms of $t$ with $x$
 and by normalizing $t$'s subterms.
 For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
+\begin{report}
 \begin{lemma}
 \label{lem:mu-norm-arg}
 If $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
@@ -1339,14 +1339,21 @@ If $t$ is normal and has subterm $u$, then $t \interp{u}$ is normal.
 %\begin{proof}
 %\rem{TODO}
 %\end{proof}
+\end{report}
 
 We now define a class of models that we consider for a saturated set of equalities~$\Ec$.
 Let $\M( \tau )$ denote the interpretation type $\tau$ in $\M$,
 that is, a set of domain elements for that type.
 For a term $t$, let $\M( t )$ denote the interpretation of $t$ in $\M$,
 that is, an element of $\M( \tau )$ where $\tau$ is the type of $t$.
-\rem{Clarify that non-codatatype terms are interpreted as $\mu$-terms, although dropping the $\mu$'s gives the standard representation?
-(GOOD IDEA. A BIT OF REDUNDANCY CANNOT HURT.)}
+In the following,
+\emph{all} types are interpretated as a set of $\mu$-terms.
+This is done to simplify the presentation.
+Since all values of types in $\Data$ and $\Nondata$ are acyclic,
+a typical representation for these values can be obtained by
+dropping each of its $\mu$-bindings. 
+For instance, the $\mu$-term $\mu x. \const{0}$ representing the integer constant zero
+is simply $\const{0}$ after dropping the $\mu$-binding of $x$.
 
 \begin{definition}[Normal Model]
 \afterDot%
@@ -1368,7 +1375,7 @@ $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$ where $x$ is fresh.
 For all selector terms $\const s^k_j( t )$ of type $\tau$, % for some $\vec u$,
 $\M( \const s^k_j( t ) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
-$\M( t )\interp{u_j}$
+$\M( t )\interp{u_k}$
 when $\M( t )$ is of the form $\MU x.\; \const{C}_j( \vec u )$.
 \end{enumerate}
 \end{definition}
@@ -1484,6 +1491,9 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 
 We first state the following properties of $\Val^\ast$,
 where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or ${\Varec{x}}$ if $t$ is of the form $\MU {\Varec{x}}.\; u$.
+\begin{paper} 
+The proof of this lemma can be found in the extended version of this paper.
+\end{paper}
 
 \begin{lemma}
 \label{lem:model-completion}
@@ -1498,6 +1508,7 @@ all subterms $t$ of $\Val^\ast \ec{y}$ with $\muvar(t) = {\Varec{x}}$.
 $\Val^\ast \ec{x} \vsim \Val^\ast \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
+\begin{report}
 \begin{proof}
 To show 1, we first show that $\Val^\ast$ contains no free variables.
 Assume by contradiction that $\Val^\ast$ contained a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
@@ -1609,6 +1620,7 @@ Thus, by induction on the number of applications of the above rule used to obtai
 we have that $\Val^\ast$ satisfies statements 2 and 3.
 \qed
 \end{proof}
+\end{report}
 
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
