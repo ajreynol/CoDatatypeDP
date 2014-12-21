@@ -1186,8 +1186,9 @@ This is enforced in the third phase by the \rn{Split} rule.
 A companion rule, \rn{Singleton}, handles the degenerate case where two terms
 from $\tEc$ have a corecursive singleton type, in which case they must be
 equivalent. Both the finiteness assumption on the datatype in \rn{Split} and
-the cardinality-1 constraint on the codatatype in \rn{Singleton} are easy to
-check based on a recursive computation of the cardinalities of the
+the cardinality-1 constraint on the codatatype in \rn{Singleton} are 
+are computed statically
+based on a recursive computation of the cardinalities of the
 constructors' argument types.
 
 \paragraph{Correctness.}
@@ -1646,15 +1647,15 @@ and thus $t_u\interp{u_i'} \vsim \Val^\ast \ec{t}\interp{ w_i }$. % for each $i 
 Thus, $\M( t ) \vsim t_u \vsim \Val^\ast \ec{t}$, and
 we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 
-If $t$ is a selector term of the form $\const s^j_k( u )$,
+If $t$ is a selector term of the form $\const s^k_j( u )$,
 since \rn{Split} does not apply,
-$\ec{u}$ must contain a term of the form $\const C_j( \const s^1_j( u ), \ldots, \const s^{n}_j( u ) )$ for some $j$.
+$\ec{u}$ must contain a term of the form $\const C_{j'}( \const s^1_{j'}( u ), \ldots, \const s^{n}_{j'}( u ) )$ for some $j'$.
 By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{u}$ is of the form
-$\MU {\Varec{u}}.\; \const C_l( w_1, \ldots, w_n )$,
-where $\Val^\ast \ec{u} \interp{ w_j } = \Val^\ast \ec{ \const s^j_k( u )}$. 
-If $k = l$, then $\M( t )$ is $\alpha$-equivalent with $\Val^\ast \ec{u} \interp{w_j} = \Val^\ast \ec{ \const s^j_k( u )}$,
+$\MU {\Varec{u}}.\; \const C_{j'}( w_1, \ldots, w_n )$,
+where $\Val^\ast \ec{u} \interp{ w_i } = \Val^\ast \ec{ \const s^i_{j'}( u )}$ for $i = 1, \ldots, n$. 
+If $j = j'$, then $\M( t )$ is $\alpha$-equivalent with $\Val^\ast \ec{u} \interp{w_k}$, which is equal to $\Val^\ast \ec{ \const s^k_j( u )}$,
 which is $\Val^\ast \ec{t}$.
-If $k \neq l$, we interpret $\const s^j_k( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
+If $j \neq j'$, we are free to interpret $\const s^k_j( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
 Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3,
 pairs of wrongly applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
