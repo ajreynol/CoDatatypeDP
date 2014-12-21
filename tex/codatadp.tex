@@ -1262,7 +1262,8 @@ with root node $\Ec$ contains a saturated node, then $\Ec$ is
 $\thD$-satisfiable.
 To do so, we exhibit a specific model $\M$ of $\thD$ that satisfies $\Ec$.
 
-First, we need additional terminology concerning $\mu$-terms.
+First, we need to define the set of interpretations of the theory $\thD$,
+which requires additional terminology concerning $\mu$-terms.
 For a $\mu$-term $t$ with subterm $u$,
 the \emph{interpretation of\/ $u$ in\/ $t$} is the $\mu$-term $t\interp{u}^\emptyset$ as returned by the following recursive procedure,
 where $x \mapsto \MU x.\; \const{C}( \vec u ) \in t$ indicates that $\MU x.\; \const{C}( \vec u )$ is the subterm of $t$ that binds this occurrence of variable $x$:
@@ -1341,10 +1342,10 @@ If $t$ is normal and has subterm $u$, then $t \interp{u}$ is normal.
 %\end{proof}
 \end{report}
 
-We now define a class of models that we consider for a saturated set of equalities~$\Ec$.
-Let $\M( \tau )$ denote the interpretation type $\tau$ in $\M$,
+We now define the class of interpretations for $\thD$.
+In the following, $\M( \tau )$ denotes the interpretation type $\tau$ in $\M$,
 that is, a set of domain elements for that type.
-For a term $t$, let $\M( t )$ denote the interpretation of $t$ in $\M$,
+For a term $t$, $\M( t )$ denotes the interpretation of $t$ in $\M$,
 that is, an element of $\M( \tau )$ where $\tau$ is the type of $t$.
 In the following,
 \emph{all} types are interpretated as a set of $\mu$-terms.
@@ -1649,22 +1650,34 @@ If $t$ is a variable, then $\M( t ) \vsim \Val^\ast \ec{ t }$ by construction.
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
 then $\M( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) }$ for some fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \Val^\ast \ec{ u_1 }, \ldots, \Val^\ast \ec{ u_n } )}$, call this term $t_u$.
-By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{t}$ is a term
-of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
-where $\Val^\ast \ec{t}\interp{w_i} = \Val^\ast \ec{u_i}$ for $i = 1, \ldots, n$.
+%By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{t}$ is a term
+%of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
+%where $\Val^\ast \ec{t}\interp{w_i} = \Val^\ast \ec{u_i}$ for $i = 1, \ldots, n$.
+Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
+by our construction of $\Val^\ast$ we have $\Val^\ast \ec{t}$ is a term
+of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$ 
+where for each $i = 1, \ldots, n$, 
+$\muvar(w_i) = {\Varec{u_i}}$ and thus by Lemma~\ref{lem:model-completion}.2, 
+$\Val^\ast \ec{t}\interp{w_i} = \Val^\ast \ec{u_i}$.
 For each $i = 1, \ldots, n$, let $u_i'$ be the $i$\vvthinspace th argument of $t_u$.
-By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$,
-and thus $t_u\interp{u_i'} \vsim \Val^\ast \ec{t}\interp{ w_i }$. % for each $i = 1, \ldots, n$.
+By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_i'} \vsim \Val^\ast \ec{u_i}$.
+Thus $t_u\interp{u_i'} \vsim \Val^\ast \ec{t}\interp{ w_i }$. % for each $i = 1, \ldots, n$.
 %By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
 Thus, $\M( t ) \vsim t_u \vsim \Val^\ast \ec{t}$, and
 we have $\M( t ) \vsim \Val^\ast \ec{t}$.
 
 If $t$ is a selector term of the form $\const s^k_j( u )$,
-since \rn{Split} does not apply,
+since \rn{Split} does not apply to $\Fc$,
 $\ec{u}$ must contain a term of the form $\const C_{j'}( \const s^1_{j'}( u ), \ldots, \const s^{n}_{j'}( u ) )$ for some $j'$.
-By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{u}$ is of the form
+%By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\ast$, we have $\Val^\ast \ec{u}$ is of the form
+%$\MU {\Varec{u}}.\; \const C_{j'}( w_1, \ldots, w_n )$,
+%where $\Val^\ast \ec{u} \interp{ w_i } = \Val^\ast \ec{ \const s^i_{j'}( u )}$ for $i = 1, \ldots, n$. 
+Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
+by our construction of $\Val^\ast$ we have $\Val^\ast \ec{u}$ is of the form
 $\MU {\Varec{u}}.\; \const C_{j'}( w_1, \ldots, w_n )$,
-where $\Val^\ast \ec{u} \interp{ w_i } = \Val^\ast \ec{ \const s^i_{j'}( u )}$ for $i = 1, \ldots, n$. 
+where for each $i = 1, \ldots, n$,
+$\muvar(w_i) = {\Varec{\const s^i_{j'}( u )}}$ and thus by Lemma~\ref{lem:model-completion}.2, 
+$\Val^\ast \ec{u} \interp{ w_i } = \Val^\ast \ec{ \const s^i_{j'}( u )}$. 
 If $j = j'$, then $\M( t )$ is $\alpha$-equivalent with $\Val^\ast \ec{u} \interp{w_k}$, which is equal to $\Val^\ast \ec{ \const s^k_j( u )}$,
 which is $\Val^\ast \ec{t}$.
 If $j \neq j'$, we are free to interpret $\const s^k_j( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\ast \ec{ t }$.
