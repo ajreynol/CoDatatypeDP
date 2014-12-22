@@ -142,7 +142,14 @@
 
 % change?
 \newcommand{\thO}{T_{\mathrm{o}}}
-\newcommand{\thD}{T_{\!\mathrm{cd}}}
+%\newcommand{\thD}{T_{\!\mathrm{cd}}}
+%%% @ANDY: the italicized "T" makes it look as though it were a variable;
+%%% and the subscript means we have two layers of subscripts in things like
+%%% \model_\thD (although we could drop the "T" and keep only the subscript
+%%% like you did in the string paper).
+%%% How about the following? I'm pretty sure \mathcal has been used for theories
+%%% before by other authors.
+\newcommand{\thD}{\mathcal{CoDt}}
 
 %\newcommand\Types{\mathcal{T}}
 \newcommand\Types{\mathcal{Y}}
