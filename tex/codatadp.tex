@@ -822,7 +822,7 @@ that the type has at most one value.
 The decision procedure for the ground theory of (co)datatypes $\thD$ determines the
 $\thD$-satisfiability of sets of ground constraints over a fixed
 signature~$\Sig$. It is formulated as a calculus, whose rules are applied
-until a contradiction is detected or until saturation.
+until saturation or contradiction.
 %
 The rules operate on a finite set $\Ec$ of equalities and disequalities
 between $\Sig$-terms, where $\Ec$ is interpreted as a conjunction.
@@ -860,9 +860,9 @@ or is $\bot$.
 % (in which case we call an application of it \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$,
 denoting nondeterministic branching. The rules associated with a phase have
-priority over those of the previous phases. The rules are applied until
-saturation (i.e., until no rule can be applied to extend~$\Ec$
-further).
+priority over those of the previous phases. The rules are applied
+until a contradiction ($\bot$) is derived or until no rule can be applied to
+extend~$\Ec$ further.
 
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
 %are simplified to $t_i$, and moreover assume that all %additional
@@ -1491,11 +1491,16 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 \xend
 \end{examplex}
 
-We first state the following properties of $\Val^\ast$,
-where we write $\muvar( t )$ to denote $t$ if $t$ is a variable, or ${\Varec{x}}$ if $t$ is of the form $\MU {\Varec{x}}.\; u$.
-\begin{paper} 
-The proof of this lemma can be found in the extended version of this paper.
-\end{paper}
+%We first state the following properties of $\Val^\ast$,
+In the following lemma about $\Val^\ast$,
+$\muvar( t )$ denotes $t$ if $t$ is a variable and ${\Varec{x}}$ if $t$ is of the form $\MU {\Varec{x}}.\; u$.
+
+%%% @ANDY: I think it's enough to point this out clearly in the introduction.
+%%% At least, that always worked fine for me. :)
+%
+%\begin{paper} 
+%The proof of this lemma can be found in the extended version of this paper.
+%\end{paper}
 
 \begin{lemma}
 \label{lem:model-completion}
