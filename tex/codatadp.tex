@@ -1104,21 +1104,29 @@ trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
   \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
 \end{enumerate}
 %
-This indicates that the values for $x$ and $y$ in models of $\Ec$
-are of the forms $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots ))))$
+The result indicates that the values for $x$ and $y$ in models of $\Ec$
+are of the forms $\const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\allowbreak \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots ))))$
 and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))))$,
 respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \xend
 \end{examplex}
 
-Given $\Val$, the rules for acyclicity and uniqueness can be stated as follows.
-For acyclicity, if there is an equivalence class $\ec{t}$ of datatype type whose class of values $\Val \ec{t} = \MU x.\; u$ are cyclic,
+Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules can be stated as follows.
+For acyclicity, if there exists an equivalence class $\ec{t}$
+where $t$'s type is a datatype and
+whose %class of  -- "whose" already refers to "equivalence class"
+values $\Val \ec{t} = \MU x.\; u$ are cyclic,
 as indicated by the assumption $x \in \FV( u )$,
-then we can conclude that $\Ec$ is unsatisfiable.
-For uniqueness, if there are two equivalence classes $\ec{t}$ and $\ec{u}$
-of codatatype type whose classes of values $\Val \ec{t}$ and $\Val \ec{u}$ are equivalent for a capture-avoiding renaming of $\mu$-bound variables,
-then we can conclude $t \teq u$.
-We demonstrate the uniqueness rule concretely with the following example.
+then $\Ec$ is unsatisfiable.
+For uniqueness, if there exist two equivalence classes $\ec{t}$ and $\ec{u}$
+where $t$ and $u$'s type is a codatatype and
+whose %classes of  -- "whose" already refers to "equivalence classes"
+values $\Val \ec{t}$ and $\Val \ec{u}$ are $\alpha$-equivalent,
+%for a capture-avoiding renaming of $\mu$-bound variables,
+then $t \teq u$. This rule may seem too restrictive, since
+$\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ denote the same
+value despite being $\alpha$-disequivalent, but the construction also works in
+such cases, as illustrated by the following example.
 
 %% @ANDY: Minor terminology point:
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
@@ -1127,19 +1135,20 @@ We demonstrate the uniqueness rule concretely with the following example.
 \begin{examplex}
 Let $\const{C} : $ $\tau \times \delta \rightarrow \delta$ be a constructor,
 and let $\Ec = \{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
-After phase~1, the equivalence classes of $\Ec$ are
-$\{ x,\, \const{C}(y,\const{C}(y,x)) \}$, $\{ \const{C}(y,x) \}$, and $\{ y \}$.
-Constructing $\Val$ as described above yields
+After phase~1, the equivalence classes %of $\Ec$
+are
+$\{ y \}$, $\{ \const{C}(y,x) \}$, and $\{ x,\, \const{C}(y,\const{C}(y,x)) \}$.
+Constructing $\Val$ yields
 \[\begin{array}{rcrlrl}
 \Val \ec{x} & \,=\, &
 \MU {\Varec{x}}. & \const{C}( {\Varec{y}},\, & \smash{\MU {\VAREC{\const{C}(y, x)}}}. & \const{C}( {\Varec{y}},\, {\Varec{x}} ) ) \\
 \Val \ec{\const{C}(y,x)} & = &
 \MU {\VAREC{\const{C}(y,x)}}. & \const{C}( {\Varec{y}},\, & \MU {\Varec{x}}. & \const{C}( {\Varec{y}},\, {\VAREC{\const{C}(y,x)}} ) )
 \end{array}\]
-Since $\Val \ec{x}$ and $\Val \ec{\const{C}(y,x)}$ are $\alpha$-equivalent,
+Since $\Val \ec{x} \aequiv \Val \ec{\const{C}(y,x)}$,
 %for the renaming
 %$\{ {\Varec{x}} \mapsto {\VAREC{\const{C}(y,x)}}, {\VAREC{\const{C}(y,x)}} \mapsto {\Varec{x}} \}$,
-the calculus can infer $x \teq \const{C}(y,x)$.
+the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 %Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$
 %are equivalent for any value of ${\Varec{y}}$.
 \xend
