@@ -688,9 +688,9 @@ witnesses $R_i$ that are required to be bisimulations:
 \text{Coinduction:}\kern.8em %%% TYPESETTING: should be \quad
 \AXC{\strut$\begin{gathered}\textstyle \bigwedge_{\,i}\, R_i[v_i, w_i] \\[-\jot]\textstyle
 \bigwedge_{\,i}\, \forall v\; w.\;\, R_i[v, w] \longrightarrow
-  \bigwedge_{\,j}\, \const{d}_j(v) \teq \const{d}_j(w)
+  \bigwedge_{\,j}\, \const{d}_{\negvthinspace j}(v) \teq \const{d}_{\negvthinspace j}(w)
   \mathrel\land
-  \const{d}_j(v) \longrightarrow \bigwedge_{\,k}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
+  \const{d}_{\negvthinspace j}(v) \longrightarrow \bigwedge_{\,k}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
 \end{gathered}$}
 \UIC{\strut$\bigwedge_{\,i}\, v_i \teq w_i$}
 \DP
@@ -835,7 +835,7 @@ The rules operate on a finite set $\Ec$ of equalities and disequalities
 between $\Sig$-terms, where $\Ec$ is interpreted as a conjunction.
 We write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
-%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
+%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
 %are simplified to $t_k$. All constraints added to $\Ec$ are also implicitly
 %normalized in this manner.
 
@@ -871,7 +871,7 @@ priority over those of the subsequent phases. The rules are applied
 until a contradiction ($\bot$) is derived or until no rule can be applied to
 extend~$\Ec$ further.
 
-%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$
+%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
 %are simplified to $t_i$, and moreover assume that all %additional
 %constraints added to $\Ec$ are normalized in this manner.
 %We present the calculus in three steps.
@@ -1254,8 +1254,8 @@ let
 %for $i \geq 0$, let ;
 and let $\SSSS \AST_t$ be the limit of this sequence.
 This is a finite set for each $t$ because the values of the type of $t$ are of finite size.
-Let $\SSSS \AST$ be the union of $\SSSS \AST_t$ for all $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \AST,\, \const C_j \in \Ctr^\delta \}$.
+Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in T$,
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \AST,\, \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
 In a derivation tree with root node~$\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
@@ -1279,9 +1279,9 @@ For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values 
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
 whose root nodes are the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
-by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) )$ is unsatisfiable
-for each $\const C_j \in \Ctr^\delta$.
-Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) )$,
+by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) )$ is unsatisfiable
+for each $\const C_{\negvthinspace j} \in \Ctr^\delta$.
+Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
@@ -1411,11 +1411,11 @@ $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$ where $x$ is fresh.
 \item
-For all selector terms $\const s^k_j( t )$ of type $\tau$, % for some $\vec u$,
-$\M( \const s^k_j( t ) )$ is the value
+For all selector terms $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
+$\M( \const s^k_{\negvthinspace j}( t ) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\M( t )\interp{u_k}$
-when $\M( t )$ is of the form $\MU x.\; \const{C}_j( \vec u )$.
+when $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$.
 \end{enumerate}
 \end{definition}
 
@@ -1580,14 +1580,14 @@ Therefore, by definition, $\Val^\AST \ec{x}$ is $\alpha$-equivalent to a value i
 
 We first show that 2 and 3 hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
-each pair of constructor terms $\const{C}_j( \vec t )$ and $\const{C}_{j'}( \vec u )$ in $\ec{z}$
+each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t )$ and $\const{C}_{j'}( \vec u )$ in $\ec{z}$
 are such that $j = j'$ since \rn{Clash} does not apply to $\Ec$,
 and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply to $\Ec$.
 Thus, 
 $\Val$ was constructed by applying a sequence of substitutions
 where all substitutions for variables ${\Varec{z}}$ 
-were uniquely of the form $\{ {\Varec{z}} \mapsto \const{C}_j( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}$
-when $\ec{z}$ contains a constructor $\const{C}_j( t_1, \ldots, t_n )$.
+were uniquely of the form $\{ {\Varec{z}} \mapsto \const{C}_{\negvthinspace j}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}$
+when $\ec{z}$ contains a constructor $\const{C}_{\negvthinspace j}( t_1, \ldots, t_n )$.
 Say $\Val \ec{y}$ has a subterm $t$ where $\muvar(t) = {\Varec{x}}$.
 Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
@@ -1608,9 +1608,9 @@ contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )
 where $\Val \ec{x} \interp{ t_i } \aequiv \Val \ec{x} \interp{ u_i }$ for $i = 1, \ldots, n$.
 Due to our construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for $i = 1, \ldots, n$.
 Since \rn{Cong} does not apply to $\Ec$
-we have $\ec{w_j}$ and $\ec{z_j}$ are distinct for some $j$.
-By statement 2, $\Val \ec{x} \interp{ t_j } = \Val \ec{z_j}$
-and $\Val \ec{x} \interp{ u_j } = \Val \ec{w_j}$,
+we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
+By statement 2, $\Val \ec{x} \interp{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
+and $\Val \ec{x} \interp{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
 which are not $\alpha$-equivalent by statement 3, contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a bisimilar subterm of $\Val \ec{x}$.
 Thus, $\Val = \nf{(\Val)}$, and statements 2 and 3 hold for $\nf{(\Val)}$.
 
@@ -1709,7 +1709,7 @@ Thus $t_u\interp{u_i'} \vsim \Val^\AST \ec{t}\interp{ w_i }$. % for each $i = 1,
 Thus, $\M( t ) \vsim t_u \vsim \Val^\AST \ec{t}$, and
 we have $\M( t ) \vsim \Val^\AST \ec{t}$.
 
-If $t$ is a selector term of the form $\const s^k_j( u )$,
+If $t$ is a selector term of the form $\const s^k_{\negvthinspace j}( u )$,
 since \rn{Split} does not apply to $\Fc$,
 $\ec{u}$ must contain a term of the form $\const C_{j'}( \const s^1_{j'}( u ), \ldots, \const s^{n}_{j'}( u ) )$ for some $j'$.
 %By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{u}$ is of the form
@@ -1721,9 +1721,9 @@ $\MU {\Varec{u}}.\; \const C_{j'}( w_1, \ldots, w_n )$,
 where for each $i = 1, \ldots, n$,
 $\muvar(w_i) = {\Varec{\const s^i_{j'}( u )}}$ and thus by Lemma~\ref{lem:model-completion}.2, 
 $\Val^\AST \ec{u} \interp{ w_i } = \Val^\AST \ec{ \const s^i_{j'}( u )}$. 
-If $j = j'$, then $\M( t )$ is $\alpha$-equivalent with $\Val^\AST \ec{u} \interp{w_k}$, which is equal to $\Val^\AST \ec{ \const s^k_j( u )}$,
+If $j = j'$, then $\M( t )$ is $\alpha$-equivalent with $\Val^\AST \ec{u} \interp{w_k}$, which is equal to $\Val^\AST \ec{ \const s^k_{\negvthinspace j}( u )}$,
 which is $\Val^\AST \ec{t}$.
-If $j \neq j'$, we are free to interpret $\const s^k_j( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\AST \ec{ t }$.
+If $j \neq j'$, we are free to interpret $\const s^k_{\negvthinspace j}( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\AST \ec{ t }$.
 Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3,
 pairs of wrongly applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
@@ -1761,19 +1761,19 @@ This section describes how the calculus in Section~\ref{sec:a-ground-decision-pr
 We first discuss several optimizations that are not reflected in the presentation of the calculus, which closely follow the approach outlined by Barrett et al in~\cite{}.
 We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in~\cite{}.
 
-Discriminators are treated as predicate symbols, so a discriminator $\const{d}_j( t )$ is such that $\const{d}_j$
-is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_j( \const s^1_j( t ), \ldots, \const s^n_j( t ) )$.
+Discriminators are treated as predicate symbols, so a discriminator $\const{d}_{\negvthinspace j}( t )$ is such that $\const{d}_{\negvthinspace j}$
+is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^n_{\negvthinspace j}( t ) )$.
 We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
-if $\const s^k_j( t )$ is a term in $\tEc$ and $t$ contains the constructor
-$\const{C}_j( \vec u )$, we immediately infer $\const s^k_j( t ) \teq u_k$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
+if $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the constructor
+$\const{C}_{\negvthinspace j}( \vec u )$, we immediately infer $\const s^k_{\negvthinspace j}( t ) \teq u_k$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
 In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
-replace $\const{C}_j( \vec t ) \teq \const{C}_{j'}( \vec u )$ with $\bot$ when $j \neq j'$,
-replace all selector terms of the form $\const{s}^{\,k}_j( \const{C}_j(t_1,\ldots,t_n) )$ by $t_k$,
-and replace all occurrences of discriminators $\const{d}_j( \const{C}_{j'}( \vec t ) )$ by $\top$ if $j=j'$ and $\bot$ otherwise.
+replace $\const{C}_{\negvthinspace j}( \vec t ) \teq \const{C}_{j'}( \vec u )$ with $\bot$ when $j \neq j'$,
+replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$ by $t_k$,
+and replace all occurrences of discriminators $\const{d}_{\negvthinspace j}( \const{C}_{j'}( \vec t ) )$ by $\top$ if $j=j'$ and $\bot$ otherwise.
 
 \paragraph{Integration into DPLL(T)}
 The calculus is implemented as \emph{theory solver} of CVC4,
