@@ -29,7 +29,8 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
-\newcommand\typ[1]{: #1}
+%\newcommand\typ[1]{: #1}
+\newcommand\typ[1]{^{\vthinspace #1}}
 
 %\newcommand\PART[1]{.#1}
 \newcommand\PART[1]{(#1)}
@@ -154,7 +155,9 @@
 %%% like you did in the string paper).
 %%% How about the following? I'm pretty sure \mathcal has been used for theories
 %%% before by other authors.
-\newcommand{\thD}{\mathcal{CoDt}}
+%\newcommand{\thD}{\mathcal{CoDt}}
+%\newcommand{\thD}{\mathcal{TDC}}
+\newcommand{\thD}{\mathcal{DC}}
 
 %\newcommand\Types{\mathcal{T}}
 \newcommand\Types{\mathcal{Y}}
@@ -1394,12 +1397,11 @@ If $t$ is normal and has subterm $u$, then $t \interp{u}$ is normal.
 \end{report}
 
 We now define the class of interpretations for $\thD$.
-In the following, $\M( \tau )$ denotes the interpretation type $\tau$ in $\M$,
+$\M( \tau )$ denotes the interpretation type $\tau$ in $\M$,
 that is, a set of domain elements for that type.
 For a term $t$, $\M( t )$ denotes the interpretation of $t$ in $\M$,
 that is, an element of $\M( \tau )$ where $\tau$ is the type of $t$.
-In the following,
-\emph{all} types are interpretated as a set of $\mu$-terms.
+\emph{All} types are interpreted as a set of $\mu$-terms.
 This is done to simplify the presentation.
 Since all values of types in $\Data$ and $\Nondata$ are acyclic,
 a typical representation for these values can be obtained by
@@ -1541,12 +1543,13 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 \xend
 \end{examplex}
 
+%%% TYPESETTING: Evil hack!!
 %We first state the following properties of $\Val^\AST$,
 In the following lemma about $\Val^\AST$,
-$\muvar( t ) = \begin{cases}
-  x & \text{if $t = \MU {x}.\; u$} \\[-\jot]
-  t & \text{otherwise ($t$ is a variable)}
-\end{cases}$
+$\muvar( t ) = \smash{\begin{cases}
+  x & \text{if $t$ is of the form $\MU {x}.\; u$} \\[-\jot]
+  t & \text{otherwise.}
+\end{cases}}$
 
 %%% @ANDY: I think it's enough to point this out clearly in the introduction.
 %%% At least, that always worked fine for my other papers. :)
@@ -1558,7 +1561,7 @@ $\muvar( t ) = \begin{cases}
 \begin{lemma}
 \label{lem:model-completion}
 If $\Val$ is constructed for a saturated set $\Ec$
-and $\Val^\AST$ is a completion of $\Val$ for normal model $\M$, the following properties hold:
+and $\Val^\AST$ is a completion of $\Val$ for a normal model $\M$, the following properties hold:
 \begin{enumerate}
 \item[\rm (1)] $\Val^\AST \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
 \item[\rm (2)]
