@@ -1441,13 +1441,13 @@ and acyclic when $\tau \not\in \Codata$.
 For all constructor terms $\const{C}( \vec t \,)$ of type $\tau$,
 $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
-$\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$ where $x$ is fresh.
+$\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$, where $x$ is fresh.
 \item
 For all selector terms $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
 $\M\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
-$\interp{\M( t )}{u_k}$
-when $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$.
+$\interp{\M( t )}{u_k}$,
+assuming $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$.
 \end{enumerate}
 \end{definition}
 
@@ -1645,13 +1645,13 @@ where $\interp{\Val \ec{x}}{ t_i } \aequiv \interp{\Val \ec{x} }{ u_i }$ for $i 
 Due to our construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for $i \in [n]$.
 Since \rn{Cong} does not apply to $\Ec$
 we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
-By statement 2, $\interp{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
+By (2), $\interp{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
 and $\interp{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
-which are not $\alpha$-equivalent by statement 3, contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a self-similar subterm of $\Val \ec{x}$.
-Thus, $\Val = \nf{\Val}$, and statements 2 and 3 hold for $\nf{\Val}$.
+which are not $\alpha$-equivalent by (3), contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a self-similar subterm of $\Val \ec{x}$.
+Thus, $\Val = \nf{\Val}$, and (2) and (3) hold for $\nf{\Val}$.
 
-We now show that if statements 2 and 3 hold for some $\Val_1$,
-then 2 and 3 also hold for $\nf{\Val_1 \sigma}$,
+We now show that if (2) and (3) hold for some $\Val_1$,
+they also hold for $\nf{\Val_1 \sigma}$,
 where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
 ${\Varec{x}} \in FV( \Val_1 )$,
 and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val_1)$.
@@ -1663,7 +1663,7 @@ $\interp{\nf{\Val_1 \sigma} \ec{y}}{ u } = \nf{\Val_1 \sigma} \ec{x}$.
 To show 3, 
 consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
 and assume by contradiction that $\nf{\Val_1 \sigma} \ec{y} \aequiv \nf{\Val_1 \sigma} \ec{z}$.
-Due to statement 3 for $\Val_1$,
+Due to (3) for $\Val_1$,
 $\ec{y}$ and $\ec{z}$ must have (minimal) subterms 
 where $t_1$ occurs in $\Val_1 \ec{y}$ the same position (call it $p$) as $t_2$ occurs in $\Val_1 \ec{z}$,
 and $t_1 \not\aequiv t_2$.
@@ -1697,7 +1697,7 @@ which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 
 are $\alpha$-disequivalent at position $p$. \rem{more detail}
 
 Thus, by induction on the number of applications of the above rule used to obtain $\Val^\AST$,
-we have that $\Val^\AST$ satisfies statements 2 and 3.
+we have that $\Val^\AST$ satisfies (2) and (3).
 \qed
 \end{proof}
 \end{report}
