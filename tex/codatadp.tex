@@ -1191,7 +1191,7 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
   \text{ or }
   \bigl( \delta \in \Data \text{ and } \left|\delta\right| \text{ is finite} \bigr)
 }{
-  \Ec := \Ec,\: t \teq \const{C}_1(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec,\: t \teq \const{C}_m(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) )
+  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) \bigr) \ror \cdots \ror \Ec := \Ec,\: t \teq \const{C}_m\bigl(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) \bigr)
 }
 \)
 \rn{Split}
@@ -1264,7 +1264,7 @@ let
 and let $\SSSS \AST_t$ be the limit of this sequence.
 This is a finite set for each $t$ because the values of the type of $t$ are of finite size.
 Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t : \delta \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
 In a derivation tree with root node~$\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
@@ -1288,9 +1288,9 @@ For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values 
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
 whose root nodes are the result of applying the rule \rn{Split} on $t : \delta$,
-by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) )}$ is unsatisfiable
+by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is unsatisfiable
 for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
-Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) )$,
+Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)$,
 this means $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
@@ -1421,7 +1421,7 @@ in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$ where $x$ is fresh.
 \item
 For all selector terms $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-$\M( \const s^k_{\negvthinspace j}( t ) )$ is the value
+$\M\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\M( t )\interp{u_k}$
 when $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$.
@@ -1720,7 +1720,7 @@ we have $\M( t ) \vsim \Val^\AST \ec{t}$.
 
 If $t$ is a selector term of the form $\const s^k_{\negvthinspace j}( u )$,
 since \rn{Split} does not apply to $\Fc$,
-$\ec{u}$ must contain a term of the form $\const C_{j'}( \const s^1_{j'}( u ), \ldots, \const s^{n}_{j'}( u ) )$ for some $j'$.
+$\ec{u}$ must contain a term of the form $\const C_{j'}\bigl( \const s^1_{j'}( u ), \ldots, \const s^{n}_{j'}( u ) \bigr)$ for some $j'$.
 %By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{j'}( w_1, \ldots, w_n )$,
 %where $\Val^\AST \ec{u} \interp{ w_i } = \Val^\AST \ec{ \const s^i_{j'}( u )}$ for $i = 1, \ldots, n$. 
@@ -1771,7 +1771,7 @@ We first discuss several optimizations that are not reflected in the presentatio
 We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in~\cite{}.
 
 Discriminators are treated as predicate symbols, so a discriminator $\const{d}_{\negvthinspace j}( t )$ is such that $\const{d}_{\negvthinspace j}$
-is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^n_{\negvthinspace j}( t ) )$.
+is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^n_{\negvthinspace j}( t ) \bigr)$.
 We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several additional rules (see~\cite{} for more details), which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
@@ -1811,9 +1811,9 @@ Thus, the rules of the calculus are implemented as follows.
 For all rules with conclusion $\bot$,
 we report the union of the explanations for all premises is $\thD$-unsatisfiable.
 For the \rn{Split} rule, we add a clause of the form
-$(\const{C}_1( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) ) \vee \ldots \vee t \teq \const{C}_m( \const s^1_m( t ), \ldots, \const s^{n_m}_m( t ) ))$
+$\const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr) \mathrel\lor \cdots \mathrel\lor t \teq \const{C}_m\bigl( \const s^1_m( t ), \ldots, \const s^{n_m}_m( t ) \bigr)$
 to $F$.
-Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
+Decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
 All other rules add equalities to the internal state of the theory solver.
 The rules in phase~1 (along with the optimization for collapsing selectors) and the \rn{Single} rule are performed eagerly,
 that is for partial satisfying assignments $M$, while the rules in phase~2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$,
