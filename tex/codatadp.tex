@@ -1358,27 +1358,31 @@ $u$ it is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k \in [n]$.
 The term $t$ is \emph{normal} if it does not contain a self-similar subterm
 and all of its strict subterms are also normal.
-For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal,
+For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal
 because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
 In particular, note that their arguments have the same expansion with respect to $t$,
 that is,
 $\interp{t}{\MU y.\; \const{C}( y )} =$
-$\MU y.\; \const{C}( \interp{t}{y}^{\{y\}} ) =$
+$\MU y.\; \const{C}( \interp{t}{y}^{\smash{\{y\}}} ) =$
 $\MU y.\; \const{C}( y )$
 is $\alpha$-equivalent to
 $\interp{t}{y} =$
-$\MU y.\; \const{C}( \interp{t}{y}^{\{y\}} ) =$
+$\MU y.\; \const{C}( \interp{t}{y}^{\smash{\{y\}}} ) =$
 $\MU y.\; \const{C}( y )$.
-The $\mu$-term $t$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
+The term $t$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
 since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $t$,
 noting that
-$\interp{t}{\MU y.\; \const{C}( x )} =
-\MU y.\; \const{C}( \interp{t}{x}^{\{y\}} ) =
-\MU y.\; \const{C}( \interp{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\{y\}} ) =
-\MU y.\; \const{C}( \MU x.\; \const{C}( \interp{t}{\MU y.\; \const{C}( x )}^{\{x,y\}} ) ) =
-\MU y.\allowbreak\; \const{C}( \MU x.\; \const{C}( y ) )$
+%
+\begin{align*}
+\interp{t}{\MU y.\; \const{C}( x )}
+& = \MU y.\; \const{C}( \interp{t}{x}^{\smash{\{y\}}} ) \\
+& = \MU y.\; \const{C}( \interp{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} ) \\
+& = \MU y.\; \const{C}( \MU x.\; \const{C}( \interp{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) ) \\
+& = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )
+\end{align*}
 is $\alpha$-equivalent to $\interp{t}{x} = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
+
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
 recursively construct its \emph{normal form} $\nf{t}$,
 by replacing all of the self-similar subterms of $t$ with $x$
