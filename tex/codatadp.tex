@@ -1009,7 +1009,7 @@ denote the equivalence class in $\Ec$ that contains $t$.
 
 \paragraph{Phase 2: Applying Acyclicity and Uniqueness.}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
-In the second phase, the premises of the rules refer to a mapping $\Val$
+The premises of the rules that make up the second phase refer to a mapping $\Val$
 that associates a $\mu$-term as representative with each equivalence class.
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
@@ -1021,7 +1021,7 @@ When $\tau$ is a datatype, % \in \Data$,
 a cyclic $t$ describes an infeasible class of values.
 %$\tau \not\in \Codata$.
 
-Formally, $\mu$-terms are defined recursively as being either a variable $x$
+Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
 or a node of the form
 $\MU x.\: \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ with the expected types.
@@ -1065,9 +1065,9 @@ The mapping $\Val$ is computed as follows.
 %
 For each equivalence class $\ec{x}$, we associate a fresh variable ${\Varec{x}}$ of the same type as $x$
 %not occurring in $\tEc$,
-and let $\Val\ec{x} = {\Varec{x}}$.
+and set $\Val\ec{x} = {\Varec{x}}$.
 Thus, there are initially no constraints on the values for any equivalence class $\ec{x}$.
-The mapping $\Val$ is then modified by applying the following unfolding rule exhaustively:
+The mapping $\Val$ is refined by applying the following unfolding rule exhaustively:\strut
 \[
 \hbox{\(
 \inferrule{
@@ -1083,14 +1083,15 @@ The mapping $\Val$ is then modified by applying the following unfolding rule exh
 %\rn{Unfold}
 }
 \]
-$\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range.
+$\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range,
+and $\Val\{{\Varec{x}} \mapsto \ldots\}$ denotes the corresponding substitution.
 It is easy to see that the height of terms produced as a result of the unfolding
 is bounded by the number of equivalence classes of $\Ec$,
 and thus the construction of $\Val$ will terminate.
 
 \begin{examplex}
-Suppose that $\Ec$ contains distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and $\ec{z}$
-where $\const{C}(z,x) \in \ec{y}$ and $\const{C}(w,y) \in \ec{x}$ for some $\const{C} \in \Ctr$.
+Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and~$\ec{z}$
+such that $\const{C}(w,y) \in \ec{x}$ and $\const{C}(z,x) \in \ec{y}$ for some $\const{C} \in \Ctr$.
 A possible sequence of unfoldings is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
