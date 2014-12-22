@@ -1130,14 +1130,13 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \end{examplex}
 
 Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules can be stated as follows.
-For acyclicity, if there exists an equivalence class $\ec{t}$
-where $t$'s type is a datatype and
+For acyclicity, if $\ec{t : \delta}$ is an equivalence class such that $\delta$ is a datatype and
 whose %class of  -- "whose" already refers to "equivalence class"
 values $\Val \ec{t} = \MU x.\; u$ are cyclic,
 as indicated by the assumption $x \in \FV( u )$,
 then $\Ec$ is unsatisfiable.
-For uniqueness, if there exist two equivalence classes $\ec{t}$ and $\ec{u}$
-where $t$ and $u$'s type is a codatatype and
+For uniqueness, if $\ec{t : \delta}$ and $\ec{u : \delta}$ are two equivalence classes such
+that $\delta$ is a codatatype and
 whose %classes of  -- "whose" already refers to "equivalence classes"
 values $\Val \ec{t}$ and $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
@@ -1542,7 +1541,10 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 
 %We first state the following properties of $\Val^\AST$,
 In the following lemma about $\Val^\AST$,
-$\muvar( t )$ denotes $t$ if $t$ is a variable and ${\Varec{x}}$ if $t$ is of the form $\MU {\Varec{x}}.\; u$.
+$\muvar( t ) = \begin{cases}
+  x & \text{if $t = \MU {x}.\; u$} \\[-\jot]
+  t & \text{otherwise ($t$ is a variable)}
+\end{cases}$
 
 %%% @ANDY: I think it's enough to point this out clearly in the introduction.
 %%% At least, that always worked fine for my other papers. :)
