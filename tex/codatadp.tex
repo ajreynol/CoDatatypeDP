@@ -861,7 +861,7 @@ or is $\bot$.
 % (in which case we call an application of it \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$,
 denoting nondeterministic branching. The rules associated with a phase have
-priority over those of the previous phases. The rules are applied
+priority over those of the subsequent phases. The rules are applied
 until a contradiction ($\bot$) is derived or until no rule can be applied to
 extend~$\Ec$ further.
 
@@ -904,22 +904,13 @@ extend~$\Ec$ further.
 \qquad
 \(
 \inferrule{
-  t \teq u,\; t \tneq u \in \Ec
-}{
-  \bot
-}
-\)
-\rn{Conflict}
-\\[5\jot]
-\(
-\inferrule{
   s \teq t,\; t \teq u \in \Ec
 }{
   \Ec := \Ec,\: s \teq u
 }
 \)
 \rn{Trans}
-\qquad
+\\[5\jot]
 \(
 \inferrule{
   \vec t \teq \vec u \in \Ec \quad \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
@@ -928,6 +919,15 @@ extend~$\Ec$ further.
 }
 \)
 \rn{Cong}
+\qquad
+\(
+\inferrule{
+  t \teq u,\; t \tneq u \in \Ec
+}{
+  \bot
+}
+\)
+\rn{Conflict}
 \\[5\jot]
 \(
 \inferrule{
@@ -1009,22 +1009,24 @@ denote the equivalence class in $\Ec$ that contains $t$.
 
 \paragraph{Phase 2: Applying Acyclicity and Uniqueness.}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
-The rules of the second phase contain premises that involve a mapping $\Val$
+In the second phase, the premises of the rules refer to a mapping $\Val$
 that associates a $\mu$-term as representative with each equivalence class.
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
 % for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
 A $\mu$-term $t$ of type $\tau$ describes a class of values of
-$\tau$ that terms in that equivalence class can take in the models of $\Ec$;
+$\tau$ that terms in that equivalence class can take in the models of $\Ec$.
 %either in the case when $\tau$ is a codatatype or datatype type,
-when $\tau \in \Data$, a cyclic $t$ describes an infeasible class of values.
+When $\tau$ is a datatype, % \in \Data$,
+a cyclic $t$ describes an infeasible class of values.
 %$\tau \not\in \Codata$.
+
 Formally, $\mu$-terms are defined recursively as being either a variable $x$
 or a node of the form
 $\MU x.\: \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ with the expected types.
 The variable $x$ need not occur freely under the binder's body, in which case the
-binder can be omitted.
+binder will sometimes be omitted in examples.
 In the \rn{Acyclic} rule,
 $\FV( u )$ denotes the variables occurring freely in $u$.
 
