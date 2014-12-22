@@ -1349,8 +1349,9 @@ $\interp{t}{u}$, as returned by the following recursive function:
 \end{cases}
 \end{array}\]
 
-Given a $\mu$-term $t$ and a subterm $u$,
-$u$ is an \emph{obviously bisimilar subterm} of~$t$ if
+The $\mu$-term $u$
+is an \emph{obviously bisimilar subterm} of~$t$ if
+$u$ is a strict subterm of $t$,
 $t$ is of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$,
 $u$ it is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k \in [n]$.
