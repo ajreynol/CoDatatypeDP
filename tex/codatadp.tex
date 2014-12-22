@@ -44,6 +44,8 @@
 \\[-11pt] %%% TYPESETTING HACK
 }
 
+\renewcommand\models{\vDash} %%% matter of taste
+
 \def\thewordpaper{paper}
 \newcommand\dotReportFootnote[1]{.}
 
@@ -1255,7 +1257,7 @@ let
 and let $\SSSS \AST_t$ be the limit of this sequence.
 This is a finite set for each $t$ because the values of the type of $t$ are of finite size.
 Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \AST,\, \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) ) \mid t : \delta \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
 In a derivation tree with root node~$\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
@@ -1275,14 +1277,14 @@ If the tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
 then $\Ec$ is $\thD$-unsatisfiable.
 For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
-For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that $t$ can take in models of $\Ec$ is infeasible,
+For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that term~$t$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
-whose root nodes are the result of applying the rule \rn{Split} on term $t$ of type $\delta$,
-by the induction hypothesis $\Ec \mathrel\cup t \teq \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) )$ is unsatisfiable
-for each $\const C_{\negvthinspace j} \in \Ctr^\delta$.
+whose root nodes are the result of applying the rule \rn{Split} on $t : \delta$,
+by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) )}$ is unsatisfiable
+for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) )$,
-we know $\Ec$ is $\thD$-unsatisfiable.
+this means $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
 In all cases, we have that $\Ec \models_{\thD} t \teq u$.
