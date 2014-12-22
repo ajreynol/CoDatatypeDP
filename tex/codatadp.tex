@@ -974,9 +974,9 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  \delta \in \Data
-  \quad
   t : \delta
+  \quad
+  \delta \in \Data
   \quad
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
   \Val \ec{t} = \MU x.\; u
@@ -990,9 +990,9 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \\[4\jot]
 \(
 \inferrule{
- \delta \in \Codata
- \quad
  t, u : \delta
+ \quad
+ \delta \in \Codata
  \quad
  %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
  \Val \ec{t} \aequiv \Val \ec{u}
@@ -1162,9 +1162,9 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 \inferrule{
   t : \delta \in \tEc
   \quad
-  ( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta )
+  \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
   \text{ or }
-  ( \delta \in \Data \text{ and } \delta \text{ finite} )
+  \bigl( \delta \in \Data \text{ and } \delta \text{ finite} \bigr)
 }{
   \Ec := \Ec,\: t \teq \const{C}_1(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) ) \ror \cdots \ror \Ec := \Ec,\: t \teq \const{C}_m(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) )
 }
@@ -1173,11 +1173,11 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 \\[5\jot]
 \(
 \inferrule{
+  t, u : \delta \in \tEc
+  \quad
   \delta \in \Codata
   \quad
   \left|\delta\right| = 1
-  \quad
-  t, u : \delta \in \tEc
 }{
   \Ec := \Ec,\: t \teq u
 }
@@ -1198,7 +1198,8 @@ $\delta$'s constructors
 $\Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}$.
 This is enforced in the third phase by the \rn{Split} rule.
 A companion rule, \rn{Singleton}, handles the degenerate case where two terms
-from $\tEc$ have a corecursive singleton type, in which case they must be
+from $\tEc$ have a corecursive singleton type
+(Section~\ref{sec:the-theory-of-co-datatypes}), in which case they must be
 equivalent. Both the finiteness assumption on the datatype in \rn{Split} and
 the cardinality-1 constraint on the codatatype in \rn{Singleton} are 
 are computed statically
