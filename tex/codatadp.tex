@@ -29,6 +29,9 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
+%\newcommand\PART[1]{.#1}
+\newcommand\PART[1]{(#1)}
+
 %\newcommand\AST{\ast}
 \newcommand\AST{\infty} %%% matter of taste -- revert if you don't like
 
@@ -1551,13 +1554,13 @@ $\muvar( t )$ denotes $t$ if $t$ is a variable and ${\Varec{x}}$ if $t$ is of th
 \begin{lemma}
 \label{lem:model-completion}
 If $\Val$ is constructed for a saturated set $\Ec$
-and $\Val^\AST$ is a completion of $\Val$ for normal model $\M$, the following holds:
+and $\Val^\AST$ is a completion of $\Val$ for normal model $\M$, the following properties hold:
 \begin{enumerate}
-\item[\rm 1.] $\Val^\AST \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
-\item[\rm 2.]
+\item[\rm (1)] $\Val^\AST \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
+\item[\rm (2)]
 $\Val^\AST \ec{x} = \Val^\AST \ec{y} \interp{ t }$ for
 all subterms $t$ of $\Val^\AST \ec{y}$ with $\muvar(t) = {\Varec{x}}$. 
-\item[\rm 3.]
+\item[\rm (3)]
 $\Val^\AST \ec{x} \vsim \Val^\AST \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
@@ -1589,7 +1592,7 @@ Therefore, by definition, $\Val^\AST \ec{x}$ is $\alpha$-equivalent to a value i
 
 We first show that 2 and 3 hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
-each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t )$ and $\const{C}_{\vthinspace\jPrime}( \vec u )$ in $\ec{z}$
+each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t )$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
 are such that $j = \jPrime$ since \rn{Clash} does not apply to $\Ec$,
 and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply to $\Ec$.
 Thus, 
@@ -1702,14 +1705,14 @@ If $t$ is a variable, then $\M( t ) \vsim \Val^\AST \ec{ t }$ by construction.
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
 then $\M( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) }$ for some fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \Val^\AST \ec{ u_1 }, \ldots, \Val^\AST \ec{ u_n } )}$, call this term $t_u$.
-%By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{t}$ is a term
+%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\Val^\AST \ec{t}\interp{w_i} = \Val^\AST \ec{u_i}$ for $i = 1, \ldots, n$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
 by our construction of $\Val^\AST$ we have $\Val^\AST \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$ 
 where for each $i = 1, \ldots, n$, 
-$\muvar(w_i) = {\Varec{u_i}}$ and thus by Lemma~\ref{lem:model-completion}.2, 
+$\muvar(w_i) = {\Varec{u_i}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2}, 
 $\Val^\AST \ec{t}\interp{w_i} = \Val^\AST \ec{u_i}$.
 For each $i = 1, \ldots, n$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $t_u\interp{u_\iPrime} \vsim \Val^\AST \ec{u_i}$.
@@ -1720,20 +1723,20 @@ we have $\M( t ) \vsim \Val^\AST \ec{t}$.
 
 If $t$ is a selector term of the form $\const s^k_{\negvthinspace j}( u )$,
 since \rn{Split} does not apply to $\Fc$,
-$\ec{u}$ must contain a term of the form $\const C_{\vthinspace\jPrime}\bigl( \const s^1_{\vthinspace\jPrime}( u ), \ldots, \const s^{n}_{\vthinspace\jPrime}( u ) \bigr)$ for some $\jPrime$.
-%By Lemma~\ref{lem:model-completion}.2 and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{u}$ is of the form
-%$\MU {\Varec{u}}.\; \const C_{\vthinspace\jPrime}( w_1, \ldots, w_n )$,
-%where $\Val^\AST \ec{u} \interp{ w_i } = \Val^\AST \ec{ \const s^i_{\vthinspace\jPrime}( u )}$ for $i = 1, \ldots, n$. 
+$\ec{u}$ must contain a term of the form $\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)$ for some $\jPrime$.
+%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{u}$ is of the form
+%$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
+%where $\Val^\AST \ec{u} \interp{ w_i } = \Val^\AST \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i = 1, \ldots, n$. 
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
-by our construction of $\Val^\AST$ we have $\Val^\AST \ec{u}$ is of the form
-$\MU {\Varec{u}}.\; \const C_{\vthinspace\jPrime}( w_1, \ldots, w_n )$,
+by construction $\Val^\AST$ must be of the form
+$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where for each $i = 1, \ldots, n$,
-$\muvar(w_i) = {\Varec{\const s^i_{\vthinspace\jPrime}( u )}}$ and thus by Lemma~\ref{lem:model-completion}.2, 
-$\Val^\AST \ec{u} \interp{ w_i } = \Val^\AST \ec{ \const s^i_{\vthinspace\jPrime}( u )}$. 
-If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\Val^\AST \ec{u} \interp{w_k}$, which is equal to $\Val^\AST \ec{ \const s^k_{\negvthinspace j}( u )}$,
+$\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2}, 
+$\Val^\AST \ec{u} \interp{ w_i } = \Val^\AST \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$. 
+If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\Val^\AST \ec{u} \interp{w_k}$, which is equal to $\Val^\AST \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
 which is $\Val^\AST \ec{t}$.
-If $j \neq \jPrime$, we are free to interpret $\const s^k_{\negvthinspace j}( \M( u ) )$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\AST \ec{ t }$.
-Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}.3,
+If $j \neq \jPrime$, we are free to interpret $\smash{\const s^k_{\negvthinspace j}( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\AST \ec{ t }$.
+Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}\PART{3},
 pairs of wrongly applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
 
@@ -1741,7 +1744,7 @@ We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
 Since $\M( t_1 ) \vsim \Val^\AST \ec{t_1}$ and $\M( t_2 ) \vsim \Val^\AST \ec{t_2}$,
-by Lemma~\ref{lem:model-completion}.3, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
+by Lemma~\ref{lem:model-completion}\PART{3}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
@@ -1780,9 +1783,9 @@ $\const{C}_{\negvthinspace j}( \vec u )$, we immediately infer $\const s^k_{\neg
 For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
 In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
-replace $\const{C}_{\negvthinspace j}( \vec t ) \teq \const{C}_{\vthinspace\jPrime}( \vec u )$ with $\bot$ when $j \neq \jPrime$,
+replace $\const{C}_{\negvthinspace j}( \vec t ) \teq \const{C}_{\negvthinspace\jPrime}( \vec u )$ with $\bot$ when $j \neq \jPrime$,
 replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$ by $t_k$,
-and replace all occurrences of discriminators $\const{d}_{\negvthinspace j}( \const{C}_{\vthinspace\jPrime}( \vec t ) )$ by $\top$ if $j = \jPrime$ and $\bot$ otherwise.
+and replace all occurrences of discriminators $\const{d}_{\negvthinspace j}( \const{C}_{\negvthinspace\jPrime}( \vec t ) )$ by $\top$ if $j = \jPrime$ and $\bot$ otherwise.
 
 \paragraph{Integration into DPLL(T).}
 The calculus is implemented as \emph{theory solver} of CVC4,
