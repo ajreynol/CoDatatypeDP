@@ -29,6 +29,8 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
+\newcommand\typ[1]{: #1}
+
 %\newcommand\PART[1]{.#1}
 \newcommand\PART[1]{(#1)}
 
@@ -464,7 +466,7 @@ is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
 and a return type $\tau$. This connection can be expressed %compactly
 as $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{report},
 which collapses to $\const{f} : \tau$ if $n = 0$\end{report}.
-For a term $t$, the notation $t : \tau$ indicates that it has type $\tau$.
+For a term $t$, the notation $t\typ{\tau}$ indicates that it has type $\tau$.
 Functions are invoked in the standard way, with $\const{f}(t_1,\ldots,t_n)$
 applying the $n$-ary function symbol
 \const{f} to $n$ well-typed arguments $t_1 :\nobreak \tau_1$, \ldots, $t_n :
@@ -992,7 +994,7 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  t : \delta
+  t\typ{\delta}
   \quad
   \delta \in \Data
   \quad
@@ -1008,7 +1010,7 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \\[4\jot]
 \(
 \inferrule{
- t, u : \delta
+ t, u\typ{\delta}
  \quad
  \delta \in \Codata
  \quad
@@ -1130,12 +1132,12 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \end{examplex}
 
 Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules can be stated as follows.
-For acyclicity, if $\ec{t : \delta}$ is an equivalence class such that $\delta$ is a datatype and
+For acyclicity, if $\ec{t\typ{\delta}}$ is an equivalence class such that $\delta$ is a datatype and
 whose %class of  -- "whose" already refers to "equivalence class"
 values $\Val \ec{t} = \MU x.\; u$ are cyclic,
 as indicated by the assumption $x \in \FV( u )$,
 then $\Ec$ is unsatisfiable.
-For uniqueness, if $\ec{t : \delta}$ and $\ec{u : \delta}$ are two equivalence classes such
+For uniqueness, if $\ec{t\typ{\delta}}$ and $\ec{u\typ{\delta}}$ are two equivalence classes such
 that $\delta$ is a codatatype and
 whose %classes of  -- "whose" already refers to "equivalence classes"
 values $\Val \ec{t}$ and $\Val \ec{u}$ are $\alpha$-equivalent,
@@ -1185,7 +1187,7 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  t : \delta \in \tEc
+  t\typ{\delta} \in \tEc
   \quad
   \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
 \\
@@ -1200,7 +1202,7 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 \\[5\jot]
 \(
 \inferrule{
-  t, u : \delta \in \tEc
+  t, u\typ{\delta} \in \tEc
   \quad
   \delta \in \Codata
   \quad
@@ -1260,13 +1262,13 @@ For each term $t \in T$\negvthinspace,
 let
 \begin{align*}
 \smash{\SSSS 0_t} & = \{ t \}
-& \smash{\SSSS {i+1}_t} & = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u : \delta \in \SSSS i{,}~ \delta \in \Data{,}~ \left|\delta\right| \text{ is finite}{,}~ \const{s} \in \Sel^{\delta}}  \}
+& \smash{\SSSS {i+1}_t} & = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u\typ{\delta} \in \SSSS i{,}~ \delta \in \Data{,}~ \left|\delta\right| \text{ is finite}{,}~ \const{s} \in \Sel^{\delta}}  \}
 \end{align*}
 %for $i \geq 0$, let ;
 and let $\SSSS \AST_t$ be the limit of this sequence.
 This is a finite set for each $t$ because the values of the type of $t$ are of finite size.
 Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t : \delta \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
+and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t\typ{\delta} \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
 In a derivation tree with root node~$\Ec$,
 it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
@@ -1289,7 +1291,7 @@ For \rn{Clash}, this is a consequence of distinctness.
 For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that term~$t$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
 If the children of $\Ec$ are closed derivation trees
-whose root nodes are the result of applying the rule \rn{Split} on $t : \delta$,
+whose root nodes are the result of applying the rule \rn{Split} on $t\typ{\delta}$,
 by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is unsatisfiable
 for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)$,
@@ -1447,7 +1449,7 @@ $\MU x.\; \const{C}( z, x ) \vsimv{z} \MU y.\; \const{C}( z, y )$,
 but
 $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
-For a variable $x : \tau$ and a fixed normal model $\M$,
+For a variable $x\typ{\tau}$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
 such that $v \vsimv{x} t\interp{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
 
@@ -1455,7 +1457,7 @@ We construct $\Val^\AST$ by exhaustively applying the following rule to $\nf{\Va
 \[
 \hbox{\(
 \inferrule{
-  {\Varec{x}} : \tau \in \FV( \Val )
+  {\Varec{x}}\typ{\tau} \in \FV( \Val )
   \quad
   \MU {\Varec{x}}.\; t \aequiv v
   \quad
