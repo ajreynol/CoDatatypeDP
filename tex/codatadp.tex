@@ -1350,15 +1350,15 @@ $\interp{t}{u}$, as returned by the following recursive function:
 \end{array}\]
 
 The $\mu$-term $u$
-is an \emph{obviously bisimilar subterm} of~$t$ if
+is a \emph{self-similar subterm} of~$t$ if
 $u$ is a strict subterm of $t$,
 $t$ is of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$,
 $u$ it is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k \in [n]$.
-The term $t$ is \emph{normal} if it does not contain an obviously bisimilar strict subterm
+The term $t$ is \emph{normal} if it does not contain a self-similar subterm
 and all of its strict subterms are also normal.
 For example, the $\mu$-term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal,
-since $\MU y.\; \const{C}( y )$ is an obviously bisimilar subterm of $t$.
+since $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
 In particular, note that their arguments have the same expansion with respect to $t$,
 that is,
 $\interp{t}{\MU y.\; \const{C}( y )} =$
@@ -1369,7 +1369,7 @@ $\interp{t}{y} =$
 $\MU y.\; \const{C}( \interp{t}{y}^{\{y\}} ) =$
 $\MU y.\; \const{C}( y )$.
 The $\mu$-term $t$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
-since $\MU y.\; \const{C}( x )$ is an obviously bisimilar subterm of $t$,
+since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $t$,
 noting that
 $\interp{t}{\MU y.\; \const{C}( x )} =
 \MU y.\; \const{C}( \interp{t}{x}^{\{y\}} ) =
@@ -1380,7 +1380,7 @@ is $\alpha$-equivalent to $\interp{t}{x} = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
 recursively construct its \emph{normal form} $\nf{t}$,
-by replacing all of the obviously bisimilar subterms of $t$ with $x$
+by replacing all of the self-similar subterms of $t$ with $x$
 %and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
 and by normalizing $t$'s subterms.
 For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
@@ -1647,7 +1647,7 @@ Since \rn{Cong} does not apply to $\Ec$
 we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
 By statement 2, $\interp{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
 and $\interp{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
-which are not $\alpha$-equivalent by statement 3, contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is an obviously bisimilar subterm of $\Val \ec{x}$.
+which are not $\alpha$-equivalent by statement 3, contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a self-similar subterm of $\Val \ec{x}$.
 Thus, $\Val = \nf{\Val}$, and statements 2 and 3 hold for $\nf{\Val}$.
 
 We now show that if statements 2 and 3 hold for some $\Val_1$,
@@ -1671,7 +1671,7 @@ and $t_1 \not\aequiv t_2$.
 %also contains position $p$.
 %If this were not the case,
 %then without loss of generality we may assume
-%$\Val_1 \sigma \ec{y}$ contains an obviously bisimilar strict subterm 
+%$\Val_1 \sigma \ec{y}$ contains a self-similar subterm 
 %$\MU {\Varec{w}}.\; u$ that strictly contains $t_1 \sigma$.
 If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
 then $\nf{\Val_1 \sigma} \ec{y}$ (resp. $\nf{\Val_1 \sigma} \ec{z}$)
