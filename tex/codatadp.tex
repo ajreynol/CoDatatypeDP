@@ -137,6 +137,7 @@
 \newcommand{\ec}[1]{[#1]}
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\Val}{\mathcal{A}}
+\newcommand{\ValC}{\mathcal{A}^\star}
 \newcommand{\Var}{\mathcal{V}}
 %\newcommand{\Varec}[1]{\Var{\ec{#1}}}
 \newcommand{\Varec}[1]{\widetilde{#1}}
@@ -1357,8 +1358,8 @@ $u$ it is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k \in [n]$.
 The term $t$ is \emph{normal} if it does not contain a self-similar subterm
 and all of its strict subterms are also normal.
-For example, the $\mu$-term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal,
-since $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
+For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal,
+because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
 In particular, note that their arguments have the same expansion with respect to $t$,
 that is,
 $\interp{t}{\MU y.\; \const{C}( y )} =$
@@ -1455,7 +1456,7 @@ In the following, we consider only normal models.
 When constructing a model $\M$ for $\Ec$,
 it remains only to define how $\M$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ constructed in phase~2 of the calculus.
-We compute the \emph{completion} $\Val^\AST$ of $\Val$ for normal model $\M$
+We compute the \emph{completion} $\ValC$ of $\Val$ for normal model $\M$
 by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
 %First, we need the following definition.
@@ -1472,7 +1473,7 @@ For a variable $x\typ{\tau}$ and a fixed normal model $\M$,
 we write $\mathcal{T}^\M_x( \Val )$ to denote the set consisting of all values $v$ from $\M( \tau )$
 such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
 
-We construct $\Val^\AST$ by exhaustively applying the following rule to $\nf{\Val}$:
+We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
 \[
 \hbox{\(
 \inferrule{
@@ -1561,8 +1562,8 @@ $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )
 \end{examplex}
 
 %%% TYPESETTING: Evil hack!!
-%We first state the following properties of $\Val^\AST$,
-In the following lemma about $\Val^\AST$,
+%We first state the following properties of $\ValC$,
+In the following lemma about $\ValC$,
 $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
   x & \text{if $t$ is of the form $\MU {x}.\; u$} \\[-\jot]
   t & \text{otherwise.}
@@ -1578,20 +1579,20 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
 \begin{lemma}
 \label{lem:model-completion}
 If $\Val$ is constructed for a saturated set $\Ec$
-and $\Val^\AST$ is a completion of $\Val$ for a normal model $\M$, the following properties hold:
+and $\ValC$ is a completion of $\Val$ for a normal model $\M$, the following properties hold:
 \begin{enumerate}
-\item[\rm (1)] $\Val^\AST \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
+\item[\rm (1)] $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
 \item[\rm (2)]
-$\Val^\AST \ec{x} = \interp{\Val^\AST \ec{y}}{ t }$ for
-all subterms $t$ of $\Val^\AST \ec{y}$ with $\muvar(t) = {\Varec{x}}$. 
+$\ValC \ec{x} = \interp{\ValC \ec{y}}{ t }$ for
+all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$. 
 \item[\rm (3)]
-$\Val^\AST \ec{x} \vsim \Val^\AST \ec{y}$ if and only if $\ec{x} = \ec{y}$.
+$\ValC \ec{x} \vsim \ValC \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
 \begin{report}
 \begin{proof}
-To show 1, we first show that $\Val^\AST$ contains no free variables.
-Assume by contradiction that $\Val^\AST$ contained a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
+To show 1, we first show that $\ValC$ contains no free variables.
+Assume by contradiction that $\ValC$ contained a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
 Then it must be the case that $\ec{y}$ does not contain a constructor term,
 or else ${\Varec{y}}$ would not occur as a free variable in $\Val$.
 Consider the case when $\tau$ is finite.
@@ -1601,18 +1602,18 @@ If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\r
 the cardinality of $\tau$ must be $1$.
 Since \rn{Single} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
-and thus there are no terms in $\mathcal{T}^\M_{\Varec{y}}(\Val^\AST)$ of type $\tau$.
+and thus there are no terms in $\mathcal{T}^\M_{\Varec{y}}(\ValC)$ of type $\tau$.
 This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to ${\Varec{y}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction,
-since there are only a finite number of closed terms in $\mathcal{T}^\M_{\Varec{y}}(\Val^\AST)$,
-and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_{\Varec{y}}(\Val^\AST)$ to ${\Varec{y}}$.
-By construction, $\Val^\AST \ec{x}$ is normal.
+since there are only a finite number of closed terms in $\mathcal{T}^\M_{\Varec{y}}(\ValC)$,
+and thus our model completion can assign a value not occurring in $\mathcal{T}^\M_{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
+By construction, $\ValC \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
-Moreover, our construction of $\Val^\AST$ applies substitutions of the form
+Moreover, our construction of $\ValC$ applies substitutions of the form
 $\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}}$ is not a codatatype.
-Thus, $\Val^\AST \ec{x}$ is acyclic when $\tau \not\in \Codata$.
-Therefore, by definition, $\Val^\AST \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
+Thus, $\ValC \ec{x}$ is acyclic when $\tau \not\in \Codata$.
+Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
 
 We first show that 2 and 3 hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
@@ -1696,8 +1697,8 @@ we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$
 which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$. \rem{more detail}
 
-Thus, by induction on the number of applications of the above rule used to obtain $\Val^\AST$,
-we have that $\Val^\AST$ satisfies (2) and (3).
+Thus, by induction on the number of applications of the above rule used to obtain $\ValC$,
+we have that $\ValC$ satisfies (2) and (3).
 \qed
 \end{proof}
 \end{report}
@@ -1715,51 +1716,51 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
 We consider a normal model $\M$
 that interprets wrongly applied selectors based on equality information in $\Fc$,
-and interprets the variables of $\Fc$ based on the completion $\Val^\AST$ of the mapping $\Val$ from phase~2.
-For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\Val^\AST \ec{x}$ for each variable $x \in \mathcal{T}(\Fc)$.
+and interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
+For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \mathcal{T}(\Fc)$.
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 We show,
 by structural induction on $t$,
-that $\M( t ) \aequiv \Val^\AST \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$,
+that $\M( t ) \aequiv \ValC \ec{t}$ for all terms $t \in \mathcal{T}( \Fc )$,
 which since $\M$ is normal, implies $\M \models t_1 \teq t_2$.
 
-If $t$ is a variable, then $\M( t ) \vsim \Val^\AST \ec{ t }$ by construction.
+If $t$ is a variable, then $\M( t ) \vsim \ValC \ec{ t }$ by construction.
 
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
 then $\M( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) }$ for some fresh $x$,
-which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \Val^\AST \ec{ u_1 }, \ldots, \Val^\AST \ec{ u_n } )}$, call this term $t_u$.
-%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{t}$ is a term
+which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$, call this term $t_u$.
+%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
-%where $\interp{\Val^\AST \ec{t}}{w_i} = \Val^\AST \ec{u_i}$ for $i \in [n]$.
+%where $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
-by our construction of $\Val^\AST$ we have $\Val^\AST \ec{t}$ is a term
+by our construction of $\ValC$ we have $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$ 
 where for each $i \in [n]$, 
 $\muvar(w_i) = {\Varec{u_i}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2}, 
-$\interp{\Val^\AST \ec{t}}{w_i} = \Val^\AST \ec{u_i}$.
+$\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i \in [n]$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
-By Lemma~\ref{lem:mu-norm-arg}, $\interp{t_u}{u_\iPrime} \vsim \Val^\AST \ec{u_i}$.
-Thus $\interp{t_u}{u_\iPrime} \vsim \interp{\Val^\AST \ec{t}}{ w_i }$. % for each $i \in [n]$.
+By Lemma~\ref{lem:mu-norm-arg}, $\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
+Thus $\interp{t_u}{u_\iPrime} \vsim \interp{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
 %By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
-Thus, $\M( t ) \vsim t_u \vsim \Val^\AST \ec{t}$, and
-we have $\M( t ) \vsim \Val^\AST \ec{t}$.
+Thus, $\M( t ) \vsim t_u \vsim \ValC \ec{t}$, and
+we have $\M( t ) \vsim \ValC \ec{t}$.
 
 If $t$ is a selector term of the form $\const s^k_{\negvthinspace j}( u )$,
 since \rn{Split} does not apply to $\Fc$,
 $\ec{u}$ must contain a term of the form $\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)$ for some $\jPrime$.
-%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\Val^\AST$, we have $\Val^\AST \ec{u}$ is of the form
+%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
-%where $\interp{\Val^\AST \ec{u} }{ w_i } = \Val^\AST \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$. 
+%where $\interp{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$. 
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
-by construction $\Val^\AST$ must be of the form
+by construction $\ValC$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where for each $i \in [n]$,
 $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2}, 
-$\interp{\Val^\AST \ec{u}}{ w_i } = \Val^\AST \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$. 
-If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\Val^\AST \ec{u}}{w_k}$, which is equal to $\Val^\AST \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
-which is $\Val^\AST \ec{t}$.
-If $j \neq \jPrime$, we are free to interpret $\smash{\const s^k_{\negvthinspace j}( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\Val^\AST \ec{ t }$.
+$\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$. 
+If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
+which is $\ValC \ec{t}$.
+If $j \neq \jPrime$, we are free to interpret $\smash{\const s^k_{\negvthinspace j}( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}\PART{3},
 pairs of wrongly applied selectors are assigned the same value if and only if they reside in the same equivalence class,
 and thus this definition is well-defined.
@@ -1767,7 +1768,7 @@ and thus this definition is well-defined.
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
-Since $\M( t_1 ) \vsim \Val^\AST \ec{t_1}$ and $\M( t_2 ) \vsim \Val^\AST \ec{t_2}$,
+Since $\M( t_1 ) \vsim \ValC \ec{t_1}$ and $\M( t_2 ) \vsim \ValC \ec{t_2}$,
 by Lemma~\ref{lem:model-completion}\PART{3}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
@@ -1875,11 +1876,11 @@ Datatypes with acyclicity
 %Codatatype simplication only
 %  &  \\
 Codatatypes without uniqueness
-  & 215 & 789 & \phantom{0}56 & 1060 \\
+  & 222 & 788 & \phantom{0}56 & 1066 \\
 Codatatypes with uniqueness
-  & 216 & 789 & \bfseries \phantom{0}59 & 1064 \\[\jot]
+  & 223 & 788 & \bfseries \phantom{0}59 & 1070 \\[\jot]
 Full (co)datatypes
-  & 222 & \bfseries 800 & \bfseries \phantom{0}59 & \bfseries 1081 \\[\jot]
+  & 229 & \bfseries 800 & \bfseries \phantom{0}59 & \bfseries 1088 \\[\jot]
 Total number of goals
   & 879 & 2974\phantom{0} & 317 & 4170
 \end{tabular}\end{center}
