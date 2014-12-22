@@ -1201,14 +1201,15 @@ A companion rule, \rn{Single}, focuses on the degenerate case where two
 terms from $\tEc$ have a corecursive singleton type
 (Section~\ref{sec:the-theory-of-co-datatypes}), in which case they must be
 equivalent. Both the finiteness assumption on the datatype in \rn{Split} and
-the singleton constraint on the codatatype in \rn{Single} are 
-are computed statically
+the singleton constraint on the codatatype in \rn{Single} can be 
+computed statically
 based on a recursive computation of the cardinalities of the
 constructors' argument types.
 
 \paragraph{Correctness.}
 An application of a rule is \emph{redundant} if at least one branch in the
 conclusion does not add a new equality to $\Ec$ and is not $\bot$.
+%%% @ANDY: Is the definition or redundant really OK? Or should it read "if none of the branches add a new eq. or is \bot"?
 A \emph{derivation tree} is a tree whose nodes are finite sets of equalities, where non-root nodes are obtained by
 a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
