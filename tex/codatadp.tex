@@ -1216,8 +1216,10 @@ a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
 A node is \emph{saturated} if no nonredundant instance of a rule can be applied to it.
 
-If there exists a closed derivation tree with root node $\Ec$, we conclude that $\Ec$ is $\thD$-unsatisfiable.
-And if there exists a derivation tree with root node $\Ec$ that contains a saturated node, we conclude that $\Ec$ is $\thD$-satisfiable.
+Correctness means that if there exists a closed derivation tree with root node
+$\Ec$, we can conclude that $\Ec$ is $\thD$-unsatisfiable; and if there exists
+a derivation tree with root node $\Ec$ that contains a saturated node, we can
+conclude that $\Ec$ is $\thD$-satisfiable.
 
 \begin{theorem}[Termination]%
 \label{thm:t}%
