@@ -1621,8 +1621,8 @@ Thus, we have
 $\interp{\Val \ec{y}}{ t } = \interp{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and thus 2 holds for $\Val$.
 Statement 3 holds for $\Val$ since \rn{Unique} does not apply.
 
-We now show that $\Val = \nf{(\Val)}$.
-Assume by contradition $\Val \ec{x} \neq \nf{(\Val \ec{x})}$ for some $\Val \ec{x}$ of minimal size.
+We now show that $\Val = \nf{\Val}$.
+Assume by contradition $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
 We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
 Due to our construction of $\Val$, 
 we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for $i = 1, \ldots, n$.
@@ -1635,10 +1635,10 @@ we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct
 By statement 2, $\interp{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
 and $\interp{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
 which are not $\alpha$-equivalent by statement 3, contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a bisimilar subterm of $\Val \ec{x}$.
-Thus, $\Val = \nf{(\Val)}$, and statements 2 and 3 hold for $\nf{(\Val)}$.
+Thus, $\Val = \nf{\Val}$, and statements 2 and 3 hold for $\nf{\Val}$.
 
 We now show that if statements 2 and 3 hold for some $\Val_1$,
-then 2 and 3 also hold for $\nf{(\Val_1 \sigma)}$,
+then 2 and 3 also hold for $\nf{\Val_1 \sigma}$,
 where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
 ${\Varec{x}} \in FV( \Val_1 )$,
 and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val_1)$.
@@ -1646,41 +1646,41 @@ To show 2,
 by assumption of 2 on $\Val_1$, we have $\interp{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
 Thus, $\interp{\Val_1 \sigma \ec{y}}{ u } = \Val_1 \sigma \ec{x}$ and
-$\interp{\nf{(\Val_1 \sigma)} \ec{y}}{ u } = \nf{(\Val_1 \sigma)} \ec{x}$.
+$\interp{\nf{\Val_1 \sigma} \ec{y}}{ u } = \nf{\Val_1 \sigma} \ec{x}$.
 To show 3, 
 consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
-and assume by contradiction that $\nf{(\Val_1 \sigma)} \ec{y} \aequiv \nf{(\Val_1 \sigma)} \ec{z}$.
+and assume by contradiction that $\nf{\Val_1 \sigma} \ec{y} \aequiv \nf{\Val_1 \sigma} \ec{z}$.
 Due to statement 3 for $\Val_1$,
 $\ec{y}$ and $\ec{z}$ must have (minimal) subterms 
 where $t_1$ occurs in $\Val_1 \ec{y}$ the same position (call it $p$) as $t_2$ occurs in $\Val_1 \ec{z}$,
 and $t_1 \not\aequiv t_2$.
-%We first show that $\nf{(\Val_1 \sigma)} \ec{y}$ (and for the same reasons, $\nf{(\Val_1 \sigma)} \ec{z}$)
+%We first show that $\nf{\Val_1 \sigma} \ec{y}$ (and for the same reasons, $\nf{\Val_1 \sigma} \ec{z}$)
 %also contains position $p$.
 %If this were not the case,
 %then without loss of generality we may assume
 %$\Val_1 \sigma \ec{y}$ contains a strict bisimilar subterm 
 %$\MU {\Varec{w}}.\; u$ that strictly contains $t_1 \sigma$.
 If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
-then $\nf{(\Val_1 \sigma)} \ec{y}$ (resp. $\nf{(\Val_1 \sigma)} \ec{z}$)
+then $\nf{\Val_1 \sigma} \ec{y}$ (resp. $\nf{\Val_1 \sigma} \ec{z}$)
 contains $t_1$ (resp. $t_2$) at position $p$,
-and $\nf{(\Val_1 \sigma)} \ec{z}$ (resp. $\nf{(\Val_1 \sigma)} \ec{y}$) does not.
+and $\nf{\Val_1 \sigma} \ec{z}$ (resp. $\nf{\Val_1 \sigma} \ec{y}$) does not.
 If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t )$ 
 and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
-then the expansion \rem{define} of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
+then the expansion \rem{define} of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$.
 Since $t_1$ and $t_2$ are minimal,
 say $t_1$ is of the form $\MU w.\; \const{C}( \vec t )$,
 and $t_2$ is ${\Varec{x}}$.
 Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\MU {\Varec{x}}.\; t$,
 we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
-or else the expansion of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
+or else the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
 Since $\interp{\Val_1 \ec{y}}{t_1}$ is normal,
 there is a closed $\mu$-term $v \in \mathcal{T}^\M_{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on our selection of $\MU {\Varec{x}}.\; t$,
 we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$,
-which implies that the expansion of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
+which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$. \rem{more detail}
 
 Thus, by induction on the number of applications of the above rule used to obtain $\Val^\AST$,
