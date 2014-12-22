@@ -184,7 +184,8 @@
 
 \include{defs}
 
-\hyphenation{data-type data-types co-data-type co-data-types isa-belle sledge-hammer}
+\hyphenation{data-type data-types co-data-type co-data-types isa-belle sledge-hammer
+non-redun-dant}
 
 
 \begin{document}
@@ -1209,14 +1210,14 @@ constructors' argument types.
 \paragraph{Correctness.}
 An application of a rule is \emph{redundant} if at least one branch in the
 conclusion does not add a new equality to $\Ec$ and is not $\bot$.
-%%% @ANDY: Is the definition or redundant really OK? Or should it read "if none of the branches add a new eq. or is \bot"?
-A \emph{derivation tree} is a tree whose nodes are finite sets of equalities, where non-root nodes are obtained by
+A \emph{derivation tree} is a tree whose nodes are finite sets of equalities and
+where each non-root node is obtained by
 a nonredundant application of a derivation rule to its parent node.
 A derivation tree is \emph{closed} if all of its leaf nodes are $\bot$.
 A node is \emph{saturated} if no nonredundant instance of a rule can be applied to it.
-%
+
 If there exists a closed derivation tree with root node $\Ec$, we conclude that $\Ec$ is $\thD$-unsatisfiable.
-If there exists a derivation tree with root node $\Ec$ that contains a saturated node, we conclude that $\Ec$ is $\thD$-satisfiable.
+And if there exists a derivation tree with root node $\Ec$ that contains a saturated node, we conclude that $\Ec$ is $\thD$-satisfiable.
 
 \begin{theorem}[Termination]%
 \label{thm:t}%
@@ -1369,7 +1370,7 @@ This is done to simplify the presentation.
 Since all values of types in $\Data$ and $\Nondata$ are acyclic,
 a typical representation for these values can be obtained by
 dropping each of its $\mu$-bindings. 
-For instance, the $\mu$-term $\mu x. \const{0}$ representing the integer constant zero
+For example, the $\mu$-term $\MU x.\; \const{0}$ representing the integer constant zero
 is simply $\const{0}$ after dropping the $\mu$-binding of $x$.
 
 \begin{definition}[Normal Model]
@@ -1594,9 +1595,9 @@ Thus, $\Val = \nf{(\Val)}$, and statements 2 and 3 hold for $\nf{(\Val)}$.
 
 We now show that if statements 2 and 3 hold for some $\Val_1$,
 then 2 and 3 also hold for $\nf{(\Val_1 \sigma)}$,
-where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \mu {\Varec{x}}. t \}$,
+where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
 ${\Varec{x}} \in FV( \Val_1 )$,
-and $\mu {\Varec{x}}. t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val_1)$.
+and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^\M_{\Varec{x}}(\Val_1)$.
 To show 2,
 by assumption of 2 on $\Val_1$, we have $\Val_1 \ec{y} \interp{ u } = \Val_1 \ec{x}$ for
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
@@ -1614,27 +1615,27 @@ and $t_1 \not\aequiv t_2$.
 %If this were not the case,
 %then without loss of generality we may assume
 %$\Val_1 \sigma \ec{y}$ contains a strict bisimilar subterm 
-%$\mu {\Varec{w}}. u$ that strictly contains $t_1 \sigma$.
+%$\MU {\Varec{w}}.\; u$ that strictly contains $t_1 \sigma$.
 If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
 then $\nf{(\Val_1 \sigma)} \ec{y}$ (resp. $\nf{(\Val_1 \sigma)} \ec{z}$)
 contains $t_1$ (resp. $t_2$) at position $p$,
 and $\nf{(\Val_1 \sigma)} \ec{z}$ (resp. $\nf{(\Val_1 \sigma)} \ec{y}$) does not.
-If $t_1$ is of the form $\mu w_1. \const{C}( \vec t )$ 
-and $t_2$ is of the form $\mu w_2. \const{D}( \vec u )$,
+If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t )$ 
+and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
 then the expansion \rem{define} of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
 are $\alpha$-disequivalent at position $p$.
 Since $t_1$ and $t_2$ are minimal,
-say $t_1$ is of the form $\mu w. \const{C}( \vec t )$,
+say $t_1$ is of the form $\MU w.\; \const{C}( \vec t )$,
 and $t_2$ is ${\Varec{x}}$.
-Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\mu {\Varec{x}}. t$,
+Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\MU {\Varec{x}}.\; t$,
 we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
 or else the expansion of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
 are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
 Since $\Val_1 \ec{y} \interp{t_1}$ is normal,
 there is a closed $\mu$-term $v \in \mathcal{T}^\M_{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \Val_1 \ec{y} \interp{t_1}$.
-Thus, by assumption on our selection of $\mu {\Varec{x}}. t$,
-we have $\mu {\Varec{x}}. t \not\vsimv{\Varec{x}} \Val_1 \ec{y} \interp{t_1}$,
+Thus, by assumption on our selection of $\MU {\Varec{x}}.\; t$,
+we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \Val_1 \ec{y} \interp{t_1}$,
 which implies that the expansion of $\nf{(\Val_1 \sigma)} \ec{y}$ and $\nf{(\Val_1 \sigma)} \ec{z}$
 are $\alpha$-disequivalent at position $p$. \rem{more detail}
 
