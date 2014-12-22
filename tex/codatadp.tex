@@ -638,7 +638,7 @@ quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
 \end{aligned}
 \]
 %
-\begin{report}
+\begin{report}%
 Expressed in the algebraic jargon, exhaustiveness helps ensure that ``no
 junk'' exists, whereas distinctness and injectivity guarantee that ``no
 confusion'' can arise.
@@ -715,8 +715,9 @@ function space $\ty{nat} \to \ty{int}$.
 
 Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory} of (co)datatypes,
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
-namely the ones that satisfy the axioms mentioned in this section.
-In particular, this means that each interpretation in $\mathbf{I}$ has a fixed interpretation
+namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
+properties mentioned in this section.
+In particular, this means that each interpretation in~$\mathbf{I}$ has a fixed interpretation
 for constructor terms and correctly applied selector terms, but may differ on its interpretation for
 wrongly applied selector terms and variables.
 A formula $\varphi$ is $\thD$-satisfiable if there exists an interpretation in $\mathbf{I}$ that satisfies $\varphi$;
@@ -758,7 +759,7 @@ only value is $\MU a.\; A(a)$. Other specimens are
       \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})
 \end{aligned}
 \]
-\end{report}
+\end{report}%
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$, as well as $\ty{stream}_{\,\ty{unit}\,}$. We call such types
 \emph{corecursive singletons}. For the decision procedure, it will be
@@ -879,7 +880,7 @@ extend~$\Ec$ further.
 %or is $\bot$ (in which case we call an application of it \emph{terminal}).
 %A rule may have multiple conclusions separated by $\parallel$, which denotes nondeterministic branching.
 
-\begin{figure}[t]
+\begin{figure}[bth]
 \normalsize
 \centering
 \begin{tabular}{c}
@@ -958,7 +959,7 @@ In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule comp
 whereas the \rn{Inject} and \rn{Clash} rules together compute (downward) unification.
 For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Inject},
 and failures to unify equated terms are recognized by \rn{Clash}.
-The rule \rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
+The \rn{Conflict} rule recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
 
 At the end of this phase, $\Ec$ induces an equivalence
 relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and
@@ -967,7 +968,7 @@ Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class in $\Ec$ that contains $t$.
 
-\begin{figure}[t]
+\begin{figure}[b!]
 \normalsize
 \centering
 \begin{tabular}{c}
@@ -1141,7 +1142,7 @@ the calculus can infer $x \teq \const{C}(y,x)$.
 \xend
 \end{examplex}
 
-\begin{figure}[t]
+\begin{figure}[tbh]
 \normalsize
 \centering
 \begin{tabular}{c}
