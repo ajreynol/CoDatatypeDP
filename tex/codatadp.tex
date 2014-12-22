@@ -1182,7 +1182,7 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
   \Ec := \Ec,\: t \teq u
 }
 \)
-\rn{Singleton}
+\rn{Single}
 \end{tabular}
 \caption{\,Derivation rules for branching%.
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
@@ -1197,11 +1197,11 @@ the equivalence class of $t$ must contain an application of one of
 $\delta$'s constructors
 $\Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}$.
 This is enforced in the third phase by the \rn{Split} rule.
-A companion rule, \rn{Singleton}, focuses on the degenerate case where two
+A companion rule, \rn{Single}, focuses on the degenerate case where two
 terms from $\tEc$ have a corecursive singleton type
 (Section~\ref{sec:the-theory-of-co-datatypes}), in which case they must be
 equivalent. Both the finiteness assumption on the datatype in \rn{Split} and
-the cardinality-1 constraint on the codatatype in \rn{Singleton} are 
+the singleton constraint on the codatatype in \rn{Single} are 
 are computed statically
 based on a recursive computation of the cardinalities of the
 constructors' argument types.
@@ -1261,12 +1261,12 @@ for each $\const C_j \in \Ctr^\delta$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_j( \const s^1_j( t ), \ldots, \const s^{n_j}_j( t ) )$,
 we know $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child of $\Ec$ is a closed derivation tree
-whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Singleton}.
+whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
 In all cases, we have that $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
 For \rn{Unique}, our construction of $\Val$ indicates that the value of $t$ and $u$ are equivalent in all models of $\Ec$.
-For \rn{Singleton}, $t$~and~$u$ must have the same value since the cardinality of their type is $1$.
+For \rn{Single}, $t$~and~$u$ must have the same value since the cardinality of their type is $1$.
 By the induction hypothesis, we have $\Ec \mathrel\cup t \teq u$ is $\thD$-unsatisfiable,
 and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
@@ -1540,7 +1540,7 @@ By assumption, $\tau \not\in \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
 If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\ref{lem:corecursive-singletons},
 the cardinality of $\tau$ must be $1$.
-Since \rn{Singleton} does not apply to $\Ec$,
+Since \rn{Single} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
 and thus there are no terms in $\mathcal{T}^\M_{\Varec{y}}(\Val^\ast)$ of type $\tau$.
 This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to ${\Varec{y}}$.
@@ -1783,7 +1783,7 @@ $(\const{C}_1( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) ) \vee \ldots \v
 to $F$.
 Notice that decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
 All other rules add equalities to the internal state of the theory solver.
-The rules in phase~1 (along with the optimization for collapsing selectors) and the \rn{Singleton} rule are performed eagerly,
+The rules in phase~1 (along with the optimization for collapsing selectors) and the \rn{Single} rule are performed eagerly,
 that is for partial satisfying assignments $M$, while the rules in phase~2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$,
 and in that order.
 
