@@ -1437,14 +1437,17 @@ only values of types in $\Codata$ may contain cycles.
 A model $\M$ is \emph{normal} if these conditions are met:
 \begin{enumerate}
 \item
-For all types $\tau$,
+%%% TODO: What does maximal set mean? Does it make sense for \Nondata?
+For each type $\tau$,
 $\M( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
 unique up to $\alpha$-equivalence and acyclic when $\tau \not\in \Codata$.
 \item
-For all constructor terms $\const{C}( \vec t \,)$ of type $\tau$,
+For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
 $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$, where $x$ is fresh.
+%%% TODO: I'm a bit worried to see a semantic value \M under a syntactic
+%%% constructor. I know our models consist of \mu-terms, but is this intended?
 \item
 For all selector terms $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
 $\M\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
