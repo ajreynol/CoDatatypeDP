@@ -1422,12 +1422,13 @@ We now define the class of interpretations for $\thD$.
 $\M( \tau )$ denotes the interpretation type $\tau$ in $\M$,
 that is, a set of domain elements for that type.
 For a term $t\typ{\tau}$, $\M( t ) \in \M( \tau )$ denotes the interpretation of $t$ in $\M$.
-To simplify the presentation, all types are interpreted as sets of $\mu$-terms.
-Since all values of types in $\Data$ and $\Nondata$ are acyclic,
-a typical representation for these values can be obtained by
-dropping each of its $\mu$-bindings. 
-For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
-is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
+To simplify the presentation, all types are interpreted as sets of $\mu$-terms; but
+only values of types in $\Codata$ may contain cycles.
+%Since all values of types in $\Data$ and $\Nondata$ are acyclic,
+%a typical representation for these values can be obtained by
+%dropping each of its $\mu$-bindings. 
+%For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
+%is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
 
 \begin{definition}[Normal Model]
 \afterDot%
