@@ -1302,13 +1302,13 @@ For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
 For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that term~$t$ can take in models of $\Ec$ is infeasible,
 and thus $\Ec$ is unsatisfiable.
-If the children of $\Ec$ are closed derivation trees
+If the child nodes of $\Ec$ are closed derivation trees
 whose root nodes are the result of applying the rule \rn{Split} on $t\typ{\delta}$,
 by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is unsatisfiable
 for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)$,
 this means $\Ec$ is $\thD$-unsatisfiable.
-Otherwise, the child of $\Ec$ is a closed derivation tree
+Otherwise, the child node of $\Ec$ is a closed derivation tree
 whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
 In all cases, we have that $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
@@ -1369,7 +1369,7 @@ is $\alpha$-equivalent to
 $\interp{t}{y} =$
 $\MU y.\; \const{C}( \interp{t}{y}^{\smash{\{y\}}} ) =$
 $\MU y.\; \const{C}( y )$.
-The term $t$ of the form $\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
+The term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
 since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $t$,
 noting that
 %
@@ -1387,14 +1387,14 @@ For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
 recursively construct its \emph{normal form} $\nf{t}$
 by replacing all of the self-similar subterms of $t$ with $x$
 %and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
-and by normalizing $t$'s subterms.
+and by normalizing the subterms.
 For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
 \begin{report}
 \begin{lemma}
 \label{lem:mu-norm-arg}
-If $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
-then $\vec u \vsim \interp{t}{\vec w}$.
+If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
+then $\vec u \vsim \interp{t}{\vec w}$\vthinspace.
 \end{lemma}
 \begin{proof}
 \rem{TODO}
@@ -1402,7 +1402,7 @@ then $\vec u \vsim \interp{t}{\vec w}$.
 
 \begin{lemma}
 \label{lem:mu-norm-interp}
-If $t$ is normal and has subterm $u$, then $\interp{t}{u}$ is normal.
+If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}$ is normal.
 \end{lemma}
 \begin{proof}
 \rem{TODO}
@@ -1421,15 +1421,13 @@ If $t$ is normal and has subterm $u$, then $\interp{t}{u}$ is normal.
 We now define the class of interpretations for $\thD$.
 $\M( \tau )$ denotes the interpretation type $\tau$ in $\M$,
 that is, a set of domain elements for that type.
-For a term $t$, $\M( t )$ denotes the interpretation of $t$ in $\M$,
-that is, an element of $\M( \tau )$ where $\tau$ is the type of $t$.
-\emph{All} types are interpreted as a set of $\mu$-terms.
-This is done to simplify the presentation.
+For a term $t\typ{\tau}$, $\M( t ) \in \M( \tau )$ denotes the interpretation of $t$ in $\M$.
+To simplify the presentation, all types are interpreted as sets of $\mu$-terms.
 Since all values of types in $\Data$ and $\Nondata$ are acyclic,
 a typical representation for these values can be obtained by
 dropping each of its $\mu$-bindings. 
-For example, the $\mu$-term $\MU x.\; \const{0}$ representing the integer constant zero
-is simply $\const{0}$ after dropping the $\mu$-binding of $x$.
+For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
+is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
 
 \begin{definition}[Normal Model]
 \afterDot%
