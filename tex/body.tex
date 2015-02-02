@@ -57,6 +57,8 @@
 
 \newcommand\FV{\mathrm{FV}}
 
+\newcommand\betweenantes{\kern1.5em}
+
 \newcommand\afterDot{\;} %%% Too little space by default after "Lemma Foo."
 
 \begin{rep}
@@ -948,7 +950,9 @@ is derived or until no rule can be applied to extend~$\Ec$ further.
 \\[5\jot]
 \(
 \inferrule{
-  \vec t \teq \vec u \in \Ec \quad \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
+  \vec t \teq \vec u \in \Ec
+  \betweenantes
+  \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
 }{
   \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
 }
@@ -976,7 +980,7 @@ is derived or until no rule can be applied to extend~$\Ec$ further.
 \(
 \inferrule{
   \const{C}( \vec t \,) \teq \const{D}( \vec u ) \in \Ec
-  \quad
+  \betweenantes
   \const{C} \not= \const{D}
 }{
   \bot
@@ -1010,12 +1014,12 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \(
 \inferrule{
   t\typ{\delta}
-  \quad
+  \betweenantes
   \delta \in \Data
-  \quad
+  \betweenantes
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
   \Val \ec{t} = \MU x.\; u
-  \quad
+  \betweenantes
   x \in \FV( u )
 }{
   \bot
@@ -1026,9 +1030,9 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \(
 \inferrule{
  t, u\typ{\delta}
- \quad
+ \betweenantes
  \delta \in \Codata
- \quad
+ \betweenantes
  %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
  \Val \ec{t} \aequiv \Val \ec{u}
 }{
@@ -1098,7 +1102,7 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 
 The mapping $\Val$ is computed as follows.
 %
-For each equivalence class $\ec{x}$, we associate a fresh variable ${\Varec{x}}$ of the same type as $x$
+With each equivalence class $\ec{x}$, we associate a fresh variable ${\Varec{x}}$ of the same type as $x$
 %not occurring in $\tEc$,
 and set $\Val\ec{x} = {\Varec{x}}$.
 Thus, there are initially no constraints on the values for any equivalence class $\ec{x}$.
@@ -1107,9 +1111,9 @@ The mapping $\Val$ is refined by applying the following unfolding rule exhaustiv
 \hbox{\(
 \inferrule{
   {\Varec{x}} \in \FV( \Val )
-  \quad
+  \betweenantes
   \const{C}( t_1, \ldots, t_n ) \in \ec{x}
-  \quad
+  \betweenantes
   \const{C} \in \Ctr
 }{
   \Val := \Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}
@@ -1203,7 +1207,7 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 \(
 \inferrule{
   t\typ{\delta} \in \tEc
-  \quad
+  \betweenantes
   \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
 \\
   \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
@@ -1218,9 +1222,9 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 \(
 \inferrule{
   t, u\typ{\delta} \in \tEc
-  \quad
+  \betweenantes
   \delta \in \Codata
-  \quad
+  \betweenantes
   \left|\delta\right| = 1
 }{
   \Ec := \Ec,\: t \teq u
@@ -1486,11 +1490,11 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
 \hbox{\(
 \inferrule{
   {\Varec{x}}\typ{\tau} \in \FV( \Val )
-  \quad
+  \betweenantes
   \MU {\Varec{x}}.\; t \aequiv v
-  \quad
+  \betweenantes
   v \in \M( \tau )
-  \quad
+  \betweenantes
   v \not\in \mathcal{T}^\M_{\Varec{x}}(\Val)
 }{
   \Val := \nf{\Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t \}}
