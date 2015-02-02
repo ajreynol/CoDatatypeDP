@@ -859,8 +859,8 @@ that the type has at most one value.
 
 The decision procedure for the ground theory of (co)datatypes $\thD$ determines the
 $\thD$-satisfiability of sets of ground constraints over a fixed
-signature~$\Sig$. It is formulated as a calculus, whose rules are applied
-until saturation or contradiction.
+signature~$\Sig$. It is formulated as a calculus, whose derivation rules are
+applied until saturation or contradiction.
 %
 The rules operate on a finite set $\Ec$ of equalities and disequalities
 between $\Sig$-terms, where $\Ec$ is taken as a conjunction.
@@ -1013,12 +1013,12 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \begin{tabular}{c}
 \(
 \inferrule{
-  t\typ{\delta}
-  \betweenantes
+%  t\typ{\delta}
+%  \betweenantes
   \delta \in \Data
   \betweenantes
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
-  \Val \ec{t} = \MU x.\; u
+  \Val \ec{t\typ{\delta}} = \MU x.\; u
   \betweenantes
   x \in \FV( u )
 }{
@@ -1029,12 +1029,12 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \\[4\jot]
 \(
 \inferrule{
- t, u\typ{\delta}
- \betweenantes
+% t, u\typ{\delta}
+% \betweenantes
  \delta \in \Codata
  \betweenantes
  %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
- \Val \ec{t} \aequiv \Val \ec{u}
+ \Val \ec{t\typ{\delta}} \aequiv \Val \ec{u}
 }{
  \Ec := \Ec,\: t \teq u
 }
@@ -1151,21 +1151,19 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \xend
 \end{examplex}
 
-Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules can be stated as follows.
-For acyclicity, if $\ec{t\typ{\delta}}$ is an equivalence class such that $\delta$ is a datatype and
-whose %class of  -- "whose" already refers to "equivalence class"
-values $\Val \ec{t} = \MU x.\; u$ are cyclic,
-as indicated by the assumption $x \in \FV( u )$,
+Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules operate as follows.
+For acyclicity, if $\ec{t\typ{\delta}}$ is a datatype equivalence class
+whose values $\Val \ec{t} = \MU x.\; u$ are cyclic
+(as indicated by the precondition $x \in \FV( u )$),
 then $\Ec$ is unsatisfiable.
-For uniqueness, if $\ec{t\typ{\delta}}$ and $\ec{u\typ{\delta}}$ are two equivalence classes such
-that $\delta$ is a codatatype and
-whose %classes of  -- "whose" already refers to "equivalence classes"
-values $\Val \ec{t}$ and $\Val \ec{u}$ are $\alpha$-equivalent,
+For uniqueness, if $\ec{t}$ and $\ec{u}$ are two codatatype equivalence classes
+whose values $\Val \ec{t}$ and $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
-then $t \teq u$. This rule may seem too restrictive, since
-$\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ denote the same
-value despite being $\alpha$-disequivalent, but the construction also works in
-such cases, as illustrated by the following example.
+then $t \teq u$. This rule may seem overly restrictive, since
+$x \teq \const{S}(x)$ and $y \teq \const{S}(\const{S}(y))$ specify the same
+value despite having $\alpha$-disequivalent right-hand sides, but the
+construction also works in such cases, by first deriving the equality
+$y \teq \const{S}(y)$.
 
 %% @ANDY: Minor terminology point:
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
@@ -1201,7 +1199,7 @@ the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
 %%% Naturally, thanks to our assumptions at the beginning of Sect. 3, our types
 %%% are either finite or infinite.
 
-\begin{figure}[tbh]
+\begin{figure}[b!]
 \normalsize
 \centering
 \begin{tabular}{c}
