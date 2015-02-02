@@ -1177,19 +1177,36 @@ $\{ x,\, \const{S}(x) \}$,
 $\{ y,\, \const{S}(\const{S}(y)) \}$,
 and $\{ \const{S}(y) \}$.
 Constructing $\Val$ yields
-\[\begin{array}{rcrl@{}rl}
-\Val \ec{x} & \,=\, & \MU {\Varec{x}}. & \const{S}(\Varec{x}) \\
-\Val \ec{y} & \,=\, &
-\MU {\Varec{y}}. & \const{S}( & \smash{\MU {\VAREC{\const{S}(y)}}}. & \const{S}( {\Varec{y}} ) ) \\
-\Val \ec{\const{S}(y)} & = &
-\MU {\VAREC{\const{S}(y)}}. & \const{S}( & \MU {\Varec{y}}. & \const{S}( {\VAREC{\const{S}(y)}} ) )
-\end{array}\]
+\begin{align*}
+\Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x}) &
+\enskip %% TYPESETTING
+\Val \ec{y} & \,=\,
+\MU {\Varec{y}}.\; \const{S}(\smash{\MU {\VAREC{\const{S}(y)}}}.\; \const{S}( {\Varec{y}} ) )
+\enskip %% TYPESETTING
+ &
+\Val \ec{\const{S}(y)} & =
+\MU {\VAREC{\const{S}(y)}}.\; \const{S}(\MU {\Varec{y}}.\; \const{S}( {\VAREC{\const{S}(y)}} ) )
+\end{align*}
 Since $\Val \ec{y} \aequiv \Val \ec{\const{S}(y)}$,
 %for the renaming
 %$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
 the \rn{Unique} rule applies to derive $y \teq \const{S}(y)$.
 %Intuitively, this equality holds, since the values of $y$ and $\const{S}(y)$
 %are equivalent.
+%
+Next, phase~1 is activated again to produce the equivalence classes
+$\{ x,\, \const{S}(x) \}$ and
+$\{ y,\, \const{S}(y),\, \const{S}(\const{S}(y)) \}$.
+The mapping $\Val$ is updated accordingly:
+\begin{align*}
+\Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x})
+&
+\Val \ec{y} & \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})
+\end{align*}
+Finally, since $\Val \ec{x} \aequiv \Val \ec{y}$,
+%for the renaming
+%$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
+the \rn{Unique} rule produces $x \teq y$.
 \xend
 \end{examplex}
 
