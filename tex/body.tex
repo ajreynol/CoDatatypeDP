@@ -301,7 +301,7 @@ one case by unifying the finite and infinite nonzero cases.
 
 Datatypes and codatatypes are an integral part of most modern proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
-have made their appearance in a few automatic theorem provers. The SMT-LIB~2
+have emerged in a few automatic theorem provers as well. The SMT-LIB~2
 \cite{barrett-et-al-2010} syntax, implemented by most SMT (satisfiability
 modulo theories) solvers, includes a theory of datatypes.
 
@@ -309,8 +309,8 @@ modulo theories) solvers, includes a theory of datatypes.
 
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in combination
-(Section~\ref{sec:a-ground-decision-procedure-for-co-datatypes})
-and discuss extensions  of the procedure for handling quantifiers
+(Section~\ref{sec:a-ground-decision-procedure-for-co-datatypes}).
+We also discuss extensions of the procedure for handling quantifiers
 (Section~\ref{sec:extension-to-quantified-formulas}).
 The procedure is described abstractly as a calculus and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
@@ -318,7 +318,7 @@ For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-
 To our knowledge, our procedure is the first of its kind for the theory of
 codatatypes.
 
-Datatypes and codatatypes share many of the same properties, so it makes sense
+Datatypes and codatatypes share many properties, so it makes sense
 to consider them together. There are, however, at least three important
 differences.
 
@@ -336,12 +336,12 @@ $\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes but satisfiable for codatatypes.
 However, the uniqueness principle states that two bisimilar values---i.e., two values
 having the same possibly infinite expansion---must be equal; from $\const{x}
-\teq \const{S}(\const{y})$ and
-$\const{y} \teq \const{S}(\const{x})$, it deduces $\const{x} \teq \const{y}$.
+\teq \const{S}(\const{x})$ and
+$\const{y} \teq \const{S}(\const{y})$, it deduces $\const{x} \teq \const{y}$.
 The acyclicity and uniqueness rules are needed to ensure completeness on
 ground problems. %and the absence of spurious models.
-They cannot be replaced by
-finite axiomatizations, so they naturally belong in a decision procedure.
+They cannot be expressed as finite axiomatizations, so they naturally belong in
+a decision procedure.
 %    * in particular, acyclicity and uniqueness are necessary for some proofs
 %%      (and cannot be axiomatized finitely)
 %    * and for model finding, without them we quickly get spurious models
@@ -355,7 +355,7 @@ finite axiomatizations, so they naturally belong in a decision procedure.
 Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \emph{values as closed terms and
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
 and for theory combinations. The $\mu$-binder notation associates a name with
-a (sub)term; it is used to represent cyclic values in the generated models and
+a subterm; it is used to represent cyclic values in the generated models and
 in the metatheory. For example,
 the $\mu$-term $\const{SCons}(1,\: \MU s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
 stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
@@ -364,13 +364,13 @@ stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
 
 
 \begin{conf}
-Proofs of soundness and completeness are included in the technical report
+Detailed proofs of soundness and completeness are included in the technical report
 associated with this paper \cite{our-report}.
 \end{conf}%
 The procedure is implemented in the SMT solver CVC4 as a combination
 of rewriting and a theory solver
 (Section~\ref{sec:the-theory-solver}).
-%\textbf{TODO: CHECK WITH IMPLEMENTATION, but round to nearest 50 or 1000.}
+\rem{CHECK WITH IMPLEMENTATION, but round to nearest 50 or 1000.}
 It consists of about 2000 lines of \cpp{} code, among which 1600 are
 shared between datatypes and codatatypes. The code is integrated in the
 development version of the solver and is expected to be part of the CVC4~1.5 release.
@@ -426,22 +426,21 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
-\paragraph{Related Work.}
-Although it was written several years ago, the account of related work in
-Barrett et al.\ \cite{barrett-et-al-2007} is still a good starting point.
-Since then, datatypes have been added to the SMT solver
-Z3 in unpublished work by Leonardo de Moura and to a SPASS-like prototype
+%\paragraph{Related Work.}
+Although it was written several years ago,
+Barrett et al.\ \cite{barrett-et-al-2007} still provides a good account of
+related work. Since then, datatypes have been added to the SMT solver
+Z3 in unpublished work by Leonardo de Moura and to a SPASS-like prototypical
 superposition prover called Pirate by Daniel Wand.
 Closely related is the automatic structural
 induction in CVC4 by Reynolds and Kuncak \cite{reynolds-kuncak-2015} and in
-Pirate by Wand and Weidenbach \cite{wand-weidenbach-201x};
+the SPASS-like prototype by Wand and Weidenbach \cite{wand-weidenbach-201x};
 both methods naturally depend on a notion of datatype.
 
 %     * point to Barrett et al. for SMT datatypes
 %       * about their own work, they say: "our focus is on generality and
 %         efficiency rather than immediacy of implementation"
 %       * (deal more directly with finite sorts than Barrett et al., Section 6.1)
-%     * SPASS-Pirate
 %     * additional ones since then (e.g. strings?)
 %     * anything about codatatypes?
 %       * proof assistants like Agda, Coq, etc. have them
@@ -471,7 +470,7 @@ Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}
 distinguish them from variables (e.g., $x$, $y$).
 \end{rep}
 Symbols starting with an uppercase letter (e.g.,
-$\const{C}, \const{S}$, $\const{SCons}$) are reserved for constructors. With each function symbol \const{f}
+$\const{S}$, $\const{Infty}$) are reserved for constructors. With each function symbol \const{f}
 is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
 and a return type $\tau$. This connection can be expressed %compactly
 as $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{rep},
@@ -499,23 +498,23 @@ $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 %    (terminology: freely-generated, inductive, algebraic, ..., sometimes
 %    with different meanings; we'll clarify below what we use)
 
-We fix a signature $\Sig = (\Types, \Funcs)$. The types are partioned into
+We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the %remaining
 \emph{ordinary types}. The function symbols are partitioned into $\Funcs = \Ctr
 \mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
 \emph{selectors}. There is no need to consider further function symbols
 because they can be abstracted away as variables when combining theories.
-Exceptionally, it is convenient to use natural number
-constants ($0$, $1$, \ldots)\ in examples.
+Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
+examples.
 
 %\paragraph{Specifications.}
-In an SMT problem, the signature is normally given by specifying the
-uninterpreted types in any order, the (co)datatypes with their constructors
+In an SMT problem, the signature is normally given by specifying first the
+uninterpreted types in any order, then the (co)datatypes with their constructors
 and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
 finally any other function symbols.
 %
-A (co)datatype specification consists of $l$~mutually recursive types which are
+Each (co)datatype specification consists of $l$~mutually recursive types which are
 either all datatypes or all codatatypes. Polymorphic types, nested
 (co)recursion, and datatype--codatatype mixtures fall outside this fragment%
 \dotReportFootnote{%
@@ -595,10 +594,10 @@ finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop
 
 A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
 type of an argument to one of $\delta$'s constructors. Semantically, a set of
-types is mutually (co)recursive if and only if the associated dependency graph
-is strongly connected. Types can be declared together as mutually
-(co)recursive even if they are not actually (co)recursive, but the
-semantic notion is more precise and is the one that interests us.
+types is \emph{mutually} (\emph{co})\emph{recursive} if and only if the
+associated dependency graph is strongly connected. Types can be declared
+together in a mutual fashion even if they are not actually (co)recursive.
+The semantic notion is more precise and is the one that interests us.
 %
 In addition, nothing forbids non(co)recursive specifications
 such~as
@@ -698,8 +697,8 @@ denotes either $P_{\iPrime}(x)$ if there exists some $\iPrime$ such that
 the formula is type-correct or else $\top$\end{rep}.
 %
 The axiom schema ensures that the interpretation of datatypes
-is a standard model. For example,
-for a datatype of natural numbers constructed from $\const{Z}$ and $\const{S}$,
+is standard.
+For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
 induction prohibits nonstandard models, which could contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
@@ -745,15 +744,17 @@ function space $\ty{nat} \to \ty{int}$.
 %best way to justify it though, but for the conference at least we can just claim it. (we
 %won't have the place for a proof anyway).
 
-Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory} of (co)datatypes,
+Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory of}
+(\emph{co})\emph{datatypes},
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
 namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
-properties mentioned in this section.
-In particular, this means that each interpretation in~$\mathbf{I}$ has a fixed interpretation
-for constructor terms and correctly applied selector terms, but may differ on its interpretation for
-wrongly applied selector terms and variables.
-A formula $\varphi$ is $\thD$-satisfiable if there exists an interpretation in $\mathbf{I}$ that satisfies $\varphi$;
-otherwise, it is $\thD$-unsatisfiable.
+properties mentioned in this section. In particular, each interpretation
+in~$\mathbf{I}$ has a fixed interpretation for constructor terms and correctly
+applied selector terms, but may differ on its interpretation for wrongly applied
+selector terms and variables. A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
+exists an interpretation in $\mathbf{I}$ that satisfies $\varphi$.
+% otherwise, it is $\thD$-unsatisfiable.  (I trust the readers' intelligence when
+% it comes to English prefixes like non-, in-, un-, and a-.)
 \rem{more?}
 
 When looking at the ground theory, induction can be replaced by the acyclicity
@@ -778,9 +779,11 @@ TODO: State more precisely and proof?
 
 %\paragraph{Special Cases.}
 Some codatatypes are so degenerate as to have infinite values
-even though they are finite. The simplest example is
+even though they are finite. A simple example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
 only value is $\MU a.\; A(a)$. Other specimens are
+$\ty{stream}_{\,\ty{unit}\,}$
+and
 \begin{conf}%
 \vthinspace$\keyw{codatatype}~\ty{b} = \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit})
 ~\keyw{and}~ \ty{c} = \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})$,
@@ -793,14 +796,14 @@ only value is $\MU a.\; A(a)$. Other specimens are
 \]
 \end{rep}%
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
-\ty{unit}$, as well as $\ty{stream}_{\,\ty{unit}\,}$. We call such types
+\ty{unit}$. We call such types
 \emph{corecursive singletons}. For the decision procedure, it will be
 important to detect these types. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
 above is altered to leave \ty{unit} uninterpreted, \ty{b} and \ty{c} will be
 singletons precisely when \ty{unit} is interpreted as a singleton.
 Fortunately, given cardinalities for the ordinary types, it is easy to
-characterize this degenerate case:
+characterize this degenerate case.
 
 % In other words, all finite corecursive codatatypes are corecursive singletons.
 
