@@ -123,7 +123,8 @@
 \newcommand{\rem}[1]{\textcolor{red}{[#1]}}
 %\newcommand{\is}[1]{is\text{-} #1}
 \newcommand{\is}[1]{\const{is#1}}
-\newcommand{\ror}{\kern.45em \parallel \kern.45em}
+\newcommand{\ror}{\parallel}
+\newcommand{\ROR}{\kern.45em \ror \kern.45em}
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
 %\newcommand{\interp}[2]{#1\llbracket #2 \rrbracket}
@@ -898,7 +899,9 @@ or is $\bot$ (contradiction).
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
 A rule may have multiple conclusions separated by $\parallel$,
-denoting nondeterministic branching. The rules belonging to a phase have
+denoting branching.
+
+The rules belonging to a phase have
 priority over those of the subsequent phases. The rules are applied until $\bot$
 is derived or until no rule can be applied to extend~$\Ec$ further.
 
@@ -1237,7 +1240,7 @@ the \rn{Unique} rule derives $x \teq y$.
   \text{ or }
   \bigl( \delta \in \Data \text{ and } \left|\delta\right| \text{ is finite} \bigr)
 }{
-  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) \bigr) \ror \cdots \ror \Ec := \Ec,\: t \teq \const{C}_m\bigl(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) \bigr)
+  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) \bigr) \ROR \cdots \ROR \Ec := \Ec,\: t \teq \const{C}_m\bigl(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) \bigr)
 }
 \)
 \rn{Split}
@@ -1264,15 +1267,14 @@ the \rn{Unique} rule derives $x \teq y$.
 
 \paragraph{Phase 3: Branching.}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
-the equivalence class of $t$ must contain an application of one of
-$\delta$'s constructors.
+the equivalence class of $t$ must contain an application of a
+$\delta$ constructor.
 This is enforced in the third phase by the \rn{Split} rule.
 A companion rule, \rn{Single}, focuses on the degenerate case where two
 terms from $\tEc$ have a corecursive singleton type
-(Section~\ref{sec:the-theory-of-co-datatypes}), in which case they must be
-equivalent. Both the finiteness assumption on the datatype in \rn{Split} and
-the singleton constraint on the codatatype in \rn{Single} can be 
-computed statically
+(Section~\ref{sec:the-theory-of-co-datatypes}) and must therefore be equal. Both
+the finiteness assumption on the datatype in \rn{Split} and the singleton
+constraint on the codatatype in \rn{Single} can be computed statically
 based on a recursive computation of the cardinalities of the
 constructors' argument types.
 
