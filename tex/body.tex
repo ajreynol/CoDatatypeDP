@@ -286,17 +286,16 @@ terms, and only those. For example, the coinductive specification
 (using an ML-like syntax) introduces a type that
 models the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
 using Peano notation but extended with an
-infinity value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
+infinite value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
 The equation $\const{S}(\infty) \teq \infty$ holds as expected,
 because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
 value~$\infty$.
 Compared
-with the more conventional, inductive definition with a dedicated constructor
-for representing infinity,
-%\[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
-%
-the codatatype avoids one case by unifying the finite and infinite nonzero cases.
+with the conventional inductive definition
+\[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
+with a dedicated constructor for representing infinity, the codatatype avoids
+one case by unifying the finite and infinite nonzero cases.
 
 \nopagebreak
 
