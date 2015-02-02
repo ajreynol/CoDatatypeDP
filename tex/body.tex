@@ -915,7 +915,7 @@ is derived or until no rule can be applied to extend~$\Ec$ further.
 %or is $\bot$ (in which case we call an application of it \emph{terminal}).
 %A rule may have multiple conclusions separated by $\parallel$, which denotes nondeterministic branching.
 
-\begin{figure}[bth]
+\begin{figure}[b!]
 \normalsize
 \centering
 \begin{tabular}{c}
@@ -1059,11 +1059,11 @@ a cyclic $t$ describes an infeasible class of values.
 Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
 or a node of the form
 $\MU x.\: \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
-$\mu$-terms $\vec t$ with the expected types.
-The variable $x$ need not occur freely under the binder's body, in which case the
-binder will sometimes be omitted in examples.
+$\mu$-terms $\vec t$ of the expected types.
+The variable $x$ need not occur freely in the binder's body, in which case
+the binder can be omitted.
 In the \rn{Acyclic} rule,
-$\FV( u )$ denotes the variables occurring freely in $u$.
+$\FV( u )$ denotes the variables occurring freely in~$u$.
 
 %%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
 %
@@ -1090,7 +1090,7 @@ but
 $\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
 \not\aequiv \MU y.\; \const{D}( y, x )$\end{rep}.
 Two $\mu$-terms can represent the same value while not being $\alpha$-equivalent---e.g.,
-$\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{C}( \const{C}( x ) )$.
+$\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 %, or informally are \emph{observationally equivalent}.
 %For convienience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
