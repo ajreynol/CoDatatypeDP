@@ -140,7 +140,7 @@
 \newcommand{\ValC}{\mathcal{A}^\star}
 \newcommand{\Var}{\mathcal{V}}
 %\newcommand{\Varec}[1]{\Var{\ec{#1}}}
-\newcommand{\Varec}[1]{\widetilde{#1}}
+\newcommand{\Varec}[1]{\vvthinspace\widetilde{#1}\vvthinspace}
 \newcommand{\VAREC}[1]{\widetilde{\vphantom{\scriptstyle x^i}\smash{#1}}}
 %\newcommand{\nf}[1]{{{#1}{\downarrow}}}
 \newcommand{\nf}[1]{\lfloor#1\rfloor}
@@ -1198,15 +1198,20 @@ Next, phase~1 is activated again to produce the equivalence classes
 $\{ x,\, \const{S}(x) \}$ and
 $\{ y,\, \const{S}(y),\, \const{S}(\const{S}(y)) \}$.
 The mapping $\Val$ is updated accordingly:
+\begin{conf}%
+$\Val \ec{y} \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})$.
+\end{conf}%
+\begin{rep}
 \begin{align*}
 \Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x})
 &
 \Val \ec{y} & \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})
 \end{align*}
+\end{rep}
 Finally, since $\Val \ec{x} \aequiv \Val \ec{y}$,
 %for the renaming
 %$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
-the \rn{Unique} rule produces $x \teq y$.
+the \rn{Unique} rule derives $x \teq y$.
 \xend
 \end{examplex}
 
