@@ -57,7 +57,7 @@
 
 \newcommand\FV{\mathrm{FV}}
 
-\newcommand\betweenantes{\kern1.5em}
+\newcommand\betweenantes{\kern1.25em}
 
 \newcommand\afterDot{\;} %%% Too little space by default after "Lemma Foo."
 
@@ -124,8 +124,9 @@
 %\newcommand{\is}[1]{is\text{-} #1}
 \newcommand{\is}[1]{\const{is#1}}
 %\newcommand{\ror}{\parallel}
-\newcommand{\ror}{{\&}}
-\newcommand{\ROR}{\kern.45em \ror \kern.45em}
+%\newcommand{\ror}{{\&}}
+%\newcommand{\ROR}{\kern.45em \ror \kern.45em}
+\newcommand\ROR{\betweenantes}
 \newcommand{\tpath}[2]{\mathcal{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcal{P}_{ #2 \rightarrow #3 }( #1 )}
 %\newcommand{\interp}[2]{#1\llbracket #2 \rrbracket}
@@ -899,7 +900,7 @@ The conclusion of a rule either describes equalities to be added to $\Ec$
 or is $\bot$ (contradiction).
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
-A rule may have multiple conclusions separated by $\ror$,
+A rule may have multiple conclusions, % separated by $\ror$,
 denoting branching.
 
 An application of a rule is \emph{redundant} if
@@ -1247,7 +1248,8 @@ the \rn{Unique} rule derives $x \teq y$.
   \text{ or }
   \bigl( \delta \in \Data \text{ and } \left|\delta\right| \text{ is finite} \bigr)
 }{
-  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) \bigr) \ROR \cdots \ROR \Ec := \Ec,\: t \teq \const{C}_m\bigl(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) \bigr)
+  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) \bigr) %\ROR
+  \ROR \cdots \ROR \Ec := \Ec,\: t \teq \const{C}_m\bigl(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) \bigr)
 }
 \)
 \rn{Split}
