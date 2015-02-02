@@ -1159,35 +1159,34 @@ then $\Ec$ is unsatisfiable.
 For uniqueness, if $\ec{t}$ and $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$ and $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
-then $t \teq u$. This rule may seem overly restrictive, since
-$x \teq \const{S}(x)$ and $y \teq \const{S}(\const{S}(y))$ specify the same
-value despite having $\alpha$-disequivalent right-hand sides, but the
-construction also works in such cases, by first deriving the equality
-$y \teq \const{S}(y)$.
+then $t \teq u$. This rule may seem too restrictive, since
+$\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ specify the same
+value despite being $\alpha$-disequivalent, but even in such cases the rule will
+make some progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
+\const{S}(\const{S}(y))$ must be equal to the entire term.
 
 %% @ANDY: Minor terminology point:
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
 %% unless it's a constant, it doesn't have a (first-order) type. So I'm rephrasing.
 
 \begin{examplex}
-Let $\const{C} : $ $\tau \times \delta \rightarrow \delta$ be a constructor,
-and let $\Ec = \{ x \teq \const{C}(y,\const{C}(y,x)) \}$.
+Let $\Ec = \{ y \teq \const{S}(\const{S}(y)) \}$.
 After phase~1, the equivalence classes %of $\Ec$
 are
-$\{ y \}$, $\{ \const{C}(y,x) \}$, and $\{ x,\, \const{C}(y,\const{C}(y,x)) \}$.
+$\{ \const{S}(y) \}$ and $\{ y,\, \const{S}(\const{S}(y)) \}$.
 Constructing $\Val$ yields
-\[\begin{array}{rcrlrl}
-\Val \ec{x} & \,=\, &
-\MU {\Varec{x}}. & \const{C}( {\Varec{y}},\, & \smash{\MU {\VAREC{\const{C}(y, x)}}}. & \const{C}( {\Varec{y}},\, {\Varec{x}} ) ) \\
-\Val \ec{\const{C}(y,x)} & = &
-\MU {\VAREC{\const{C}(y,x)}}. & \const{C}( {\Varec{y}},\, & \MU {\Varec{x}}. & \const{C}( {\Varec{y}},\, {\VAREC{\const{C}(y,x)}} ) )
+\[\begin{array}{rcrl@{}rl}
+\Val \ec{y} & \,=\, &
+\MU {\Varec{y}}. & \const{S}( & \smash{\MU {\VAREC{\const{S}(y)}}}. & \const{S}( {\Varec{y}} ) ) \\
+\Val \ec{\const{S}(y)} & = &
+\MU {\VAREC{\const{S}(y)}}. & \const{S}( & \MU {\Varec{y}}. & \const{S}( {\VAREC{\const{S}(y)}} ) )
 \end{array}\]
-Since $\Val \ec{x} \aequiv \Val \ec{\const{C}(y,x)}$,
+Since $\Val \ec{y} \aequiv \Val \ec{\const{S}(y)}$,
 %for the renaming
-%$\{ {\Varec{x}} \mapsto {\VAREC{\const{C}(y,x)}}, {\VAREC{\const{C}(y,x)}} \mapsto {\Varec{x}} \}$,
-the \rn{Unique} rule applies to derive $x \teq \const{C}(y,x)$.
-%Intuitively, this equality holds, since the values of $x$ and $\const{C}( y, x )$
-%are equivalent for any value of ${\Varec{y}}$.
+%$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
+the \rn{Unique} rule applies to derive $y \teq \const{S}(y)$.
+%Intuitively, this equality holds, since the values of $y$ and $\const{S}(y)$
+%are equivalent.
 \xend
 \end{examplex}
 
