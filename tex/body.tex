@@ -74,8 +74,6 @@
 
 \DeclareFontFamily{OT1}{pzc}{}
 \DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
-\DeclareMathAlphabet{\mathscr}{OT1}{pzc}{m}{it}
-
 \DeclareMathAlphabet{\mathcal}{OT1}{pzc}{m}{it}
 
 \let\labelitemi=\labelitemii %% CHEAT!
@@ -162,9 +160,7 @@
 %%% like you did in the string paper).
 %%% How about the following? I'm pretty sure \mathcal has been used for theories
 %%% before by other authors.
-%\newcommand{\thD}{\mathcal{CoDt}}
-%\newcommand{\thD}{\mathcal{TDC}}
-\newcommand{\thD}{\mathcal{DC}}
+\newcommand{\thD}{\mathcal{CD}}
 
 %\newcommand\Types{\mathcal{T}}
 \newcommand\Types{\mathcal{Y}}
@@ -174,8 +170,8 @@
 \newcommand\Codata{\Types_{\mathrm{codt}}}
 \newcommand\Nondata{\Types_{\mathrm{ord}}}
 
-\newcommand\Ctr{\Funcs_{\mathrm{ctr}}}
-\newcommand\Sel{\Funcs_{\mathrm{sel}}}
+\newcommand\Ctr{\Funcs_{\smash{\mathrm{ctr}}}}
+\newcommand\Sel{\Funcs_{\smash{\mathrm{sel}}}}
 %\newcommand\Plainfuncs{\Funcs_{\mathrm{other}}}
 
 \newcommand\vvthinspace{\kern+0.041667em}
@@ -305,7 +301,7 @@ have emerged in a few automatic theorem provers as well. The SMT-LIB~2
 \cite{barrett-et-al-2010} syntax, implemented by most SMT (satisfiability
 modulo theories) solvers, includes a theory of datatypes.
 
-\pagebreak
+\pagebreak[3]
 
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in combination
@@ -542,8 +538,9 @@ ordinary, among the already known (co)datatypes, or among the (co)datatypes
 being introduced.
 %
 To every argument corresponds a selector. The names for the (co)data\-types, the
-constructors, and the selectors must be distinct and different from
-existing names%
+constructors, and the selectors must be
+\begin{conf}fresh\end{conf}\begin{rep}distinct and different from
+existing names\end{rep}%
 \dotReportFootnote{It can be convenient to specify the same selector
 for several constructors associated with the same (co)data\-type,
 as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
@@ -560,11 +557,11 @@ Schematically:
 \]
 %
 with
-$\const{C}_{i\negvthinspace j} : \tau_{i\negvthinspace j}^1\times\cdots\times\tau_{i\negvthinspace j}^{\,k_{\smash{i\negvthinspace j}}} \to \delta_i$
-and $\const{s}_{i\negvthinspace j}^{\,k} : \delta_i \to \tau_{i\negvthinspace j}^{\,k}$. Defaults are assumed for
-the selector names if they are omitted. Given a type $\delta$, its
-constructors and selectors are denoted by $\Ctr^\delta$ and $\Sel^\delta$,
-respectively.
+$\smash{\const{C}_{i\negvthinspace j} : \tau_{i\negvthinspace j}^1\times\cdots\times\tau_{i\negvthinspace j}^{\,k_{\smash{i\negvthinspace j}}} \to \delta_i}$
+and $\smash{\const{s}_{i\negvthinspace j}^{\,k} : \delta_i \to \tau_{i\negvthinspace j}^{\,k}}$.
+Defaults are assumed for the selector names if they are omitted.
+The $\delta$ constructors and selectors are denoted by $\Ctr^\delta$ and
+$\Sel^\delta$.
 
 For types with several constructors, it is customary to provide discriminators
 $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
@@ -573,6 +570,7 @@ The discriminator term $\const{d}_{i\negvthinspace j}(x)$ can be seen as an abbr
 $x = \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
 %This will simplify the presentation. % of the decision procedure.
 
+\begin{rep}%
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
       \keyw{codatatype}\; \,\ty{llist}_{\,\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(%\const{lhead}{:}\;
@@ -583,7 +581,6 @@ Here are a few examples of legal specifications of (co)datatype families:
 \end{aligned}
 \]
 
-\begin{rep}%
 Because all types must be inhabited (nonempty), a datatype specification is
 admissible only if a ground constructor term can be exhibited.
 This rules out non-well-founded specifications such as
@@ -748,10 +745,13 @@ Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory of}
 (\emph{co})\emph{datatypes},
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
 namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
-properties mentioned in this section. In particular, each interpretation
-in~$\mathbf{I}$ has a fixed interpretation for constructor terms and correctly
-applied selector terms, but may differ on its interpretation for wrongly applied
-selector terms and variables. A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
+properties mentioned in this section. In particular, the interpretations
+in~$\mathbf{I}$ share the same fixed interpretation for constructor terms and correctly
+applied selector terms but may differ on wrongly applied
+selector terms. \rem{and variables?}
+%%% @ANDY: Variables are normally not part of the interpretation, but given by
+%%% an additional environment. Or is this done differently in the SMT community?
+A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
 exists an interpretation in $\mathbf{I}$ that satisfies $\varphi$.
 % otherwise, it is $\thD$-unsatisfiable.  (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
@@ -761,7 +761,7 @@ When looking at the ground theory, induction can be replaced by the acyclicity
 axiom schema, which states that any ground constructor term cannot be equal to
 a variable it contains \cite{barrett-et-al-2007}. Dually, coinduction can be
 replaced by the uniqueness axiom schema, which asserts that (co)recursive
-definitions giving rise to the same infinite expansion---e.g., $x \teq
+equations giving rise to the same infinite expansion---e.g., $x \teq
 \const{C}(x)$ and $y \teq \const{C}(\const{C}(y))$---must be equal.
 
 \begin{rep}
@@ -798,7 +798,7 @@ and
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$. We call such types
 \emph{corecursive singletons}. For the decision procedure, it will be
-important to detect these types. %, even if they rarely arise in practice.
+crucial to detect these types. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
 above is altered to leave \ty{unit} uninterpreted, \ty{b} and \ty{c} will be
 singletons precisely when \ty{unit} is interpreted as a singleton.
