@@ -59,10 +59,10 @@
 
 \newcommand\afterDot{\;} %%% Too little space by default after "Lemma Foo."
 
-\begin{report}
+\begin{rep}
 \def\thewordpaper{report}
 \renewcommand\dotReportFootnote[1]{.\footnote{#1}}
-\end{report}
+\end{rep}
 
 \newcommand\afterLdots{\kern.1em} %% TYPESETTING
 
@@ -299,7 +299,7 @@ one case by unifying the finite and infinite nonzero cases.
 
 \nopagebreak
 
-Datatypes and codatatypes are an integral part of modern proof assistants,
+Datatypes and codatatypes are an integral part of most modern proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
 have made their appearance in a few automatic theorem provers. The SMT-LIB~2
 \cite{barrett-et-al-2010} syntax, implemented by most SMT (satisfiability
@@ -363,10 +363,10 @@ stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9, \ldots$\afterLdots.
 %%% 1090909 is a prime number
 
 
-\begin{paper}
+\begin{conf}
 Proofs of soundness and completeness are included in the technical report
 associated with this paper \cite{our-report}.
-\end{paper}%
+\end{conf}%
 The procedure is implemented in the SMT solver CVC4 as a combination
 of rewriting and a theory solver
 (Section~\ref{sec:the-theory-solver}).
@@ -456,35 +456,35 @@ The setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are simply atomic sorts, with no
 structure, and interpreted by nonempty domains. The set~$\Types$ must contain a
-distinguished type \ty{bool}\begin{report} interpreted as the set of truth
-values $\{\bot, \top\}$\end{report}. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-The only predicate is equality ($\teq$)\begin{report} and belongs to the logical symbols\end{report}.
+distinguished type \ty{bool}\begin{rep} interpreted as the set of truth
+values $\{\bot, \top\}$\end{rep}. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
+The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep}.
 Other predicates can be represented as functions to $\ty{bool}$,
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
-\begin{report}
+\begin{rep}
 The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
 whereas $\tau,\:\upsilon$ range over arbitrary types.
-When applied to terms, the symbol $=$ denotes syntactic equality.\end{report}
+When applied to terms, the symbol $=$ denotes syntactic equality.\end{rep}
 
-\begin{report}
+\begin{rep}
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
 distinguish them from variables (e.g., $x$, $y$).
-\end{report}
+\end{rep}
 Symbols starting with an uppercase letter (e.g.,
 $\const{C}, \const{S}$, $\const{SCons}$) are reserved for constructors. With each function symbol \const{f}
 is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
 and a return type $\tau$. This connection can be expressed %compactly
-as $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{report},
-which collapses to $\const{f} : \tau$ if $n = 0$\end{report}.
+as $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{rep},
+which collapses to $\const{f} : \tau$ if $n = 0$\end{rep}.
 For a term $t$, the notation $t\typ{\tau}$ indicates that it has type $\tau$.
 Functions are invoked in the standard way, with $\const{f}(t_1,\ldots,t_n)$
 applying the $n$-ary function symbol
 \const{f} to $n$ well-typed arguments $t_1 :\nobreak \tau_1$, \ldots, $t_n :
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
-\begin{report}%
+\begin{rep}%
 The operator $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
-$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{report}%
+$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
 Finally, $[n]$ denotes the set $\{1,\ldots, n\}$, and
 $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
@@ -584,14 +584,14 @@ Here are a few examples of legal specifications of (co)datatype families:
 \end{aligned}
 \]
 
-\begin{report}%
+\begin{rep}%
 Because all types must be inhabited (nonempty), a datatype specification is
 admissible only if a ground constructor term can be exhibited.
 This rules out non-well-founded specifications such as
 \[\keyw{datatype}\;\, \ty{fstream}_{\,\tau} \,=\, \const{FSCons}(\tau,\:\, \ty{fstream}_{\,\tau})\]
 For codatatypes, no admissibility check is necessary because there is always a term,
 finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop}.
-\end{report}
+\end{rep}
 
 A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
 type of an argument to one of $\delta$'s constructors. Semantically, a set of
@@ -602,10 +602,10 @@ semantic notion is more precise and is the one that interests us.
 %
 In addition, nothing forbids non(co)recursive specifications
 such~as
-\begin{paper}%
+\begin{conf}%
 \vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} = \const{None} \mid \const{Some}(\tau)$.%
-\end{paper}%
-\begin{report}%
+\end{conf}%
+\begin{rep}%
 \[\begin{aligned}[t]
       \keyw{datatype}\;\, \ty{option}_{\,\tau} & \,=\, \const{None} \mid \const{Some}(\tau) \\[-.5\jot]
       \keyw{codatatype}\; \,\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
@@ -613,7 +613,7 @@ such~as
 \]
 At the semantic level, it makes no difference whether such types are
 introduced as datatypes or as codatatypes.
-\end{report}%
+\end{rep}%
 %Without loss of generality, we consider that these types are datatypes
 %instead of codatatypes.
 
@@ -627,7 +627,7 @@ introduced as datatypes or as codatatypes.
 %\paragraph{Characterization.}
 One way to define datatypes semantically is as the initial model of the
 selector--constructor equations \cite{barrett-et-al-2010}.
-\begin{report}
+\begin{rep}
 A drawback of this approach is that it does
 not naturally account for selectors applied to wrong constructors. Barrett et
 al.\ address this by parameterizing the construction by default values, but
@@ -636,7 +636,7 @@ $\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$. This flaw
 could be corrected, but the added complexity seems to suggest that selectors
 are better characterized axiomatically.
 
-\end{report}
+\end{rep}
 A related semantic view of datatypes is as initial algebras. Codatatypes are
 then defined dually as final coalgebras \cite{rutten-2000}. The datatypes are
 generated by their constructors, whereas the codatatypes are viewed through
@@ -670,20 +670,20 @@ quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
 \end{aligned}
 \]
 %
-\begin{report}%
+\begin{rep}%
 Expressed in the algebraic jargon, exhaustiveness helps ensure that ``no
 junk'' exists, whereas distinctness and injectivity guarantee that ``no
 confusion'' can arise.
 The result of selectors applied to the wrong
 constructor is left completely unspecified.
-\end{report}
+\end{rep}
 
 %  * how to deal with "wrong" selectors, e.g.
 %        hd(nil1) = hd(nil2)?
 %      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
 %        and not in other models
 
-Datatypes are additionally characterized by an induction axiom schema\begin{report}:
+Datatypes are additionally characterized by an induction axiom schema\begin{rep}:
 %
 \[
 \begin{aligned}[t]
@@ -695,7 +695,7 @@ Datatypes are additionally characterized by an induction axiom schema\begin{repo
 \]
 where the induction hypothesis $\mathit{IH}_{i\negvthinspace j}^k(x)$
 denotes either $P_{\iPrime}(x)$ if there exists some $\iPrime$ such that
-the formula is type-correct or else $\top$\end{report}.
+the formula is type-correct or else $\top$\end{rep}.
 %
 The axiom schema ensures that the interpretation of datatypes
 is a standard model. For example,
@@ -704,9 +704,9 @@ induction prohibits nonstandard models, which could contain cyclic values---e.g.
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
 %
-\begin{report}\par\end{report}
+\begin{rep}\par\end{rep}
 %
-For codatatypes, the dual notion is called coinduction. \begin{report}It depends on
+For codatatypes, the dual notion is called coinduction. \begin{rep}It depends on
 witnesses $R_i$ that are required to be bisimulations:
 %
 \[
@@ -724,21 +724,21 @@ witnesses $R_i$ that are required to be bisimulations:
 \]
 where $x \sim y$ denotes either $R_{\iPrime}[x, y]$ if there exists some
 $\iPrime$ such that the formula is type-correct or $x \teq y$ otherwise.
-\end{report}%
+\end{rep}%
 This axiom schema guarantees that two values that yield the same
 observations must be equal, where the observations are made by using the
 selectors and discriminators.
 %
-\begin{report}\par\end{report}
+\begin{rep}\par\end{rep}
   %
 In addition, codatatypes are guaranteed to contain all values corresponding to
 infinite ground constructor terms.
-\begin{report}
+\begin{rep}
 In general, this cannot be captured by a
 first-order axiomatization, since there may be uncountably many of them.
 For example, $\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable
 function space $\ty{nat} \to \ty{int}$.
-\end{report}
+\end{rep}
 
 %TODO: Andy, introduce theory here. There were some ideas below in the comments
 %you might want to mention either here or in Section 3. I'm not sure what's the
@@ -763,9 +763,9 @@ replaced by the uniqueness axiom schema, which asserts that (co)recursive
 definitions giving rise to the same infinite expansion---e.g., $x \teq
 \const{C}(x)$ and $y \teq \const{C}(\const{C}(y))$---must be equal.
 
-\begin{report}
+\begin{rep}
 TODO: State more precisely and proof?
-\end{report}
+\end{rep}
 
 %    * :
 %        enough to consider acyclicity -- no way to specify infinite objects
@@ -781,17 +781,17 @@ Some codatatypes are so degenerate as to have infinite values
 even though they are finite. The simplest example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
 only value is $\MU a.\; A(a)$. Other specimens are
-\begin{paper}%
+\begin{conf}%
 \vthinspace$\keyw{codatatype}~\ty{b} = \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit})
 ~\keyw{and}~ \ty{c} = \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})$,
-\end{paper}%
-\begin{report}%
+\end{conf}%
+\begin{rep}%
 \[\begin{aligned}[t]
       \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-1\jot]
       \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})
 \end{aligned}
 \]
-\end{report}%
+\end{rep}%
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$, as well as $\ty{stream}_{\,\ty{unit}\,}$. We call such types
 \emph{corecursive singletons}. For the decision procedure, it will be
@@ -813,7 +813,7 @@ single constructor, whose arguments have types that are interpreted as
 singletons.
 \end{lemma}
 
-\begin{report}
+\begin{rep}
 \begin{proof}
 By definition, the type is equipped with at least one (directly or indirectly)
 corecursive constructor $\const{C}$. If it additional has second
@@ -833,7 +833,7 @@ again excludes finite models. Otherwise, the coinduction principle ensures
 that the type has at most one value.
 \qed
 \end{proof}
-\end{report}
+\end{rep}
 
 %  * assume for simplicity no indirect recursion, but this does not radically
 %    change the argument
@@ -1082,10 +1082,10 @@ The notation $t \aequiv u$, expressing $\alpha$-\emph{equivalence},
 indicates that the $\mu$-terms $t$ and $u$
 are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables---e.g.,
 %$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
-$\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$\begin{report},
+$\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$\begin{rep},
 but
 $\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
-\not\aequiv \MU y.\; \const{D}( y, x )$\end{report}.
+\not\aequiv \MU y.\; \const{D}( y, x )$\end{rep}.
 Two $\mu$-terms can represent the same value while not being $\alpha$-equivalent---e.g.,
 $\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{C}( \const{C}( x ) )$.
 %, or informally are \emph{observationally equivalent}.
@@ -1390,7 +1390,7 @@ by replacing all of the self-similar subterms of $t$ with $x$
 and by normalizing the subterms.
 For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
-\begin{report}
+\begin{rep}
 \begin{lemma}
 \label{lem:mu-norm-arg}
 If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
@@ -1416,7 +1416,7 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 %\begin{proof}
 %\rem{TODO}
 %\end{proof}
-\end{report}
+\end{rep}
 
 We now define the class of interpretations for $\thD$.
 $\M( \tau )$ denotes the interpretation type $\tau$ in $\M$,
@@ -1577,9 +1577,9 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
 %%% @ANDY: I think it's enough to point this out clearly in the introduction.
 %%% At least, that always worked fine for my other papers. :)
 %
-%\begin{paper} 
+%\begin{conf} 
 %The proof of this lemma can be found in the extended version of this paper.
-%\end{paper}
+%\end{conf}
 
 \begin{lemma}
 \label{lem:model-completion}
@@ -1594,7 +1594,7 @@ all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$.
 $\ValC \ec{x} \vsim \ValC \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
 \end{lemma}
-\begin{report}
+\begin{rep}
 \begin{proof}
 To show 1, we first show that $\ValC$ contains no free variables.
 Assume by contradiction that $\ValC$ contained a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
@@ -1706,7 +1706,7 @@ Thus, by induction on the number of applications of the above rule used to obtai
 we have that $\ValC$ satisfies (2) and (3).
 \qed
 \end{proof}
-\end{report}
+\end{rep}
 
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
