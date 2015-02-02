@@ -1170,12 +1170,15 @@ make some progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
 %% unless it's a constant, it doesn't have a (first-order) type. So I'm rephrasing.
 
 \begin{examplex}
-Let $\Ec = \{ y \teq \const{S}(\const{S}(y)) \}$.
+Let $\Ec = \{ x \teq \const{S}(x),\; y \teq \const{S}(\const{S}(y)) \}$.
 After phase~1, the equivalence classes %of $\Ec$
 are
-$\{ \const{S}(y) \}$ and $\{ y,\, \const{S}(\const{S}(y)) \}$.
+$\{ x,\, \const{S}(x) \}$,
+$\{ y,\, \const{S}(\const{S}(y)) \}$,
+and $\{ \const{S}(y) \}$.
 Constructing $\Val$ yields
 \[\begin{array}{rcrl@{}rl}
+\Val \ec{x} & \,=\, & \MU {\Varec{x}}. & \const{S}(\Varec{x}) \\
 \Val \ec{y} & \,=\, &
 \MU {\Varec{y}}. & \const{S}( & \smash{\MU {\VAREC{\const{S}(y)}}}. & \const{S}( {\Varec{y}} ) ) \\
 \Val \ec{\const{S}(y)} & = &
