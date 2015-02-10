@@ -1,4 +1,4 @@
-cp rep.pdf ~/hgs/papers_etc/homepage/codp_rep.pdf
 cp conf.pdf ~/hgs/papers_etc/homepage/codp_conf.pdf
+cp rep.pdf ~/hgs/papers_etc/homepage/codp_rep.pdf
 copyweb
 (cd ~/hgs/papers_etc/homepage/; hg ci -m "updated codp*.pdf"; hg push)
