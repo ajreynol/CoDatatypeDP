@@ -1476,7 +1476,7 @@ To simplify the presentation, all types are interpreted as sets of $\mu$-terms; 
 only values of types in $\Codata$ may contain cycles.
 %Since all values of types in $\Data$ and $\Nondata$ are acyclic,
 %a typical representation for these values can be obtained by
-%dropping each of its $\mu$-bindings. 
+%dropping each of its $\mu$-bindings.
 %For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
 %is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
 
@@ -1603,7 +1603,7 @@ which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in~$\Ec$.
 On the other hand, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^\M_{{\Varec{x}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
-For example, we may assign values such as 
+For example, we may assign values such as
 $\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
 $\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
 $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
@@ -1627,7 +1627,7 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
 %%% @ANDY: I think it's enough to point this out clearly in the introduction.
 %%% At least, that always worked fine for my other papers. :)
 %
-%\begin{conf} 
+%\begin{conf}
 %The proof of this lemma can be found in the extended version of this paper.
 %\end{conf}
 
@@ -1639,7 +1639,7 @@ and $\ValC$ is a completion of $\Val$ for a normal model $\M$, the following pro
 \item[\rm (1)] $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
 \item[\rm (2)]
 $\ValC \ec{x} = \interp{\ValC \ec{y}}{ t }$ for
-all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$. 
+all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$.
 \item[\rm (3)]
 $\ValC \ec{x} \vsim \ValC \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{enumerate}
@@ -1675,15 +1675,15 @@ For all equivalence classes $\ec{z}$,
 each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t )$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
 are such that $j = \jPrime$ since \rn{Clash} does not apply to $\Ec$,
 and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply to $\Ec$.
-Thus, 
+Thus,
 $\Val$ was constructed by applying a sequence of substitutions
-where all substitutions for variables ${\Varec{z}}$ 
+where all substitutions for variables ${\Varec{z}}$
 were uniquely of the form $\{ {\Varec{z}} \mapsto \const{C}_{\negvthinspace j}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}$
 when $\ec{z}$ contains a constructor $\const{C}_{\negvthinspace j}( t_1, \ldots, t_n )$.
 Say $\Val \ec{y}$ has a subterm $t$ where $\muvar(t) = {\Varec{x}}$.
 Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
-Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ are interpreted in 
+Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ are interpreted in
 the expansion of $\interp{\Val \ec{y}}{ t }$ as a term
 constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. \rem{more detail}
 Thus, we have
@@ -1693,7 +1693,7 @@ Statement 3 holds for $\Val$ since \rn{Unique} does not apply.
 We now show that $\Val = \nf{\Val}$.
 Assume by contradition $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
 We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
-Due to our construction of $\Val$, 
+Due to our construction of $\Val$,
 we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for $i \in [n]$.
 Since $\Val \ec{x}$ is a minimal, it
 contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
@@ -1716,24 +1716,24 @@ by assumption of 2 on $\Val_1$, we have $\interp{\Val_1 \ec{y}}{ u } = \Val_1 \e
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
 Thus, $\interp{\Val_1 \sigma \ec{y}}{ u } = \Val_1 \sigma \ec{x}$ and
 $\interp{\nf{\Val_1 \sigma} \ec{y}}{ u } = \nf{\Val_1 \sigma} \ec{x}$.
-To show 3, 
+To show 3,
 consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
 and assume by contradiction that $\nf{\Val_1 \sigma} \ec{y} \aequiv \nf{\Val_1 \sigma} \ec{z}$.
 Due to (3) for $\Val_1$,
-$\ec{y}$ and $\ec{z}$ must have (minimal) subterms 
+$\ec{y}$ and $\ec{z}$ must have (minimal) subterms
 where $t_1$ occurs in $\Val_1 \ec{y}$ the same position (call it $p$) as $t_2$ occurs in $\Val_1 \ec{z}$,
 and $t_1 \not\aequiv t_2$.
 %We first show that $\nf{\Val_1 \sigma} \ec{y}$ (and for the same reasons, $\nf{\Val_1 \sigma} \ec{z}$)
 %also contains position $p$.
 %If this were not the case,
 %then without loss of generality we may assume
-%$\Val_1 \sigma \ec{y}$ contains a self-similar subterm 
+%$\Val_1 \sigma \ec{y}$ contains a self-similar subterm
 %$\MU {\Varec{w}}.\; u$ that strictly contains $t_1 \sigma$.
 If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
 then $\nf{\Val_1 \sigma} \ec{y}$ (resp. $\nf{\Val_1 \sigma} \ec{z}$)
 contains $t_1$ (resp. $t_2$) at position $p$,
 and $\nf{\Val_1 \sigma} \ec{z}$ (resp. $\nf{\Val_1 \sigma} \ec{y}$) does not.
-If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t )$ 
+If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t )$
 and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
 then the expansion \rem{define} of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$.
@@ -1788,11 +1788,11 @@ which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \con
 %By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
+Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by our construction of $\ValC$ we have $\ValC \ec{t}$ is a term
-of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$ 
-where for each $i \in [n]$, 
-$\muvar(w_i) = {\Varec{u_i}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2}, 
+of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
+where for each $i \in [n]$,
+$\muvar(w_i) = {\Varec{u_i}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2},
 $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i \in [n]$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
@@ -1806,13 +1806,13 @@ since \rn{Split} does not apply to $\Fc$,
 $\ec{u}$ must contain a term of the form $\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)$ for some $\jPrime$.
 %By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
-%where $\interp{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$. 
-Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$, 
+%where $\interp{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
+Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by construction $\ValC$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where for each $i \in [n]$,
-$\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2}, 
-$\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$. 
+$\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2},
+$\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
 If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
 which is $\ValC \ec{t}$.
 If $j \neq \jPrime$, we are free to interpret $\smash{\const s^k_{\negvthinspace j}( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
