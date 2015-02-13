@@ -661,7 +661,7 @@ their selectors.
 
 Datatypes and codatatypes share many basic properties pertaining to
 constructors and selectors. All properties below are implicitly universally
-quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
+quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:\rem{Introduce that $\is{C}$ is notation for discriminators.}
 % and to all possible splits of the
 %$n$-ary constructor $\const{C}_{i\negvthinspace j}$'s argument list into $\bar x,
 %y, \bar z$:
@@ -766,7 +766,7 @@ namely the ones that satisfy the %axioms --- existence of all infinite codatatyp
 properties mentioned in this section. In particular, the interpretations
 in~$\mathbf{I}$ share the same fixed interpretation for constructor terms and correctly
 applied selector terms but may differ on wrongly applied
-selector terms. \rem{and variables?}
+selector terms and variables.
 %%% @ANDY: Variables are normally not part of the interpretation, but given by
 %%% an additional environment. Or is this done differently in the SMT community?
 A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
@@ -927,7 +927,7 @@ Second, all types $\tau \in \Nondata$ have infinite cardinality.
 This is not overly restrictive, because each interpreted type $\tau \in \Nondata$
 having finite cardinality~$n$
 can be replaced by an enumeration datatype with $n$~nullary constructors.
-Moreover, since the constraints are ground, they cannot entail an upper bound
+Moreover, since the constraints in $\Ec$ are ground, they cannot entail an upper bound
 on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
 we may without loss of generality %or completeness
 treat all types in $\Nondata$ as infinite.
@@ -1539,7 +1539,7 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
   \betweenantes
   v \not\in \mathcal{T}^\M_{\Varec{x}}(\Val)
 }{
-  \Val := \nf{\Val \{ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t \}}
+  \Val := \nf{\Val [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
 }
 \)
 %\rn{Assign}
@@ -1757,6 +1757,13 @@ we have that $\ValC$ satisfies (2) and (3).
 \end{proof}
 \end{rep}
 
+Intuitively, this lemma states three properties of $\ValC$ which ensure a normal model $\M$ can be trivially constructed for $\Ec$.
+Part~\PART{1} states that the values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal model.
+In particular, this means they are closed, normal, and acyclic when required.
+Part~\PART{2} states that the interpretation of all subterms in the range of $\ValC$ depends on its associated variable only.
+In other words, the interpretation of a subterm $t$ where $\muvar(t) = {\Varec{x}}$ is equal to $\ValC \ec{x}$, independent of the context in which it is interpreted.
+Part~\PART{3} states that $\ValC$ is injective, which in the following ensures that a distinct values can be associated with each equivalence class in a corresponding model.
+
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
 \afterDot
@@ -1771,7 +1778,8 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 We consider a normal model $\M$
 that interprets wrongly applied selectors based on equality information in $\Fc$,
 and interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
-For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \mathcal{T}(\Fc)$.
+For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \mathcal{T}(\Fc)$,
+which by Lemma~\ref{lem:model-completion}\PART{1} is guaranteed to exist.
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 We show,
@@ -1791,7 +1799,7 @@ Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by our construction of $\ValC$ we have $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 where for each $i \in [n]$,
-$\muvar(w_i) = {\Varec{u_i}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2},
+$\muvar(w_i) = {\Varec{u_i}}$.  Thus by Lemma~\ref{lem:model-completion}\PART{2},
 $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i \in [n]$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
@@ -1814,10 +1822,11 @@ $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrim
 $\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
 If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
 which is $\ValC \ec{t}$.
-If $j \neq \jPrime$, we are free to interpret $\smash{\const s^k_{\negvthinspace j}( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
-Since \rn{Cong} does not apply and due to Lemma~\ref{lem:model-completion}\PART{3},
-pairs of wrongly applied selectors are assigned the same value if and only if they reside in the same equivalence class,
-and thus this definition is well-defined.
+If $j \neq \jPrime$, since \rn{Cong} does not apply,
+$\smash{\const s^k_{\negvthinspace j}( u )}$ and $\smash{\const s^k_{\negvthinspace j}( u' )}$
+are in distinct equivalence classes only if $u$ and $u'$ are in distinct equivalence classes.
+Due to the induction hypothesis and Lemma~\ref{lem:model-completion}\PART{3}, $\M( u ) \neq \M( u' )$ for all such $u, u'$.
+Thus, we may interpret $\smash{\M(\const s^k_{\negvthinspace j})( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
@@ -1847,26 +1856,6 @@ Blah.
 \label{sec:the-theory-solver}
 
 This section describes how the calculus in Section~\ref{sec:a-ground-decision-procedure-for-co-datatypes} is implemented within the SMT solver CVC4.
-
-\paragraph{Optimizations.}
-We first discuss several optimizations that are not reflected in the presentation of the calculus, which closely follow the approach outlined by Barrett et al.\ \cite{barrett-et-al-2007}.
-We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in Barrett et al.
-
-Discriminators are treated as predicate symbols, so a discriminator $\const{d}_{\negvthinspace j}( t )$ is such that $\const{d}_{\negvthinspace j}$
-is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^n_{\negvthinspace j}( t ) \bigr)$.
-We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
-Handling discriminators requires extending the decision procedure with several
-additional rules (see~Barrett et al.\ \cite{barrett-et-al-2007} for more
-details), which apply uniformly to both datatypes and codatatypes.
-Also, selectors are collapsed eagerly:
-if $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the constructor
-$\const{C}_{\negvthinspace j}( \vec u )$, we immediately infer $\const s^k_{\negvthinspace j}( t ) \teq u_k$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
-For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
-In particular, we
-replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
-replace $\const{C}_{\negvthinspace j}( \vec t ) \teq \const{C}_{\negvthinspace\jPrime}( \vec u )$ with $\bot$ when $j \neq \jPrime$,
-replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$ by $t_k$,
-and replace all occurrences of discriminators $\const{d}_{\negvthinspace j}( \const{C}_{\negvthinspace\jPrime}( \vec t ) )$ by $\top$ if $j = \jPrime$ and $\bot$ otherwise.
 
 \paragraph{Integration into DPLL(T).}
 The calculus is implemented as \emph{theory solver} of CVC4,
@@ -1906,6 +1895,26 @@ and in that order.
     * sharing is caring (let's cite it for a change)
     * theory combination more complicated (and Theorem Completeness too weak)
 
+    
+\paragraph{Optimizations.}
+Our implementation uses several optimizations not reflected in the presentation of the calculus, which closely follow the approach outlined by Barrett et al.\ \cite{barrett-et-al-2007}.
+We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in Barrett et al.
+
+Discriminators are treated as predicate symbols, so a discriminator $\const{d}_{\negvthinspace j}( t )$ is such that $\const{d}_{\negvthinspace j}$
+is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^n_{\negvthinspace j}( t ) \bigr)$.
+We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
+Handling discriminators requires extending the decision procedure with several
+additional rules (see~Barrett et al.\ \cite{barrett-et-al-2007} for more
+details), which apply uniformly to both datatypes and codatatypes.
+Also, selectors are collapsed eagerly:
+if $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the constructor
+$\const{C}_{\negvthinspace j}( \vec u )$, we immediately infer $\const s^k_{\negvthinspace j}( t ) \teq u_k$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
+For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
+In particular, we
+replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
+replace $\const{C}_{\negvthinspace j}( \vec t ) \teq \const{C}_{\negvthinspace\jPrime}( \vec u )$ with $\bot$ when $j \neq \jPrime$,
+replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$ by $t_k$,
+and replace all occurrences of discriminators $\const{d}_{\negvthinspace j}( \const{C}_{\negvthinspace\jPrime}( \vec t ) )$ by $\top$ if $j = \jPrime$ and $\bot$ otherwise.
 
 %\section{Examples}
 %\label{sec:examples}
