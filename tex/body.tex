@@ -1436,10 +1436,10 @@ is $\alpha$-equivalent to $\interp{t}{x} = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
-recursively construct its \emph{normal form} $\nf{t}$
+construct its \emph{normal form} $\nf{t}$
 by replacing all of the self-similar subterms of $t$ with $x$
 %and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
-and by normalizing the subterms.
+and by recursively normalizing $t$'s subterms.
 For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
 \begin{rep}
@@ -1471,10 +1471,11 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 \end{rep}
 
 We now define the class of interpretations for $\thD$.
-$\M( \tau )$ denotes the interpretation type $\tau$ in $\M$,
-that is, a set of domain elements for that type.
+$\M( \tau )$ denotes the interpretation type $\tau$ in $\M$---that is, a set of
+domain elements for that type.
 For a term $t\typ{\tau}$, $\M( t ) \in \M( \tau )$ denotes the interpretation of $t$ in $\M$.
-To simplify the presentation, all types are interpreted as sets of $\mu$-terms; but
+%To simplify the presentation,
+All types are interpreted as sets of $\mu$-terms, but
 only values of types in $\Codata$ may contain cycles.
 %Since all values of types in $\Data$ and $\Nondata$ are acyclic,
 %a typical representation for these values can be obtained by
@@ -1489,19 +1490,16 @@ only values of types in $\Codata$ may contain cycles.
 A model $\M$ is \emph{normal} if these conditions are met:
 \begin{enumerate}
 \item
-%%% TODO: What does maximal set mean? Does it make sense for \Nondata?
 For each type $\tau$,
 $\M( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
-unique up to $\alpha$-equivalence and acyclic when $\tau \not\in \Codata$.
+unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
 $\M( \const{C}( \vec t \,) )$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$, where $x$ is fresh.
-%%% TODO: I'm a bit worried to see a semantic value \M under a syntactic
-%%% constructor. I know our models consist of \mu-terms, but is this intended?
 \item
-For all selector terms $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
+For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
 $\M\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\interp{\M( t )}{u_k}$,
