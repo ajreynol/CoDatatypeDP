@@ -132,7 +132,7 @@
 %\newcommand{\interp}[2]{\llbracket #2 \rrbracket_{#1}}
 %%% And one that doesn't look so semantic
 %\newcommand{\interp}[2]{\lceil #2 \rceil_{#1}}
-\newcommand{\interp}[2]{\left< \smash{#2} \right>_{#1}}
+\newcommand{\interp}[2]{\langle \smash{#2} \rangle_{#1}}
 \newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
 \newcommand{\ec}[1]{[#1]}
 \newcommand{\M}{\mathcal{M}}
@@ -1361,8 +1361,8 @@ for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)$,
 this means $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child node of $\Ec$ is a closed derivation tree
-whose root node is $\Ec \mathrel\cup t \teq u$ obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
-In all cases, we have that $\Ec \models_{\thD} t \teq u$.
+whose root node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
+In all these cases, $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
 For \rn{Unique}, our construction of $\Val$ indicates that the value of $t$ and $u$ are equivalent in all models of $\Ec$.
@@ -1372,14 +1372,14 @@ and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
 \end{proof}
 
-It remains to show the converse of the previous theorem: When a derivation tree
+It remains to show the converse of the previous theorem: If a derivation tree
 with root node $\Ec$ contains a saturated node, then $\Ec$ is
 $\thD$-satisfiable.
-To do so, we exhibit a specific model $\M$ of $\thD$ that satisfies $\Ec$.
+The proof relies on a specific model $\M$ of $\thD$ that satisfies $\Ec$.
 
 First, we define the set of interpretations of the theory $\thD$,
 which requires additional terminology concerning $\mu$-terms.
-For a $\mu$-term $t$ with subterm $u$,
+Given a $\mu$-term $t$ with subterm $u$,
 %%% @ANDY: I'm taking the liberty of renaming "interpretation" to "expansion". Interpretation
 %%% sounds semantic to me (although it is sometimes used for syntactic transformations).
 the \emph{expansion of $u$ with respect to $t$} is the $\mu$-term $\interp{t}{u}^\emptyset$,
@@ -1390,11 +1390,11 @@ $\interp{t}{u}$, as returned by the following recursive function:
 %variable $x$:
 \[\begin{array}{r@{}c@{}l}
 \interp{t}{x}^B & {} \,=\, {} &
-\textstyle\smash{\begin{cases}
+\textstyle\relax{\begin{cases}
     \MU x.\; \const{C}( \interp{t}{ \vec u}^{\smash{B \mathrel\cup \{ x \}}}) & \text{if this $x \notin B$ is
     bound by $\MU x.\; \const{C}( \vec u )$ in $t$}  \\[-\jot]
     x & \text{otherwise}
-\end{cases}} ~ \\[1.5ex] %% TYPESETTING: trick with \smash
+\end{cases}} ~ \\
 \interp{t}{\MU x.\; \const{C}( \vec u )}^B & = &
 \textstyle\begin{cases}
     \MU x.\; \const{C}( \interp{t}{ \vec u }^{\smash{B \mathrel\cup \{ x \}}} ) & \text{if }x \not\in B \\[-\jot]
