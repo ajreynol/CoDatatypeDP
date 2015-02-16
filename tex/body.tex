@@ -1500,7 +1500,7 @@ in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$, where $x$ is fresh.
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-$\M\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
+$\M\negvthinspace\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
 $\interp{\M( t )}{u_k}$,
 assuming $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$.
@@ -1510,13 +1510,14 @@ assuming $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u
 In the following, we consider only normal models.
 When constructing a model $\M$ for $\Ec$,
 it remains only to define how $\M$ interprets wrongly applied selector terms and variables.
-For the latter, this will be based on the mapping $\Val$ constructed in phase~2 of the calculus.
-We compute the \emph{completion} $\ValC$ of $\Val$ for normal model $\M$
+For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
+We obtain the \emph{completion} $\ValC$ of $\Val$ for normal model $\M$
 by assigning values from $\M$ to unassigned variables in the domain of $\Val$.
 
 %First, we need the following definition.
 We write $t \vsimv{x} u$ if $\mu$-terms $t$ and $u$ are syntactically equivalent
-for some renaming that avoids capturing any variable other than $x$.
+for some renaming that avoids capturing any variable other than $x$.%
+\rem{Clarify previous definition}
 For example,
 $\MU x.\; \const{D}( x ) \vsimv{y} \MU x.\; \const{D}( y )$,
 $\MU x.\; \const{C}( x, x ) \vsimv{x} \MU y.\; \const{C}( x, y )$ and
