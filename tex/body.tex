@@ -1391,13 +1391,13 @@ $\interp{t}{u}$, as returned by the following recursive function:
 \[\begin{array}{r@{}c@{}l}
 \interp{t}{x}^B & {} \,=\, {} &
 \textstyle\relax{\begin{cases}
-    \MU x.\; \const{C}( \interp{t}{ \vec u}^{\smash{B \mathrel\cup \{ x \}}}) & \text{if this $x \notin B$ is
+    \MU x.\; \const{C}\smash{\bigl( \interp{t}{ \vec u}^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if this $x \notin B$ is
     bound by $\MU x.\; \const{C}( \vec u )$ in $t$}  \\[-\jot]
     x & \text{otherwise}
 \end{cases}} ~ \\
 \interp{t}{\MU x.\; \const{C}( \vec u )}^B & = &
 \textstyle\begin{cases}
-    \MU x.\; \const{C}( \interp{t}{ \vec u }^{\smash{B \mathrel\cup \{ x \}}} ) & \text{if }x \not\in B \\[-\jot]
+    \MU x.\; \const{C}\smash{\bigl( \interp{t}{ \vec u }^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if }x \not\in B \\[-\jot]
     x & \text{otherwise}
 \end{cases}
 \end{array}\]
@@ -1412,24 +1412,24 @@ The term $t$ is \emph{normal} if it does not contain a self-similar subterm
 and all of its strict subterms are also normal.
 For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal
 because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
-In particular, note that their arguments have the same expansion with respect to $t$,
-that is,
-$\interp{t}{\MU y.\; \const{C}( y )} =$
-$\MU y.\; \const{C}( \interp{t}{y}^{\smash{\{y\}}} ) =$
-$\MU y.\; \const{C}( y )$
+Their arguments have the same expansion with respect to
+$t$:
+$\interp{t}{\MU y.\; \const{C}( y )} =
+\MU y.\; \const{C}\bigl( \interp{t}{y}^{\smash{\{y\}}} \bigr) =
+\MU y.\; \const{C}( y )$
 is $\alpha$-equivalent to
-$\interp{t}{y} =$
-$\MU y.\; \const{C}( \interp{t}{y}^{\smash{\{y\}}} ) =$
-$\MU y.\; \const{C}( y )$.
+$\interp{t}{y} =
+\MU y.\; \const{C}\bigl( \interp{t}{y}^{\smash{\{y\}}} \bigr) =
+\MU y.\; \const{C}( y )$.
 The term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
 since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $t$,
 noting that
 %
 \begin{align*}
 \interp{t}{\MU y.\; \const{C}( x )}
-& = \MU y.\; \const{C}( \interp{t}{x}^{\smash{\{y\}}} ) \\
-& = \MU y.\; \const{C}( \interp{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} ) \\
-& = \MU y.\; \const{C}( \MU x.\; \const{C}( \interp{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) ) \\
+& = \MU y.\; \const{C}\bigl( \interp{t}{x}^{\smash{\{y\}}} \bigr) \\
+& = \MU y.\; \const{C}\bigl( \interp{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr) \\
+& = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \interp{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr) \\
 & = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )
 \end{align*}
 is $\alpha$-equivalent to $\interp{t}{x} = t$.
