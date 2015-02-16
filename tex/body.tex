@@ -1,3 +1,6 @@
+%%% TODO: Clarify that \mu-terms appear in generated models
+%%% TODO: In report, give small example where Single is needed
+
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -27,6 +30,9 @@
 \def\spnXwtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}%
                          \@addtoreset{#1}{chapter}}%
 \makeatother
+
+%\newcommand\XXXL{DPLL}
+\newcommand\XXXL{CDCL} %% TODO: Convince Andy this is right
 
 \newcommand\NOK[1]{\textcolor{red}{\textbf{#1}}}
 \newcommand\OK[1]{#1}
@@ -1453,6 +1459,7 @@ then $\vec u \vsim \interp{t}{\vec w}$\vthinspace.
 \end{lemma}
 \begin{proof}
 \rem{TODO}
+\qed
 \end{proof}
 
 \begin{lemma}
@@ -1461,6 +1468,7 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 \end{lemma}
 \begin{proof}
 \rem{TODO}
+\qed
 \end{proof}
 
 %\begin{lemma}
@@ -1470,6 +1478,7 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 %\end{lemma}
 %\begin{proof}
 %\rem{TODO}
+%\qed
 %\end{proof}
 \end{rep}
 
@@ -1487,6 +1496,7 @@ only values of types in $\Codata$ may contain cycles.
 %is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
 
 \rem{TODO: Normal model vs. actual model.}
+\rem{TODO: Model or interpretation? Grep elsewhere.}
 
 \begin{definition}[Normal Model]
 \afterDot%
@@ -1556,9 +1566,11 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
 }
 \]
 %
-The rule chooses an unassigned variable in $\Val$ and assigns it a value that is
-not $\alpha$-equivalent to one occurring in
-$\mathcal{T}^{\smash{\M}}_{\Varec{x}}(\Val)$.
+The rule chooses an unassigned variable in $\Val$ and assigns it a fresh
+value---one that does not occur in $\mathcal{T}^{\smash{\M}}_{\Varec{x}}(\Val)$
+modulo $\alpha$-equivalence.
+\rem{The ``not alpha equivalent'' bit is expressed differently in the rule,
+with $\notin$. This looks fishy.}
 \rem{What guarantees that such a value exists? (Answer: infinitely many values
 of codatatypes, of which only finitely many are in
 $\mathcal{T}^{\smash{\M}}_{\Varec{x}}(\Val)$?)}
@@ -1610,15 +1622,14 @@ $x$ is interpreted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$, and so on.
 Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\M$ to
-lose its modelhood.%
-\rem{Improve terminology.}
-% "be inconsistent." Surely, models can't be "inconsistent".
+become a non-model.
+% "be inconsistent." Models can't be "inconsistent".
 For example, assign $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$ for ${\Varec{x}}$.
 After this substitution, $\Val \ec{y_2}$ is $\MU {\Varec{y_2}}.\; \const{D}( \MU {\Varec{x}}.\; \const{D}( {\Varec{x}} ) )$,
 which has normal form $\MU {\Varec{y_2}}.\; \const{D}( {\Varec{y_2}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$.
 However, this contradicts the disequality $x \not\teq y_2$ in~$\Ec$.
-On the other hand, if the value assigned to ${\Varec{x}}$ is not $\alpha$-equivalent to any term in $\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$,
+On the other hand, if the value assigned to ${\Varec{x}}$ is fresh, %not $\alpha$-equivalent to any term in $\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For example, we may assign values such as
 $\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
@@ -1653,7 +1664,7 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
 If $\Val$ is constructed for a saturated set $\Ec$
 and $\ValC$ is a completion of $\Val$ for a normal model $\M$, the following properties hold:
 \begin{enumerate}
-\item[\rm (1)] $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$, where $\ec{x}$ has type $\tau$.
+\item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
 \item[\rm (2)]
 $\ValC \ec{x} = \interp{\ValC \ec{y}}{ t }$ for
 all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$.
@@ -1775,12 +1786,17 @@ we have that $\ValC$ satisfies (2) and (3).
 \end{proof}
 \end{rep}
 
-Intuitively, this lemma states three properties of $\ValC$ which ensure a normal model $\M$ can be trivially constructed for $\Ec$.
-Part~\PART{1} states that the values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal model.
-In particular, this means they are closed, normal, and acyclic when required.
-Part~\PART{2} states that the interpretation of all subterms in the range of $\ValC$ depends on its associated variable only.
-In other words, the interpretation of a subterm $t$ where $\muvar(t) = {\Varec{x}}$ is equal to $\ValC \ec{x}$, independent of the context in which it is interpreted.
-Part~\PART{3} states that $\ValC$ is injective, which in the following ensures that a distinct values can be associated with each equivalence class in a corresponding model.
+Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
+model $\M$ can be trivially constructed for $\Ec$. Part~\PART{1} states that the
+values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal
+model. In particular, this means they are closed, normal, and acyclic when
+required. Part~\PART{2} states that the interpretation of all subterms in the
+range of $\ValC$ depends on its associated variable only. In other words, the
+interpretation of a subterm $t$ where $\muvar(t) = {\Varec{x}}$ is equal to
+$\ValC \ec{x}$, independently of the context in which it is interpreted.
+Part~\PART{3} states that $\ValC$ is injective, which in the following ensures
+that a distinct values can be associated with each equivalence class in a
+corresponding model.
 
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
@@ -1794,8 +1810,8 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
 We consider a normal model $\M$
-that interprets wrongly applied selectors based on equality information in $\Fc$,
-and interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
+that interprets wrongly applied selectors based on equality information in $\Fc$
+and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
 For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \mathcal{T}(\Fc)$,
 which by Lemma~\ref{lem:model-completion}\PART{1} is guaranteed to exist.
 
@@ -1809,7 +1825,8 @@ If $t$ is a variable, then $\M( t ) \vsim \ValC \ec{ t }$ by construction.
 
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
 then $\M( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) }$ for some fresh $x$,
-which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$, call this term $t_u$.
+which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$.
+Call this term $t_u$.
 %By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
@@ -1843,7 +1860,7 @@ which is $\ValC \ec{t}$.
 If $j \neq \jPrime$, since \rn{Cong} does not apply,
 $\smash{\const s^k_{\negvthinspace j}( u )}$ and $\smash{\const s^k_{\negvthinspace j}( u' )}$
 are in distinct equivalence classes only if $u$ and $u'$ are in distinct equivalence classes.
-Due to the induction hypothesis and Lemma~\ref{lem:model-completion}\PART{3}, $\M( u ) \neq \M( u' )$ for all such $u, u'$.
+Due to the induction hypothesis and Lemma~\ref{lem:model-completion}\PART{3}, $\M( u ) \neq \M( u' )$ for all such $u$, $u'$.
 Thus, we may interpret $\smash{\M(\const s^k_{\negvthinspace j})( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
@@ -1873,66 +1890,87 @@ Blah.
 \section{Implementation as a Theory Solver in CVC4}
 \label{sec:the-theory-solver}
 
-This section describes how the calculus in Section~\ref{sec:a-ground-decision-procedure-for-co-datatypes} is implemented within the SMT solver CVC4.
+The decision procedure for (co)datatypes and its extension to quantified
+formulas were described at a high level of abstraction. This section describes
+the implementation within the SMT solver CVC4.
 
-\paragraph{Integration into DPLL(T).}
-The calculus is implemented as \emph{theory solver} of CVC4,
-that is, a specialized solver for determining the satisfiability of conjunctions of constraints for its theory.
-Given a theory $T = T_1 \mathrel\cup \ldots T_n$ and a input set of clauses $F$ in CNF,
-the DPLL($T$) \rem{CDCL($T$)?} procedure
-(incrementally) builds partial assignments from the atomic formulas of $F$ to truth values such that no clause in $F$ is falsified.
-We may interpret this partial assignment as a set of literals where $a \in M$ for all atoms $a$ that it assigned the value $\top$, and $\neg a \in M$ for all atoms that it assigns the value $\bot$.
-Then, at a high level, by the Nelson--Oppen combination framework,
-each $T_i$-solver for $i = 1, \ldots, l$ takes as input a combination of (1) the purified form of $T_i$-constraints occurring in $M$ where terms containing symbols not belonging to $T_i$ are replaced by fresh variables of the same type,
-(2) additional equalities and disequalities between variables of types not belonging to $T_i$.
-Let us call this set $M_i$.
-Each $T_i$ solver either
-reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case $\neg C$ is added to $F$,
-adds a clause $C$ to $F$,
-or does nothing.
-When $M$ is a complete assignment for $F$, a theory solver can only choose to do nothing when $M_i$ is indeed $T_i$-satisfiable.
+\paragraph{Integration into {\relax\XXXL($T$)}.}
+The calculus is implemented as a \emph{theory solver} of CVC4, that is, a
+specialized solver for determining the satisfiability of conjunctions of
+constraints for its theory.
+Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a input set of
+clauses $F$ in CNF, the \XXXL($T$) procedure
+incrementally builds partial assignments from the atomic formulas of $F$ to
+truth values such that no clause in $F$ is falsified. We may interpret such a
+partial assignment as a set of literals where $a \in M$ for all atoms $a$ that
+it assigned the value $\top$, and $\neg\; a \in M$ for all atoms that it assigns
+the value $\bot$. Then, at a high level, by the Nelson--Oppen combination
+framework, each $T_i$-solver for $i = 1, \ldots, l$ takes as input a combination
+of (1) the purified form of $T_i$-constraints occurring in $M$, where terms
+containing symbols not belonging to $T_i$ are replaced by fresh variables of the
+same type; (2) additional equalities and disequalities between variables of
+types not belonging to $T_i$. Let us call this set $M_i$. Each $T_i$ solver
+either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
+$\neg\; C$ is added to $F$, adds a clause $C$ to $F$, or does nothing.
+When $M$ is a complete assignment for $F$, a theory solver can only choose to do
+nothing when $M_i$ is indeed $T_i$-satisfiable.
 
-Assume $\Ec$ is initially the set $M_i$ described above.
-For each equality added to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t \teq s$,
-which we call its \emph{explanation}.
-Similarly, each $\Val \ec{x}$ is also associated an explanation, that is,
-a set of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of $\Ec$ are of the form $\Val \ec{x}$.
-For example, if $x \teq \const{C}( x ) \in M_i$, then $x \teq \const{C}( x )$ is a (possible) explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
-Thus, the rules of the calculus are implemented as follows.
-For all rules with conclusion $\bot$,
-we report the union of the explanations for all premises is $\thD$-unsatisfiable.
-For the \rn{Split} rule, we add a clause of the form
-$\const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr) \mathrel\lor \cdots \mathrel\lor t \teq \const{C}_m\bigl( \const s^1_m( t ), \ldots, \const s^{n_m}_m( t ) \bigr)$
-to $F$.
-Decisions on which branch to take are thus performed externally by the SAT solver, and not by the theory solver.
-All other rules add equalities to the internal state of the theory solver.
-The rules in phase~1 (along with the optimization for collapsing selectors) and the \rn{Single} rule are performed eagerly,
-that is for partial satisfying assignments $M$, while the rules in phase~2 and the \rn{Split} rule are performed only for complete satisfying assignments $M$,
-and in that order.
+Assume $\Ec$ is initially the set $M_i$ described above. For each equality added
+to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t
+\teq s$, which we call its \emph{explanation}.
+Similarly, each $\Val \ec{x}$ is also associated an explanation---that is, a set
+of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of
+$\Ec$ are of the form $\Val \ec{x}$. For example, if $x \teq \const{C}( x ) \in
+M_i$, then $x \teq \const{C}( x )$ is an %(possible)
+explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
+Thus, the rules of the calculus are implemented as follows. For all rules with
+conclusion $\bot$, we report the union of the explanations for all premises is
+$\thD$-unsatisfiable. For the \rn{Split} rule, we add a clause of the form
+$\const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr)
+\mathrel\lor \cdots \mathrel\lor t \teq \const{C}_m\bigl( \const s^1_m( t ),
+\ldots, \const s^{n_m}_m( t ) \bigr)$ to $F$.
+Decisions on which branch to take are thus performed externally by the SAT
+solver and not by the theory solver. All other rules add equalities to the
+internal state of the theory solver. The rules in phase~1 (along with the
+optimization for collapsing selectors) and the \rn{Single} rule are performed
+eagerly---that is, for partial satisfying assignments $M$---while the rules in
+phase~2 and the \rn{Split} rule are performed only for complete satisfying
+assignments $M$, and in that order.\rem{in what order?}
 
-    * sharing is caring (let's cite it for a change)
-    * theory combination more complicated (and Theorem Completeness too weak)
-
+\rem{TODO: * sharing is caring (let's cite it for a change)}
+\rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
     
 \paragraph{Optimizations.}
-Our implementation uses several optimizations not reflected in the presentation of the calculus, which closely follow the approach outlined by Barrett et al.\ \cite{barrett-et-al-2007}.
-We only briefly mention these optimizations, since each applies to datatypes as well as codatatypes, and most have been presented thoroughly in Barrett et al.
+Our implementation uses several optimizations not reflected in the presentation
+of the calculus, which closely follow the approach outlined by Barrett et al.\
+\cite{barrett-et-al-2007}.%
+\rem{What closely follows the approach by Barrett et al.? The optimizations or
+the calculus?}
+We only briefly mention these optimizations, since
+each applies to datatypes as well as codatatypes, and most have been presented
+thoroughly in Barrett et al.
 
 Discriminators are treated as predicate symbols, so a discriminator $\const{d}_{\negvthinspace j}( t )$ is such that $\const{d}_{\negvthinspace j}$
 is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^n_{\negvthinspace j}( t ) \bigr)$.
 We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several
-additional rules (see~Barrett et al.\ \cite{barrett-et-al-2007} for more
-details), which apply uniformly to both datatypes and codatatypes.
+additional rules \cite{barrett-et-al-2007},
+which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
-if $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the constructor
-$\const{C}_{\negvthinspace j}( \vec u )$, we immediately infer $\const s^k_{\negvthinspace j}( t ) \teq u_k$, whereas the calculus we presented would apply \rn{Split} and \rn{Inject} before inferring this equality.
-For the sake of reducing the number of unique constraints considered by the calculus, we compute a normal form for constraints as a preprocessing step.
-In particular, we
-replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term ordering,
-replace $\const{C}_{\negvthinspace j}( \vec t ) \teq \const{C}_{\negvthinspace\jPrime}( \vec u )$ with $\bot$ when $j \neq \jPrime$,
-replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$ by $t_k$,
-and replace all occurrences of discriminators $\const{d}_{\negvthinspace j}( \const{C}_{\negvthinspace\jPrime}( \vec t ) )$ by $\top$ if $j = \jPrime$ and $\bot$ otherwise.
+If $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the
+constructor $\const{C}_{\negvthinspace j}( \vec u )$, we immediately infer
+$\const s^k_{\negvthinspace j}( t ) \teq u_k$, whereas the calculus we presented
+would apply \rn{Split} and \rn{Inject} before inferring this equality. For the
+sake of reducing the number of unique constraints considered by the calculus, we
+compute a normal form for constraints as a preprocessing step. In particular, we
+replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term
+ordering, replace $\const{C}_{\negvthinspace j}( \vec t ) \teq
+\const{C}_{\negvthinspace\jPrime}( \vec u )$ with $\bot$ when $j \neq \jPrime$,
+replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}(
+\const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$ by $t_k$, and replace
+occurrences of discriminators $\const{d}_{\negvthinspace j}(
+\const{C}_{\negvthinspace\jPrime}( \vec t ) )$ by $\top$ or $\bot$
+based on whether $j = \jPrime$.
 
 %\section{Examples}
 %\label{sec:examples}
@@ -1943,34 +1981,6 @@ and replace all occurrences of discriminators $\const{d}_{\negvthinspace j}( \co
 \newcommand\gandl{G\&L}
 \newcommand\HD[1]{\hbox to2.5em{\hfill#1\hfill}}
 
-\begin{table*}[tbh!]
-\normalsize
-\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern.5em}c@{\kern1.3em}c@{\;}}
-  & \HD{Distro} & \HD{AFP} & \HD{\gandl} & \relax{All}
-\MIDRULE
-No (co)datatypes
-  & 229 & 765 & \phantom{0}61 & 1055 \\[\jot]
-%Datatype simplication only
-%  &  \\
-Datatypes without \rn{Acyclic}
-  & 235 & 770 & \phantom{0}61 & 1066 \\
-Full datatypes
-  & 235 & 773 & \phantom{0}61 & 1069 \\[\jot]
-%Codatatype simplication only
-%  &  \\
-Codatatypes without \rn{Unique}
-  & 230 & 794 & \phantom{0}65 & 1089 \\
-Full codatatypes
-  & 231 & 794 & \bfseries \phantom{0}68 & 1093 \\[\jot]
-Full (co)datatypes
-  & \bfseries 237 & \bfseries 802 & \bfseries \phantom{0}68 & \bfseries 1107 \\[\jot]
-Total number of goals
-  & 879 & 2974\phantom{0} & 317 & 4170
-\end{tabular}\end{center}
-\caption{\,Number of solved goals for the three benchmark suites}
-\label{tab:bench}
-\end{table*}
-
 To evaluate the decision procedure, we generated problems from existing
 Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
 Codatatypes being a recent addition to Isabelle
@@ -1979,7 +1989,7 @@ included all the theory files from the Isabelle distribution (Distro) and the \e
 of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
 within the supported fragment. We also included two unpublished theories by
 Peter Gammie and Andreas Lochbihler (\gandl), about Bird and Stern--Brocot trees.
-To also exercise the the support
+To also exercise the support
 for datatypes, the benchmarks are complemented by theories about lists
 and tree data structures. The theories were selected before running the
 experiments. The experimental data is publicly available.%
@@ -2011,6 +2021,34 @@ tautologies.
 %  * so when analyzing statistics of this kind, with highly varied problems,
 %    we must not overestimate the importance of a single trick
 %  * on the other hand: every percentage point counts! cite Tom Hales
+
+\begin{table*}[tbh!]
+\normalsize
+\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern.5em}c@{\kern1.3em}c@{\;}}
+  & \HD{Distro} & \HD{AFP} & \HD{\gandl} & \relax{All}
+\MIDRULE
+No (co)datatypes
+  & 229 & 765 & \phantom{0}61 & 1055 \\[\jot]
+%Datatype simplication only
+%  &  \\
+Datatypes without \rn{Acyclic}
+  & 235 & 770 & \phantom{0}61 & 1066 \\
+Full datatypes
+  & 235 & 773 & \phantom{0}61 & 1069 \\[\jot]
+%Codatatype simplication only
+%  &  \\
+Codatatypes without \rn{Unique}
+  & 230 & 794 & \phantom{0}65 & 1089 \\
+Full codatatypes
+  & 231 & 794 & \bfseries \phantom{0}68 & 1093 \\[\jot]
+Full (co)datatypes
+  & \bfseries 237 & \bfseries 802 & \bfseries \phantom{0}68 & \bfseries 1107 \\[\jot]
+Total number of goals
+  & 879 & 2974\phantom{0} & 317 & 4170
+\end{tabular}\end{center}
+\caption{\,Number of solved goals for the three benchmark suites}
+\label{tab:bench}
+\end{table*}
 
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
 makes a difference across all theories. Overall, it accounts for a success rate
