@@ -120,8 +120,6 @@
 \newcommand{\teq}{\approx}
 \newcommand{\tneq}{\not\teq}
 \newcommand{\rem}[1]{\textcolor{red}{[#1]}}
-%\newcommand{\is}[1]{is\text{-} #1}
-\newcommand{\is}[1]{\const{is#1}}
 %\newcommand{\ror}{\parallel}
 %\newcommand{\ror}{{\&}}
 %\newcommand{\ROR}{\kern.45em \ror \kern.45em}
@@ -164,7 +162,7 @@
 %%% like you did in the string paper).
 %%% How about the following? I'm pretty sure \mathcal has been used for theories
 %%% before by other authors.
-\newcommand{\thD}{\mathcal{CD}}
+\newcommand{\thD}{\mathcal{DC}}
 
 %\newcommand\Types{\mathcal{T}}
 \newcommand\Types{\mathcal{Y}}
@@ -617,12 +615,12 @@ The semantic notion is more precise and is the one that interests us.
 In addition, nothing forbids non(co)recursive specifications
 such~as
 \begin{conf}%
-\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} = \const{None} \mid \const{Some}(\tau)$.%
+\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} \,=\, \const{None} \,\mid\, \const{Some}(\tau)$.%
 \end{conf}%
 \begin{rep}%
 \[\begin{aligned}[t]
-      \keyw{datatype}\;\, \ty{option}_{\,\tau} & \,=\, \const{None} \mid \const{Some}(\tau) \\[-.5\jot]
-      \keyw{codatatype}\; \,\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
+      \keyw{datatype}~\vthinspace\ty{option}_{\,\tau\!} & \,=\, \const{None} \,\mid\, \const{Some}(\tau) \\[-.5\jot]
+      \keyw{codatatype}~\vthinspace\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
 \end{aligned}
 \]
 At the semantic level, it makes no difference whether such types are
@@ -646,7 +644,7 @@ A drawback of this approach is that it does
 not naturally account for selectors applied to wrong constructors. Barrett et
 al.\ address this by parameterizing the construction by default values, but
 this gives rise to spurious equalities between unrelated terms---e.g.,
-$\const{s}_{11}(\const{C}_2) \teq \const{s}_{11}(\const{C}_3)$. This flaw
+$\const{s}_1^1(\const{C}_2) \teq \const{s}_1^1(\const{C}_3)$. This flaw
 could be corrected, but the added complexity seems to suggest that selectors
 are better characterized axiomatically.
 
@@ -661,7 +659,7 @@ their selectors.
 
 Datatypes and codatatypes share many basic properties pertaining to
 constructors and selectors. All properties below are implicitly universally
-quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:\rem{Introduce that $\is{C}$ is notation for discriminators.}
+quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
 % and to all possible splits of the
 %$n$-ary constructor $\const{C}_{i\negvthinspace j}$'s argument list into $\bar x,
 %y, \bar z$:
@@ -677,7 +675,7 @@ quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:\rem{In
     \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(x_1,\ldots,x_{k-1},y,x_{k+1},\ldots,x_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y}
   \\[-.5\jot]
 \text{Exhaustiveness:}\quad
-  & \smash{\is{C}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \is{C}_{im_i}(x)}
+  & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
   \\[-.5\jot]
 \text{Selection:}\quad
   & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k}
@@ -725,8 +723,8 @@ witnesses $R_i$ that are required to be bisimulations:
 %
 \[
 \begin{aligned}[t]
-\text{Coinduction:}\kern.8em %%% TYPESETTING: should be \quad
-\AXC{\strut$\begin{gathered}\textstyle \bigwedge_{\,i}\, R_i[v_i, w_i] \\[-\jot]\textstyle
+\text{Coinduction:}\quad
+\AXC{\strut$\begin{gathered}\textstyle \smash{\bigwedge_{\,i}\, R_i[v_i, w_i]} \\[-\jot]\textstyle
 \bigwedge_{\,i}\, \forall v\; w.\;\, R_i[v, w] \longrightarrow
   \bigwedge_{\,j}\, \const{d}_{\negvthinspace j}(v) \teq \const{d}_{\negvthinspace j}(w)
   \mathrel\land
@@ -759,8 +757,8 @@ function space $\ty{nat} \to \ty{int}$.
 %best way to justify it though, but for the conference at least we can just claim it. (we
 %won't have the place for a proof anyway).
 
-Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory of}
-(\emph{co})\emph{datatypes},
+Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory of
+datatypes and codatatypes},
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
 namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
 properties mentioned in this section. In particular, the interpretations
@@ -1182,7 +1180,7 @@ Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules operate as foll
 For acyclicity, if $\ec{t}$ is a datatype equivalence class
 whose values $\Val \ec{t} = \MU x.\; u$ are cyclic
 (as required by the precondition $x \in \FV( u )$),
-then $\Ec$ is unsatisfiable.
+then $\Ec$ is $\thD$-unsatisfiable.
 For uniqueness, if $\ec{t}$, $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$, $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
@@ -1251,7 +1249,7 @@ the \rn{Unique} rule can finally derive $x \teq y$.
 %%% Naturally, thanks to our assumptions at the beginning of Sect. 3, our types
 %%% are either finite or infinite.
 
-\begin{figure}[b!]
+\begin{figure}[t!]
 \normalsize
 \centering
 \begin{tabular}{c}
@@ -1284,6 +1282,7 @@ the \rn{Unique} rule can finally derive $x \teq y$.
 \)
 \rn{Single}
 \end{tabular}
+%%% TODO: Clarify s's?
 \caption{\,Derivation rules for branching%.
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
 %Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
@@ -1300,10 +1299,10 @@ A companion rule, \rn{Single}, focuses on the degenerate case where two
 terms from $\tEc$ have a corecursive singleton type
 (Section~\ref{sec:the-theory-of-co-datatypes}) and must therefore be equal. Both
 the finiteness assumption on the datatype in \rn{Split} and the singleton
-constraint on the codatatype in \rn{Single} can be computed statically
+constraint on the codatatype in \rn{Single} can be evaluated statically
 based on a recursive computation of the cardinalities of the
-constructors' argument types (assuming all types in $\Nondata$ are
-infinite).
+constructors' argument types. This step relies on the assumption that all types
+in $\Nondata$ are infinite.
 
 \paragraph{Correctness.}
 Correctness means that if there exists a closed derivation tree with root node
@@ -1317,22 +1316,25 @@ conclude that $\Ec$ is $\thD$-satisfiable.
 All derivation trees are finite.
 \end{theorem}
 \begin{proof}
-Consider a derivation tree with root node $\Ec$.
-Let $\SSS \subseteq \tEc$ be the set of terms occurring as arguments of selectors.
-Let $T \subseteq \tEc$ be the set of terms whose types are finite datatypes.
-For each term $t \in T$\negvthinspace,
-let
+Consider a derivation tree with root node $\Ec$. Let $D \subseteq \tEc$ be the
+set of terms whose types are finite datatypes, and let $\SSS \subseteq \tEc$ be
+the set of terms occurring as arguments to selectors. For each term $t \in
+D$\negvthinspace, let
 \begin{align*}
 \smash{\SSSS 0_t} & = \{ t \}
-& \smash{\SSSS {i+1}_t} & = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u\typ{\delta} \in \SSSS i{,}~ \delta \in \Data{,}~ \left|\delta\right| \text{ is finite}{,}~ \const{s} \in \Sel^{\delta}}  \}
+& \smash{\SSSS {i+1}_t} & = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u\typ{\delta} \in \SSSS i_t{,}~ \delta \in \Data{,}~ \left|\delta\right| \text{ is finite}{,}~ \const{s} \in \Sel^{\delta}}  \}
 \end{align*}
 %for $i \geq 0$, let ;
 and let $\SSSS \AST_t$ be the limit of this sequence.
-This is a finite set for each $t$ because the values of the type of $t$ are of finite size.
-Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in T$,
-and let $\tcEc$ be the set of subterms of $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t\typ{\delta} \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
+This is a finite set for each $t$ because the values of the type of $t$ are of finite size\rem{Clarify}.
+Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in D$,
+and let $\tcEc$ be the set of subterms of
+%
+$$\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t\typ{\delta} \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$$
+%
 In a derivation tree with root node~$\Ec$,
-it can be shown by case analysis on the rules of the calculus that each non-root node $\Fc$ is such that
+it can be shown by %case analysis
+induction on the rules of the calculus that each non-root node $\Fc$ is such that
 $\mathcal{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
 Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\left| \smash{\tcEc}\vphantom{X} \right|{\!}^2$,
 which is finite since $\tcEc$ is finite.
@@ -1350,11 +1352,11 @@ If the tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
 then $\Ec$ is $\thD$-unsatisfiable.
 For \rn{Conflict}, this is a consequence of equality reasoning.
 For \rn{Clash}, this is a consequence of distinctness.
-For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that term~$t$ can take in models of $\Ec$ is infeasible,
-and thus $\Ec$ is unsatisfiable.
+For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that term~$t$ can take in models of $\Ec$ is infeasible.
 If the child nodes of $\Ec$ are closed derivation trees
-whose root nodes are the result of applying the rule \rn{Split} on $t\typ{\delta}$,
-by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is unsatisfiable
+whose root nodes are the result of applying \rn{Split} on $t\typ{\delta}$,
+by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is
+$\thD$-unsatisfiable
 for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
 Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)$,
 this means $\Ec$ is $\thD$-unsatisfiable.
