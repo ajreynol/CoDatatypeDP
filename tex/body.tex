@@ -28,6 +28,9 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
+\newcommand\NOK[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand\OK[1]{#1}
+
 %\newcommand\typ[1]{: #1}
 \newcommand\typ[1]{^{\vthinspace #1}}
 
@@ -1938,15 +1941,15 @@ No (co)datatypes
   & 229 & 765 & \phantom{0}61 & 1055 \\[\jot]
 %Datatype simplication only
 %  &  \\
-Datatypes without acyclicity
+Datatypes without \rn{Acyclic}
   & 235 & 770 & \phantom{0}61 & 1066 \\
-Datatypes with acyclicity
+Full datatypes
   & 235 & 773 & \phantom{0}61 & 1069 \\[\jot]
 %Codatatype simplication only
 %  &  \\
-Codatatypes without uniqueness
+Codatatypes without \rn{Unique}
   & 230 & 794 & \phantom{0}65 & 1089 \\
-Codatatypes with uniqueness
+Full codatatypes
   & 231 & 794 & \bfseries \phantom{0}68 & 1093 \\[\jot]
 Full (co)datatypes
   & \bfseries 237 & \bfseries 802 & \bfseries \phantom{0}68 & \bfseries 1107 \\[\jot]
@@ -1960,15 +1963,16 @@ Total number of goals
 To evaluate the decision procedure, we generated problems from existing
 Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
 Codatatypes being a recent addition to Isabelle
-\cite{blanchette-et-al-2014-impl}, benchmarks are somewhat hard to come by. We
-included the theory files from the Isabelle distribution (Distro) and the \emph{Archive
+\cite{blanchette-et-al-2014-impl}, benchmarks are not abundant. We
+included all the theory files from the Isabelle distribution (Distro) and the \emph{Archive
 of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
 within the supported fragment. We also included two unpublished theories by
 Peter Gammie and Andreas Lochbihler (\gandl), about Bird and Stern--Brocot trees.
 To also exercise the the support
-for datatypes, the benchmarks are complemented by theories about various list
-and tree data structures. The theory files were selected before running the
-experiments. The experimental data is publicly available \cite{our-eval-data}.
+for datatypes, the benchmarks are complemented by theories about lists
+and tree data structures. The theories were selected before running the
+experiments. The experimental data is publicly available.%
+\footnote{\url{http://TODO/FIXME.}}
 
 For each goal in each theory file, Sledgehammer was invoked to select
 256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
@@ -1989,8 +1993,6 @@ tautologies.
 %benefits of activating the decision procedure as opposed to letting
 %Sledgehammer do what it would normally do?}
 
-\newcommand\BAD[1]{\textcolor{red}{\textbf{#1}}}
-
 %  * experience with such features is not extremely high -- e.g. arithmetic,
 %    a most useful theory on lots of benchmarks, increases Sledgehammer's
 %    success rate by 2 percentage points, or 4\%, with Z3 in earlier work \cite{xxx}
@@ -2000,20 +2002,17 @@ tautologies.
 %  * on the other hand: every percentage point counts! cite Tom Hales
 
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
-makes a difference across all theories, and an overall difference of
-\BAD{4.7\%}. Moreover, every aspect of the procedure, including the more
-expensive rules, make a contribution. \textbf{NOT TRUE}: What is not visible in the table, but
-readily available when looking at the raw data \cite{our-eval-data}, is that
-the stronger decision procedures subsume the weaker ones. In the context of
-Sledgehammer, the power of interpreted (co)datatypes is roughly
-comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}.
-
+makes a difference across all theories. Overall, it accounts for a success rate
+increase of \OK{4.9\%}. Moreover, every aspect of the procedure, including the
+more expensive rules, make a contribution.
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
-
-Among the four uniqueness proofs, three corresponded to one-line
-proofs in Isabelle, of the form \keyw{by}~\textit{coinduction}~\textit{auto}
-\cite{blanchette-et-al-2014-impl}. The fourth proof was somewhat more elaborate:
+%
+Three proofs were found thanks to
+the \rn{Acyclic} rule and four required the \rn{Unique} rule. Among the latter,
+three correspond to one-line proofs in Isabelle, of the form
+\keyw{by}~\textit{coinduction}~\textit{auto} \cite{blanchette-et-al-2014-impl}.
+The fourth proof, by Gammie and Lochbihler, is more elaborate:
 %
 \begin{quote}
 \keyw{lemma} \,\textit{X0\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \Longrightarrow x = \const{X0}$ \\
@@ -2026,6 +2025,11 @@ proofs in Isabelle, of the form \keyw{by}~\textit{coinduction}~\textit{auto}
 \noindent
 where \const{X0} is defined as $\const{X0} =
 \const{Node}\;0\;\const{num}\;\const{X0}$.
+
+The raw data also reveals that the
+stronger decision procedures almost completely subsume the weaker ones. For
+Sledgehammer, the power of interpreted (co)datatypes is roughly comparable to
+that of arithmetic \cite{blanchette-et-al-2013-smt}.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -2043,14 +2047,16 @@ On the practical side, we obtained respectable results on Isabelle benchmarks.
 
 This work is part of a larger program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
-interactive theorem proving. As future work, we want to implement proof
-reconstruction for CVC4's (co)datatype inferences in Isabelle. We also want to
-try out CVC4 for higher-order model finding in Isabelle, as an alternative to
-the counterexample generator Nitpick \cite{blanchette-nipkow-2010}. We
-see some opportunities to enrich SMT solvers with recursive and corecursive
-functions. Finally, it might be possible to go further in terms of supporting
-nested and mixed (co)recursion and quantified formulas over (co)datatypes in
-solvers.
+interactive theorem proving. As future work, it would be useful to implement
+proof reconstruction for CVC4's (co)datatype inferences in Isabelle. We also
+want to try out CVC4 for higher-order model finding in Isabelle, as an
+alternative to the counterexample generator Nitpick
+\cite{blanchette-nipkow-2010}. Finally, it might be worthwhile to enrich SMT
+solvers with explicit support for recursive and corecursive functions.
+
+%Finally, it might be possible to go
+%further in terms of supporting nested and mixed (co)recursion and quantified
+%ormulas over (co)datatypes in solvers.
 
 \def\ackname{Acknowledgment}
 \paragraph{\ackname.}
