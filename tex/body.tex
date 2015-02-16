@@ -374,7 +374,7 @@ associated with this paper \cite{our-report}.
 The procedure is implemented in the SMT solver CVC4 as a combination
 of rewriting and a theory solver
 (Section~\ref{sec:the-theory-solver}).
-\rem{CHECK WITH IMPLEMENTATION, but round to nearest 50 or 1000.}
+\rem{CHECK WITH IMPLEMENTATION, but round to nearest 50 or 100 LOC.}
 It consists of about 2000 lines of \cpp{} code, among which 1600 are
 shared between datatypes and codatatypes. The code is integrated in the
 development version of the solver and is expected to be part of the CVC4~1.5 release.
@@ -927,8 +927,8 @@ Second, all types $\tau \in \Nondata$ have infinite cardinality.
 This is not overly restrictive, because each interpreted type $\tau \in \Nondata$
 having finite cardinality~$n$
 can be replaced by an enumeration datatype with $n$~nullary constructors.
-Moreover, since the constraints in $\Ec$ are ground, they cannot entail an upper bound
-on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
+Finally, since the constraints in $\Ec$ are ground, they cannot entail an upper
+bound on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
 we may without loss of generality %or completeness
 treat all types in $\Nondata$ as infinite.
 
@@ -1132,9 +1132,9 @@ The mapping $\Val$ is computed as follows.
 With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
 of the same type as $u$
 %not occurring in $\tEc$,
-and set $\Val\ec{u} = {\Varec{u}}$.
-Thus, there are initially no constraints on the values for any equivalence class $\ec{u}$.
-The mapping $\Val$ is refined by applying the following unfolding rule exhaustively:\strut
+and let $\Val\ec{u} = {\Varec{u}}$. Therefore, there are initially no
+constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
+is refined by applying the following unfolding rule exhaustively:\strut
 \[
 \hbox{\(
 \inferrule{
@@ -1179,14 +1179,14 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \end{examplex}
 
 Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules operate as follows.
-For acyclicity, if $\ec{t\typ{\delta}}$ is a datatype equivalence class
+For acyclicity, if $\ec{t}$ is a datatype equivalence class
 whose values $\Val \ec{t} = \MU x.\; u$ are cyclic
-(as indicated by the precondition $x \in \FV( u )$),
+(as required by the precondition $x \in \FV( u )$),
 then $\Ec$ is unsatisfiable.
 For uniqueness, if $\ec{t}$, $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$, $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
-then $t \teq u$. This rule may seem too restrictive, since
+then $t \teq u$. This may seem too restrictive, since
 $\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ specify the same
 value despite being $\alpha$-disequivalent, but the rule will
 make some progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
@@ -1221,9 +1221,10 @@ the \rn{Unique} rule applies to derive $y \teq \const{S}(y)$.
 %Intuitively, this equality holds, since the values of $y$ and $\const{S}(y)$
 %are equivalent.
 %
-Next, phase~1 is activated again to produce the equivalence classes
+At this point, phase~1 is activated again to refine the equivalence classes,
+yielding
 $\{ x,\, \const{S}(x) \}$ and
-$\{ y,\, \const{S}(y),\, \const{S}(\const{S}(y)) \}$.
+$\{ y,\, \const{S}(y),\allowbreak\, \const{S}(\const{S}(y)) \}$.
 The mapping $\Val$ is updated accordingly:
 \begin{conf}%
 $\Val \ec{y} \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})$.
@@ -1235,10 +1236,10 @@ $\Val \ec{y} \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})$.
 \Val \ec{y} & \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})
 \end{align*}
 \end{rep}
-Finally, since $\Val \ec{x} \aequiv \Val \ec{y}$,
+Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 %for the renaming
 %$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
-the \rn{Unique} rule derives $x \teq y$.
+the \rn{Unique} rule can finally derive $x \teq y$.
 \xend
 \end{examplex}
 
@@ -1301,7 +1302,7 @@ terms from $\tEc$ have a corecursive singleton type
 the finiteness assumption on the datatype in \rn{Split} and the singleton
 constraint on the codatatype in \rn{Single} can be computed statically
 based on a recursive computation of the cardinalities of the
-constructors' argument types (and assuming all types in $\Nondata$ are
+constructors' argument types (assuming all types in $\Nondata$ are
 infinite).
 
 \paragraph{Correctness.}
