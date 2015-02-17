@@ -1669,7 +1669,7 @@ $\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
 $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
 to ${\Varec{x}}$.
 Legal substitutions for ${\Varec{x}}$ may cause the range of $\Val$ to contain abnormal terms.
-After applying the substitution for the third term mentioned above\rem{which third term?},
+After applying the substitution for $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$, we have that
 $\Val \ec{w_1}$ is $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
 which has normal form
 $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )$.
@@ -1926,7 +1926,8 @@ truth values such that no clause in $F$ is falsified. We may interpret such a
 partial assignment as a set of literals where $a \in M$ for all atoms $a$ that
 it assigned the value $\top$, and $\neg\; a \in M$ for all atoms that it assigns
 the value $\bot$. Then, at a high level, by the Nelson--Oppen combination
-framework, each $T_i$-solver for $i = 1, \ldots, l$ takes as input a combination
+framework (its variant used in CVC4 is described in~\cite{jovanovic2011sharing}), 
+each $T_i$-solver for $i = 1, \ldots, l$ takes as input a combination
 of (1) the purified form of $T_i$-constraints occurring in $M$, where terms
 containing symbols not belonging to $T_i$ are replaced by fresh variables of the
 same type; (2) additional equalities and disequalities between variables of
@@ -1952,15 +1953,29 @@ $\const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr)
 \ldots, \const s^{n_m}_m( t ) \bigr)$ to $F$.
 Decisions on which branch to take are thus performed externally by the SAT
 solver and not by the theory solver. All other rules add equalities to the
-internal state of the theory solver. The rules in phase~1 (along with the
-optimization for collapsing selectors) and the \rn{Single} rule are performed
+internal state of the theory solver. The rules in phase~1 along with the
+optimization for collapsing selectors are performed
 eagerly---that is, for partial satisfying assignments $M$---while the rules in
-phase~2 and the \rn{Split} rule are performed only for complete satisfying
-assignments $M$, and in that order.\rem{in what order?}
+phases~2 and~3 are performed only for complete satisfying
+assignments $M$. 
 
-\rem{TODO: * sharing is caring (let's cite it for a change)}
+Prior to constructing a model for $F$, the theory solver does not explicitly construct $\mu$-terms nor the map $\Val$.
+Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
+To recognize when the precondition of \rn{Acyclic} holds,
+the procedure considers each datatype equivalence class $\ec{t}$ containing a constructor $\const{C}( t_1, \ldots, t_n )$.
+It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all arguments of constructors in these equivalence classes in the same way.
+If while doing so it returns to $\ec{t}$, then it deduces that \rn{Acyclic} applies to $t$.
+To recognize when the precondition of \rn{Unique} holds,
+the procedure considers the set $S$ of all codatatype equivalence classes.
+It simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $S$,
+while partitioning $S$ into $S_1, \ldots, S_n$,
+where all terms in $S_i$ have the same constructor type for all their subterms of type $\Data \cup \Codata$,
+and are equivalent for all subterms of type $\Nondata$.
+If after doing so, some $S_i$ contains two terms $u$ and $v$, then it deduces that \rn{Unique} applies to $u$ and $v$.
+
+%\rem{TODO: * sharing is caring (let's cite it for a change)}
 \rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
-\rem{TODO: representation of $\mu$-terms?}
+%\rem{TODO: representation of $\mu$-terms?}
 
 \paragraph{Extension to Quantified Formulas.}
 Two paras. One general one that talks about:
@@ -1974,11 +1989,9 @@ Two paras. One general one that talks about:
 One more specific that talks about the cardinality calculus.
     
 \paragraph{Optimizations.}
-Our implementation uses several optimizations not reflected in the presentation
-of the calculus, which closely follow the approach outlined by Barrett et al.\
-\cite{barrett-et-al-2007}.%
-\rem{What closely follows the approach by Barrett et al.? The optimizations or
-the calculus?}
+Our implementation uses several optimizations which
+follow the approach outlined by Barrett et al.\cite{barrett-et-al-2007}
+and are not reflected in the presentation of the calculus.
 We only briefly mention these optimizations, since
 each applies to datatypes as well as codatatypes, and most have been presented
 thoroughly in Barrett et al.
@@ -2033,7 +2046,7 @@ experiments. The experimental data is publicly available.%
 For each goal in each theory file, Sledgehammer was invoked to select
 256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
 along with the goal \cite{boehme-2012-phd}. The resulting problem was given to
-CVC4, running for up to \textbf{TODO: XXX} seconds on the StarExec cluster
+CVC4, running for up to 60 seconds on the StarExec cluster
 \cite{stump-et-al-2014-starexec}. Problems involving no (co)datatypes were
 filtered out. Due to the lack of machinery for reconstructing inferences about
 (co)datatypes in Isabelle, CVC4 is trusted as an oracle in these experiments.
@@ -2128,7 +2141,7 @@ a complication specific to codatatypes.
 % difficult per se, but there are tricky corner cases to take care of if we care
 % about completeness (which we do).
 %% alliteration
-On the practical side, we obtained respectable results on Isabelle benchmarks.
+On the practical side, we obtained respectable results on Isabelle benchmarks. \rem{emphasize new capabilities allows us to improve state of the art.}
 
 This work is part of a larger program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
@@ -2145,9 +2158,11 @@ solvers with explicit support for recursive and corecursive functions.
 
 \def\ackname{Acknowledgment}
 \paragraph{\ackname.}
-We owe a great debt to Clark Barrett and Cesare Tinelli for datatype case blah
-blah blah. \rem{TODO FIXME}
-Morgan Deters?
+We owe a great debt to the development team of CVC4, 
+including Clark Barrett and Cesare Tinelli,
+and in particular Morgan Deters,
+who jointly with the first author developed the theory solver for datatypes in
+CVC4.
 %
 Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
 Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
@@ -2160,7 +2175,7 @@ Andrei Popescu helped clarify our thoughts regarding the axiomatization of
 codatatypes. Dmitriy Traytel took part in discussions about degenerate
 codatatypes.
 %
-Blanchette's research was partially supported by the Deutsche
+The second author's research was partially supported by the Deutsche
 Forschungs\-gemein\-schaft (DFG) project
 \relax{Hardening the Hammer} (grant Ni\,491\slash 14-1).
 
