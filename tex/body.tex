@@ -348,9 +348,20 @@ differences.
 
 First, \emph{codatatypes need not be well-founded.}
 For example, the type
-%
-\[\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\, \const{SCons}(\tau,\: \ty{stream}_{\,\tau})\]
-%
+
+\begin{conf}
+\kern-2pt %%% TYPESETTING: HACK
+\end{conf}
+
+\vskip\abovedisplayskip
+\noindent\centerline{$\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\, \const{SCons}(\tau,\: \ty{stream}_{\,\tau})$}
+\vskip\belowdisplayskip
+
+\begin{conf}
+\kern-2pt %%% TYPESETTING: HACK
+\end{conf}
+
+\noindent
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
 corresponding datatype would be rejected as non-well-founded \cite{blanchette-et-al-2015-esop}.
 
@@ -376,7 +387,6 @@ a decision procedure.
 %axiomatizations.)
 %axiom.
 
-\looseness=-1
 Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \emph{values as closed terms and
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
 and for theory combinations. The $\mu$-binder notation associates a name with
@@ -451,11 +461,11 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
 \begin{rep}\paragraph{Related Work.} \end{rep}%
-Although it was written several years ago,
+Although it was written a few years ago,
 Barrett et al.\ \cite{barrett-et-al-2007} still provides a good account of
 related work. Since then, datatypes have been added to the SMT solver
-Z3 in unpublished work by Leonardo de Moura and to a SPASS-like %prototypical
-superposition prover by Daniel Wand \cite{wand-2014}.
+Z3 in unpublished work \begin{rep}by Leonardo de Moura \end{rep}and to a SPASS-like %prototypical
+superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
 Closely related is the automatic structural
 induction in superposition provers \cite{kersani-peltier-2013,wand-weidenbach-201x}
 and SMT solvers \cite{reynolds-kuncak-2015}.
@@ -485,11 +495,15 @@ inspired by the $\mu$-calculus \cite[etc.]{kozen-1983,endrullis-et-al-2011}.
 %
 %     * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
 
+\begin{conf}
+\kern-2.9pt %%% TYPESETTING: HACK
+\end{conf}
+
 \paragraph{Conventions.}
 The setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
-set of function symbols $\Funcs$. Types are simply atomic sorts, with no
-structure, and interpreted by nonempty domains. The set~$\Types$ must contain a
+set of function symbols $\Funcs$. Types are atomic sorts and interpreted by
+nonempty domains. The set~$\Types$ must contain a
 distinguished type \ty{bool}\begin{rep} interpreted as the set of truth
 values $\{\bot, \top\}$\end{rep}. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
 The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep}.
@@ -500,19 +514,21 @@ The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
 whereas $\tau,\:\upsilon$ range over arbitrary types.
 When applied to terms, the symbol $=$ denotes syntactic equality.\end{rep}
 
+\pagebreak
+
 \begin{rep}
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
 distinguish them from variables (e.g., $x$, $y$).
 \end{rep}
 Symbols starting with an uppercase letter (e.g.,
 $\const{S}$, $\const{Infty}$) are reserved for constructors. With each function symbol \const{f}
-is associated a list of argument types $\tau_1,\ldots,\tau_n$ (with $n \ge 0$)
-and a return type $\tau$. This connection can be expressed %compactly
-as $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{rep},
+is associated a list of argument types $\tau_1,\ldots,\tau_n$ ($n \ge 0$)
+and a return type $\tau$. This connection is written %compactly
+$\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{rep},
 which collapses to $\const{f} : \tau$ if $n = 0$\end{rep}.
-For a term $t$, the notation $t\typ{\tau}$ indicates that it has type $\tau$.
-Functions are invoked in the standard way, with $\const{f}(t_1,\ldots,t_n)$
-applying the $n$-ary function symbol
+The notation $t\typ{\tau}$ indicates that term $t$ has type $\tau$.
+Functions invocations $\const{f}(t_1,\ldots,t_n)$
+apply the $n$-ary function symbol
 \const{f} to $n$ well-typed arguments $t_1 :\nobreak \tau_1$, \ldots, $t_n :
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
