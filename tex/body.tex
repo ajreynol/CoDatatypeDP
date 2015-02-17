@@ -332,8 +332,6 @@ modulo theories) solvers, includes a theory of datatypes.
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in combination
 (Section~\ref{sec:a-ground-decision-procedure-for-co-datatypes}).
-We also discuss extensions of the procedure for handling quantifiers
-(Section~\ref{sec:extension-to-quantified-formulas}).
 The procedure is described abstractly as a calculus and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
@@ -397,12 +395,11 @@ stands for the lasso\begin{rep}-shaped\end{rep} sequence $1, 0, 9, 0, 9, 0, 9,
 %%% 1090909 is a prime number
 
 \begin{conf}
-Detailed proofs of soundness and completeness are included in the technical report
-associated with this paper \cite{our-report}.
+Detailed proofs of soundness and completeness are included in a technical report
+\cite{our-report}.
 \end{conf}%
 The procedure is implemented in the SMT solver CVC4 \cite{barrett-et-al-2011} as a combination
-of rewriting and a theory solver
-(Section~\ref{sec:the-theory-solver}).
+of rewriting and a theory solver (Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
 It consists of about 2000 lines of \cpp{} code, among which \NOK{1600} are
 shared between datatypes and codatatypes. The code is integrated in the
 development version of the solver and is expected to be part of the CVC4~1.5 release.
@@ -512,7 +509,7 @@ The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
 whereas $\tau,\:\upsilon$ range over arbitrary types.
 When applied to terms, the symbol $=$ denotes syntactic equality.\end{rep}
 
-\pagebreak
+\pagebreak[2]
 
 \begin{rep}
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
@@ -1911,19 +1908,8 @@ and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the calculus is sound and complete for $\thD$.
 
-\section{Extension to Quantified Formulas}
-\label{sec:extension-to-quantified-formulas}
-
-  * universal conjecture is no problem:
-    * falls into the ground fragment via negation
-      and skolemization
-  * nor is existential axiom a problem
-  * what's interesting: universal axioms and existential conjectures
-
-Blah.
-
 \section{Implementation as a Theory Solver in CVC4}
-\label{sec:the-theory-solver}
+\label{sec:implementation-as-a-theory-solver-in-cvc4}
 
 The decision procedure for (co)datatypes and its extension to quantified
 formulas were described at a high level of abstraction. This section describes
@@ -1975,6 +1961,17 @@ assignments $M$, and in that order.\rem{in what order?}
 \rem{TODO: * sharing is caring (let's cite it for a change)}
 \rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
 \rem{TODO: representation of $\mu$-terms?}
+
+\paragraph{Extension to Quantified Formulas.}
+Two paras. One general one that talks about:
+\begin{verbatim}
+  * universal conjecture is no problem:
+    * falls into the ground fragment via negation
+      and skolemization
+  * nor is existential axiom a problem
+  * what's interesting: universal axioms and existential conjectures
+\end{verbatim}
+One more specific that talks about the cardinality calculus.
     
 \paragraph{Optimizations.}
 Our implementation uses several optimizations not reflected in the presentation
@@ -2149,7 +2146,7 @@ solvers with explicit support for recursive and corecursive functions.
 \def\ackname{Acknowledgment}
 \paragraph{\ackname.}
 We owe a great debt to Clark Barrett and Cesare Tinelli for datatype case blah
-blah blah. \textbf{TODO FIXME}
+blah blah. \rem{TODO FIXME}
 Morgan Deters?
 %
 Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
