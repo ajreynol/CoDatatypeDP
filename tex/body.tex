@@ -315,8 +315,7 @@ The equation $\const{S}(\infty) \teq \infty$ holds as expected,
 because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
 value~$\infty$.
-Compared
-with the conventional
+Compared with the conventional inductive definition
 \[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
 with a dedicated constructor for representing infinity, the codatatype avoids
 one case by unifying the finite and infinite nonzero cases.
@@ -359,7 +358,8 @@ For example, the type
 
 \noindent
 of infinite sequences, or streams, over an element type $\tau$ is allowed; the
-corresponding datatype would be rejected as non-well-founded \cite{blanchette-et-al-2015-esop}.
+corresponding datatype would be rejected as non-well-founded%
+\begin{rep} \cite{blanchette-et-al-2015-esop}\end{rep}.
 
 Second, \emph{a uniqueness rule replaces the acyclicity rule of datatypes.}
 Cyclic constraints such as
@@ -2075,23 +2075,23 @@ tautologies. Z3 is included for comparison when this is possible.
 \begin{table*}[t!]
 \normalsize
 \begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}cc@{\kern.5em}cc@{\kern.5em}cc@{\kern1.3em}cc@{\;}}
-  & \multicolumn{2}{c}{Distro} & \multicolumn{2}{c}{AFP} & \multicolumn{2}{c}{\gandl} & \multicolumn{2}{c}{All} \\
+  & \multicolumn{2}{c}{Distro} & \multicolumn{2}{c}{AFP} & \multicolumn{2}{c}{\gandl} & \multicolumn{2}{c}{Overall} \\
   & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}
 \MIDRULE
 No (co)datatypes
-  & 209 & 221 & 777 & 785 & \phantom{0}51 & \phantom{0}52 & 1037 & 1048 \\[\jot]
+  & 209 & 221 & 777 & 785 & \phantom{0}51 & \phantom{0}52 & 1037 & 1048 \\%[\jot]
 %Datatype simplication only
 %  &  \\
 Datatypes w/o \rn{Acyclic}
   & & 235 & & 770 & & \phantom{0}61 & & 1066 \\
 Full datatypes
-  & 213 & 227 & 791 & 786 & \phantom{0}51 & \phantom{0}52 & 1055 & 1065 \\[\jot]
+  & 213 & 227 & 791 & 786 & \phantom{0}51 & \phantom{0}52 & 1055 & 1065 \\%[\jot]
 %Codatatype simplication only
 %  &  \\
 Codatatypes w/o \rn{Unique}
   & & 230 & & 794 & & \phantom{0}65 & & 1089 \\
 Full codatatypes
-  & & 231 & & 794 & & \bfseries \phantom{0}68 & & 1093 \\[\jot]
+  & & 231 & & 794 & & \bfseries \phantom{0}68 & & 1093 \\%[\jot]
 Full (co)datatypes
   & & \bfseries 237 & & \bfseries 802 & & \bfseries \phantom{0}68 & & \bfseries 1107% \\[\jot]
 \end{tabular}\end{center}
