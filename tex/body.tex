@@ -2015,7 +2015,7 @@ based on whether $j = \jPrime$.
 \label{sec:experimental-results}
 
 \newcommand\gandl{G\&L}
-\newcommand\HD[1]{\hbox to2.5em{\hfill#1\hfill}}
+\newcommand\HD[1]{\hbox to2.3em{\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
 To evaluate the decision procedure, we generated problems from existing
 Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
@@ -2030,6 +2030,8 @@ for datatypes, the benchmarks are complemented by theories about lists
 and tree data structures. The theories were selected before running the
 experiments. The experimental data is publicly available.%
 \footnote{\url{http://TODO/FIXME.}}
+
+%  & 879 & 2974\phantom{0} & 317 & 4170
 
 For each goal in each theory file, Sledgehammer was invoked to select
 256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
@@ -2058,29 +2060,30 @@ tautologies.
 %    we must not overestimate the importance of a single trick
 %  * on the other hand: every percentage point counts! cite Tom Hales
 
+%%% TODO: Fix data
+
 \begin{table*}[tbh!]
 \normalsize
-\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern.5em}c@{\kern1.3em}c@{\;}}
-  & \HD{Distro} & \HD{AFP} & \HD{\gandl} & \relax{All}
+\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}cc@{\kern.5em}cc@{\kern.5em}cc@{\kern1.3em}cc@{\;}}
+  & \multicolumn{2}{c}{Distro} & \multicolumn{2}{c}{AFP} & \multicolumn{2}{c}{\gandl} & \multicolumn{2}{c}{All} \\
+  & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}
 \MIDRULE
 No (co)datatypes
-  & 221 & 760 & \phantom{0}55 & 1036 \\[\jot]
+  & 209 & 221 & 777 & 785 & \phantom{0}51 & \phantom{0}52 & 1037 & 1048 \\[\jot]
 %Datatype simplication only
 %  &  \\
-Datatypes without \rn{Acyclic}
-  & 227 & 765 & \phantom{0}55 & 1047 \\
+Datatypes w/o \rn{Acyclic}
+  & & 235 & & 770 & & \phantom{0}61 & & 1066 \\
 Full datatypes
-  & 227 & 771 & \phantom{0}55 & 1053 \\[\jot]
+  & 213 & 227 & 791 & 786 & \phantom{0}51 & \phantom{0}52 & 1055 & 1065 \\[\jot]
 %Codatatype simplication only
 %  &  \\
-Codatatypes without \rn{Unique}
-  & 222 & 789 & \phantom{0}56 & 1067 \\
+Codatatypes w/o \rn{Unique}
+  & & 230 & & 794 & & \phantom{0}65 & & 1089 \\
 Full codatatypes
-  & 223 & 789 & \bfseries \phantom{0}59 & 1071 \\[\jot]
+  & & 231 & & 794 & & \bfseries \phantom{0}68 & & 1093 \\[\jot]
 Full (co)datatypes
-  & \bfseries 229 & \bfseries 800 & \bfseries \phantom{0}59 & \bfseries 1088 \\[\jot]
-Total number of goals
-  & 879 & 2974\phantom{0} & 317 & 4170
+  & & \bfseries 237 & & \bfseries 802 & & \bfseries \phantom{0}68 & & \bfseries 1107% \\[\jot]
 \end{tabular}\end{center}
 \caption{\,Number of solved goals for the three benchmark suites}
 \label{tab:bench}
@@ -2088,7 +2091,7 @@ Total number of goals
 
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
 makes a difference across all theories. Overall, it accounts for a success rate
-increase of \OK{5.0\%}. Moreover, every aspect of the procedure, including the
+increase of \OK{4.9\%}. Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
