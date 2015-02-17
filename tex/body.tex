@@ -1526,7 +1526,8 @@ assuming $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u
 
 In the following, we consider only normal models.
 When constructing a model $\M$ for $\Ec$,
-it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.
+it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.%
+\rem{Variables are really part of the model then?}
 For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
 
 %First, we need the following definition.
@@ -1789,16 +1790,16 @@ we have that $\ValC$ satisfies (2) and (3).
 \end{rep}
 
 Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
-model $\M$ can be trivially constructed for $\Ec$. Part~\PART{1} states that the
+model $\M$ can be trivially constructed for $\Ec$. Property~\PART{1} states that the
 values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal
 model. In particular, this means they are closed, normal, and acyclic when
-required. Part~\PART{2} states that the interpretation of all subterms in the
+required. Property~\PART{2} states that the interpretation of all subterms in the
 range of $\ValC$ depends on its associated variable only. In other words, the
 interpretation of a subterm $t$ where $\muvar(t) = {\Varec{x}}$ is equal to
 $\ValC \ec{x}$, independently of the context in which it is interpreted.
-Part~\PART{3} states that $\ValC$ is injective, which in the following ensures
-that a distinct values can be associated with each equivalence class in a
-corresponding model.
+Property~\PART{3} states that $\ValC$ is injective (modulo
+$\alpha$-equivalence), which in the following ensures that a distinct value can
+be associated with each equivalence class in a corresponding model.
 
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
