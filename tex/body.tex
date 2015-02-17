@@ -316,7 +316,7 @@ because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
 value~$\infty$.
 Compared
-with the conventional inductive definition
+with the conventional
 \[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
 with a dedicated constructor for representing infinity, the codatatype avoids
 one case by unifying the finite and infinite nonzero cases.
@@ -328,8 +328,6 @@ including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
 have emerged in a few automatic theorem provers as well. The SMT-LIB~2
 \cite{barrett-et-al-2010} syntax, implemented by most SMT (satisfiability
 modulo theories) solvers, includes a theory of datatypes.
-
-\pagebreak[3]
 
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in combination
@@ -460,8 +458,8 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
-\begin{rep}\paragraph{Related Work.} \end{rep}%
-Although it was written a few years ago,
+\begin{rep}\paragraph{Related Work.} Although\end{rep}%
+\begin{conf}Although\end{conf} it was written a few years ago,
 Barrett et al.\ \cite{barrett-et-al-2007} still provides a good account of
 related work. Since then, datatypes have been added to the SMT solver
 Z3 in unpublished work \begin{rep}by Leonardo de Moura \end{rep}and to a SPASS-like %prototypical
@@ -578,10 +576,14 @@ mixed nested (co)recursion as well as
 \cite{blanchette-et-al-2014-codata}).}
 In the presentation, we allow ourselves some metalevel parameterization
 % at the metalevel
-through subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
+through subscripts%
+\begin{conf}
+(e.g., $\ty{stream}_{\,\tau}$)%
+\end{conf}%
+\begin{rep}---for example, $\ty{stream}_{\,\tau}$ denotes a
 family of ground types including
 $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
-and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.
+and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}\end{rep}.
 
 \newcommand\elll{\kern.18ex l\kern.11ex}
 \newcommand\elllx{\kern.11ex l\kern.18ex}
