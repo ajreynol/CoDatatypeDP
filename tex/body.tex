@@ -2133,22 +2133,22 @@ that of arithmetic \cite{blanchette-et-al-2013-smt}.
 \label{sec:conclusion}
 
 We introduced a decision procedure for the ground theory of datatypes and
-codatatypes and implemented it in the SMT solver CVC4. Our main
+codatatypes. Our main
 contribution has been the support for codatatypes. Both the metatheory and
-the implementation rely heavily on $\mu$-terms to represent cyclic values,
+the implementation in CVC4 rely heavily on $\mu$-terms to represent cyclic values,
 a complication specific to codatatypes.
 % are not very
 % difficult per se, but there are tricky corner cases to take care of if we care
 % about completeness (which we do).
 %% alliteration
-On the practical side, the empirical results on Isabelle benchmarks
+The empirical results on Isabelle benchmarks
 confirm that CVC4's new capabilities improve the state of the art.
 
 This work is part of a program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, it would be useful to implement
-proof reconstruction for CVC4's (co)datatype inferences in Isabelle. We also
-want to try out the solver for model finding in Isabelle, as an alternative to
+proof reconstruction for (co)data\-type inferences in Isabelle. We also
+want to try out CVC4 for model finding in Isabelle, as an alternative to
 Nitpick. Finally, it might be worthwhile to extend SMT solvers with dedicated
 support for (co)recursive functions.
 
