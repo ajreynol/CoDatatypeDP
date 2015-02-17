@@ -316,7 +316,9 @@ because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
 value~$\infty$.
 Compared with the conventional inductive definition
+\begin{rep}
 \[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
+\end{rep}
 with a dedicated constructor for representing infinity, the codatatype avoids
 one case by unifying the finite and infinite nonzero cases.
 
@@ -327,6 +329,8 @@ including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
 have emerged in a few automatic theorem provers as well. The SMT-LIB~2
 \cite{barrett-et-al-2010} syntax, implemented by most SMT (satisfiability
 modulo theories) solvers, includes a theory of datatypes.
+
+\pagebreak[2]
 
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in combination
@@ -345,7 +349,7 @@ First, \emph{codatatypes need not be well-founded.}
 For example, the type
 
 \begin{conf}
-\kern-2pt %%% TYPESETTING: HACK
+\kern-2pt %%% TYPESETTING: Crude hack
 \end{conf}
 
 \vskip\abovedisplayskip
@@ -353,7 +357,7 @@ For example, the type
 \vskip\belowdisplayskip
 
 \begin{conf}
-\kern-2pt %%% TYPESETTING: HACK
+\kern-2pt %%% TYPESETTING: Crude hack
 \end{conf}
 
 \noindent
@@ -455,15 +459,14 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
-\begin{rep}\paragraph{Related Work.} Although\end{rep}%
-\begin{conf}Although\end{conf} it was written a few years ago,
+\begin{rep}\paragraph{Related Work.} Despite\end{rep}%
+\begin{conf}Despite\end{conf} its age,
 Barrett et al.\ \cite{barrett-et-al-2007} still provides a good account of
 related work. Since then, datatypes have been added to the SMT solver
-Z3 \cite{de-moura-bjoerner-2008} in unpublished work \begin{rep}by Leonardo de Moura \end{rep}and to a SPASS-like %prototypical
+Z3 \cite{de-moura-bjoerner-2008} \begin{rep}in unpublished work by Leonardo de Moura \end{rep}and to a SPASS-like %prototypical
 superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
 Closely related is the automatic structural
-induction in superposition provers \cite{kersani-peltier-2013,wand-weidenbach-201x}
-and SMT solvers \cite{reynolds-kuncak-2015}.
+induction in both types of provers \cite{kersani-peltier-2013,wand-weidenbach-201x,reynolds-kuncak-2015}.
 %
 Datatypes are explicitly supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
@@ -491,7 +494,7 @@ inspired by the $\mu$-calculus \cite[etc.]{kozen-1983,endrullis-et-al-2011}.
 %     * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
 
 \begin{conf}
-\kern-2.9pt %%% TYPESETTING: HACK
+\kern-2.9pt %%% TYPESETTING: Crude hack
 \end{conf}
 
 \paragraph{Conventions.}
@@ -509,30 +512,29 @@ The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
 whereas $\tau,\:\upsilon$ range over arbitrary types.
 When applied to terms, the symbol $=$ denotes syntactic equality.\end{rep}
 
-\pagebreak[2]
-
 \begin{rep}
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
 distinguish them from variables (e.g., $x$, $y$).
 \end{rep}
-Symbols starting with an uppercase letter (e.g.,
-$\const{S}$, $\const{Infty}$) are reserved for constructors. With each function symbol \const{f}
-is associated a list of argument types $\tau_1,\ldots,\tau_n$ ($n \ge 0$)
-and a return type $\tau$. This connection is written %compactly
+Names starting with an uppercase letter (e.g.,
+$\const{S}$) are reserved for constructors. With each function symbol \const{f}
+is associated a list of argument types $\tau_1,\ldots,\tau_n$ (for $n \ge 0$)
+and a return type $\tau$, written
 $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{rep},
 which collapses to $\const{f} : \tau$ if $n = 0$\end{rep}.
-The notation $t\typ{\tau}$ indicates that term $t$ has type $\tau$.
+The notation $t\typ{\tau}$ indicates that term $t$ has type~$\tau$.
+\begin{rep}%
 Functions invocations $\const{f}(t_1,\ldots,t_n)$
 apply the $n$-ary function symbol
 \const{f} to $n$ well-typed arguments $t_1 :\nobreak \tau_1$, \ldots, $t_n :
 \tau_n$. Nullary function symbols are called constants and can appear without
 parentheses in terms.
-\begin{rep}%
 The operator $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
 Finally, $[n]$ denotes the set $\{1,\ldots, n\}$, and
 $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
+\pagebreak
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
@@ -551,8 +553,8 @@ $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Dat
 \mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
 \emph{selectors}. There is no need to consider further function symbols
 because they can be abstracted away as variables when combining theories.
-Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
-examples.
+%Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
+%examples.
 
 %\paragraph{Specifications.}
 In an SMT problem, the signature is normally given by specifying first the
@@ -648,7 +650,9 @@ type of an argument to one of $\delta$'s constructors. Semantically, a set of
 types is \emph{mutually} (\emph{co})\emph{recursive} if and only if the
 associated dependency graph is strongly connected. Types can be declared
 together in a mutual fashion even if they are not actually (co)recursive.
+\begin{rep}%
 The semantic notion is more precise and is the one that interests us.
+\end{rep}
 %
 In addition, nothing forbids non(co)recursive specifications
 such~as
