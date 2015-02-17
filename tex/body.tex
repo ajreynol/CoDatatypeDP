@@ -801,16 +801,16 @@ function space $\ty{nat} \to \ty{int}$.
 
 Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory of
 datatypes and codatatypes},
-which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{I}$,
+which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{J}$,
 namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
 properties mentioned in this section. In particular, the interpretations
-in~$\mathbf{I}$ share the same fixed interpretation for constructor terms and correctly
+in~$\mathbf{J}$ share the same fixed interpretation for constructor terms and correctly
 applied selector terms but may differ on wrongly applied
 selector terms and variables.
 %%% @ANDY: Variables are normally not part of the interpretation, but given by
 %%% an additional environment. Or is this done differently in the SMT community?
 A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
-exists an interpretation in $\mathbf{I}$ that satisfies $\varphi$.
+exists an interpretation in $\mathbf{J}$ that satisfies $\varphi$.
 % otherwise, it is $\thD$-unsatisfiable.  (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
 \rem{more?}
