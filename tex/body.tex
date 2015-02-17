@@ -1139,7 +1139,7 @@ The mapping $\Val$ is computed as follows.
 With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
 of the same type as $u$
 %not occurring in $\tEc$,
-and let $\Val\ec{u} = {\Varec{u}}$. Therefore, there are initially no
+and set $\Val\ec{u} := {\Varec{u}}$. Therefore, there are initially no
 constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
 is refined by applying the following unfolding rule exhaustively:\strut
 \[
@@ -1410,19 +1410,20 @@ $\interp{t}{u}$, as returned by the following recursive function:
     x & \text{otherwise}
 \end{cases}
 \end{array}\]
+%
+\rem{TODO: add small examples}
 
 The $\mu$-term $u$
 is a \emph{self-similar subterm} of~$t$ if
-$u$ is a strict subterm of $t$,
+$u$ is a proper subterm of $t$,
 $t$ is of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$,
 $u$ it is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k \in [n]$.
 The term $t$ is \emph{normal} if it does not contain a self-similar subterm
-and all of its strict subterms are also normal.
+and all of its proper subterms are also normal.
 For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal
 because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
-Their arguments have the same expansion with respect to
-$t$:
+Their arguments have the same expansion with respect to~$t$:
 $\interp{t}{\MU y.\; \const{C}( y )} =
 \MU y.\; \const{C}\bigl( \interp{t}{y}^{\smash{\{y\}}} \bigr) =
 \MU y.\; \const{C}( y )$
@@ -1444,12 +1445,13 @@ noting that
 is $\alpha$-equivalent to $\interp{t}{x} = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
-For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$, we can
-construct its \emph{normal form} $\nf{t}$
+For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$,
+its \emph{normal form} $\nf{t}$ is obtained
 by replacing all of the self-similar subterms of $t$ with $x$
 %and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
-and by recursively normalizing $t$'s subterms.
-For example, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
+and by recursively normalizing the subterms.
+For variables, $\nf{x} = x$.
+Thus, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
 \begin{rep}
 \begin{lemma}
