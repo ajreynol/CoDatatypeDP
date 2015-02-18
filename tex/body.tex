@@ -147,7 +147,7 @@
 \newcommand{\JJJJ}{\mathcal{\!J\!}}
 \newcommand{\J}{\mathcalx{J}}
 \newcommand{\M}{\mathcalx{M}}
-\newcommand{\Val}{\mathcalx{A}}
+\newcommand{\Val}{\mathcalx{A}\vvthinspace}
 \newcommand{\ValC}{\mathcalx{A}^\star}
 \newcommand{\Var}{\mathcalx{V}}
 %\newcommand{\Varec}[1]{\Var{\ec{#1}}}
@@ -1667,24 +1667,24 @@ After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as fol
 \end{array}\]
 %
 To construct a completion $\ValC$, we must choose values for the free
-variables of $\Val$, namely ${\Varec{z}}$ and ${\Varec{y}}$.
-Modulo $\alpha$-equivalence, the set \smash{$\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$} is
-$%\begin{array}{c}
+variables of $\Val$, namely ${\Varec{y}}$ and ${\Varec{z}}$.
+Modulo $\alpha$-equivalence, $\smash{\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )} =
+%\begin{array}{c}
 \{
-\MU z.\; \const{D}( z ),\;
-\MU z.\; \const{C}( \const{D}( z )),\allowbreak\;
-\const{C}( \MU z.\; \const{D}( z )),\;
-\MU z.\; \const{C}( z )
+\MU a.\: \const{D}( a ),\:
+\MU a.\: \const{C}( \const{D}( a )),\allowbreak\:
+\const{C}( \MU a.\: \const{D}( a )),\allowbreak\:
+\MU a.\: \const{C}( a )
 \}
 %\end{array}
 $.
-Consider a normal interpretation $\J$ that interprets variables in $\Ec$ based on the mapping $\Val$:
+Consider a normal interpretation $\J$ that evaluates variables in $\Ec$ based on the mapping $\Val$:
 $z$ is interpreted as $\Val \ec{z}$, $y$ as $\Val \ec{y}$, and so on.
 Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\Ec$ to be falsified by $\J$.
 For example, assign $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$ for ${\Varec{z}}$.
-After this substitution, $\Val \ec{v}$ is $\MU {\Varec{v}}.\; \const{D}( \MU {\Varec{z}}.\; \const{D}( {\Varec{z}} ) )$,
+After the substitution, $\Val \ec{v} = \MU {\Varec{v}}.\; \const{D}( \MU {\Varec{z}}.\; \const{D}( {\Varec{z}} ) )$,
 which has normal form $\MU {\Varec{v}}.\; \const{D}( {\Varec{v}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$.
 However, this contradicts the disequality $z \not\teq v$ in~$\Ec$.
