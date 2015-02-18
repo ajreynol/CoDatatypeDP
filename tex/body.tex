@@ -1226,11 +1226,12 @@ then $\Ec$ is $\thD$-unsatisfiable.
 For uniqueness, if $\ec{t}$, $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$, $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
-then $t \teq u$. This may seem too restrictive, since
+then $t \teq u$. This precondition may seem too restrictive, since
 $\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ specify the same
 value despite being $\alpha$-disequivalent, but the rule will
 make some progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
-\const{S}(\const{S}(y))$ must be equal to the entire term.
+\const{S}(\const{S}(y))$ must be equal to the entire term,
+as demonstrated in the following example.
 
 %% @ANDY: Minor terminology point:
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
@@ -1619,64 +1620,57 @@ the range of $\Val$ after each rule application.\rem{clumsy}
 Let $\delta$ be a codatatype with the constructors $\const{C}, \const{D}, \const{E} :\delta \rightarrow \delta$.
 Let $\Ec$ be the set
 $\{
-w_1 \teq \const{C}( x ),\;
-w_2 \teq \const{E}( w_3 ),\;
-x \not\teq y_2,\;
-y_1 \teq \const{C}( y_2 ),\;
-y_2 \teq \const{D}( x ),\;
-z_1 \teq \const{E}( z_2 ),\;
-z_2 \teq \const{C}( z_1 )
+w \teq \const{C}( z ),\;
+z \teq \const{D}( x ),\;
+u \teq \const{C}( x ),\;
+v \teq \const{E}( y ),\;
+x \not\teq z
 \}$.
 After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as follows:
-\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
-\Val \ec{w_1} & {}\,=\,{} & \MU {\Varec{w_1}}. & \const{C}( {\Varec{x}} ) &
-\Val \ec{y_1} & {}\,=\,{} & \MU {\Varec{y_1}}. & \const{C}( & \MU {\Varec{y_2}}. & \const{D}( {\Varec{x}} ) ) \\
-\Val \ec{w_2} & = & \MU {\Varec{w_2}}. & \const{E}( {\Varec{w_3}} ) &
-\Val \ec{y_2} & = & \MU {\Varec{y_2}}. & \multicolumn{2}{@{}l@{}}{\const{D}( {\Varec{x}} )} \\
-\Val \ec{w_3} & = & {\Varec{w_3}} &&
-\Val \ec{z_1} & = & \MU {\Varec{z_1}}. & \const{E}( & \MU {\Varec{z_2}}. & \const{C}( {\Varec{z_1}} ) ) \\
-\Val \ec{x} & = & {\Varec{x}} &&
-\Val \ec{z_2} & = & \MU {\Varec{z_2}}. & \const{C}( & \MU {\Varec{z_1}}. & \const{E}( {\Varec{z_2}} ) )
+%\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
+%\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
+\[\begin{array}{r@{}c@{}r@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}l@{\;}l}
+\Val \ec{x} & = & {\Varec{x}} &
+\Val \ec{z} & = & \MU {\Varec{z}}. & \multicolumn{2}{@{}l@{}}{\const{D}( {\Varec{x}} )} & &
+\Val \ec{u} & {}\,=\,{} & \MU {\Varec{u}}. & \const{C}( {\Varec{x}} ) \\
+\Val \ec{y} & = & {\Varec{y}} &
+\Val \ec{w} & {}\,=\,{} & \MU {\Varec{w}}. & \const{C}( & \MU {\Varec{z}}. & \const{D}( {\Varec{x}} ) ) &
+\Val \ec{v} & = & \MU {\Varec{v}}. & \const{E}( {\Varec{y}} )
 \end{array}\]
 %
 To construct a completion $\ValC$, we must choose values for the free
-variables of $\Val$, namely ${\Varec{w_3}}$ and ${\Varec{x}}$.
+variables of $\Val$, namely ${\Varec{x}}$ and ${\Varec{y}}$.
 Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$} is
 \[%\begin{array}{c}
 \{
-\MU x.\; \const{C}( x ),\;
+\MU x.\; \const{D}( x ),\;
 \MU x.\; \const{C}( \const{D}( x )),\;
 \const{C}( \MU x.\; \const{D}( x )),\;
-\MU x.\; \const{C}( \const{E}( x )),\;
-\MU x.\; \const{D}( x ),\;
-\MU x.\; \const{E}( \const{C}( x ))
+\MU x.\; \const{C}( x )
 \}
 %\end{array}
 \]
-Consider a model $\M$ that interprets variables in $\Ec$ based on the mapping $\Val$:
-$x$ is interpreted as $\Val \ec{x}$, $y_1$ as $\Val \ec{y_1}$, and so on.
-Assigning a value for ${\Varec{x}}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$
+Consider a normal interpretation $\mathbf{J}$ \rem{Appropriate symbol?} that interprets variables in $\Ec$ based on the mapping $\Val$:
+$x$ is interpreted as $\Val \ec{x}$, $y$ as $\Val \ec{y}$, and so on.
+Assigning a value for $\Val \ec{x}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
-which in turn may cause $\M$ to
-become a non-model.
-% "be inconsistent." Models can't be "inconsistent".
+which in turn may cause $\Ec$ to be falsified by $\mathbf{J}$.
 For example, assign $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$ for ${\Varec{x}}$.
-After this substitution, $\Val \ec{y_2}$ is $\MU {\Varec{y_2}}.\; \const{D}( \MU {\Varec{x}}.\; \const{D}( {\Varec{x}} ) )$,
-which has normal form $\MU {\Varec{y_2}}.\; \const{D}( {\Varec{y_2}} )$,
+After this substitution, $\Val \ec{z}$ is $\MU {\Varec{z}}.\; \const{D}( \MU {\Varec{x}}.\; \const{D}( {\Varec{x}} ) )$,
+which has normal form $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$.
-However, this contradicts the disequality $x \not\teq y_2$ in~$\Ec$.
+However, this contradicts the disequality $x \not\teq z$ in~$\Ec$.
 On the other hand, if the value assigned to ${\Varec{x}}$ is fresh, %not $\alpha$-equivalent to any term in $\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
-For example, we may assign values such as
-$\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$,
-$\MU {\Varec{x}}.\; \const{E}( \MU x_1.\; \const{C}( x_1) )$, or
+For example, we may assign a value such as
+$\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$ or
 $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
 to ${\Varec{x}}$.
 Legal substitutions for ${\Varec{x}}$ may cause the range of $\Val$ to contain abnormal terms.
-After applying the substitution for $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$, we have that
-$\Val \ec{w_1}$ is $\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
+For example, after assigning $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$ to $\Varec{x}$, we have that
+$\Val \ec{u}$ is $\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
 which has normal form
-$\MU {\Varec{w_1}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{w_1}} ) )$.
+$\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{u}} ) )$.
 \xend
 \end{examplex}
 
@@ -1823,16 +1817,16 @@ we have that $\ValC$ satisfies (2) and (3).
 \end{rep}
 
 Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
-model $\M$ can be trivially constructed for $\Ec$. Property~\PART{1} states that the
+interpretation $\mathbf{J}$ can be constructed that satisfies $\Ec$. Property~\PART{1} states that the
 values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal
-model. In particular, this means they are closed, normal, and acyclic when
+interpretation. In particular, this means they are closed, normal, and acyclic when
 required. Property~\PART{2} states that the interpretation of all subterms in the
 range of $\ValC$ depends on its associated variable only. In other words, the
 interpretation of a subterm $t$ where $\muvar(t) = {\Varec{x}}$ is equal to
 $\ValC \ec{x}$, independently of the context in which it is interpreted.
 Property~\PART{3} states that $\ValC$ is injective (modulo
 $\alpha$-equivalence), which in the following ensures that a distinct value can
-be associated with each equivalence class in a corresponding model.
+be associated with each equivalence class.
 
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
@@ -1845,7 +1839,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
-We consider a normal model $\M$
+We consider a normal model $\M$ \rem{Change to interpretation, with proper symbol.}
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
 For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \mathcal{T}(\Fc)$,
@@ -1957,8 +1951,7 @@ $\const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr)
 \ldots, \const s^{n_m}_m( t ) \bigr)$ to $F$.
 Decisions on which branch to take are thus performed externally by the SAT
 solver and not by the theory solver. All other rules add equalities to the
-internal state of the theory solver. The rules in phase~1 along with the
-optimization for collapsing selectors are performed
+internal state of the theory solver. The rules in phase~1 are performed
 eagerly---that is, for partial satisfying assignments $M$---while the rules in
 phases~2 and~3 are performed only for complete satisfying
 assignments $M$. 
@@ -1975,7 +1968,7 @@ It simultaneously visits the equivalence classes of arguments of constructor ter
 while partitioning $S$ into $S_1, \ldots, S_n$,
 where all terms in $S_i$ have the same constructor type for all their subterms of type $\Data \cup \Codata$,
 and are equivalent for all subterms of type $\Nondata$.
-If after doing so, some $S_i$ contains two terms $u$ and $v$, then it deduces that \rn{Unique} applies to $u$ and $v$.
+If after doing so, some $S_i$ in the resulting partition contains two terms $u$ and $v$, then it deduces that \rn{Unique} applies to $u$ and $v$.
 
 %\rem{TODO: * sharing is caring (let's cite it for a change)}
 \rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
@@ -2008,10 +2001,11 @@ additional rules \cite{barrett-et-al-2007},
 which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
 If $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the
-constructor $\const{C}_{\negvthinspace j}( \vec u )$, we immediately infer
-$\const s^k_{\negvthinspace j}( t ) \teq u_k$, whereas the calculus we presented
-would apply \rn{Split} and \rn{Inject} before inferring this equality. For the
-sake of reducing the number of unique constraints considered by the calculus, we
+constructor $\const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, we immediately add
+$\const s^k_{\negvthinspace j}( t ) \teq u_k$ to $\Ec$, whereas the presented calculus
+would apply \rn{Split} and \rn{Inject} before adding this equality. 
+\begin{rep}  % lower priority to mention this
+For the sake of reducing the number of unique constraints considered by the calculus, we
 compute a normal form for constraints as a preprocessing step. In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term
 ordering, replace $\const{C}_{\negvthinspace j}( \vec t ) \teq
@@ -2021,6 +2015,7 @@ replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}(
 occurrences of discriminators $\const{d}_{\negvthinspace j}(
 \const{C}_{\negvthinspace\jPrime}( \vec t ) )$ by $\top$ or $\bot$
 based on whether $j = \jPrime$.
+\end{rep}
 
 %\section{Examples}
 %\label{sec:examples}
