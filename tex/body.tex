@@ -122,8 +122,8 @@
 %\newcommand{\Rc}{\mathsf{R}}
 \newcommand{\vrange}{\mathsf{range}}
 \newcommand{\vdom}{\mathsf{dom}}
-\newcommand{\tEc}{\mathcalx{T}(\Ec)}
-\newcommand{\tcEc}{\mathcalx{T}^\AST(\Ec)}
+\newcommand{\tEc}{\Terms(\Ec)}
+\newcommand{\tcEc}{\Terms^\AST(\Ec)}
 \newcommand{\rn}[1]{\textsf{\small #1}}
 \newcommand{\cvc}{\textsc{cvc}{\small 4}\xspace}
 \newcommand{\teq}{\approx}
@@ -176,7 +176,7 @@
 %%% before by other authors.
 \newcommand{\thD}{\mathcalx{DC}}
 
-%\newcommand\Types{\mathcal{T}}
+\newcommand\Terms{\mathcalx{T}}
 \newcommand\Types{\mathcalx{Y}}
 \newcommand\Funcs{\mathcalx{F}}
 
@@ -1411,7 +1411,7 @@ $\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspac
 In a derivation tree with root node~$\Ec$,
 it can be shown by %case analysis
 induction on the rules of the calculus that each non-root node $\Fc$ is such that
-$\mathcalx{T}(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
+$\Terms(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
 Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\left| \smash{\tcEc}\vphantom{X} \right|{\!}^2$,
 which is finite since $\tcEc$ is finite.
 \qed
@@ -1606,7 +1606,7 @@ but
 $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
 For a variable $x\typ{\tau}$ and a fixed normal interpretation $\J$,
-we write $\mathcalx{T}^{\smash{\J}}_x( \Val )$ to denote the set consisting of all values
+we write $\Terms^{\smash{\J}}_x( \Val )$ to denote the set consisting of all values
 $v \in \J( \tau )$
 such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
 %\rem{TODO: Intuition?}
@@ -1624,7 +1624,7 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
   \betweenantes
   v \in \J( \tau )
   \betweenantes
-  v \not\in \mathcalx{T}^{\smash{\J}}_{\Varec{x}}(\Val)
+  v \not\in \Terms^{\smash{\J}}_{\Varec{x}}(\Val)
 }{
   \Val := \nf{\Val [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
 }
@@ -1634,11 +1634,11 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
 \]
 %
 The rule chooses an unassigned variable in $\Val$ and assigns it a fresh
-value---one that does not occur in $\mathcalx{T}^{\smash{\J}}_{\Varec{x}}(\Val)$
+value---one that does not occur in $\Terms^{\smash{\J}}_{\Varec{x}}(\Val)$
 modulo $\alpha$-equivalence.
 %\rem{TODO: What guarantees that such a value exists? (Answer: infinitely many values
 %of codatatypes, of which only finitely many are in
-%$\mathcalx{T}^{\smash{\J}}_{\Varec{x}}(\Val)$?)}
+%$\Terms^{\smash{\J}}_{\Varec{x}}(\Val)$?)}
 Since this update removes one
 variable from the set $\FV( \Val )$ and does not add any variables to $\FV( \Val
 )$, it can only be applied a finite number of times. We normalize all terms in
@@ -1668,7 +1668,7 @@ After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as fol
 %
 To construct a completion $\ValC$, we must choose values for the free
 variables of $\Val$, namely ${\Varec{z}}$ and ${\Varec{y}}$.
-Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\J}}_{{\Varec{z}}}( \Val )$} is
+Modulo $\alpha$-equivalence, the set \smash{$\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$} is
 $%\begin{array}{c}
 \{
 \MU z.\; \const{D}( z ),\;
@@ -1680,7 +1680,7 @@ $%\begin{array}{c}
 $.
 Consider a normal interpretation $\J$ that interprets variables in $\Ec$ based on the mapping $\Val$:
 $z$ is interpreted as $\Val \ec{z}$, $y$ as $\Val \ec{y}$, and so on.
-Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\mathcalx{T}^{\smash{\J}}_{{\Varec{z}}}( \Val )$
+Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\Ec$ to be falsified by $\J$.
 For example, assign $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$ for ${\Varec{z}}$.
@@ -1688,7 +1688,7 @@ After this substitution, $\Val \ec{v}$ is $\MU {\Varec{v}}.\; \const{D}( \MU {\V
 which has normal form $\MU {\Varec{v}}.\; \const{D}( {\Varec{v}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$.
 However, this contradicts the disequality $z \not\teq v$ in~$\Ec$.
-On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\mathcalx{T}^{\smash{\M}}_{{\Varec{z}}}( \Val )$,
+On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\Terms^{\smash{\M}}_{{\Varec{z}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For example, we may assign a value such as
 $\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$ or
@@ -1743,14 +1743,14 @@ If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\r
 the cardinality of $\tau$ must be $1$.
 Since \rn{Single} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
-and thus there are no terms in $\mathcalx{T}^{\smash{\J}}_{\Varec{y}}(\ValC)$ of type $\tau$.
+and thus there are no terms in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$ of type $\tau$.
 This is a contradiction, since %our %model
 completion can assign the value in the domain of $\tau$ to ${\Varec{y}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction,
-since there are only a finite number of closed terms in $\mathcalx{T}^{\smash{\J}}_{\Varec{y}}(\ValC)$,
+since there are only a finite number of closed terms in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$,
 and thus %our %model
-completion can assign a value not occurring in $\mathcalx{T}^{\smash{\J}}_{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
+completion can assign a value not occurring in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
 By construction, $\ValC \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
 Moreover, our construction of $\ValC$ applies substitutions of the form
@@ -1798,7 +1798,7 @@ We now show that if (2) and (3) hold for some $\Val_1$,
 they also hold for $\nf{\Val_1 \sigma}$,
 where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
 ${\Varec{x}} \in FV( \Val_1 )$,
-and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcalx{T}^{\smash{\J}}_{\Varec{x}}(\Val_1)$.
+and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\Terms^{\smash{\J}}_{\Varec{x}}(\Val_1)$.
 To show 2,
 by assumption of 2 on $\Val_1$, we have $\interp{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
@@ -1834,7 +1834,7 @@ we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
 or else the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
 Since $\interp{\Val_1 \ec{y}}{t_1}$ is normal,
-there is a closed $\mu$-term $v \in \mathcalx{T}^{\smash{\J}}_{\Varec{x}}( \Val_1 )$
+there is a closed $\mu$-term $v \in \Terms^{\smash{\J}}_{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on our selection of $\MU {\Varec{x}}.\; t$,
 we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$,
@@ -1875,13 +1875,13 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 We consider a normal model $\M$
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
-For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \mathcalx{T}(\Fc)$,
+For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
 which by Lemma~\ref{lem:interpretation-completion}\PART{1} is guaranteed to exist.
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 We show,
 by structural induction on $t$,
-that $\M( t ) \aequiv \ValC \ec{t}$ for all terms $t \in \mathcalx{T}( \Fc )$,
+that $\M( t ) \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
 which since $\M$ is normal, implies $\M \models t_1 \teq t_2$.
 
 If $t$ is a variable, then $\M( t ) \vsim \ValC \ec{ t }$ by construction.
