@@ -917,14 +917,24 @@ that the type has at most one value.
 \section{The Ground Decision Procedure} % for (Co)datatypes}
 \label{sec:the-ground-decision-procedure}
 
-The decision procedure for the ground theory of (co)datatypes $\thD$ determines the
-$\thD$-satisfiability of sets of ground constraints over a fixed
-signature~$\Sig$. It is formulated as a calculus.
+Given a fixed signature~$\Sig$,
+the decision procedure for the ground theory of (co)datatypes $\thD$ determines the
+$\thD$-satisfiability of finite sets $\Ec$ of constraints:\ equalities
+and disequalities between ground $\Sig$-terms. The procedure is formulated as a
+calculus.
 % whose derivation rules are applied until saturation or contradiction.
-%
-The derivation rules operate on a finite set $\Ec$ of equalities and
-disequalities between $\Sig$-terms. %, taken as a conjunction.
-We let $\tEc$ denote the set of $\Sig$-terms occurring in $\Ec$.
+
+To simplify the presentation, we make a few assumptions about
+$\Sig$.
+First, all codatatypes in $\Codata$ are corecursive. This is not restrictive
+because noncorecursive codatatypes can be seen as nonrecursive
+datatypes.
+Second, all types $\tau \in \Nondata$ have infinite cardinality.
+This is not overly restrictive, because each interpreted type in $\Nondata$
+having finite cardinality~$n$
+can be replaced by an enumeration datatype with $n$~nullary constructors.
+As for uninterpreted types, since the constraints in $\Ec$ are ground, they cannot entail an upper
+bound on the cardinality of any such type, so it is safe to consider them infinite.
 
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
@@ -940,8 +950,8 @@ A rule may have multiple conclusions, % separated by $\ror$,
 denoting branching.
 %
 An application of a rule is \emph{redundant} if at least one branch in the
-conclusion is an assignment to $\Ec$ that leaves it unchanged. A
-\emph{derivation tree} is a %finite
+conclusion is an assignment to $\Ec$ that leaves it unchanged.
+A \emph{derivation tree} is a %finite
 tree whose nodes are finite sets of
 equalities and where child nodes are obtained by a nonredundant application of a
 derivation rule to the parent node. A derivation tree is \emph{closed} if all of
@@ -951,15 +961,10 @@ instance of a rule can be applied to it.
 The calculus consists of three sets of rules, given in
 \figuresname~\ref{fig:cc-rules} to \ref{fig:split-rule}, corresponding to three
 phases. The first phase computes the bidirectional closure of $\Ec$. The second
-phase
-makes \hfill inferences \hfill based \hfill on \hfill acyclicity \hfill (for
-\hfill datatypes) \hfill and \hfill uniqueness \hfill (for \hfill codatatypes).
-
-%%% TYPESETTING: horrible hack
-\pagebreak[2]
-\noindent
+phase makes inferences based on acyclicity (for \hfill datatypes) and uniqueness
+(for codatatypes).
 The third phase performs case splitting on constructors for
-various terms in $\tEc$.
+various terms in $\tEc$, the set of $\Sig$-terms occurring in $\Ec$.
 %Following the conventions from~\cite{},
 %The derivation rules are given in \relax{guarded assignment form},
 %where
@@ -967,20 +972,6 @@ various terms in $\tEc$.
 The rules belonging to a phase have priority over those of the subsequent
 phases. Rules are applied until the derivation tree is closed or all leaf nodes
 are saturated.
-
-To simplify the presentation, we make the following assumptions about
-the signature $\Sig$.
-First, all codatatypes in $\Codata$ are corecursive. This is not restrictive
-because noncorecursive codatatypes can be seen instead as nonrecursive
-datatypes.
-Second, all types $\tau \in \Nondata$ have infinite cardinality.
-This is not overly restrictive, because each interpreted type $\tau \in \Nondata$
-having finite cardinality~$n$
-can be replaced by an enumeration datatype with $n$~nullary constructors.
-Finally, since the constraints in $\Ec$ are ground, they cannot entail an upper
-bound on the cardinality of any uninterpreted type $\tau \in \Nondata$; thus,
-we may without loss of generality %or completeness
-treat all types in $\Nondata$ as infinite.
 
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
 %are simplified to $t_i$, and moreover assume that all %additional
@@ -1086,6 +1077,7 @@ equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class in $\Ec$ that contains $t$.
 
 \begin{figure}[t!]
+\vspace*{+3pt} %% TYPESETTING HACK
 \normalsize
 \centering
 \begin{tabular}{c}
