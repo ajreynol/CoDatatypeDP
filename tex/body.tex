@@ -1479,13 +1479,11 @@ The term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
 since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $t$,
 noting that
 %
-\begin{align*}
-\interp{t}{\MU y.\; \const{C}( x )}
-& = \MU y.\; \const{C}\bigl( \interp{t}{x}^{\smash{\{y\}}} \bigr) \\
-& = \MU y.\; \const{C}\bigl( \interp{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr) \\
-& = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \interp{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr) \\
-& = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )
-\end{align*}
+$\interp{t}{\MU y.\; \const{C}( x )}
+ = \MU y.\; \const{C}\bigl( \interp{t}{x}^{\smash{\{y\}}} \bigr)
+ = \MU y.\; \const{C}\bigl( \interp{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
+ = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \interp{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
+ = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )$
 is $\alpha$-equivalent to $\interp{t}{x} = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
@@ -1615,8 +1613,6 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
 The rule chooses an unassigned variable in $\Val$ and assigns it a fresh
 value---one that does not occur in $\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)$
 modulo $\alpha$-equivalence.
-\rem{The ``not alpha equivalent'' bit is expressed differently in the rule,
-with $\notin$. This looks fishy.}
 \rem{What guarantees that such a value exists? (Answer: infinitely many values
 of codatatypes, of which only finitely many are in
 $\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)$?)}
