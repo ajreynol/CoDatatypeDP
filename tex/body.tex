@@ -361,9 +361,9 @@ For example, the type
 \end{conf}
 
 \noindent
-of infinite sequences, or streams, over an element type $\tau$ is allowed; the
-corresponding datatype would be rejected as non-well-founded%
-\begin{rep} \cite{blanchette-et-al-2015-esop}\end{rep}.
+of infinite sequences, or streams, over an element type $\tau$ is allowed\begin{rep}; the
+corresponding datatype would be rejected as non-well-founded
+\cite{blanchette-et-al-2015-esop}\end{rep}.
 
 Second, \emph{a uniqueness rule replaces the acyclicity rule of datatypes.}
 Cyclic constraints such as
@@ -404,9 +404,10 @@ Detailed proofs of soundness and completeness are included in a technical report
 \end{conf}%
 The procedure is implemented in the SMT solver CVC4 \cite{barrett-et-al-2011} as a combination
 of rewriting and a theory solver (Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
-It consists of about 2000 lines of \cpp{} code, among which \NOK{1600} are
-shared between datatypes and codatatypes. The code is integrated in the
-development version of the solver and is expected to be part of the CVC4~1.5 release.
+It consists of about 2000 lines of \cpp{} code, %among which \NOK{1600} are
+most of which are shared between datatypes and codatatypes. The code is
+integrated in the development version of the solver and is expected to be part
+of the CVC4~1.5 release.
 %
 An evaluation on %hand-crafted examples and on
 problems generated from Isabelle theories using the Sledgehammer tool
@@ -502,22 +503,18 @@ The setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are atomic sorts and interpreted by
 nonempty domains. The set~$\Types$ must contain a
-distinguished type \ty{bool}\begin{rep} interpreted as the set of truth
-values $\{\bot, \top\}$\end{rep}. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep}.
-Other predicates can be represented as functions to $\ty{bool}$,
-with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
+distinguished type \ty{bool} interpreted as the set of truth
+values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
 \begin{rep}
 The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
 whereas $\tau,\:\upsilon$ range over arbitrary types.
-When applied to terms, the symbol $=$ denotes syntactic equality.\end{rep}
+When applied to terms, the symbol $=$ denotes syntactic equality.
 
-\begin{rep}
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
 distinguish them from variables (e.g., $x$, $y$).
 \end{rep}
-Names starting with an uppercase letter (e.g.,
-$\const{S}$) are reserved for constructors. With each function symbol \const{f}
+Names starting with an uppercase letter \begin{rep}(e.g.,
+$\const{S}$) \end{rep}are reserved for constructors. With each function symbol \const{f}
 is associated a list of argument types $\tau_1,\ldots,\tau_n$ (for $n \ge 0$)
 and a return type $\tau$, written
 $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{rep},
@@ -527,11 +524,17 @@ The notation $t\typ{\tau}$ indicates that term $t$ has type~$\tau$.
 Functions invocations $\const{f}(t_1,\ldots,t_n)$
 apply the $n$-ary function symbol
 \const{f} to $n$ well-typed arguments $t_1 :\nobreak \tau_1$, \ldots, $t_n :
-\tau_n$. Nullary function symbols are called constants and can appear without
+\tau_n$. Nullary function symbols, called constants, can appear without
 parentheses in terms.
-The operator $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
+\end{rep}
+The set $\Funcs$ must at least contain
+$\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
+The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep}.
+Other predicates can be represented as functions to $\ty{bool}$,
+with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
+\begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
-Finally, $[n]$ denotes the set $\{1,\ldots, n\}$, and
+Finally, $[n] = \{1,\ldots, n\}$ and
 $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
 %* although nothing prevents composing the decision procedure with theories
@@ -2098,6 +2101,8 @@ Full (co)datatypes
 \label{tab:bench}
 \end{table*}
 
+\newcommand\nummodden{num\hbox{\rm\_}mod\hbox{\rm\_}den}
+
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
 makes a difference across all theories. Overall, it accounts for a success rate
 increase of \OK{5.2\%}. Moreover, every aspect of the procedure, including the
@@ -2112,7 +2117,7 @@ three correspond to one-line proofs in Isabelle, of the form
 The fourth proof, by Gammie and Lochbihler, is more elaborate:
 %
 \begin{quote}
-\keyw{lemma} \,\textit{X0\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \Longrightarrow x = \const{X0}$ \\
+\keyw{lemma} \,\textit{\nummodden\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \Longrightarrow x = \const{\nummodden}$ \\
 \keyw{proof} \,(\textit{coinduction arbitrary}: $x$ \textit{rule}: \textit{tree.coinduct\_strong}) \\
 \noindent\hbox{}\quad  \keyw{case} (\textit{Eq\_tree} $x$) \keyw{show} \textit{?case} \\
 \noindent\hbox{}\qquad  \keyw{by} (\textit{subst} (1 2 3 4) \textit{Eq\_tree}) (\textit{simp add}: \textit{eqTrueI}[OF \textit{Eq\_tree}]) \\
@@ -2120,8 +2125,8 @@ The fourth proof, by Gammie and Lochbihler, is more elaborate:
 \end{quote}
 %
 \noindent
-where \const{X0} is defined as $\const{X0} =
-\const{Node}\;0\;\const{num}\;\const{X0}$.
+where \const{\nummodden} is defined as $\const{\nummodden} =
+\const{Node}\;0\;\const{num}\;\const{\nummodden}$.
 
 The raw data also reveals that the
 stronger decision procedures almost completely subsume the weaker ones. For
