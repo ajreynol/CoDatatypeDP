@@ -1327,7 +1327,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
   \text{ or }
   \bigl( \delta \in \Data \text{ and } \left|\delta\right| \text{ is finite} \bigr)
 }{
-  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_1}_1( t ) \bigr) %\ROR
+  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_{1\!}}_1( t ) \bigr) %\ROR
   \ROR \cdots \ROR \Ec := \Ec,\: t \teq \const{C}_m\bigl(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) \bigr)
 }
 \)
@@ -1977,7 +1977,7 @@ explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
 Thus, the rules of the calculus are implemented as follows. For all rules with
 conclusion $\bot$, we report the union of the explanations for all premises is
 $\thD$-unsatisfiable. For \rn{Split}, we add a clause %of the form
-$t \teq \const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr)
+$t \teq \const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_{1\!}}_1( t ) \bigr)
 \mathrel\lor \cdots \mathrel\lor t \teq \const{C}_m\bigl( \const s^1_m( t ),
 \ldots, \const s^{n_m}_m( t ) \bigr)$ to $F$.
 Decisions on which branch to take are thus performed externally by the SAT
@@ -2014,8 +2014,8 @@ Many SMT solvers, such as CVC4, support reasoning about quantified formulas usin
 These methods extend naturally to quantified formulas over the signature of the theory of datatypes and codatatypes.
 
 However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes.
-Namely, since quantified formulas may entail cardinality constraints on uninterpreted types $U$,
-we may no longer assume that $U$ is of infinite cardinality.
+Namely, since quantified formulas may entail cardinality constraints on uninterpreted types $\ty{u}$,
+we may no longer assume that $\ty{u}$ is of infinite cardinality.
 When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \emph{incomplete},
 since the preconditions on \rn{Split} and \rn{Single} may not apply when they indeed are applicable.
 This does not necessarily impact the correctness of our procedure in this setting,
@@ -2023,12 +2023,12 @@ since by assumption the solver is already incomplete when quantified formulas ar
 Regardless, we may be interested in increasing the precision of the solver by doing the following.
 First, we may apply \rn{Split} to terms of datatype types whose cardinality depends on the finiteness of uninterpreted types.
 Second, we may conditionally apply \rn{Single} to terms of codatatype types that may have cardinality one.
-For instance, consider the codatatype $\keyw{codatatype}~\ty{c} = \const{C}(\ty{U},\: \ty{c})$, where $U$ is an uninterpreted type.
-This codatatype has cardinality one when $\ty{U}$ has cardinality one.
-If there exists two equivalence classes $\ec{t\typ{c}}$ and $\ec{u\typ{c}}$,
-our implementation adds a clause of the form $( \exists x\,y.\, x \not\teq y \vee t \teq u )$ to $F$,
-where $x$ and $y$ are variables of type $U$.
-In other words, either the cardinality of $U$ is greater than one, or $t$ must be equal to $u$.
+For example, consider the codatatype $\keyw{codatatype}~\ty{c} = \const{C}(\ty{u},\: \ty{c})$, where $\ty{u}$ is an uninterpreted type.
+This codatatype has cardinality one when $\ty{u}$ has cardinality one.
+If there exist two equivalence classes $\ec{s\typ{c}}$ and $\ec{t\typ{c}}$,
+our implementation adds the clause %of the form
+$\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y \mathrel\vee s \teq t$ to $F$.
+In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.
 
     
 \paragraph{Optimizations.}
