@@ -2149,20 +2149,21 @@ Full (co)datatypes
 \end{table*}
 
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
-makes a difference across all theories. Overall, it accounts for a success rate
-increase of \OK{5.2\%}. Moreover, every aspect of the procedure, including the
+makes a difference across all theories. It accounts for an overall success rate
+increase of over \OK{5\%}. Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
 %
 Three proofs were found thanks to
 the \rn{Acyclic} rule and four required the \rn{Unique} rule. Among the latter,
-three are one-line proofs in Isabelle, of the form
-\keyw{by}~\textit{coinduction}~\textit{auto}\begin{rep} \cite{blanchette-et-al-2014-impl}\end{rep}.
+three are simple proofs of the form
+\keyw{by}~\textit{coinduction}~\textit{auto} %\cite{blanchette-et-al-2014-impl}
+in Isabelle.
 The fourth proof, by Gammie and Lochbihler, is more elaborate:
 %
 \begin{quote}
-\keyw{lemma} \,\textit{\nummodden\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \Longrightarrow x = \const{\nummodden}$ \\
+\keyw{lemma} \,\textit{\nummodden\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \vthinspace\Longrightarrow\vthinspace x = \const{\nummodden}$ \\
 \keyw{proof} \,(\textit{coinduction arbitrary}: $x$ \textit{rule}: \textit{tree.coinduct\_strong}) \\
 \noindent\hbox{}\quad  \keyw{case} (\textit{Eq\_tree} $x$) \keyw{show} \textit{?case} \\
 \noindent\hbox{}\qquad  \keyw{by} (\textit{subst} (1 2 3 4) \textit{Eq\_tree}) (\textit{simp add}: \textit{eqTrueI}[OF \textit{Eq\_tree}]) \\
