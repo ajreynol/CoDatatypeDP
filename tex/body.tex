@@ -825,7 +825,7 @@ exists an interpretation in $\JJJJ$ that satisfies $\varphi$.
 % it comes to English prefixes like non-, in-, un-, and a-.)
 
 For the ground theory, induction is equivalent to the acyclicity
-axiom schema, which states that ground constructor terms cannot be equal to
+axiom schema, which states that constructor terms cannot be equal to
 any of their proper subterms \cite{barrett-et-al-2007}. Dually, coinduction
 is equivalent to the uniqueness axiom schema, which asserts that codatatype
 values are fully characterized by their possibly infinite expansion.
@@ -848,7 +848,7 @@ TODO: State more precisely and proof?
 Some codatatypes are so degenerate as to have infinite values
 even though they are finite. A simple example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
-only value is $\MU a.\; A(a)$. Other specimens are
+unique value is $\MU a.\; A(a)$. Other specimens are
 $\ty{stream}_{\,\ty{unit}\,}$
 and
 \begin{conf}%
