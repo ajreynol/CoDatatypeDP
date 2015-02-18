@@ -1648,57 +1648,57 @@ the range of $\Val$ after each rule application.%\rem{TODO: clumsy}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
 Let $\Ec$ be the set
 $\{
-w \teq \const{C}( z ),\;
-z \teq \const{D}( x ),\;
-u \teq \const{C}( x ),\;
-v \teq \const{E}( y ),\;
-x \not\teq z
+u \teq \const{C}( z ),\;
+v \teq \const{D}( z ),\;
+w \teq \const{E}( y ),\;
+x \teq \const{C}( v ),\;
+z \not\teq v
 \}$.
 After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as follows:
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
 \[\begin{array}{r@{}c@{}r@{}l@{\qquad}r@{}c@{}r@{}l@{\qquad}r@{}c@{}l}
-\Val \ec{u} & {}\,=\,{} & \MU {\Varec{u}}.\; & \const{C}( {\Varec{x}} ) &
-\Val \ec{v} & = & \MU {\Varec{v}}.\; & \const{E}( {\Varec{y}} ) &
+\Val \ec{u} & {}\,=\,{} & \MU {\Varec{u}}.\; & \const{C}( {\Varec{z}} ) &
+\Val \ec{w} & = & \MU {\Varec{w}}.\; & \const{E}( {\Varec{y}} ) &
 \Val \ec{y} & {}\,=\,{} & {\Varec{y}} \\
-\Val \ec{z} & = & \MU {\Varec{z}}.\; & \const{D}( {\Varec{x}} ) &
-\Val \ec{w} & {}\,=\,{} & \MU {\Varec{w}}.\; & \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{x}} ) ) &
-\Val \ec{x} & = & {\Varec{x}}
+\Val \ec{v} & = & \MU {\Varec{v}}.\; & \const{D}( {\Varec{z}} ) &
+\Val \ec{x} & {}\,=\,{} & \MU {\Varec{x}}.\; & \const{C}( \MU {\Varec{v}}.\; \const{D}( {\Varec{z}} ) ) &
+\Val \ec{z} & = & {\Varec{z}}
 \end{array}\]
 %
 To construct a completion $\ValC$, we must choose values for the free
-variables of $\Val$, namely ${\Varec{x}}$ and ${\Varec{y}}$.
-Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\J}}_{{\Varec{x}}}( \Val )$} is
+variables of $\Val$, namely ${\Varec{z}}$ and ${\Varec{y}}$.
+Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\J}}_{{\Varec{z}}}( \Val )$} is
 $%\begin{array}{c}
 \{
-\MU x.\; \const{D}( x ),\;
-\MU x.\; \const{C}( \const{D}( x )),\allowbreak\;
-\const{C}( \MU x.\; \const{D}( x )),\;
-\MU x.\; \const{C}( x )
+\MU z.\; \const{D}( z ),\;
+\MU z.\; \const{C}( \const{D}( z )),\allowbreak\;
+\const{C}( \MU z.\; \const{D}( z )),\;
+\MU z.\; \const{C}( z )
 \}
 %\end{array}
 $.
 Consider a normal interpretation $\J$ that interprets variables in $\Ec$ based on the mapping $\Val$:
-$x$ is interpreted as $\Val \ec{x}$, $y$ as $\Val \ec{y}$, and so on.
-Assigning a value for $\Val \ec{x}$ that is $\alpha$-equivalent to a value in $\mathcalx{T}^{\smash{\J}}_{{\Varec{x}}}( \Val )$
+$z$ is interpreted as $\Val \ec{z}$, $y$ as $\Val \ec{y}$, and so on.
+Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\mathcalx{T}^{\smash{\J}}_{{\Varec{z}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\Ec$ to be falsified by $\J$.
-For example, assign $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$ for ${\Varec{x}}$.
-After this substitution, $\Val \ec{z}$ is $\MU {\Varec{z}}.\; \const{D}( \MU {\Varec{x}}.\; \const{D}( {\Varec{x}} ) )$,
-which has normal form $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$,
-which is $\alpha$-equivalent to $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$.
-However, this contradicts the disequality $x \not\teq z$ in~$\Ec$.
-On the other hand, if the value assigned to ${\Varec{x}}$ is fresh, %not $\alpha$-equivalent to any term in $\mathcalx{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$,
+For example, assign $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$ for ${\Varec{z}}$.
+After this substitution, $\Val \ec{v}$ is $\MU {\Varec{v}}.\; \const{D}( \MU {\Varec{z}}.\; \const{D}( {\Varec{z}} ) )$,
+which has normal form $\MU {\Varec{v}}.\; \const{D}( {\Varec{v}} )$,
+which is $\alpha$-equivalent to $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$.
+However, this contradicts the disequality $z \not\teq v$ in~$\Ec$.
+On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\mathcalx{T}^{\smash{\M}}_{{\Varec{z}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For example, we may assign a value such as
-$\MU {\Varec{x}}.\; \const{E}( {\Varec{x}} )$ or
-$\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$
-to ${\Varec{x}}$.
-Legal substitutions for ${\Varec{x}}$ may cause the range of $\Val$ to contain abnormal terms.
-For example, after assigning $\MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) )$ to $\Varec{x}$, we have that
-$\Val \ec{u}$ is $\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( \const{C}( {\Varec{x}} ) ) )$,
+$\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$ or
+$\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$
+to ${\Varec{z}}$.
+Legal substitutions for ${\Varec{z}}$ may cause the range of $\Val$ to contain abnormal terms.
+For example, after assigning $\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$ to $\Varec{z}$, we have that
+$\Val \ec{u}$ is $\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) ) )$,
 which has normal form
-$\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{x}}.\; \const{D}( {\Varec{u}} ) )$.
+$\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{u}} ) )$.
 \xend
 \end{examplex}
 
