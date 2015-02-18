@@ -534,8 +534,7 @@ Other predicates can be represented as functions to $\ty{bool}$,
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
 \begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
-Finally, $[n] = \{1,\ldots, n\}$ and
-$\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
+Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
@@ -588,7 +587,7 @@ and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}\end{rep}.
 \newcommand\elll{\kern.18ex l\kern.11ex}
 \newcommand\elllx{\kern.11ex l\kern.18ex}
 
-Each datatype $\delta$ is equipped with
+Each (co)datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
 arguments and returns a $\delta$ value. The argument types must be either
 ordinary, among the already known (co)datatypes, or among the (co)datatypes
@@ -806,7 +805,7 @@ Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory of
 datatypes and codatatypes},
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{J}$,
 namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
-properties mentioned in this section. In particular, the interpretations
+properties mentioned in this section, including (co)induction. In particular, the interpretations
 in~$\mathbf{J}$ share the same fixed interpretation for constructor terms and correctly
 applied selector terms but may differ on wrongly applied
 selector terms and variables.
@@ -1194,10 +1193,10 @@ is refined by applying the following unfolding rule exhaustively:\strut
 }
 \]
 $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range,
-and $\Val[x \mapsto t]$ denotes the substitution of $t$ for $x$ in $\Val$'s range.
-It is easy to see that the height of terms produced as a result of the unfolding
-is bounded by the number of equivalence classes of $\Ec$,
-and thus the construction of $\Val$ will terminate.
+and $\Val[x \mapsto t]$ denotes the variable-capturing substitution of $t$ for
+$x$ in $\Val$'s range. It is easy to see that the height of terms produced as a
+result of the unfolding is bounded by the number of equivalence classes of
+$\Ec$, and thus the construction of $\Val$ will terminate.
 
 \begin{examplex}
 Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and~$\ec{z}$
@@ -1449,13 +1448,14 @@ $\interp{t}{u}$, as returned by the following recursive function:
 \end{array}\]
 %
 \rem{TODO: add small examples}
+\rem{TODO: explain why terminates}
 
 The $\mu$-term $u$
 is a \emph{self-similar subterm} of~$t$ if
 $u$ is a proper subterm of $t$,
 $t$ is of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$,
-$u$ it is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
-and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k \in [n]$.
+$u$ is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
+and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k$. % \in [n]
 The term $t$ is \emph{normal} if it does not contain a self-similar subterm
 and all of its proper subterms are also normal.
 For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal
@@ -1755,11 +1755,11 @@ We now show that $\Val = \nf{\Val}$.
 Assume by contradition $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
 We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
 Due to our construction of $\Val$,
-we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for $i \in [n]$.
+we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for some $i$ % \in [n]$.
 Since $\Val \ec{x}$ is a minimal, it
 contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
-where $\interp{\Val \ec{x}}{ t_i } \aequiv \interp{\Val \ec{x} }{ u_i }$ for $i \in [n]$.
-Due to our construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for $i \in [n]$.
+where $\interp{\Val \ec{x}}{ t_i } \aequiv \interp{\Val \ec{x} }{ u_i }$ for some $i$. % \in [n]$.
+Due to our construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for some $i$. % \in [n]$.
 Since \rn{Cong} does not apply to $\Ec$
 we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
 By (2), $\interp{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
@@ -1866,10 +1866,10 @@ Call this term $t_u$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by our construction of $\ValC$ we have $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
-where for each $i \in [n]$,
+where for each $i \in \{1,\ldots, n\}$, % \in [n]$,
 $\muvar(w_i) = {\Varec{u_i}}$.  Thus by Lemma~\ref{lem:model-completion}\PART{2},
 $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
-For each $i \in [n]$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
+For each $i \in \{1,\ldots, n\}$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
 Thus $\interp{t_u}{u_\iPrime} \vsim \interp{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
 %By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
@@ -1885,7 +1885,7 @@ $\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by construction $\ValC$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
-where for each $i \in [n]$,
+where for each $i \in \{1,\ldots, n\}$,
 $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2},
 $\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
 If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
@@ -1920,7 +1920,7 @@ the implementation within the SMT solver CVC4.
 The calculus is implemented as a \emph{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 constraints for its theory.
-Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a input set of
+Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and an input set of
 clauses $F$ in CNF, the \XXXL($T$) procedure
 incrementally builds partial assignments from the atomic formulas of $F$ to
 truth values such that no clause in $F$ is falsified. We may interpret such a
@@ -1948,8 +1948,8 @@ M_i$, then $x \teq \const{C}( x )$ is an %(possible)
 explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
 Thus, the rules of the calculus are implemented as follows. For all rules with
 conclusion $\bot$, we report the union of the explanations for all premises is
-$\thD$-unsatisfiable. For the \rn{Split} rule, we add a clause of the form
-$\const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr)
+$\thD$-unsatisfiable. For \rn{Split}, we add a clause %of the form
+$t \teq \const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr)
 \mathrel\lor \cdots \mathrel\lor t \teq \const{C}_m\bigl( \const s^1_m( t ),
 \ldots, \const s^{n_m}_m( t ) \bigr)$ to $F$.
 Decisions on which branch to take are thus performed externally by the SAT
@@ -2069,7 +2069,7 @@ filtered out. Due to the lack of machinery for reconstructing inferences about
 
 CVC4 was run on each problem several times, with the support for datatypes and
 codatatypes either enabled or disabled. The contributions of the acyclicity and
-uniqueness rules were also measured, so find out whether these somewhat
+uniqueness rules were also measured, to find out whether these somewhat
 expensive rules are useful in practice. Even when the decision procedure is
 disabled, some of the generated axioms typically include basic properties of
 constructors and selectors, which the decision procedure would recognize as
