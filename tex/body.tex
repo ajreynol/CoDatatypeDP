@@ -2016,46 +2016,44 @@ and $v$, it deduces that \rn{Unique} applies to $u$ and $v$.
 %\rem{TODO: representation of $\mu$-terms?}
 
 %\paragraph{Extension to Quantified Formulas.}
-While our calculus is a decision procedure for ground constraints in the theory of datatypes and codatatypes,
+While the decision procedure is restricted to ground constraints,
 in practice we are often interested in problems that combine reasoning about universal axioms and existential conjectures,
 where checking satisfiability requires reasoning about such ground constraints in the presence of universally quantified formulas.
-Many SMT solvers, such as CVC4, support reasoning about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
+Many SMT solvers, including CVC4, support reasoning about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
 These methods extend naturally to quantified formulas over the signature of the theory of datatypes and codatatypes.
 
 However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes.
 Namely, since quantified formulas may entail cardinality constraints on uninterpreted types $\ty{u}$,
-we may no longer assume that $\ty{u}$ is of infinite cardinality.
-When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \emph{incomplete},
-since the preconditions on \rn{Split} and \rn{Single} may not apply when they indeed are applicable.
+we may no longer assume that they are of infinite cardinality.
+When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \relax{incomplete},
+due to the overly restrictive preconditions on \rn{Split} and \rn{Single}.
 This does not necessarily impact the correctness of our procedure in this setting,
 since by assumption the solver is already incomplete when quantified formulas are present.
-Regardless, we may be interested in increasing the precision of the solver by doing the following.
-First, we may apply \rn{Split} to terms of datatype types whose cardinality depends on the finiteness of uninterpreted types.
-Second, we may conditionally apply \rn{Single} to terms of codatatype types that may have cardinality one.
-For example, consider the codatatype $\keyw{codatatype}~\ty{c} = \const{C}(\ty{u},\: \ty{c})$, where $\ty{u}$ is an uninterpreted type.
-This codatatype has cardinality one when $\ty{u}$ has cardinality one.
-If there exist two equivalence classes $\ec{s\typ{c}}$ and $\ec{t\typ{c}}$,
+Regardless, we can increase the precision of the solver by doing the following.
+First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of uninterpreted types.
+Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
+For example, consider the $\ty{stream}_{\,\ty{u}}$ codatatype, where $\ty{u}$ is uninterpreted.
+This type has cardinality precisely when $\ty{u}$ has cardinality one.
+If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
 our implementation adds the clause %of the form
 $\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y \mathrel\vee s \teq t$ to $F$.
-In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.
+\begin{rep}In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.\end{rep}
 
 %\paragraph{Optimizations.}
-Our implementation uses several optimizations which
+The implementation of the decision procedure uses several optimizations which
 follow the approach outlined by Barrett et al.\cite{barrett-et-al-2007}
 and are not reflected in the presentation of the calculus.
-We only briefly mention these optimizations, since
-each applies to datatypes as well as codatatypes, and most have been presented
-thoroughly in Barrett et al.
-
+We briefly mention the main ones.
+%
 Discriminators are treated as predicate symbols, so a discriminator $\const{d}_{\negvthinspace j}( t )$ is such that $\const{d}_{\negvthinspace j}$
 is a predicate symbol, instead of reducing this constraint to $t \teq \const{C}_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^n_{\negvthinspace j}( t ) \bigr)$.
-We have found that this leads to better performance since this reduction introduces terms more eagerly to $\tEc$.
+We have found that this leads to better performance because this reduction introduces terms more eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several
-additional rules \cite{barrett-et-al-2007},
+rules \cite{barrett-et-al-2007},
 which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
-If $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the
-constructor $\const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, we immediately add
+If $\const s^k_{\negvthinspace j}( t ) \in \tEc$ and $t =
+\const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, we immediately add
 $\smash{\const s^k_{\negvthinspace j}( t ) \teq u_k}$ to $\Ec$\begin{rep}, whereas the presented calculus
 would apply \rn{Split} and \rn{Inject} before adding this equality\end{rep}. 
 \begin{rep}  % lower priority to mention this
