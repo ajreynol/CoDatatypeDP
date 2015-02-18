@@ -144,6 +144,7 @@
 \newcommand{\interp}[2]{\langle \smash{#2} \rangle_{#1}}
 \newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
 \newcommand{\ec}[1]{[#1]}
+\newcommand{\J}{\mathcal{J}}
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\Val}{\mathcal{A}}
 \newcommand{\ValC}{\mathcal{A}^\star}
@@ -188,6 +189,7 @@
 \newcommand\vvthinspace{\kern+0.041667em}
 \newcommand\vthinspace{\kern+0.083333em}
 \newcommand\negvthinspace{\kern-0.083333em}
+\newcommand\negvvthinspace{\kern-0.041667em}
 
 %%% For final version as well?
 \usepackage[
@@ -334,7 +336,7 @@ modulo theories) solvers, includes a theory of datatypes.
 
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in combination
-(Section~\ref{sec:a-ground-decision-procedure-for-co-datatypes}).
+(Section~\ref{sec:the-ground-decision-procedure}).
 The procedure is described abstractly as a calculus and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
@@ -731,14 +733,13 @@ junk'' exists, whereas distinctness and injectivity guarantee that ``no
 confusion'' can arise.
 The result of selectors applied to the wrong
 constructor is left completely unspecified.
-\end{rep}
+\end{rep}%
 %
 %  * how to deal with "wrong" selectors, e.g.
 %        hd(nil1) = hd(nil2)?
 %      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
 %        and not in other models
 %
-\noindent\kern\parindent
 Datatypes are additionally characterized by an induction axiom schema\begin{rep}:
 %
 \[
@@ -760,7 +761,7 @@ induction prohibits nonstandard models, which could contain cyclic values---e.g.
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
 
-\pagebreak
+\pagebreak[2]
 
 For codatatypes, the dual notion is called coinduction. \begin{rep}It depends on
 witnesses $R_i$ that are required to be bisimulations:
@@ -801,7 +802,7 @@ function space $\ty{nat} \to \ty{int}$.
 %best way to justify it though, but for the conference at least we can just claim it. (we
 %won't have the place for a proof anyway).
 
-Given a signature $\Sig$, we write $\thD$ to refer to the \emph{theory of
+Given a signature $\Sig$, $\thD$ refers to the \emph{theory of
 datatypes and codatatypes},
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\mathbf{J}$,
 namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
@@ -815,7 +816,7 @@ A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
 exists an interpretation in $\mathbf{J}$ that satisfies $\varphi$.
 % otherwise, it is $\thD$-unsatisfiable.  (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
-\rem{more?}
+%\rem{more?}
 
 When looking at the ground theory, induction can be replaced by the acyclicity
 axiom schema, which states that any ground constructor term cannot be equal to
@@ -860,7 +861,7 @@ where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \emph{corecursive singletons}. For the decision procedure, it will be
 crucial to detect these types. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
-above is altered to leave \ty{unit} uninterpreted, \ty{b} and \ty{c} will be
+above is altered to make \ty{unit} an ordinary type, \ty{b} and \ty{c} will be
 singletons precisely when \ty{unit} is interpreted as a singleton.
 Fortunately, given cardinalities for the ordinary types, it is easy to
 characterize this degenerate case.
@@ -913,7 +914,7 @@ that the type has at most one value.
 %   or at least two;
 
 \section{The Ground Decision Procedure} % for (Co)datatypes}
-\label{sec:a-ground-decision-procedure-for-co-datatypes}
+\label{sec:sec:the-ground-decision-procedure}
 
 The decision procedure for the ground theory of (co)datatypes $\thD$ determines the
 $\thD$-satisfiability of sets of ground constraints over a fixed
@@ -921,8 +922,8 @@ signature~$\Sig$. It is formulated as a calculus.
 % whose derivation rules are applied until saturation or contradiction.
 %
 The derivation rules operate on a finite set $\Ec$ of equalities and
-disequalities between $\Sig$-terms, taken as a conjunction. We
-write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
+disequalities between $\Sig$-terms. %, taken as a conjunction.
+We let $\tEc$ denote the set of $\Sig$-terms occurring in $\Ec$.
 
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
@@ -946,11 +947,17 @@ derivation rule to the parent node. A derivation tree is \emph{closed} if all of
 its leaf nodes are $\bot$. A node is \emph{saturated} if no nonredundant
 instance of a rule can be applied to it.
 
-The calculus consists of three sets of rules, presented in
+The calculus consists of three sets of rules, given in
 \figuresname~\ref{fig:cc-rules} to \ref{fig:split-rule}, corresponding to three
 phases. The first phase computes the bidirectional closure of $\Ec$. The second
-phase makes inferences based on acyclicity (for datatypes) and uniqueness (for
-codatatypes). The third phase performs case splitting on constructors for
+phase
+makes \hfill inferences \hfill based \hfill on \hfill acyclicity \hfill (for
+\hfill datatypes) \hfill and \hfill uniqueness \hfill (for \hfill codatatypes).
+
+%%% TYPESETTING: horrible hack
+\pagebreak[2]
+\noindent
+The third phase performs case splitting on constructors for
 various terms in $\tEc$.
 %Following the conventions from~\cite{},
 %The derivation rules are given in \relax{guarded assignment form},
@@ -1534,34 +1541,33 @@ only values of types in $\Codata$ may contain cycles.
 %For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
 %is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
 
-\rem{TODO: Normal model vs. actual model.}
-\rem{TODO: Model or interpretation? Grep elsewhere.}
+\rem{TODO: Normal interpretation vs. actual interpretation.}
 
-\begin{definition}[Normal Model]
+\begin{definition}[Normal Interpretation]
 \afterDot%
-\label{def:norm-model}%
+\label{def:norm-interpretation}%
 \rm
-A model $\M$ is \emph{normal} if these conditions are met:
+An interpretation $\J$ is \emph{normal} if these conditions are met:
 \begin{enumerate}
 \item
 For each type $\tau$,
-$\M( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
+$\J( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
 unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
-$\M( \const{C}( \vec t \,) )$ is the value
-in $\M( \tau )$ that is $\alpha$-equivalent to
-$\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$, where $x$ is fresh.
+$\J( \const{C}( \vec t \,) )$ is the value
+in $\J( \tau )$ that is $\alpha$-equivalent to
+$\nf{\MU x.\; \const{C}( \J( \vec t \,) )}$, where $x$ is fresh.
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-if $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
-then $\M\negvthinspace\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
-in $\M( \tau )$ that is $\alpha$-equivalent to
-$\interp{\M( t )}{u_k}$.
+if $\J( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
+then $\J\negvvthinspace\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
+in $\J( \tau )$ that is $\alpha$-equivalent to
+$\interp{\J( t )}{u_k}$.
 \end{enumerate}
 \end{definition}
 
-In the following, we consider only normal models.
+In the following, we consider only normal interpretations.
 When constructing a model $\M$ for $\Ec$,
 it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.%
 \rem{Variables are really part of the model then?}
@@ -1578,14 +1584,14 @@ $\MU x.\; \const{C}( z, x ) \vsimv{z} \MU y.\; \const{C}( z, y )$,
 but
 $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
-For a variable $x\typ{\tau}$ and a fixed normal model $\M$,
-we write $\mathcal{T}^{\smash{\M}}_x( \Val )$ to denote the set consisting of all values
-$v \in \M( \tau )$
+For a variable $x\typ{\tau}$ and a fixed normal interpretation $\J$,
+we write $\mathcal{T}^{\smash{\J}}_x( \Val )$ to denote the set consisting of all values
+$v \in \J( \tau )$
 such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
 \rem{Intuition?}
 
-The \emph{completion} $\ValC$ of $\Val$ for a normal model $\M$
-assigns values from $\M$ to unassigned variables in the domain of $\Val$.
+The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
+assigns values from $\J$ to unassigned variables in the domain of $\Val$.
 We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:%
 \rem{A bit clumsy}
 \[
@@ -1595,9 +1601,9 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
   \betweenantes
   \MU {\Varec{x}}.\; t \aequiv v
   \betweenantes
-  v \in \M( \tau )
+  v \in \J( \tau )
   \betweenantes
-  v \not\in \mathcal{T}^{\smash{\M}}_{\Varec{x}}(\Val)
+  v \not\in \mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)
 }{
   \Val := \nf{\Val [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
 }
@@ -1607,13 +1613,13 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
 \]
 %
 The rule chooses an unassigned variable in $\Val$ and assigns it a fresh
-value---one that does not occur in $\mathcal{T}^{\smash{\M}}_{\Varec{x}}(\Val)$
+value---one that does not occur in $\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)$
 modulo $\alpha$-equivalence.
 \rem{The ``not alpha equivalent'' bit is expressed differently in the rule,
 with $\notin$. This looks fishy.}
 \rem{What guarantees that such a value exists? (Answer: infinitely many values
 of codatatypes, of which only finitely many are in
-$\mathcal{T}^{\smash{\M}}_{\Varec{x}}(\Val)$?)}
+$\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)$?)}
 Since this update removes one
 variable from the set $\FV( \Val )$ and does not add any variables to $\FV( \Val
 )$, it can only be applied a finite number of times. We normalize all terms in
@@ -1643,7 +1649,7 @@ After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as fol
 %
 To construct a completion $\ValC$, we must choose values for the free
 variables of $\Val$, namely ${\Varec{x}}$ and ${\Varec{y}}$.
-Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$} is
+Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\J}}_{{\Varec{x}}}( \Val )$} is
 \[%\begin{array}{c}
 \{
 \MU x.\; \const{D}( x ),\;
@@ -1653,11 +1659,11 @@ Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\M}}_{{\Varec{x
 \}
 %\end{array}
 \]
-Consider a normal interpretation $\mathbf{J}$ \rem{Appropriate symbol?} that interprets variables in $\Ec$ based on the mapping $\Val$:
+Consider a normal interpretation $\J$ that interprets variables in $\Ec$ based on the mapping $\Val$:
 $x$ is interpreted as $\Val \ec{x}$, $y$ as $\Val \ec{y}$, and so on.
-Assigning a value for $\Val \ec{x}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^{\smash{\M}}_{{\Varec{x}}}( \Val )$
+Assigning a value for $\Val \ec{x}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^{\smash{\J}}_{{\Varec{x}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
-which in turn may cause $\Ec$ to be falsified by $\mathbf{J}$.
+which in turn may cause $\Ec$ to be falsified by $\J$.
 For example, assign $\MU {\Varec{x}}.\; \const{D}( {\Varec{x}} )$ for ${\Varec{x}}$.
 After this substitution, $\Val \ec{z}$ is $\MU {\Varec{z}}.\; \const{D}( \MU {\Varec{x}}.\; \const{D}( {\Varec{x}} ) )$,
 which has normal form $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$,
@@ -1693,11 +1699,11 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
 %\end{conf}
 
 \begin{lemma}
-\label{lem:model-completion}
+\label{lem:interpretation-completion}
 If $\Val$ is constructed for a saturated set $\Ec$
-and $\ValC$ is a completion of $\Val$ for a normal model $\M$, the following properties hold:
+and $\ValC$ is a completion of $\Val$ for a normal interpretation $\J$, the following properties hold:
 \begin{enumerate}
-\item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
+\item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\J( \tau )$.
 \item[\rm (2)]
 $\ValC \ec{x} = \interp{\ValC \ec{y}}{ t }$ for
 all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$.
@@ -1718,18 +1724,20 @@ If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\r
 the cardinality of $\tau$ must be $1$.
 Since \rn{Single} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
-and thus there are no terms in $\mathcal{T}^{\smash{\M}}_{\Varec{y}}(\ValC)$ of type $\tau$.
-This is a contradiction, since our model completion may assign the value in the domain of $\tau$ to ${\Varec{y}}$.
+and thus there are no terms in $\mathcal{T}^{\smash{\J}}_{\Varec{y}}(\ValC)$ of type $\tau$.
+This is a contradiction, since %our %model
+completion can assign the value in the domain of $\tau$ to ${\Varec{y}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction,
-since there are only a finite number of closed terms in $\mathcal{T}^{\smash{\M}}_{\Varec{y}}(\ValC)$,
-and thus our model completion can assign a value not occurring in $\mathcal{T}^{\smash{\M}}_{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
+since there are only a finite number of closed terms in $\mathcal{T}^{\smash{\J}}_{\Varec{y}}(\ValC)$,
+and thus %our %model
+completion can assign a value not occurring in $\mathcal{T}^{\smash{\J}}_{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
 By construction, $\ValC \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
 Moreover, our construction of $\ValC$ applies substitutions of the form
 $\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}}$ is not a codatatype.
 Thus, $\ValC \ec{x}$ is acyclic when $\tau \not\in \Codata$.
-Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\M( \tau )$.
+Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\J( \tau )$.
 
 We first show that 2 and 3 hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
@@ -1771,7 +1779,7 @@ We now show that if (2) and (3) hold for some $\Val_1$,
 they also hold for $\nf{\Val_1 \sigma}$,
 where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
 ${\Varec{x}} \in FV( \Val_1 )$,
-and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^{\smash{\M}}_{\Varec{x}}(\Val_1)$.
+and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val_1)$.
 To show 2,
 by assumption of 2 on $\Val_1$, we have $\interp{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
@@ -1806,7 +1814,7 @@ we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
 or else the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
 Since $\interp{\Val_1 \ec{y}}{t_1}$ is normal,
-there is a closed $\mu$-term $v \in \mathcal{T}^{\smash{\M}}_{\Varec{x}}( \Val_1 )$
+there is a closed $\mu$-term $v \in \mathcal{T}^{\smash{\J}}_{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on our selection of $\MU {\Varec{x}}.\; t$,
 we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$,
@@ -1820,7 +1828,7 @@ we have that $\ValC$ satisfies (2) and (3).
 \end{rep}
 
 Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
-interpretation $\mathbf{J}$ can be constructed that satisfies $\Ec$. Property~\PART{1} states that the
+interpretation $\J$ can be constructed that satisfies $\Ec$. Property~\PART{1} states that the
 values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal
 interpretation. In particular, this means they are closed, normal, and acyclic when
 required. Property~\PART{2} states that the interpretation of all subterms in the
@@ -1842,11 +1850,11 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
-We consider a normal model $\M$ \rem{Change to interpretation, with proper symbol.}
+We consider a normal model $\M$
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
 For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \mathcal{T}(\Fc)$,
-which by Lemma~\ref{lem:model-completion}\PART{1} is guaranteed to exist.
+which by Lemma~\ref{lem:interpretation-completion}\PART{1} is guaranteed to exist.
 
 We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 We show,
@@ -1860,14 +1868,14 @@ If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
 then $\M( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) }$ for some fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$.
 Call this term $t_u$.
-%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
+%By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by our construction of $\ValC$ we have $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 where for each $i \in \{1,\ldots, n\}$, % \in [n]$,
-$\muvar(w_i) = {\Varec{u_i}}$.  Thus by Lemma~\ref{lem:model-completion}\PART{2},
+$\muvar(w_i) = {\Varec{u_i}}$.  Thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
 $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i \in \{1,\ldots, n\}$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
 By Lemma~\ref{lem:mu-norm-arg}, $\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
@@ -1879,28 +1887,28 @@ we have $\M( t ) \vsim \ValC \ec{t}$.
 If $t$ is a selector term of the form $\const s^k_{\negvthinspace j}( u )$,
 since \rn{Split} does not apply to $\Fc$,
 $\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)}$ for some $\jPrime$.
-%By Lemma~\ref{lem:model-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
+%By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 %where $\interp{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by construction $\ValC$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where for each $i \in \{1,\ldots, n\}$,
-$\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$ and thus by Lemma~\ref{lem:model-completion}\PART{2},
+$\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$ and thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
 $\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
 If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
 which is $\ValC \ec{t}$.
 If $j \neq \jPrime$, since \rn{Cong} does not apply,
 $\smash{\const s^k_{\negvthinspace j}( u )}$ and $\smash{\const s^k_{\negvthinspace j}( u' )}$
 are in distinct equivalence classes only if $u$ and $u'$ are in distinct equivalence classes.
-Due to the induction hypothesis and Lemma~\ref{lem:model-completion}\PART{3}, $\M( u ) \neq \M( u' )$ for all such $u$, $u'$.
+Due to the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\M( u ) \neq \M( u' )$ for all such $u$, $u'$.
 Thus, we may interpret $\smash{\M(\const s^k_{\negvthinspace j})( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\M$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
 Since $\M( t_1 ) \vsim \ValC \ec{t_1}$ and $\M( t_2 ) \vsim \ValC \ec{t_2}$,
-by Lemma~\ref{lem:model-completion}\PART{3}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
+by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
