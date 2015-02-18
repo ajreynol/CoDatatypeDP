@@ -819,12 +819,11 @@ exists an interpretation in $\mathbf{J}$ that satisfies $\varphi$.
 % it comes to English prefixes like non-, in-, un-, and a-.)
 %\rem{more?}
 
-When looking at the ground theory, induction can be replaced by the acyclicity
-axiom schema, which states that any ground constructor term cannot be equal to
-a variable it contains \cite{barrett-et-al-2007}. Dually, coinduction can be
-replaced by the uniqueness axiom schema, which asserts that (co)recursive
-equations giving rise to the same infinite expansion---e.g., $x \teq
-\const{C}(x)$ and $y \teq \const{C}(\const{C}(y))$---must be equal.
+For the ground theory, induction is equivalent to the acyclicity
+axiom schema, which states that ground constructor terms cannot be equal to
+any of their proper subterms \cite{barrett-et-al-2007}. Dually, coinduction
+is equivalent to the uniqueness axiom schema, which asserts that codatatype
+values are fully characterized by their possibly infinite expansion.
 
 \begin{rep}
 TODO: State more precisely and proof?
@@ -942,11 +941,11 @@ bound on the cardinality of any such type, so it is safe to consider them infini
 %normalized in this manner.
 
 A rule can be applied to $\Ec$ if all the specified preconditions are met.
-The conclusion of a rule either describes equalities to be added to $\Ec$
+The conclusion either describes equalities to be added to $\Ec$
 or is $\bot$ (contradiction).
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
-A rule may have multiple conclusions, % separated by $\ror$,
+One rule has multiple conclusions, % separated by $\ror$,
 denoting branching.
 %
 An application of a rule is \emph{redundant} if at least one branch in the
@@ -954,7 +953,10 @@ conclusion is an assignment to $\Ec$ that leaves it unchanged.
 A \emph{derivation tree} is a %finite
 tree whose nodes are finite sets of
 equalities and where child nodes are obtained by a nonredundant application of a
-derivation rule to the parent node. A derivation tree is \emph{closed} if all of
+derivation rule to the parent node. \hfill A
+derivation tree
+\goodbreak\noindent %%% TYPESETTING: horrible HACKS
+is \emph{closed} if all of
 its leaf nodes are $\bot$. A node is \emph{saturated} if no nonredundant
 instance of a rule can be applied to it.
 
