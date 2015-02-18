@@ -476,7 +476,10 @@ induction in both types of provers \cite{kersani-peltier-2013,wand-weidenbach-20
 Datatypes are explicitly supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
 also find models involving cyclic codatatype values. The $\mu$-notation is
-inspired by the $\mu$-calculus \cite[etc.]{kozen-1983,endrullis-et-al-2011}.
+inspired by the $\mu$-calculus
+\begin{conf}\cite{kozen-1983}\end{conf}%
+\begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}\end{rep}%
+.
 
 % TODO: Leon, RADA -- http://www-users.cs.umn.edu/~hung/papers/fse13.pdf
 
@@ -1069,6 +1072,8 @@ are saturated.
 \label{fig:cc-rules}
 \end{figure}
 
+\kern-1.5pt %% TYPESETTING hack
+
 \paragraph{Phase 1: Computing the Bidirectional Closure.}
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
 whereas the \rn{Inject} and \rn{Clash} rules together compute (downward) unification.
@@ -1125,6 +1130,8 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \label{fig:ab-rules}
 \end{figure}
 
+\kern-1.5pt %% TYPESETTING hack
+
 \paragraph{Phase 2: Applying Acyclicity and Uniqueness.}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 The premises of the rules that make up the second phase refer to a mapping $\Val$
@@ -1147,12 +1154,11 @@ The variable $x$ need not occur freely in the binder's body, in which case
 the binder can be omitted.
 In the \rn{Acyclic} rule,
 $\FV( u )$ denotes the variables occurring freely in~$u$.
-
 %%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
 %
 %For uniformity, we also consider $%\MU x.\;
 %\const{c}$ to be a $\mu$-term if $\const{c}$ is a constant of type $\tau \in \Nondata$.
-
+%
 %%% I think this should be clear enough from the "Conventions" paragraph at the
 %%% end of the introduction.
 %%
@@ -1160,19 +1166,21 @@ $\FV( u )$ denotes the variables occurring freely in~$u$.
 %if $\const{C} : \vec \tau \rightarrow \upsilon$
 %and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
 %then $\MU x.\; \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
-
+%
 A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
-it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
-it contains an occurrence of a bound variable.
-The notation $t \aequiv u$, expressing $\alpha$-\emph{equivalence},
+it contains no free variables. \hfill It is \emph{cyclic} if %and only if --- ditto
+it contains a bound variable. \hfill The
+\goodbreak %%% TYPESETTING: horrible hacks (including two hfills)
+\noindent
+notation $t \aequiv u$, for $\alpha$-\emph{equivalence},
 indicates that the $\mu$-terms $t$ and $u$
-are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables---e.g.,
+are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables\begin{rep}---e.g.,
 %$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
-$\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$\begin{rep},
+$\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$,
 but
 $\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
 \not\aequiv \MU y.\; \const{D}( y, x )$\end{rep}.
-Two $\mu$-terms can represent the same value while not being $\alpha$-equivalent---e.g.,
+Two $\mu$-terms can denote the same value despite being $\alpha$-disequivalent---e.g.,
 $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 %, or informally are \emph{observationally equivalent}.
 %For convienience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
@@ -1274,7 +1282,7 @@ the \rn{Unique} rule applies to derive $y \teq \const{S}(y)$.
 %Intuitively, this equality holds, since the values of $y$ and $\const{S}(y)$
 %are equivalent.
 %
-At this point, phase~1 is activated again to refine the equivalence classes,
+At this point, phase~1 is activated again, % to XXX the equivalence classes,
 yielding
 $\{ x,\, \const{S}(x) \}$ and
 $\{ y,\, \const{S}(y),\allowbreak\, \const{S}(\const{S}(y)) \}$.
@@ -1292,7 +1300,7 @@ $\Val \ec{y} \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})$.
 Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 %for the renaming
 %$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
-the \rn{Unique} rule can finally derive $x \teq y$.
+\rn{Unique} can finally derive $x \teq y$.
 \xend
 \end{examplex}
 
@@ -1352,9 +1360,12 @@ $\delta$ constructor term.
 This is enforced in the third phase by the \rn{Split} rule.
 A companion rule, \rn{Single}, focuses on the degenerate case where two
 terms from $\tEc$ have a corecursive singleton type
-(Section~\ref{sec:the-theory-of-co-datatypes}) and must therefore be equal. Both
-the finiteness assumption on the datatype in \rn{Split} and the singleton
-constraint on the codatatype in \rn{Single} can be evaluated statically
+%(Section~\ref{sec:the-theory-of-co-datatypes})
+and must therefore be equal. Both
+\rn{Split}'s finiteness assumption %on the datatype
+and \rn{Single}'s singleton
+constraint %on the codatatype
+can be evaluated statically
 based on a recursive computation of the cardinalities of the
 constructors' argument types. This step relies on the assumption that all types
 in $\Nondata$ are infinite.
