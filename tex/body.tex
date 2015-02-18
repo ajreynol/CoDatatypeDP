@@ -1137,22 +1137,22 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \paragraph{Phase 2: Applying Acyclicity and Uniqueness.}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 The premises of the rules that make up the second phase refer to a mapping $\Val$
-that associates a $\mu$-term as representative with each equivalence class.
+that associates a $\mu$-term with each equivalence class as its representative.
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
 % for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
-A $\mu$-term $t$ of type $\tau$ describes a class of values of
-$\tau$ that terms in that equivalence class can take in the models of $\Ec$.
+A $\mu$-term $t\typ{\tau}$ describes a class of $\tau$ values
+that terms in that equivalence class can take in the models of $\Ec$.
 %either in the case when $\tau$ is a codatatype or datatype type,
 When $\tau$ is a datatype, % \in \Data$,
-a cyclic $t$ describes an infeasible class of values.
+a cyclic $\mu$-term describes an infeasible class of values.
 %$\tau \not\in \Codata$.
 
 Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
 or a node of the form
 $\MU x.\: \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ of the expected types.
-The variable $x$ need not occur freely in the binder's body, in which case
+The variable $x$ need not occur freely in the $\mu$-binder's body, in which case
 the binder can be omitted.
 In the \rn{Acyclic} rule,
 $\FV( u )$ denotes the variables occurring freely in~$u$.
@@ -1170,11 +1170,11 @@ $\FV( u )$ denotes the variables occurring freely in~$u$.
 %then $\MU x.\; \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
 %
 A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
-it contains no free variables. \hfill It is \emph{cyclic} if %and only if --- ditto
-it contains a bound variable. \hfill The
-\goodbreak %%% TYPESETTING: horrible hacks (including two hfills)
+it contains no free variables. \,It is \emph{cyclic} if %and only if --- ditto
+it contains a bound variable. \,The
+\goodbreak %%% TYPESETTING: horrible hacks (including two \,'s)
 \noindent
-notation $t \aequiv u$, for $\alpha$-\emph{equivalence},
+$\alpha$-\emph{equivalence} relation $t \aequiv u$
 indicates that the $\mu$-terms $t$ and $u$
 are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables\begin{rep}---e.g.,
 %$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
@@ -1189,10 +1189,10 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
-The mapping $\Val$ is computed as follows.
+The mapping $\Val$, on which the rules depends, is computed as follows.
 %
-With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
-of the same type as $u$
+With each equivalence class $\ec{u\typ{\tau}}$, we associate a fresh variable $\Varec{u}\typ{\tau}$
+%of the same type as $u$
 %not occurring in $\tEc$,
 and set $\Val\ec{u} := {\Varec{u}}$. Therefore, there are initially no
 constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
@@ -1213,7 +1213,7 @@ is refined by applying the following unfolding rule exhaustively:\strut
 }
 \]
 $\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range,
-and $\Val[x \mapsto t]$ denotes the variable-capturing substitution of $t$ for
+and $\Val[x \mapsto t]$ denotes the \emph{variable-capturing} substitution of $t$ for
 $x$ in $\Val$'s range. It is easy to see that the height of terms produced as a
 result of the unfolding is bounded by the number of equivalence classes of
 $\Ec$, and thus the construction of $\Val$ will terminate.
@@ -1645,7 +1645,7 @@ variable from the set $\FV( \Val )$ and does not add any variables to $\FV( \Val
 the range of $\Val$ after each rule application.%\rem{TODO: clumsy}
 
 \begin{examplex}
-Let $\delta$ be a codatatype with the constructors $\const{C}, \const{D}, \const{E} :\delta \rightarrow \delta$.
+Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
 Let $\Ec$ be the set
 $\{
 w \teq \const{C}( z ),\;
@@ -1657,13 +1657,13 @@ x \not\teq z
 After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as follows:
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
-\[\begin{array}{r@{}c@{}r@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}l@{\;}l}
-\Val \ec{x} & = & {\Varec{x}} &
-\Val \ec{z} & = & \MU {\Varec{z}}. & \multicolumn{2}{@{}l@{}}{\const{D}( {\Varec{x}} )} & &
-\Val \ec{u} & {}\,=\,{} & \MU {\Varec{u}}. & \const{C}( {\Varec{x}} ) \\
-\Val \ec{y} & = & {\Varec{y}} &
-\Val \ec{w} & {}\,=\,{} & \MU {\Varec{w}}. & \const{C}( & \MU {\Varec{z}}. & \const{D}( {\Varec{x}} ) ) &
-\Val \ec{v} & = & \MU {\Varec{v}}. & \const{E}( {\Varec{y}} )
+\[\begin{array}{r@{}c@{}r@{}l@{\qquad}r@{}c@{}r@{}l@{\qquad}r@{}c@{}l}
+\Val \ec{u} & {}\,=\,{} & \MU {\Varec{u}}.\; & \const{C}( {\Varec{x}} ) &
+\Val \ec{v} & = & \MU {\Varec{v}}.\; & \const{E}( {\Varec{y}} ) &
+\Val \ec{y} & {}\,=\,{} & {\Varec{y}} \\
+\Val \ec{z} & = & \MU {\Varec{z}}.\; & \const{D}( {\Varec{x}} ) &
+\Val \ec{w} & {}\,=\,{} & \MU {\Varec{w}}.\; & \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{x}} ) ) &
+\Val \ec{x} & = & {\Varec{x}}
 \end{array}\]
 %
 To construct a completion $\ValC$, we must choose values for the free
