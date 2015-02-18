@@ -534,8 +534,6 @@ $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
 Finally, $[n]$ denotes the set $\{1,\ldots, n\}$, and
 $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
-\pagebreak
-
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
 
@@ -557,7 +555,7 @@ because they can be abstracted away as variables when combining theories.
 %examples.
 
 %\paragraph{Specifications.}
-In an SMT problem, the signature is normally given by specifying first the
+In an SMT problem, the signature is typically given by specifying first the
 uninterpreted types in any order, then the (co)datatypes with their constructors
 and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
 finally any other function symbols.
@@ -606,8 +604,8 @@ Schematically:
 \[
 \begin{aligned}[t]
 \!(\keyw{co})\keyw{datatype}\;\,
-  \delta_1 & {}= \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m_1\!}(\ldots)} \\
-   \smash{\vdots\,\,\,} \\[-1\jot]
+  \delta_1 & {}= \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m_1\!}(\ldots)} \\[-.5\jot]
+   \smash{\vdots\,\,\,} \\[-1.5\jot]
   \keyw{and}\; \,\delta_{\elllx} & =\, \smash{\const{C}_{\elll 1\!}(\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \ldots, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}})} \mid \cdots \mid \smash{\const{C}_{\elll m_{\elllx}\!}(\ldots)}
 \end{aligned}
 \]
@@ -648,11 +646,12 @@ finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop
 A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
 type of an argument to one of $\delta$'s constructors. Semantically, a set of
 types is \emph{mutually} (\emph{co})\emph{recursive} if and only if the
-associated dependency graph is strongly connected. Types can be declared
-together in a mutual fashion even if they are not actually (co)recursive.
+associated dependency graph is strongly connected.
 \begin{rep}%
-The semantic notion is more precise and is the one that interests us.
-\end{rep}
+Types can be declared together in a mutual fashion even if they are not actually
+(co)recursive. The semantic notion is more precise and is the one that interests
+us.
+\end{rep}%
 %
 In addition, nothing forbids non(co)recursive specifications
 such~as
@@ -699,9 +698,9 @@ their selectors.
 %axiomatic approach emphasizes the commonality between datatypes and
 %codatatypes, while sacrificing a theoretically fruitful notion of duality.
 
-Datatypes and codatatypes share many basic properties pertaining to
-constructors and selectors. All properties below are implicitly universally
-quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
+Datatypes and codatatypes share many basic properties\begin{rep}. All properties
+below are implicitly universally quantified and range over all $i$, $j$,
+$\jPrime$, and $k$ within bounds\end{rep}:
 % and to all possible splits of the
 %$n$-ary constructor $\const{C}_{i\negvthinspace j}$'s argument list into $\bar x,
 %y, \bar z$:
@@ -711,14 +710,14 @@ quantified and range over all $i$, $j$, $\jPrime$, and $k$ within bounds:
 \text{Distinctness:}\quad
   & %\forall \bar x, \bar y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \quad\text{if $j \not= \jPrime$}}
-  \\[-.5\jot]
+  \\[-1\jot]
 \text{Injectivity:}\quad
   & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(x_1,\ldots,x_{k-1},y,x_{k+1},\ldots,x_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y}
-  \\[-.5\jot]
+  \\[-1\jot]
 \text{Exhaustiveness:}\quad
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
-  \\[-.5\jot]
+  \\[-1\jot]
 \text{Selection:}\quad
   & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k}
 \end{aligned}
@@ -731,12 +730,13 @@ confusion'' can arise.
 The result of selectors applied to the wrong
 constructor is left completely unspecified.
 \end{rep}
-
+%
 %  * how to deal with "wrong" selectors, e.g.
 %        hd(nil1) = hd(nil2)?
 %      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
 %        and not in other models
-
+%
+\noindent\kern\parindent
 Datatypes are additionally characterized by an induction axiom schema\begin{rep}:
 %
 \[
@@ -757,9 +757,9 @@ For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
 induction prohibits nonstandard models, which could contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
-%
-\begin{rep}\par\end{rep}
-%
+
+\pagebreak
+
 For codatatypes, the dual notion is called coinduction. \begin{rep}It depends on
 witnesses $R_i$ that are required to be bisimulations:
 %
@@ -919,7 +919,7 @@ signature~$\Sig$. It is formulated as a calculus.
 % whose derivation rules are applied until saturation or contradiction.
 %
 The derivation rules operate on a finite set $\Ec$ of equalities and
-disequalities between $\Sig$-terms, where $\Ec$ is taken as a conjunction. We
+disequalities between $\Sig$-terms, taken as a conjunction. We
 write $\tEc$ to denote the set of $\Sig$-terms occurring in $\Ec$.
 
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
@@ -2028,8 +2028,8 @@ based on whether $j = \jPrime$.
 
 To evaluate the decision procedure, we generated problems from existing
 Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
-Codatatypes being a recent addition to Isabelle
-\cite{blanchette-et-al-2014-impl}, benchmarks are not abundant. We
+Codatatypes being a recent addition to Isabelle\begin{rep}
+\cite{blanchette-et-al-2014-impl}\end{rep}, benchmarks are not abundant. We
 included all the theory files from the Isabelle distribution (Distro) and the \emph{Archive
 of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
 within the supported fragment. We also included two unpublished theories by
@@ -2044,8 +2044,8 @@ experiments. The experimental data is publicly available.%
 
 For each goal in each theory file, Sledgehammer was invoked to select
 256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
-along with the goal \cite{boehme-2012-phd}. The resulting problem was given to
-CVC4, running for up to 60 seconds on the StarExec cluster
+along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
+given to CVC4, running for up to 60 seconds on the StarExec cluster
 \cite{stump-et-al-2014-starexec}. Problems involving no (co)datatypes were
 filtered out. Due to the lack of machinery for reconstructing inferences about
 (co)datatypes in Isabelle, CVC4 is trusted as an oracle in these experiments.
@@ -2108,7 +2108,7 @@ more expensive rules, make a contribution.
 Three proofs were found thanks to
 the \rn{Acyclic} rule and four required the \rn{Unique} rule. Among the latter,
 three correspond to one-line proofs in Isabelle, of the form
-\keyw{by}~\textit{coinduction}~\textit{auto} \cite{blanchette-et-al-2014-impl}.
+\keyw{by}~\textit{coinduction}~\textit{auto}\begin{rep} \cite{blanchette-et-al-2014-impl}\end{rep}.
 The fourth proof, by Gammie and Lochbihler, is more elaborate:
 %
 \begin{quote}
