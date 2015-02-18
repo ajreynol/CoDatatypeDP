@@ -328,9 +328,10 @@ one case by unifying the finite and infinite nonzero cases.
 
 Datatypes and codatatypes are an integral part of most modern proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
-have emerged in a few automatic theorem provers as well. The SMT-LIB~2
-\cite{barrett-et-al-2010} syntax, implemented by most SMT (satisfiability
-modulo theories) solvers, includes a theory of datatypes.
+have emerged in a few automatic theorem provers as well. The SMT-LIB
+\cite{barrett-et-al-2010} format, implemented by most SMT %(satisfiability
+%modulo theories)
+solvers, has been extended with a syntax for datatypes.
 
 \pagebreak[2]
 
@@ -602,7 +603,7 @@ existing names\end{rep}%
 \dotReportFootnote{It can be convenient to specify the same selector
 for several constructors associated with the same (co)data\-type,
 as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
-However, this is disallowed by SMT-LIB 2, so we do not consider it here.}
+However, this is disallowed by CVC4 and Z3, so we do not consider it here.}
 Schematically:
 %
 \[
@@ -2074,7 +2075,7 @@ experiments. The experimental data are publicly available.%
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
 For each goal in each theory file, Sledgehammer was invoked to select
-256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB
+256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB~2
 along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
 given to CVC4, running for up to 60 seconds on the StarExec cluster
 \cite{stump-et-al-2014-starexec}. Problems involving no (co)datatypes were
