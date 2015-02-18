@@ -1211,16 +1211,16 @@ A possible sequence of unfoldings is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
-\item \noindent\rlap{Initially:}\phantom{Unfold $\Varec{x}$:\enskip}$\{  \}$
-\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
-\item \noindent\rlap{Unfold $\Varec{y}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+%\item \noindent\rlap{Initially:}\phantom{Unfold $\Varec{x}$:\enskip}$\{  \}$
+\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
+\item \noindent\rlap{Unfold $\vthinspace\Varec{y}\negvthinspace$}\phantom{Unfold $\Varec{x}$}:\enskip$\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
   \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
-\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
+\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
   \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
 \end{enumerate}
 %
-The result indicates that the values for $x$ and $y$ in models of $\Ec$
-are of the forms $\const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\allowbreak \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots ))))$
+The resulting $\Val$ indicates that the values for $x$ and $y$ in models of $\Ec$
+must be of the forms $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}},\allowbreak \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots ))))$
 and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))))$,
 respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \xend
