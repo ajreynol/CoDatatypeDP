@@ -840,6 +840,7 @@ TODO: State more precisely and proof?
 %        acyclic objects do not exist
 
 %\paragraph{Special Cases.}
+{\looseness=-1
 Some codatatypes are so degenerate as to have infinite values
 even though they are finite. A simple example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
@@ -864,9 +865,10 @@ crucial to detect these types. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
 above is altered to make \ty{unit} an ordinary type, \ty{b} and \ty{c} will be
 singletons precisely when \ty{unit} is interpreted as a singleton.
-Fortunately, given cardinalities for the ordinary types, it is easy to
-characterize this degenerate case.
+Fortunately, \begin{rep}given cardinalities for the ordinary types, \end{rep}%
+it is easy to characterize this degenerate case.
 
+}
 % In other words, all finite corecursive codatatypes are corecursive singletons.
 
 \begin{lemma}%[Corecursive Singletons]%
@@ -874,7 +876,7 @@ characterize this degenerate case.
 \afterDot
 Let $\delta$ be a corecursive codatatype. The domain interpreting $\delta$ is
 either infinite or a singleton. In the latter case, $\delta$ necessarily has a
-single constructor, whose arguments have types that are interpreted as
+single constructor, whose arguments have types that are interpreted by
 singletons.
 \end{lemma}
 
@@ -941,9 +943,12 @@ bound on the cardinality of any such type, so it is safe to consider them infini
 %are simplified to $t_k$. All constraints added to $\Ec$ are also implicitly
 %normalized in this manner.
 
-A rule can be applied to $\Ec$ if all the specified preconditions are met.
+{\looseness=-1
+A rule can be applied to $\Ec$ if %all
+the %specified
+preconditions are met.
 The conclusion either describes equalities to be added to $\Ec$
-or is $\bot$ (contradiction).
+or is $\bot$. % (contradiction).
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
 One rule has multiple conclusions, % separated by $\ror$,
@@ -954,12 +959,11 @@ conclusion is an assignment to $\Ec$ that leaves it unchanged.
 A \emph{derivation tree} is a %finite
 tree whose nodes are finite sets of
 equalities and where child nodes are obtained by a nonredundant application of a
-derivation rule to the parent node. \hfill A
-derivation tree
-\goodbreak\noindent %%% TYPESETTING: horrible HACKS
-is \emph{closed} if all of
+derivation rule to the parent. A derivation tree is \emph{closed} if all of
 its leaf nodes are $\bot$. A node is \emph{saturated} if no nonredundant
 instance of a rule can be applied to it.
+
+}
 
 The calculus consists of three sets of rules, given in
 \figuresname~\ref{fig:cc-rules} to \ref{fig:split-rule}, corresponding to three
