@@ -327,19 +327,17 @@ one case by unifying the finite and infinite nonzero cases.
 
 \nopagebreak
 
-Datatypes and codatatypes are an integral part of most modern proof assistants,
+Datatypes and codatatypes are an integral part of many proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
 have emerged in a few automatic theorem provers as well. The SMT-LIB
 %\cite{barrett-et-al-2010}
 format, implemented by most SMT
 %(satisfiability modulo theories)
 solvers, has been extended with a syntax for datatypes.
-
-\pagebreak[2]
-
 In this \thewordpaper, we introduce a unified decision procedure for ground
-problems involving datatypes and codatatypes in combination
-(Section~\ref{sec:the-ground-decision-procedure}).
+problems involving datatypes and codatatypes in
+\begin{conf}\goodbreak\noindent\end{conf}%  %%% TYPESETTING: terrible hack
+combination (Section~\ref{sec:the-ground-decision-procedure}).
 The procedure is described abstractly as a calculus and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
@@ -472,17 +470,18 @@ related work. Since then, datatypes have been added to the SMT solver
 Z3 \cite{de-moura-bjoerner-2008} \begin{rep}in unpublished work by Leonardo de Moura \end{rep}and to a SPASS-like %prototypical
 superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
 Closely related is the automatic structural
-induction in both types of provers \cite{kersani-peltier-2013,wand-weidenbach-201x,reynolds-kuncak-2015}.
+induction in both types of provers \cite{kersani-peltier-2013,cruanes-201x,wand-weidenbach-201x,reynolds-kuncak-2015},
+the (co)datatype and (co)induction support in Dafny \cite{leino-moskal-2014},
+and the (semi-)decision procedures implemented in Leon \cite{suter-et-al-2011} and RADA \cite{pham-et-al-2013}
+for datatypes.
 %
-Datatypes are explicitly supported by the higher-order model finder Refute
+Datatypes are supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
 also find models involving cyclic codatatype values. The $\mu$-notation is
 inspired by the $\mu$-calculus
 \begin{conf}\cite{kozen-1983}\end{conf}%
 \begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}\end{rep}%
 .
-
-% TODO: Leon, RADA -- http://www-users.cs.umn.edu/~hung/papers/fse13.pdf
 
 %\textbf{TODO}:
 %  * Klop et al. (streams) Andrew Lice % http://joerg.endrullis.de/
@@ -511,7 +510,7 @@ The setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are atomic sorts and interpreted by
 nonempty domains. The set~$\Types$ must contain a
-distinguished type \ty{bool} interpreted as the set of truth
+\begin{rep}distinguished \end{rep}type \ty{bool} interpreted as the set of truth
 values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
 \begin{rep}
 The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
@@ -538,8 +537,8 @@ parentheses in terms.
 The set $\Funcs$ must at least contain
 $\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
 The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep}.
-Other predicates can be represented as functions to $\ty{bool}$,
-with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
+Other predicates can be represented as functions to $\ty{bool}$\begin{rep},
+with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$\end{rep}.
 \begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
 Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
@@ -2187,7 +2186,7 @@ that of arithmetic \cite{blanchette-et-al-2013-smt}.
 We introduced a decision procedure for the ground theory of datatypes and
 codatatypes. Our main
 contribution has been the support for codatatypes. Both the metatheory and
-the implementation in CVC4 rely heavily on $\mu$-terms to represent cyclic values,
+the implementation in CVC4 rely on $\mu$-terms to represent cyclic values,
 a complication specific to codatatypes.
 % are not very
 % difficult per se, but there are tricky corner cases to take care of if we care
