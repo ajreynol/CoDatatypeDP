@@ -158,7 +158,8 @@
 \newcommand{\vsim}{\aequiv}
 \newcommand{\vsimv}[1]{\mathrel{=^{#1}_\alpha}}
 \newcommand{\tpos}[2]{#1\!\mid_{#2}}
-\newcommand{\muvar}{\mathcal{Var}}
+%\newcommand{\muvar}{\mathcal{Var}}
+\newcommand{\muvar}{\mathrm{Var}} %% cf. FV
 
 \newcommand\SSS{\mathit{S\vthinspace}}
 \newcommand\SSSS[1]{\mathit{S}^{\,#1}}
@@ -1667,15 +1668,15 @@ After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as fol
 To construct a completion $\ValC$, we must choose values for the free
 variables of $\Val$, namely ${\Varec{x}}$ and ${\Varec{y}}$.
 Modulo $\alpha$-equivalence, the set \smash{$\mathcal{T}^{\smash{\J}}_{{\Varec{x}}}( \Val )$} is
-\[%\begin{array}{c}
+$%\begin{array}{c}
 \{
 \MU x.\; \const{D}( x ),\;
-\MU x.\; \const{C}( \const{D}( x )),\;
+\MU x.\; \const{C}( \const{D}( x )),\allowbreak\;
 \const{C}( \MU x.\; \const{D}( x )),\;
 \MU x.\; \const{C}( x )
 \}
 %\end{array}
-\]
+$.
 Consider a normal interpretation $\J$ that interprets variables in $\Ec$ based on the mapping $\Val$:
 $x$ is interpreted as $\Val \ec{x}$, $y$ as $\Val \ec{y}$, and so on.
 Assigning a value for $\Val \ec{x}$ that is $\alpha$-equivalent to a value in $\mathcal{T}^{\smash{\J}}_{{\Varec{x}}}( \Val )$
@@ -1843,6 +1844,8 @@ we have that $\ValC$ satisfies (2) and (3).
 \qed
 \end{proof}
 \end{rep}
+
+\pagebreak[2]
 
 Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
 interpretation $\J$ can be constructed that satisfies $\Ec$. Property~\PART{1} states that the
@@ -2113,7 +2116,7 @@ tautologies. Z3 is included for comparison. % when this is possible.
 %    we must not overestimate the importance of a single trick
 %  * on the other hand: every percentage point counts! cite Tom Hales
 
-%%% TODO: Fix data
+\newcommand\nummodden{num\hbox{\rm\_}mod\hbox{\rm\_}den}
 
 \begin{table*}[t!]
 \normalsize
@@ -2141,8 +2144,6 @@ Full (co)datatypes
 \caption{\,Number of solved goals for the three benchmark suites}
 \label{tab:bench}
 \end{table*}
-
-\newcommand\nummodden{num\hbox{\rm\_}mod\hbox{\rm\_}den}
 
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
 makes a difference across all theories. Overall, it accounts for a success rate
