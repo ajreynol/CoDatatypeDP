@@ -1104,7 +1104,7 @@ denote the equivalence class in $\Ec$ that contains $t$.
  \delta \in \Codata
  \betweenantes
  %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
- \Val \ec{t\typ{\delta}} \aequiv \Val \ec{u}
+ \Val \ec{t\typ{\delta}} \aequiv \Val \ec{u\typ{\delta}}
 }{
  \Ec := \Ec,\: t \teq u
 }
@@ -1411,7 +1411,7 @@ whose root node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the r
 In all these cases, $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
-For \rn{Unique}, our construction of $\Val$ indicates that the value of $t$ and $u$ are equivalent in all models of $\Ec$.
+For \rn{Unique}, our construction of $\Val$ indicates that the values of $t$ and $u$ are equivalent in all models of $\Ec$.
 For \rn{Single}, $t$~and~$u$ must have the same value since the cardinality of their type is $1$.
 By the induction hypothesis, $\Ec \mathrel\cup t \teq u$ is $\thD$-unsatisfiable
 and thus $\Ec$ is $\thD$-unsatisfiable.
@@ -1554,10 +1554,10 @@ in $\M( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \M( \vec t \,) )}$, where $x$ is fresh.
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-$\M\negvthinspace\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
+if $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
+then $\M\negvthinspace\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
 in $\M( \tau )$ that is $\alpha$-equivalent to
-$\interp{\M( t )}{u_k}$,
-assuming $\M( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$.
+$\interp{\M( t )}{u_k}$.
 \end{enumerate}
 \end{definition}
 
@@ -1927,18 +1927,18 @@ truth values such that no clause in $F$ is falsified. We may interpret such a
 partial assignment as a set of literals where $a \in M$ for all atoms $a$ that
 it assigned the value $\top$, and $\neg\; a \in M$ for all atoms that it assigns
 the value $\bot$. Then, at a high level, by the Nelson--Oppen combination
-framework (its variant used in CVC4 is described in~\cite{jovanovic2011sharing}), 
+framework (its variant in CVC4 is described in~\cite{jovanovic2011sharing}), 
 each $T_i$-solver for $i = 1, \ldots, l$ takes as input a combination
 of (1) the purified form of $T_i$-constraints occurring in $M$, where terms
 containing symbols not belonging to $T_i$ are replaced by fresh variables of the
 same type; (2) additional equalities and disequalities between variables of
 types not belonging to $T_i$. Let us call this set $M_i$. Each $T_i$ solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
-$\neg\; C$ is added to $F$, adds a clause $C$ to $F$, or does nothing.
+$\neg\; C$ is added to $F$, adds a clause to $F$, or does nothing.
 When $M$ is a complete assignment for $F$, a theory solver can only choose to do
 nothing when $M_i$ is indeed $T_i$-satisfiable.
 
-Assume $\Ec$ is initially the set $M_i$ described above. For each equality added
+Assume $\Ec$ is initially the set $M_i$ described above. For each equality $t \teq s$ added
 to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t
 \teq s$, which we call its \emph{explanation}.
 Similarly, each $\Val \ec{x}$ is also associated an explanation---that is, a set
@@ -1968,25 +1968,39 @@ If while doing so it returns to $\ec{t}$, then it deduces that \rn{Acyclic} appl
 To recognize when the precondition of \rn{Unique} holds,
 the procedure considers the set $S$ of all codatatype equivalence classes.
 It simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $S$,
-while partitioning $S$ into $S_1, \ldots, S_n$,
-where all terms in $S_i$ have the same constructor type for all their subterms of type $\Data \cup \Codata$,
-and are equivalent for all subterms of type $\Nondata$.
-If after doing so, some $S_i$ in the resulting partition contains two terms $u$ and $v$, then it deduces that \rn{Unique} applies to $u$ and $v$.
+while partitioning $S$ into $S_1, \ldots, S_n$ based on the top-most symbol of constructor terms in these equivalence classes
+and the equivalence of their arguments of type $\Nondata$.
+It then partitions each set in this partition in the same manner recursively.
+If after doing so, the resulting partition contains a set $S_i$ containing distinct terms $u$ and $v$, then it deduces that \rn{Unique} applies to $u$ and $v$.
 
 %\rem{TODO: * sharing is caring (let's cite it for a change)}
 \rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
 %\rem{TODO: representation of $\mu$-terms?}
 
 \paragraph{Extension to Quantified Formulas.}
-Two paras. One general one that talks about:
-\begin{verbatim}
-  * universal conjecture is no problem:
-    * falls into the ground fragment via negation
-      and skolemization
-  * nor is existential axiom a problem
-  * what's interesting: universal axioms and existential conjectures
-\end{verbatim}
-One more specific that talks about the cardinality calculus.
+While our calculus is a decision procedure for ground constraints in the theory of datatypes and codatatypes,
+in practice we are often interested in problems that combine reasoning about universal axioms and existential conjectures,
+where checking satisfiability requires reasoning about such ground constraints in the presence of universally quantified formulas.
+Many SMT solvers, such as CVC4, support reasoning about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
+These methods extend naturally to quantified formulas over the signature of the theory of datatypes and codatatypes.
+
+However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes.
+Namely, since quantified formulas may entail cardinality constraints on uninterpreted types $U$,
+we may no longer assume that $U$ is of infinite cardinality.
+When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \emph{incomplete},
+since the preconditions on \rn{Split} and \rn{Single} may not apply when they indeed are applicable.
+This does not necessarily impact the correctness of our procedure in this setting,
+since by assumption the solver is already incomplete when quantified formulas are present.
+Regardless, we may be interested in increasing the precision of the solver by doing the following.
+First, we may apply \rn{Split} to terms of datatype types whose cardinality depends on the finiteness of uninterpreted types.
+Second, we may conditionally apply \rn{Single} to terms of codatatype types that may have cardinality one.
+For instance, consider the codatatype $\keyw{codatatype}~\ty{c} = \const{C}(\ty{U},\: \ty{c})$, where $U$ is an uninterpreted type.
+This codatatype has cardinality one when $\ty{U}$ has cardinality one.
+If there exists two equivalence classes $\ec{t\typ{c}}$ and $\ec{u\typ{c}}$,
+our implementation adds a clause of the form $( \exists x\,y.\, x \not\teq y \vee t \teq u )$ to $F$,
+where $x$ and $y$ are variables of type $U$.
+In other words, either the cardinality of $U$ is greater than one, or $t$ must be equal to $u$.
+
     
 \paragraph{Optimizations.}
 Our implementation uses several optimizations which
@@ -2165,8 +2179,8 @@ support for (co)recursive functions.
 We owe a great debt to the development team of CVC4, 
 including Clark Barrett and Cesare Tinelli,
 and in particular Morgan Deters,
-who jointly with the first author developed the theory solver for datatypes in
-CVC4.
+who jointly with the first author developed the initial version 
+of the theory solver for datatypes in CVC4.
 %
 Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
 Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
