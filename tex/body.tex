@@ -1229,17 +1229,17 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules operate as follows.
 For acyclicity, if $\ec{t}$ is a datatype equivalence class
 whose values $\Val \ec{t} = \MU x.\; u$ are cyclic
-(as required by the precondition $x \in \FV( u )$),
+(as expressed by $x \in \FV( u )$),
 then $\Ec$ is $\thD$-unsatisfiable.
 For uniqueness, if $\ec{t}$, $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$, $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
-then $t \teq u$. This precondition may seem too restrictive, since
+then $t \teq u$. This requirement may seem too restrictive, since
 $\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ specify the same
 value despite being $\alpha$-disequivalent, but the rule will
 make some progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
 \const{S}(\const{S}(y))$ must be equal to the entire term,
-as demonstrated in the following example.
+as demonstrated next.
 
 %% @ANDY: Minor terminology point:
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
