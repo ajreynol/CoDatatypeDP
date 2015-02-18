@@ -1374,17 +1374,25 @@ Consider a derivation tree with root node $\Ec$. Let $D \subseteq \tEc$ be the
 set of terms whose types are finite datatypes, and let $\SSS \subseteq \tEc$ be
 the set of terms occurring as arguments to selectors. For each term $t \in
 D$\negvthinspace, let
+\begin{conf}
+$\smash{\SSSS 0_t} = \{ t \}$ and
+$\smash{\SSSS {i+1}_t} = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u\typ{\delta} \in \SSSS i_t{,}}~\allowbreak\smash{ \delta \in \Data{,}~ \left|\delta\right| \text{ is finite}{,}~ \const{s} \in \Sel^{\delta}}  \}$,
+\end{conf}%
+\begin{rep}
 \begin{align*}
 \smash{\SSSS 0_t} & = \{ t \}
 & \smash{\SSSS {i+1}_t} & = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u\typ{\delta} \in \SSSS i_t{,}~ \delta \in \Data{,}~ \left|\delta\right| \text{ is finite}{,}~ \const{s} \in \Sel^{\delta}}  \}
 \end{align*}
+\end{rep}%
 %for $i \geq 0$, let ;
 and let $\SSSS \AST_t$ be the limit of this sequence.
-This is a finite set for each $t$ because the values of the type of $t$ are of finite size\rem{Clarify}.
+This is a finite set for each $t$ because there can only be finitely many
+values of the same type as $t$.
+%%% TODO: Clarify above step in report.
 Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in D$,
 and let $\tcEc$ be the set of subterms of
 %
-$$\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t\typ{\delta} \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$$
+$\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t\typ{\delta} \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
 %
 In a derivation tree with root node~$\Ec$,
 it can be shown by %case analysis
