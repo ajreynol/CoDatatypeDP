@@ -924,7 +924,8 @@ that the type has at most one value.
 \label{sec:the-ground-decision-procedure}
 
 Given a fixed signature~$\Sig$,
-the decision procedure for the ground theory of (co)datatypes $\thD$ determines the
+the decision procedure for the ground theory of (co)datatypes %$\thD$
+determines the
 $\thD$-satisfiability of finite sets $\Ec$ of constraints:\ equalities
 and disequalities between ground $\Sig$-terms. The procedure is formulated as a
 calculus.
@@ -936,7 +937,7 @@ First, all codatatypes in $\Codata$ are corecursive. This is not restrictive
 because noncorecursive codatatypes can be seen as nonrecursive
 datatypes.
 Second, all types $\tau \in \Nondata$ have infinite cardinality.
-This is not overly restrictive, because each interpreted type in $\Nondata$
+This is not very limitative, because each interpreted type in $\Nondata$
 having finite cardinality~$n$
 can be replaced by an enumeration datatype with $n$~nullary constructors.
 As for uninterpreted types, since the constraints in $\Ec$ are ground, they cannot entail an upper
@@ -948,7 +949,7 @@ bound on the cardinality of any such type, so it is safe to consider them infini
 %normalized in this manner.
 
 {\looseness=-1
-A rule can be applied to $\Ec$ if %all
+A derivation rule can be applied to $\Ec$ if %all
 the %specified
 preconditions are met.
 The conclusion either describes equalities to be added to $\Ec$
@@ -958,7 +959,7 @@ or is $\bot$. % (contradiction).
 One rule has multiple conclusions, % separated by $\ror$,
 denoting branching.
 %
-An application of a rule is \emph{redundant} if at least one branch in the
+An application of a rule is \emph{redundant} if one branch in the
 conclusion is an assignment to $\Ec$ that leaves it unchanged.
 A \emph{derivation tree} is a %finite
 tree whose nodes are finite sets of
@@ -972,9 +973,9 @@ instance of a rule can be applied to it.
 The calculus consists of three sets of rules, given in
 \figuresname~\ref{fig:cc-rules} to \ref{fig:split-rule}, corresponding to three
 phases. The first phase computes the bidirectional closure of $\Ec$. The second
-phase makes inferences based on acyclicity (for \hfill datatypes) and uniqueness
+phase makes inferences based on acyclicity (for datatypes) and uniqueness
 (for codatatypes).
-The third phase performs case splitting on constructors for
+The third phase performs case distinctions on constructors for
 various terms occurring in $\Ec$.
 %Following the conventions from~\cite{},
 %The derivation rules are given in \relax{guarded assignment form},
