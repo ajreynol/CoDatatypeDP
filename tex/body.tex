@@ -821,7 +821,6 @@ A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
 exists an interpretation in $\mathbf{J}$ that satisfies $\varphi$.
 % otherwise, it is $\thD$-unsatisfiable.  (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
-%\rem{more?}
 
 For the ground theory, induction is equivalent to the acyclicity
 axiom schema, which states that ground constructor terms cannot be equal to
@@ -1476,8 +1475,8 @@ $\interp{t}{u}$, as returned by the following recursive function:
 \end{cases}
 \end{array}\]
 %
-\rem{TODO: add small examples}
-\rem{TODO: explain why terminates}
+%\rem{TODO: add small examples}
+%\rem{TODO: explain why terminates}
 
 The $\mu$-term $u$
 is a \emph{self-similar subterm} of~$t$ if
@@ -1523,19 +1522,19 @@ Thus, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( 
 If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
 then $\vec u \vsim \interp{t}{\vec w}$\vthinspace.
 \end{lemma}
-\begin{proof}
-\rem{TODO}
-\qed
-\end{proof}
+% TODO:
+%\begin{proof}
+%\qed
+%\end{proof}
 
 \begin{lemma}
 \label{lem:mu-norm-interp}
 If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}$ is normal.
 \end{lemma}
-\begin{proof}
-\rem{TODO}
-\qed
-\end{proof}
+% TODO:
+%\begin{proof}
+%\qed
+%\end{proof}
 
 %\begin{lemma}
 %\label{lem:mu-cong}
@@ -1561,7 +1560,7 @@ only values of types in $\Codata$ may contain cycles.
 %For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
 %is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
 
-\rem{TODO: Normal interpretation vs. actual interpretation.}
+%\rem{TODO: Normal interpretation vs. actual interpretation.}
 
 \begin{definition}[Normal Interpretation]
 \afterDot%
@@ -1607,12 +1606,12 @@ For a variable $x\typ{\tau}$ and a fixed normal interpretation $\J$,
 we write $\mathcal{T}^{\smash{\J}}_x( \Val )$ to denote the set consisting of all values
 $v \in \J( \tau )$
 such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
-\rem{Intuition?}
+%\rem{TODO: Intuition?}
 
 The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
 assigns values from $\J$ to unassigned variables in the domain of $\Val$.
 We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:%
-\rem{A bit clumsy}
+%\rem{TODO: A bit clumsy}
 \[
 \hbox{\(
 \inferrule{
@@ -1634,13 +1633,13 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
 The rule chooses an unassigned variable in $\Val$ and assigns it a fresh
 value---one that does not occur in $\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)$
 modulo $\alpha$-equivalence.
-\rem{What guarantees that such a value exists? (Answer: infinitely many values
-of codatatypes, of which only finitely many are in
-$\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)$?)}
+%\rem{TODO: What guarantees that such a value exists? (Answer: infinitely many values
+%of codatatypes, of which only finitely many are in
+%$\mathcal{T}^{\smash{\J}}_{\Varec{x}}(\Val)$?)}
 Since this update removes one
 variable from the set $\FV( \Val )$ and does not add any variables to $\FV( \Val
 )$, it can only be applied a finite number of times. We normalize all terms in
-the range of $\Val$ after each rule application.\rem{clumsy}
+the range of $\Val$ after each rule application.%\rem{TODO: clumsy}
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C}, \const{D}, \const{E} :\delta \rightarrow \delta$.
@@ -1771,7 +1770,7 @@ Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
 Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ are interpreted in
 the expansion of $\interp{\Val \ec{y}}{ t }$ as a term
-constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. \rem{more detail}
+constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. %\rem{TODO: more detail}
 Thus, we have
 $\interp{\Val \ec{y}}{ t } = \interp{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and thus 2 holds for $\Val$.
 Statement 3 holds for $\Val$ since \rn{Unique} does not apply.
@@ -1821,7 +1820,8 @@ contains $t_1$ (resp. $t_2$) at position $p$,
 and $\nf{\Val_1 \sigma} \ec{z}$ (resp. $\nf{\Val_1 \sigma} \ec{y}$) does not.
 If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t )$
 and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
-then the expansion \rem{define} of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
+then the expansion %\rem{TODO: define}
+of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$.
 Since $t_1$ and $t_2$ are minimal,
 say $t_1$ is of the form $\MU w.\; \const{C}( \vec t )$,
@@ -1836,7 +1836,7 @@ such that $v \vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on our selection of $\MU {\Varec{x}}.\; t$,
 we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$,
 which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
-are $\alpha$-disequivalent at position $p$. \rem{more detail}
+are $\alpha$-disequivalent at position $p$. %\rem{TODO: more detail}
 
 Thus, by induction on the number of applications of the above rule used to obtain $\ValC$,
 we have that $\ValC$ satisfies (2) and (3).
@@ -2009,10 +2009,6 @@ It then partitions each set in this partition in the same manner recursively.
 If %after doing so,
 the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
 and $v$, it deduces that \rn{Unique} applies to $u$ and $v$.
-
-%\rem{TODO: * sharing is caring (let's cite it for a change)}
-%\rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
-%\rem{TODO: representation of $\mu$-terms?}
 
 %\paragraph{Extension to Quantified Formulas.}
 While the decision procedure is restricted to ground constraints,
