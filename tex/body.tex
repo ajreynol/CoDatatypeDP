@@ -1942,9 +1942,15 @@ By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the calculus is sound a
 
 The decision procedure for (co)datatypes and its extension to quantified
 formulas were described at a high level of abstraction. This section describes
-the implementation within the SMT solver CVC4.
+the main aspects of the implementation within the SMT solver CVC4:\ the
+integration into CDCL($T$), the extension to quantified formulas, and
+some optimizations.
 
-\paragraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
+%%% @ANDY: I'm trying without \paragraph's, to save space but also to make the
+%%% section look more like a whole than a random list of stuff. Revert if you
+%%% disagree.
+
+%\paragraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
 The calculus is implemented as a \emph{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 constraints for its theory.
@@ -2006,7 +2012,7 @@ If after doing so, the resulting partition contains a set $S_i$ containing disti
 %\rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
 %\rem{TODO: representation of $\mu$-terms?}
 
-\paragraph{Extension to Quantified Formulas.}
+%\paragraph{Extension to Quantified Formulas.}
 While our calculus is a decision procedure for ground constraints in the theory of datatypes and codatatypes,
 in practice we are often interested in problems that combine reasoning about universal axioms and existential conjectures,
 where checking satisfiability requires reasoning about such ground constraints in the presence of universally quantified formulas.
@@ -2030,8 +2036,7 @@ our implementation adds the clause %of the form
 $\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y \mathrel\vee s \teq t$ to $F$.
 In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.
 
-    
-\paragraph{Optimizations.}
+%\paragraph{Optimizations.}
 Our implementation uses several optimizations which
 follow the approach outlined by Barrett et al.\cite{barrett-et-al-2007}
 and are not reflected in the presentation of the calculus.
