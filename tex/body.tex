@@ -1897,7 +1897,9 @@ where for each $i \in \{1,\ldots, n\}$, % \in [n]$,
 $\muvar(w_i) = {\Varec{u_i}}$.  Thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
 $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i \in \{1,\ldots, n\}$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
-By Lemma~\ref{lem:mu-norm-arg}, $\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
+\begin{rep}By Lemma~\ref{lem:mu-norm-arg},\end{rep}%
+\begin{conf}Clearly,\end{conf} %% TODO: Fix! ;)
+$\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
 Thus $\interp{t_u}{u_\iPrime} \vsim \interp{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
 %By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
 Thus, $\M( t ) \vsim t_u \vsim \ValC \ec{t}$, and
