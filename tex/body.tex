@@ -1732,7 +1732,7 @@ $\ValC \ec{x} \vsim \ValC \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 \end{lemma}
 \begin{rep}
 \begin{proof}
-To show 1, we first show that $\ValC$ contains no free variables.
+To show (1), we first show that $\ValC$ contains no free variables.
 Assume by contradiction that $\ValC$ contained a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
 Then it must be the case that $\ec{y}$ does not contain a constructor term,
 or else ${\Varec{y}}$ would not occur as a free variable in $\Val$.
@@ -1740,7 +1740,7 @@ Consider the case when $\tau$ is finite.
 By assumption, $\tau \not\in \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
 If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\ref{lem:corecursive-singletons},
-the cardinality of $\tau$ must be $1$.
+the cardinality of $\tau$ must be one.
 Since \rn{Single} does not apply to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
 and thus there are no terms in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$ of type $\tau$.
@@ -1758,7 +1758,7 @@ $\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}
 Thus, $\ValC \ec{x}$ is acyclic when $\tau \not\in \Codata$.
 Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\J( \tau )$.
 
-We first show that 2 and 3 hold initially for $\Val$.
+We first show that (2) and (3) hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
 each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t )$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
 are such that $j = \jPrime$ since \rn{Clash} does not apply to $\Ec$,
@@ -1775,8 +1775,8 @@ Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ ar
 the expansion of $\interp{\Val \ec{y}}{ t }$ as a term
 constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. %\rem{TODO: more detail}
 Thus, we have
-$\interp{\Val \ec{y}}{ t } = \interp{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and thus 2 holds for $\Val$.
-Statement 3 holds for $\Val$ since \rn{Unique} does not apply.
+$\interp{\Val \ec{y}}{ t } = \interp{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and thus (2) holds for $\Val$.
+Property (3) holds for $\Val$ since \rn{Unique} does not apply.
 
 We now show that $\Val = \nf{\Val}$.
 Assume by contradition $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
@@ -1799,12 +1799,12 @@ they also hold for $\nf{\Val_1 \sigma}$,
 where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
 ${\Varec{x}} \in FV( \Val_1 )$,
 and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\Terms^{\smash{\J}}_{\Varec{x}}(\Val_1)$.
-To show 2,
-by assumption of 2 on $\Val_1$, we have $\interp{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
+To show (2),
+by assumption of (2) on $\Val_1$, we have $\interp{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
 Thus, $\interp{\Val_1 \sigma \ec{y}}{ u } = \Val_1 \sigma \ec{x}$ and
 $\interp{\nf{\Val_1 \sigma} \ec{y}}{ u } = \nf{\Val_1 \sigma} \ec{x}$.
-To show 3,
+To show (3),
 consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
 and assume by contradiction that $\nf{\Val_1 \sigma} \ec{y} \aequiv \nf{\Val_1 \sigma} \ec{z}$.
 Due to (3) for $\Val_1$,
