@@ -966,7 +966,7 @@ phases. The first phase computes the bidirectional closure of $\Ec$. The second
 phase makes inferences based on acyclicity (for \hfill datatypes) and uniqueness
 (for codatatypes).
 The third phase performs case splitting on constructors for
-various terms in $\tEc$, the set of $\Sig$-terms occurring in $\Ec$.
+various terms occurring in $\Ec$.
 %Following the conventions from~\cite{},
 %The derivation rules are given in \relax{guarded assignment form},
 %where
@@ -1072,7 +1072,8 @@ and failures to unify equated terms are recognized by \rn{Clash}.
 The \rn{Conflict} rule recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
 
 At the end of this phase, $\Ec$ induces an equivalence
-relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and
+relation over the set of $\Sig$-terms occurring in $\Ec$,
+denoted by $\tEc$, such that two terms $t$ and $u$ are equivalent if and
 only if $t \teq u \in \Ec$.
 Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
