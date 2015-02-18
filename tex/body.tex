@@ -412,7 +412,7 @@ integrated in the development version of the solver and is expected to be part
 of the CVC4~1.5 release.
 %
 An evaluation on %hand-crafted examples and on
-problems generated from Isabelle theories using the Sledgehammer tool
+problems generated from Isabelle theories using the Sledgehammer tool \cite{paulson-blanchette-2010}
 demonstrates the usefulness of the approach (Section~\ref{sec:experimental-results}).
 
 %  * useful both for proving and for model finding
@@ -914,7 +914,7 @@ that the type has at most one value.
 %   or at least two;
 
 \section{The Ground Decision Procedure} % for (Co)datatypes}
-\label{sec:sec:the-ground-decision-procedure}
+\label{sec:the-ground-decision-procedure}
 
 The decision procedure for the ground theory of (co)datatypes $\thD$ determines the
 $\thD$-satisfiability of sets of ground constraints over a fixed
@@ -993,7 +993,7 @@ treat all types in $\Nondata$ as infinite.
 %the derivation rules of our calculus are given in \emph{guarded assignment form},
 %where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
 
-\begin{figure}[b!]
+\begin{figure}[t!]
 \normalsize
 \centering
 \begin{tabular}{c}
@@ -1064,6 +1064,7 @@ treat all types in $\Nondata$ as infinite.
 \)
 \rn{Clash}
 \end{tabular}
+\vspace*{-3pt} %% TYPESETTING HACK
 \caption{\,Derivation rules for bidirectional closure%.
 }
 \label{fig:cc-rules}
@@ -1083,7 +1084,7 @@ Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class in $\Ec$ that contains $t$.
 
-\begin{figure}[b!]
+\begin{figure}[t!]
 \normalsize
 \centering
 \begin{tabular}{c}
@@ -1094,7 +1095,7 @@ denote the equivalence class in $\Ec$ that contains $t$.
   \delta \in \Data
   \betweenantes
   %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
-  \Val \ec{t\typ{\delta}} = \MU x.\; u
+  \Val \smash{\ec{t\typ{\delta}}} = \MU x.\; u
   \betweenantes
   x \in \FV( u )
 }{
@@ -1110,13 +1111,14 @@ denote the equivalence class in $\Ec$ that contains $t$.
  \delta \in \Codata
  \betweenantes
  %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
- \Val \ec{t\typ{\delta}} \aequiv \Val \ec{u\typ{\delta}}
+ \Val \smash{\ec{t\typ{\delta}}} \aequiv \Val \smash{\ec{u\typ{\delta}}}
 }{
  \Ec := \Ec,\: t \teq u
 }
 \)
 \rn{Unique}
 \end{tabular}
+\vspace*{-3pt} %% TYPESETTING HACK
 \caption{\,Derivation rules for acyclicity and uniqueness%.
 }
 \label{fig:ab-rules}
@@ -1919,7 +1921,7 @@ The decision procedure for (co)datatypes and its extension to quantified
 formulas were described at a high level of abstraction. This section describes
 the implementation within the SMT solver CVC4.
 
-\paragraph{Integration into {\relax\XXXL($T$)}.}
+\paragraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
 The calculus is implemented as a \emph{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 constraints for its theory.
@@ -1956,7 +1958,8 @@ $t \teq \const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_1}_1( t ) \bigr
 \mathrel\lor \cdots \mathrel\lor t \teq \const{C}_m\bigl( \const s^1_m( t ),
 \ldots, \const s^{n_m}_m( t ) \bigr)$ to $F$.
 Decisions on which branch to take are thus performed externally by the SAT
-solver and not by the theory solver. All other rules add equalities to the
+solver. % and not by the theory solver.
+All other rules add equalities to the
 internal state of the theory solver. The rules in phase~1 are performed
 eagerly---that is, for partial satisfying assignments $M$---while the rules in
 phases~2 and~3 are performed only for complete satisfying
@@ -1977,7 +1980,7 @@ It then partitions each set in this partition in the same manner recursively.
 If after doing so, the resulting partition contains a set $S_i$ containing distinct terms $u$ and $v$, then it deduces that \rn{Unique} applies to $u$ and $v$.
 
 %\rem{TODO: * sharing is caring (let's cite it for a change)}
-\rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
+%\rem{TODO: ``theory combination more complicated (and Theorem Completeness too weak)''?}
 %\rem{TODO: representation of $\mu$-terms?}
 
 \paragraph{Extension to Quantified Formulas.}
@@ -2047,14 +2050,14 @@ based on whether $j = \jPrime$.
 \newcommand\HD[1]{\hbox to2.25em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
 To evaluate the decision procedure, we generated problems from existing
-Isabelle formalizations using Sledgehammer \cite{paulson-blanchette-2010}.
+Isabelle formalizations using Sledgehammer.
 Codatatypes being a recent addition to Isabelle\begin{rep}
 \cite{blanchette-et-al-2014-impl}\end{rep}, benchmarks are not abundant. We
-included all the theory files from the Isabelle distribution (Distro) and the \emph{Archive
-of Formal Proofs} (AFP) \cite{klein-et-al-afp} that define codatatypes falling
-within the supported fragment. We also included two unpublished theories by
-Peter Gammie and Andreas Lochbihler (\gandl), about Bird and Stern--Brocot trees.
-To also exercise the support
+included all the theory files from the Isabelle distribution (Distro, 879 goals)
+and the \emph{Archive of Formal Proofs} (AFP, 2974 goals) \cite{klein-et-al-afp}
+that define codatatypes falling within the supported fragment. We also included
+two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
+goals), about Bird and Stern--Brocot trees. To also exercise the support
 for datatypes, the benchmarks are complemented by theories about lists
 and tree data structures. The theories were selected before running the
 experiments. The experimental data are publicly available.%
@@ -2068,7 +2071,8 @@ along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
 given to CVC4, running for up to 60 seconds on the StarExec cluster
 \cite{stump-et-al-2014-starexec}. Problems involving no (co)datatypes were
 filtered out. Due to the lack of machinery for reconstructing inferences about
-(co)datatypes in Isabelle, CVC4 is trusted as an oracle in these experiments.
+(co)datatypes in Isabelle, the external solver is trusted as an oracle in these
+experiments.
 
 CVC4 was run on each problem several times, with the support for datatypes and
 codatatypes either enabled or disabled. The contributions of the acyclicity and
@@ -2076,7 +2080,7 @@ uniqueness rules were also measured, to find out whether these somewhat
 expensive rules are useful in practice. Even when the decision procedure is
 disabled, some of the generated axioms typically include basic properties of
 constructors and selectors, which the decision procedure would recognize as
-tautologies. Z3 is included for comparison when this is possible.
+tautologies. Z3 is included for comparison. % when this is possible.
 %This allows us to answer the question, \relax{What are the
 %benefits of activating the decision procedure as opposed to letting
 %Sledgehammer do what it would normally do?}
