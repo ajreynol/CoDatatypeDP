@@ -476,7 +476,7 @@ Datatypes are explicitly supported by the higher-order model finder Refute
 also find models involving cyclic codatatype values. The $\mu$-notation is
 inspired by the $\mu$-calculus \cite[etc.]{kozen-1983,endrullis-et-al-2011}.
 
-% \textbf{TODO:} Nitpick
+% TODO: Leon, RADA -- http://www-users.cs.umn.edu/~hung/papers/fse13.pdf
 
 %\textbf{TODO}:
 %  * Klop et al. (streams) Andrew Lice % http://joerg.endrullis.de/
@@ -2033,10 +2033,10 @@ which apply uniformly to both datatypes and codatatypes.
 Also, selectors are collapsed eagerly:
 If $\const s^k_{\negvthinspace j}( t )$ is a term in $\tEc$ and $t$ contains the
 constructor $\const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, we immediately add
-$\smash{\const s^k_{\negvthinspace j}( t ) \teq u_k}$ to $\Ec$, whereas the presented calculus
-would apply \rn{Split} and \rn{Inject} before adding this equality. 
+$\smash{\const s^k_{\negvthinspace j}( t ) \teq u_k}$ to $\Ec$\begin{rep}, whereas the presented calculus
+would apply \rn{Split} and \rn{Inject} before adding this equality\end{rep}. 
 \begin{rep}  % lower priority to mention this
-For the sake of reducing the number of unique constraints considered by the calculus, we
+To reduce the number of unique constraints considered by the calculus, we
 compute a normal form for constraints as a preprocessing step. In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term
 ordering, replace $\const{C}_{\negvthinspace j}( \vec t ) \teq
@@ -2057,7 +2057,7 @@ based on whether $j = \jPrime$.
 \newcommand\gandl{G\&L}
 \newcommand\HD[1]{\hbox to2.25em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
-To evaluate the decision procedure, we generated problems from existing
+To evaluate the decision procedure, we generated benchmark problems from existing
 Isabelle formalizations using Sledgehammer.
 Codatatypes being a recent addition to Isabelle\begin{rep}
 \cite{blanchette-et-al-2014-impl}\end{rep}, benchmarks are not abundant. We
@@ -2141,7 +2141,7 @@ more expensive rules, make a contribution.
 %
 Three proofs were found thanks to
 the \rn{Acyclic} rule and four required the \rn{Unique} rule. Among the latter,
-three correspond to one-line proofs in Isabelle, of the form
+three are one-line proofs in Isabelle, of the form
 \keyw{by}~\textit{coinduction}~\textit{auto}\begin{rep} \cite{blanchette-et-al-2014-impl}\end{rep}.
 The fourth proof, by Gammie and Lochbihler, is more elaborate:
 %
