@@ -373,7 +373,8 @@ For example, the type
 \end{conf}
 
 \noindent
-of infinite sequences, or streams, over an element type $\tau$ is allowed\begin{rep}; the
+of infinite sequences or streams over an element type $\tau$ is
+allowed\begin{conf}, with no base case\end{conf}\begin{rep}; the
 corresponding datatype would be rejected as non-well-founded
 \cite{blanchette-et-al-2015-esop}\end{rep}.
 
@@ -418,7 +419,7 @@ integrated in the development version of the solver and is expected to be part
 of the CVC4~1.5 release.
 %
 An evaluation on %hand-crafted examples and on
-problems generated from Isabelle \cite{nipkow-et-al-2002} theories using the Sledgehammer tool \cite{paulson-blanchette-2010}
+problems generated from Isabelle theories using the Sledgehammer tool \cite{paulson-blanchette-2010}
 demonstrates the usefulness of the approach (Section~\ref{sec:experimental-results}).
 
 %  * useful both for proving and for model finding
@@ -529,7 +530,6 @@ is associated a list of argument types $\tau_1,\ldots,\tau_n$ (for $n \ge 0$)
 and a return type $\tau$, written
 $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$\begin{rep},
 which collapses to $\const{f} : \tau$ if $n = 0$\end{rep}.
-The notation $t\typ{\tau}$ indicates that term $t$ has type~$\tau$.
 \begin{rep}%
 Functions invocations $\const{f}(t_1,\ldots,t_n)$
 apply the $n$-ary function symbol
@@ -539,9 +539,10 @@ parentheses in terms.
 \end{rep}
 The set $\Funcs$ must at least contain
 $\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
-The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep}.
-Other predicates can be represented as functions to $\ty{bool}$\begin{rep},
+The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep};
+other predicates can be represented as functions to $\ty{bool}$\begin{rep},
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$\end{rep}.
+The notation $t\typ{\tau}$ indicates that term $t$ has type~$\tau$.
 \begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbreviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
 Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
