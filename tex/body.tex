@@ -1440,7 +1440,7 @@ whose root node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the r
 In all these cases, $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
-For \rn{Unique}, our construction of $\Val$ indicates that the values of $t$ and $u$ are equivalent in all models of $\Ec$.
+For \rn{Unique}, the construction of $\Val$ indicates that the values of $t$ and $u$ are equivalent in all models of $\Ec$.
 For \rn{Single}, $t$~and~$u$ must have the same value since the cardinality of their type is $1$.
 By the induction hypothesis, $\Ec \mathrel\cup t \teq u$ is $\thD$-unsatisfiable
 and thus $\Ec$ is $\thD$-unsatisfiable.
@@ -1752,7 +1752,7 @@ and thus %our %model
 completion can assign a value not occurring in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
 By construction, $\ValC \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
-Moreover, our construction of $\ValC$ applies substitutions of the form
+Moreover, the construction of $\ValC$ applies substitutions of the form
 $\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}}$ is not a codatatype.
 Thus, $\ValC \ec{x}$ is acyclic when $\tau \not\in \Codata$.
 Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\J( \tau )$.
@@ -1780,12 +1780,12 @@ Property (3) holds for $\Val$ since \rn{Unique} does not apply.
 We now show that $\Val = \nf{\Val}$.
 Assume by contradition $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
 We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
-Due to our construction of $\Val$,
+Due to the construction of $\Val$,
 we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for some $i$ % \in [n]$.
 Since $\Val \ec{x}$ is a minimal, it
 contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
 where $\interp{\Val \ec{x}}{ t_i } \aequiv \interp{\Val \ec{x} }{ u_i }$ for some $i$. % \in [n]$.
-Due to our construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for some $i$. % \in [n]$.
+Due to the construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for some $i$. % \in [n]$.
 Since \rn{Cong} does not apply to $\Ec$
 we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
 By (2), $\interp{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
@@ -1835,7 +1835,7 @@ are $\alpha$-disequivalent at position $p$ since they do not contain the same fr
 Since $\interp{\Val_1 \ec{y}}{t_1}$ is normal,
 there is a closed $\mu$-term $v \in \Terms^{\smash{\J}}_{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$.
-Thus, by assumption on our selection of $\MU {\Varec{x}}.\; t$,
+Thus, by assumption on the selection of $\MU {\Varec{x}}.\; t$,
 we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$,
 which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$. %\rem{TODO: more detail}
@@ -1894,7 +1894,7 @@ Call this term $t_u$.
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
-by our construction of $\ValC$ we have $\ValC \ec{t}$ is a term
+by the construction of $\ValC$ we have $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 where
 $\muvar(w_i) = {\Varec{u_i}}$ for each $i$.  Thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
@@ -1971,12 +1971,11 @@ Then, %at a high level,
 by a variant
 \cite{jovanovic2011sharing} of the Nelson--Oppen method,
 each $T_i$-solver %for $i = 1, \ldots, l$  n?
-takes as input the union
+takes as input the union $M_i$
 of (1) the purified form of $T_i$-constraints occurring in $M$, where terms
 containing symbols not belonging to $T_i$ are replaced by fresh variables\begin{rep} of the
 same type\end{rep}; (2) additional equalities and disequalities between variables of
-types not belonging to $T_i$. Let us call this set $M_i$.
-%%% TODO, @ANDY: which set M_i?
+types not belonging to $T_i$.
 Each $T_i$ solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
 $\neg\; C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
@@ -2034,7 +2033,7 @@ we may no longer assume that they are of infinite cardinality.
 When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \relax{incomplete},
 due to the overly restrictive preconditions on \rn{Split} and \rn{Single}.
 This does not %necessarily
-impact the correctness of our procedure in this setting,
+impact the correctness of the procedure in this setting,
 since %by assumption
 the solver is already incomplete when quantified formulas are present.
 Nonetheless, two techniques help increase the precision of the solver.
@@ -2043,7 +2042,7 @@ Second, we can conditionally apply \rn{Single} to codatatype terms that may have
 For example, consider the $\ty{stream}_{\,\ty{u}}$ codatatype, where $\ty{u}$ is uninterpreted.
 This type has cardinality precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
-our implementation adds the clause %of the form
+the implementation adds the clause %of the form
 $\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y \mathrel\vee s \teq t$ to $F$.
 \begin{rep}In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.\end{rep}
 
