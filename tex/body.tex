@@ -68,7 +68,7 @@
 
 \newcommand\FV{\mathrm{FV}}
 
-\newcommand\betweenantes{\kern1.25em}
+\newcommand\betweenantes{\kern1.125em}
 
 \newcommand\afterDot{\;} %%% Too little space by default after "Lemma Foo."
 
@@ -330,8 +330,6 @@ Compared with the conventional inductive definition
 \end{rep}
 with a dedicated constructor for representing infinity, the codatatype avoids
 one case by unifying the finite and infinite nonzero cases.
-
-\nopagebreak
 
 Datatypes and codatatypes are an integral part of many proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
@@ -1150,7 +1148,7 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 %\vspace*{+3pt}
 \normalsize
 \centering
-\begin{tabular}{c}
+\begin{tabular}{@{}c@{}}
 \(
 \inferrule{
 %  t\typ{\delta}
@@ -1166,8 +1164,7 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 }
 \)
 \rn{Acyclic}
-\\[4\jot]
-\(
+\kern1.5em\( %%% TYPESETTING: should be \quad
 \inferrule{
 % t, u\typ{\delta}
 % \betweenantes
@@ -1575,7 +1572,6 @@ For each type $\tau$,
 %%% sets *contain* elements, they *include* other sets
 $\interp{\J}{\tau}$ includes a maximal set of closed normal $\mu$-terms of that type that are
 unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
-\pagebreak[2] %% TYPESETTING
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
 $\interp{\J}{\const{C}}( \interp{\J}{\vec t} )$ is the value
@@ -1721,10 +1717,8 @@ $\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{u}} ) )$.\e
 \xend
 \end{examplex}
 
-%%% TYPESETTING: Evil hack!!
-%We first state the following properties of $\ValC$,
 In the following lemma about $\ValC$,
-$\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
+$\vphantom{\Bigl(_j}\muvar( t ) = \relax{\begin{cases}
   t & \text{if $t$ is a variable} \\[-\jot]
   x & \text{if $t$ is of the form $\MU {x}.\; u$.} 
 \end{cases}}$
@@ -2123,13 +2117,8 @@ Isabelle formalizations using Sledgehammer.
 We
 included all the theory files from the Isabelle distribution (Distro, 879 goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974 goals) \cite{klein-et-al-afp}
-that define codatatypes falling within the supported fragment. \hfill We added
-two
-
-\pagebreak %%% TYPESETTING: hack (including \hfill)
-
-\noindent
-unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
+that define codatatypes falling within the supported fragment. We added
+two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
 goals), about Bird and Stern--Brocot trees. To exercise the support
 for datatypes, the benchmarks were complemented by theories about lists
 and trees. The theories were selected before running the
