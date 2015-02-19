@@ -1466,6 +1466,10 @@ $\interp{t}{u}$, as returned by the following recursive function:
 \end{array}\]
 The recursion will eventually terminate because each recursion adds one bound
 variable to $B$ and there are finitely many distinct bound variables in a $\mu$-term.
+Intuitively, the expansion of a subterm is a
+closed $\mu$-term that denotes the same value as the original subterm---e.g.,
+$\interp{\mu x.\; \const{C}(\mu y.\; \const{D}(x))}{\mu y.\; \const{D}(x)} =
+ \mu y.\; \const{D}(\mu x.\; \const{C}(y))$.
 %
 %\rem{TODO: add small examples}
 %\rem{TODO: explain why terminates}
