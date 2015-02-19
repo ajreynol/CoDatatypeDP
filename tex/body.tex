@@ -1467,6 +1467,8 @@ $\interp{t}{u}$, as returned by the following recursive function:
     x & \text{otherwise}
 \end{cases}
 \end{array}\]
+The recursion will eventually terminate because each recursion adds one bound
+variable to $B$ and there are finitely many distinct bound variables in a $\mu$-term.
 %
 %\rem{TODO: add small examples}
 %\rem{TODO: explain why terminates}
@@ -1553,8 +1555,6 @@ only values of types in $\Codata$ may contain cycles.
 %For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
 %is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
 
-%\rem{TODO: Normal interpretation vs. actual interpretation.}
-
 \begin{definition}[Normal Interpretation]
 \afterDot%
 \label{def:norm-interpretation}%
@@ -1579,7 +1579,12 @@ $\interp{\J( t )}{u_k}$.
 \end{enumerate}
 \end{definition}
 
-In the following, we consider only normal interpretations.
+Strictly speaking, normal interpretations are not models of codatatypes,
+because they are restricted to an $\omega$-regular values, whereas models must
+also cater for acyclic infinite terms. However, by monotonicity of ground
+constraints, it is trivial to extend a normal interpretation into a model.
+In the following, we focus on normal interpretations.
+
 When constructing a model $\M$ for $\Ec$,
 it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
