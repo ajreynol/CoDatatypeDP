@@ -542,7 +542,7 @@ $\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
 The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep}.
 Other predicates can be represented as functions to $\ty{bool}$\begin{rep},
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$\end{rep}.
-\begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbeviates a conjunction
+\begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbreviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
 Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
@@ -990,7 +990,7 @@ are saturated.
 %constraints added to $\Ec$ are normalized in this manner.
 %We present the calculus in three steps.
 %In the first step, we compute the bidirectional closure of $\Ec$;
-%in the second step, we make inferences based on cyclicity and uniqueness;
+%in the second step, we make inferences based on acyclicity and uniqueness;
 %and in the third step, %(when necessary),
 %we branch on constructor types for various terms in $\tEc$.
 %Following the conventions from~\cite{},
@@ -1140,7 +1140,7 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU 
 Two $\mu$-terms can denote the same value despite being $\alpha$-disequivalent---e.g.,
 $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 %, or informally are \emph{observationally equivalent}.
-%For convienience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
+%For convenience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
@@ -1216,7 +1216,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \begin{examplex}
 Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and~$\ec{z}$
 such that $\const{C}(w,y) \in \ec{x}$ and $\const{C}(z,x) \in \ec{y}$ for some $\const{C} \in \Ctr$.
-A possible sequence of unfoldings is given below, omitting
+A possible sequence of unfolding steps is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
@@ -1792,7 +1792,7 @@ $\expand{\Val \ec{y}}{ t } = \expand{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$,
 Property (3) holds for $\Val$ since \rn{Unique} does not apply.
 
 We now show that $\Val = \nf{\Val}$.
-Assume by contradition $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
+Assume by contradiction $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
 We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
 Due to the construction of $\Val$,
 we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for some $i$ % \in [n]$.
@@ -2158,13 +2158,13 @@ tautologies. Z3 is included for comparison. % when this is possible.
 \MIDRULE
 No (co)datatypes
   & 209 & 221 & 777 & 775 & 51 & 52 & 1037 & 1048 \\%[\jot]
-%Datatype simplication only
+%Datatype simplification only
 %  &  \\
 Datatypes w/o \rn{Acyclic}
   & -- & 227 & -- & 780 & -- & 52 & -- & 1059 \\
 Full datatypes
   & 213 & 227 & 791 & 786 & 51 & 52 & 1055 & 1065 \\%[\jot]
-%Codatatype simplication only
+%Codatatype simplification only
 %  &  \\
 Codatatypes w/o \rn{Unique}
   & -- & 222 & -- & 804 & -- & 56 & -- & 1082 \\
