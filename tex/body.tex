@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[scaled=.82]{beramono}
+\usepackage[scaled=.9]{helvet}
 \usepackage{booktabs}
 \usepackage{bussproofs}
 \usepackage{calc}
@@ -845,7 +846,7 @@ values are fully characterized by their possibly infinite expansion.
 Some codatatypes are so degenerate as to have infinite values
 even though they are finite. A simple example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
-unique value is $\MU a.\; A(a)$. Other specimens are
+unique value is $\MU a.\; \const{A}(a)$. Other specimens are
 $\ty{stream}_{\,\ty{unit}\,}$
 and
 \begin{conf}%
@@ -1104,8 +1105,8 @@ a cyclic $\mu$-term describes an infeasible class of values.
 %$\tau \not\in \Codata$.
 
 Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
-or a node of the form
-$\MU x.\: \const{C}( \vec t\, )$ for some constructor $\const{C} \in \Ctr$ and
+or an applied constructor
+$\MU x.\: \const{C}( \vec t\, )$ for some $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ of the expected types.
 The variable $x$ need not occur freely in the $\mu$-binder's body, in which case
 the binder can be omitted.
