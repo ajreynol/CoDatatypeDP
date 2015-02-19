@@ -1646,7 +1646,7 @@ the range of $\ValC$ at each step.
 The last precondition is admittedly rather technical. Its role is to ensure that
 $\ValC$ remains injective modulo $\alpha$-equivalence. A simpler, less efficient
 way to proceed would be to compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
-injectivity afterward.
+injectivity afterward. Injectivity is important to satisfy disequality constraints.
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
