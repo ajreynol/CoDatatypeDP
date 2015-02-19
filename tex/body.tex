@@ -482,8 +482,8 @@ Datatypes are supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
 also generate models involving cyclic codatatype values. The $\mu$-notation is
 inspired by the $\mu$-calculus
-%\begin{conf}\cite{kozen-1983}\end{conf}%
-\cite[etc.]{kozen-1983,endrullis-et-al-2011}.
+\begin{conf}\cite{kozen-1983}\end{conf}%
+\begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}\end{rep}.
 
 %  * Ro\c{s}u --- equality of streams is...
 %     http://dl.acm.org/citation.cfm?doid=1159803.1159827
@@ -1591,7 +1591,7 @@ When constructing a model $\M$ of $\Ec$,
 it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
 
-%First, we need the following definition.
+First, we need the following definitions.
 We write $t \vsimv{x} u$ if $\mu$-terms $t$ and $u$ are syntactically equivalent
 for some renaming that avoids capturing any variable other than $x$.
 For example,
@@ -1602,11 +1602,10 @@ $\MU x.\; \const{C}( z, x ) \vsimv{z} \MU y.\; \const{C}( z, y )$,
 but
 $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
-For a variable $x\typ{\tau}$ and a fixed normal interpretation $\J$,
+For a variable $x\typ{\tau}$ and a normal interpretation $\J$,
 we write $\Terms^{\smash{\J}}_x( \Val )$ to denote the set consisting of all values
 $v \in \J( \tau )$
 such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
-%\rem{TODO: Intuition?}
 
 The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
 assigns values from $\J$ to unassigned variables in the domain of $\Val$.
@@ -1640,6 +1639,11 @@ Since this update removes one
 variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
 )$, the process eventually terminates. We normalize all terms in
 the range of $\ValC$ at each step.
+
+The last precondition is admittedly rather technical. Its role is to ensure that
+$\ValC$ remains injective modulo $\alpha$-equivalence. A simpler, less efficient
+way to express the rule would be to check that property explicitly before
+performing the assignment.
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
