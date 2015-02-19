@@ -1608,8 +1608,8 @@ such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurri
 
 The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
 assigns values from $\J$ to unassigned variables in the domain of $\Val$.
-We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:%
-%\rem{TODO: A bit clumsy}
+We construct $\ValC$ by initially taking $\ValC := \nf{\Val}$
+and by exhaustively applying the following rule:%
 \[
 \hbox{\(
 \inferrule{
@@ -1621,23 +1621,23 @@ We construct $\ValC$ by exhaustively applying the following rule to $\nf{\Val}$:
   \betweenantes
   v \not\in \Terms^{\smash{\J}}_{\Varec{x}}(\Val)
 }{
-  \Val := \nf{\Val [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
+  \ValC := \nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
 }
 \)
 %\rn{Assign}
 }
 \]
 %
-The rule chooses an unassigned variable in $\Val$ and assigns it a fresh
-value---one that does not occur in $\Terms^{\smash{\J}}_{\Varec{x}}(\Val)$
+The rule chooses an unassigned variable in $\ValC$ and assigns it a fresh
+value---one that does not occur in $\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$
 modulo $\alpha$-equivalence.
 %\rem{TODO: What guarantees that such a value exists? (Answer: infinitely many values
 %of codatatypes, of which only finitely many are in
-%$\Terms^{\smash{\J}}_{\Varec{x}}(\Val)$?)}
+%$\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$?)}
 Since this update removes one
-variable from the set $\FV( \Val )$ and does not add any variables to $\FV( \Val
-)$, it can only be applied a finite number of times. We normalize all terms in
-the range of $\Val$ after each rule application.%\rem{TODO: clumsy}
+variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
+)$, the process eventually terminates. We normalize all terms in
+the range of $\ValC$ at each step.
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
