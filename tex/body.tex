@@ -1586,7 +1586,7 @@ in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \interp{\J}{\vec t} )}$, where $x$ is fresh.
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-if $\interp{\J}{t}$ is $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
+if $\interp{\J}{t}$ is $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$,
 then $\J\negvvthinspace( \const s^k_{\negvthinspace j} )\bigl( \interp{\J}{t} \bigr)$ is the value
 in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
 $\expand{\interp{\J}{t}}{u_k}$.
@@ -1730,7 +1730,7 @@ $\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{u}} ) )$.\e
 In the following lemma about $\ValC$,
 $\vphantom{\Bigl(_j}\muvar( t ) = \relax{\begin{cases}
   t & \text{if $t$ is a variable} \\[-\jot]
-  x & \text{if $t$ is of the form $\MU {x}.\; u$.} 
+  x & \text{if $t$ is of the form $\MU {x}.\; u$.}
 \end{cases}}$
 
 %%% I think it's enough to point this out clearly in the introduction.
@@ -1948,7 +1948,7 @@ $\expand{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPr
 If $j = \jPrime$, then $\interp{\J}{t}$ is $\alpha$-equivalent with $\expand{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}
 = \ValC \ec{t}$.
 If $j \neq \jPrime$, since \rn{Cong} does not apply,
-any term of the form $\smash{\const s^k_{\negvthinspace j}( u' )}$ not occurring in $\ec{t}$ 
+any term of the form $\smash{\const s^k_{\negvthinspace j}( u' )}$ not occurring in $\ec{t}$
 is such that $[u] \not= [u']$.
 By the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{u} \neq \interp{\J}{u'}$ for all such $u$, $u'$.
 Thus, we may interpret $\smash{\interp{\J}{\const s^k_{\negvthinspace j}}( \interp{\J}{u} )}$ as the value in $\interp{\J}{\tau}$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
@@ -2029,7 +2029,7 @@ All other rules add equalities to the
 internal state of the theory solver. The rules in phase~1 are performed
 eagerly---that is, for partial satisfying assignments $M$---while the rules in
 phases~2 and~3 are performed only for complete satisfying
-assignments $M$. 
+assignments $M$.
 
 Prior to constructing a model for $F\!$, the theory solver does not explicitly construct $\mu$-terms nor the mapping $\Val$.
 Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
@@ -2091,7 +2091,7 @@ Selectors are collapsed eagerly:
 If $\const s^k_{\negvthinspace j}( t ) \in \tEc$ and $t =
 \const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, the solver directly adds
 $\smash{\const s^k_{\negvthinspace j}( t ) \teq u_k}$ to $\Ec$, whereas the presented calculus
-would apply \rn{Split} and \rn{Inject} before adding this equality. 
+would apply \rn{Split} and \rn{Inject} before adding this equality.
 
 To reduce the number of unique constraints considered by the calculus, we
 compute a normal form for constraints as a preprocessing step. In particular, we
@@ -2236,7 +2236,7 @@ confirm that CVC4's new capabilities improve the state of the art.
 This work is part of a program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, it would be useful to implement
-proof reconstruction for (co)data\-type inferences in Isabelle. 
+proof reconstruction for (co)data\-type inferences in Isabelle.
 CVC4 cound be interfaced for generating counterexamples in proof assistants, as
 an alternative to Nitpick. Finally, it might be worthwhile to extend SMT solvers
 with dedicated support for (co)recursive functions.
@@ -2247,10 +2247,10 @@ with dedicated support for (co)recursive functions.
 
 \def\ackname{Acknowledgment}
 \ourparagraph{\ackname.}
-We owe a great debt to the development team of CVC4, 
+We owe a great debt to the development team of CVC4,
 including Clark Barrett and Cesare Tinelli,
 and in particular Morgan Deters,
-who jointly with the first author developed the initial version 
+who jointly with the first author developed the initial version
 of the theory solver for datatypes in CVC4.
 %
 Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
