@@ -475,7 +475,7 @@ related work. Since then, datatypes have been added to the SMT solver
 Z3 \cite{de-moura-bjoerner-2008} \begin{rep}in unpublished work by Leonardo de Moura \end{rep}and to a SPASS-like %prototypical
 superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
 Closely related are the automatic structural
-induction in both types of provers \cite{kersani-peltier-2013,cruanes-201x,wand-weidenbach-201x,reynolds-kuncak-2015},
+induction in both kinds of provers \cite{kersani-peltier-2013,cruanes-201x,wand-weidenbach-201x,reynolds-kuncak-2015},
 the (co)datatype and (co)induction support in Dafny \cite{leino-moskal-2014},
 and the (semi-)decision procedures for datatypes
 implemented in Leon \cite{suter-et-al-2011} and RADA \cite{pham-et-al-2013}.
@@ -632,7 +632,7 @@ $\Sel^\delta$.
 For types with several constructors, it is customary to provide discriminators
 $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
 it is not necessary to extend the signature:
-We let $\const{d}_{i\negvthinspace j}(t)$
+We can simply let $\const{d}_{i\negvthinspace j}(t)$
 abbreviate
 $t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
 %This will simplify the presentation. % of the decision procedure.
@@ -734,7 +734,7 @@ $\jPrime$, and $k$ within bounds\end{rep}:
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
   \\[-1\jot]
 \text{Selection:}\quad
-  & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) = x_k}
+  & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) \teq x_k}
 \end{aligned}
 \]
 %
@@ -1860,8 +1860,6 @@ we have that $\ValC$ satisfies (2) and (3).
 \end{proof}
 \end{rep}
 
-\pagebreak[2]
-
 Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
 interpretation $\J$ can be constructed that satisfies $\Ec$. Property~\PART{1} states that the
 values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal
@@ -2194,8 +2192,8 @@ more expensive rules, make a contribution.
 Three proofs were found thanks to
 the \rn{Acyclic} rule and four required the \rn{Unique} rule. Among the latter,
 three are simple proofs of the form
-\keyw{by}~\textit{coinduction}~\textit{auto} %\cite{blanchette-et-al-2014-impl}
-in Isabelle.
+\keyw{by}~\textit{coinduction}~\textit{auto}
+in Isabelle \cite{blanchette-et-al-2014-impl}.
 The fourth proof, by Gammie and Lochbihler, is more elaborate:
 %
 \begin{quote}
