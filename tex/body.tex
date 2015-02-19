@@ -1344,10 +1344,10 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 
 \paragraph{Phase 3: Branching \rm(\figurename~\ref{fig:split-rule}).}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
-the equivalence class of $t$ must contain a
+$t$'s equivalence class must contain a
 $\delta$ constructor term.
 This is enforced in the third phase by the \rn{Split} rule.
-A companion rule, \rn{Single}, focuses on the degenerate case where two
+Another rule, \rn{Single}, focuses on the degenerate case where two
 terms %from $\tEc$
 have a corecursive singleton type
 %(Section~\ref{sec:the-theory-of-co-datatypes})
@@ -1631,7 +1631,9 @@ and by exhaustively applying the following rule:%
 %
 Given an unassigned variable in $\ValC$, this rule assigns it a fresh
 value---one that does not occur in $\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$
-modulo $\alpha$-equivalence.
+modulo $\alpha$-equivalence---excluding
+not only existing terms in the range of $\ValC$ but also
+terms that could emerge as a result of the update.
 %\rem{TODO: What guarantees that such a value exists? (Answer: infinitely many values
 %of codatatypes, of which only finitely many are in
 %$\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$?)}
@@ -1642,8 +1644,8 @@ the range of $\ValC$ at each step.
 
 The last precondition is admittedly rather technical. Its role is to ensure that
 $\ValC$ remains injective modulo $\alpha$-equivalence. A simpler, less efficient
-way to express the rule would be to check that property explicitly before
-performing the assignment.
+way to proceed would be to compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
+injectivity afterward.
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
