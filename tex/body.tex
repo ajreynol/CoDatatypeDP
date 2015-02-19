@@ -31,8 +31,8 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
-%\newcommand\DISC[1]{t \teq \const{C}_{#1}\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
-\newcommand\DISC[1]{\const{d}_{#1}(t)}
+\newcommand\DISC[1]{t \teq \const{C}_{#1}\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
+%\newcommand\DISC[1]{\const{d}_{#1}(t)}
 
 %\newcommand\XXXL{DPLL}
 \newcommand\XXXL{CDCL}
@@ -149,7 +149,8 @@
 \newcommand{\ec}[1]{[#1]}
 \newcommand{\JJJJ}{\mathcal{\!J\!}}
 \newcommand{\J}{\mathcalx{J}}
-\newcommand{\M}{\mathcalx{M}}
+%\newcommand{\M}{\mathcalx{M}}
+\newcommand{\M}{\mathcalx{J}}
 \newcommand{\Val}{\mathcalx{A}\vvthinspace}
 \newcommand{\ValC}{\mathcalx{A}^\star}
 \newcommand{\Var}{\mathcalx{V}}
@@ -926,14 +927,17 @@ calculus.
 
 To simplify the presentation, we make a few assumptions about
 $\Sig$.
-First, all codatatypes in $\Codata$ are corecursive. This is not restrictive
+First, all codatatypes in $\Codata$ are corecursive. This is reasonable
 because noncorecursive codatatypes can be seen as nonrecursive
 datatypes.
 Second, all types $\tau \in \Nondata$ have infinite cardinality.
-This is not very limitative, because each interpreted type in $\Nondata$
-having finite cardinality~$n$
-can be replaced by an enumeration datatype with $n$~nullary constructors.
-As for uninterpreted types, since the constraints in $\Ec$ are ground, they cannot entail an upper
+This is not very restrictive, because in principle each interpreted type in
+$\Nondata$ having finite cardinality~$n$
+can be replaced by a %n enumeration
+datatype with $n$~nullary constructors
+\cite{barrett-et-al-2007}.
+As for uninterpreted types, since the constraints in $\Ec$
+are ground, they cannot entail an upper
 bound on the cardinality of any such type, so it is safe to consider them infinite.
 
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
@@ -1358,8 +1362,8 @@ and \rn{Single}'s singleton
 constraint %on the codatatype
 can be evaluated statically
 based on a recursive computation of the cardinalities of the
-constructors' argument types. This step relies on the assumption that
-ordinary types are infinite.
+constructors' argument types.
+%This step relies on the assumption that ordinary types are infinite.
 
 \paragraph{Correctness.}
 Correctness means that if there exists a closed derivation tree with root node
@@ -1389,8 +1393,8 @@ $\smash{\SSSS {i+1}_t} = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u\t
 \end{rep}%
 %for $i \geq 0$, let ;
 and let $\SSSS \AST_t$ be the limit of this sequence.
-This is a finite set for each $t$ because there can only be finitely many
-values of the same type as $t$.
+This is a finite set for each $t$, because in the absence of (co)recursion
+one eventually reaches a point where no selector can be applied.
 %%% TODO: Clarify above step in report.
 Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in D$,
 and let $\tcEc$ be the set of subterms of
@@ -2027,8 +2031,10 @@ formulas involving datatypes and codatatypes.
 However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes:
 Since quantified formulas may entail cardinality constraints on uninterpreted types $\ty{u}$,
 we may no longer assume that they are of infinite cardinality.
-When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \relax{incomplete}
-since it may fail to recognize cases when the preconditions of \rn{Split} and \rn{Single} hold.
+When assuming that a finite type has infinite cardinality, the calculus
+presented in this paper is \relax{incomplete}
+since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
+applied.
 This does not %necessarily
 impact the correctness of the procedure in this setting,
 since %by assumption
@@ -2045,7 +2051,7 @@ $(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F$.
 
 %\paragraph{Optimizations.}
 The implementation of the decision procedure uses several optimizations
-following the lines of Barrett et al. \cite{barrett-et-al-2007}.
+following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 %and are not reflected in the presentation of the calculus.
 We briefly mention the main ones.
 %
