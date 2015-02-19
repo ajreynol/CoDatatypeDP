@@ -1609,9 +1609,10 @@ but
 $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
 For a variable $x\typ{\tau}$ and a normal interpretation $\J$,
-we write $\Terms^{\smash{\J}}_x( \Val )$ to denote the set consisting of all values
+we let $\Terms^{\smash{\J}}_x( \Val )$ denote the set consisting of all values
 $v \in \J( \tau )$
-such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurring in the range of $\Val$.
+such that $v \vsimv{x} \interp{t}{u}$ for some subterm $u$ of a term $t$
+occurring in the range of $\Val$. This set describes shapes of terms to avoid.
 
 The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
 assigns values from $\J$ to unassigned variables in the domain of $\Val$.
@@ -1680,10 +1681,10 @@ variables of $\Val$, specifically ${\Varec{y}}$ and ${\Varec{z}}$.
 Modulo $\alpha$-equivalence, $\smash{\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )} =
 %\begin{array}{c}
 \{
-\MU a.\: \const{D}( a ),\:
+\MU a.\: \const{C}( a ),\:
+\MU a.\: \const{D}( a ),\allowbreak\:
 \MU a.\: \const{C}( \const{D}( a )),\allowbreak\:
-\const{C}( \MU a.\: \const{D}( a )),\allowbreak\:
-\MU a.\: \const{C}( a )
+\const{C}( \MU a.\: \const{D}( a ))
 \}
 %\end{array}
 $.
