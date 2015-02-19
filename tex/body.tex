@@ -32,6 +32,12 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
+%\newcommand\ourparagraph[1]{\paragraph{\upshape\textbf{#1}}}
+%\newcommand\beforefig{}
+
+\newcommand\ourparagraph[1]{\paragraph{{#1}}}
+\newcommand\beforefig{\rm}
+
 \newcommand\DISC[1]{t \teq \const{C}_{#1}\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
 %\newcommand\DISC[1]{\const{d}_{#1}(t)}
 
@@ -470,7 +476,7 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
-\begin{rep}\paragraph{Related Work.} Despite\end{rep}%
+\begin{rep}\ourparagraph{Related Work.} Despite\end{rep}%
 \begin{conf}Despite\end{conf} its age,
 Barrett et al.\ \cite{barrett-et-al-2007} still provides a good account of
 related work. Since then, datatypes have been added to the SMT solver
@@ -510,7 +516,7 @@ inspired by the $\mu$-calculus
 \kern-2.9pt %%% TYPESETTING: Crude hack
 \end{conf}
 
-\paragraph{Conventions.}
+\ourparagraph{Conventions.}
 The setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are atomic sorts and interpreted as
@@ -568,7 +574,7 @@ because they can be abstracted away as variables when combining theories.
 %Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
 %examples.
 
-%\paragraph{Specifications.}
+%\ourparagraph{Specifications.}
 In an SMT problem, the signature is typically given by specifying first the
 uninterpreted ordinary types in any order, then the (co)datatypes with their constructors
 and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
@@ -693,7 +699,7 @@ such types are introduced as datatypes or as codatatypes.
 %the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 %nonemptiness.
 
-%\paragraph{Characterization.}
+%\ourparagraph{Characterization.}
 One way to define datatypes semantically is as the initial model of the
 selector--constructor equations \cite{barrett-et-al-2007}.
 \begin{rep}
@@ -841,7 +847,7 @@ values are fully characterized by their possibly infinite expansion.
 %        consider uniqueness -- no way to express that certain infinite
 %        acyclic objects do not exist
 
-%\paragraph{Special Cases.}
+%\ourparagraph{Special Cases.}
 {\looseness=-1
 Some codatatypes are so degenerate as to have infinite values
 even though they are finite. A simple example is
@@ -1075,7 +1081,7 @@ are saturated.
 \label{fig:cc-rules}
 \end{figure}
 
-\paragraph{Phase 1: Computing the Bidirectional Closure \rm(\figurename~\ref{fig:cc-rules}).}
+\ourparagraph{Phase 1: Computing the Bidirectional Closure \beforefig(\figurename~\ref{fig:cc-rules}).}
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
 whereas the \rn{Inject} and \rn{Clash} rules together compute (downward) unification.
 For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Inject},
@@ -1090,7 +1096,7 @@ Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class in $\Ec$ that contains $t$.
 
-\paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(\figurename~\ref{fig:ab-rules}).}
+\ourparagraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 The premises of the rules that make up the second phase refer to a mapping $\Val$
 that associates a $\mu$-term with each equivalence class as its representative.
@@ -1345,7 +1351,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \label{fig:split-rule}
 \end{figure}
 
-\paragraph{Phase 3: Branching \rm(\figurename~\ref{fig:split-rule}).}
+\ourparagraph{Phase 3: Branching \beforefig(\figurename~\ref{fig:split-rule}).}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
 $t$'s equivalence class must contain a
 $\delta$ constructor term.
@@ -1363,7 +1369,7 @@ based on a recursive computation of the cardinalities of the
 constructors' argument types.
 %This step relies on the assumption that ordinary types are infinite.
 
-\paragraph{Correctness.}
+\ourparagraph{Correctness.}
 Correctness means that if there exists a closed derivation tree with root node
 $\Ec$, then $\Ec$ is $\thD$-unsatisfiable; and if there exists
 a derivation tree with root node $\Ec$ that contains a saturated node, then
@@ -1968,11 +1974,11 @@ the main aspects of the implementation within the SMT solver CVC4:\ the
 integration into CDCL($T$), the extension to quantified formulas, and
 some optimizations.
 
-%%% @ANDY: I'm trying without \paragraph's, to save space but also to make the
+%%% @ANDY: I'm trying without \ourparagraph's, to save space but also to make the
 %%% section look more like a whole than a random list of stuff. Revert if you
 %%% disagree.
 
-%\paragraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
+%\ourparagraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
 {\looseness=-1
 The calculus is implemented as a \relax{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
@@ -2038,7 +2044,7 @@ If %after doing so,
 the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
 and $v$, it deduces that \rn{Unique} applies to $u$ and $v$.
 
-%\paragraph{Extension to Quantified Formulas.}
+%\ourparagraph{Extension to Quantified Formulas.}
 While the decision procedure is restricted to ground constraints,
 in practice we often want to solve problems that feature universal axioms and existential conjectures,
 where checking satisfiability requires reasoning about such ground constraints in the presence of universally quantified formulas.
@@ -2067,7 +2073,7 @@ the implementation adds the clause %of the form
 $(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F$.
 \begin{rep}In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.\end{rep}
 
-%\paragraph{Optimizations.}
+%\ourparagraph{Optimizations.}
 The implementation of the decision procedure uses several optimizations
 following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 %and are not reflected in the presentation of the calculus.
@@ -2237,7 +2243,7 @@ support for (co)recursive functions.
 %ormulas over (co)datatypes in solvers.
 
 \def\ackname{Acknowledgment}
-\paragraph{\ackname.}
+\ourparagraph{\ackname.}
 We owe a great debt to the development team of CVC4, 
 including Clark Barrett and Cesare Tinelli,
 and in particular Morgan Deters,
