@@ -31,6 +31,9 @@
                          \@addtoreset{#1}{chapter}}%
 \makeatother
 
+%\newcommand\DISC[1]{t \teq \const{C}_{#1}\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
+\newcommand\DISC[1]{\const{d}_{#1}(t)}
+
 %\newcommand\XXXL{DPLL}
 \newcommand\XXXL{CDCL}
 
@@ -504,7 +507,7 @@ inspired by the $\mu$-calculus
 \paragraph{Conventions.}
 The setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
-set of function symbols $\Funcs$. Types are atomic sorts and interpreted by
+set of function symbols $\Funcs$. Types are atomic sorts and interpreted as
 nonempty domains. The set~$\Types$ must contain a
 \begin{rep}distinguished \end{rep}type \ty{bool} interpreted as the set of truth
 values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
@@ -625,9 +628,9 @@ $\Sel^\delta$.
 For types with several constructors, it is customary to provide discriminators
 $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
 it is not necessary to extend the signature:
-The discriminator atom $\const{d}_{i\negvthinspace j}(x) \begin{conf}\teq
-\const{true}\end{conf}$ can be seen as an abbreviation for
-$x = \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
+We let $\const{d}_{i\negvthinspace j}(t)$
+abbreviate
+$t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
 %This will simplify the presentation. % of the decision procedure.
 
 \begin{rep}%
@@ -870,8 +873,8 @@ it is easy to characterize this degenerate case.
 \afterDot
 Let $\delta$ be a corecursive codatatype. The domain interpreting $\delta$ is
 either infinite or a singleton. In the latter case, $\delta$ necessarily has a
-single constructor, whose arguments have types that are interpreted by
-singletons.
+single constructor, whose arguments have types that are interpreted as
+singleton domains.
 \end{lemma}
 
 \begin{rep}
@@ -1314,8 +1317,8 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
   \text{ or }
   \bigl( \delta \in \Data \text{ and } \left|\delta\right| \text{ is finite} \bigr)
 }{
-  \Ec := \Ec,\: t \teq \const{C}_1\bigl(\const s^1_1( t ), \ldots,\const s^{n_{1\!}}_1( t ) \bigr) %\ROR
-  \ROR \cdots \ROR \Ec := \Ec,\: t \teq \const{C}_m\bigl(\const s^1_m( t ), \ldots,\const s^{n_m}_m( t ) \bigr)
+  \Ec := \Ec,\: \DISC{1} %\ROR
+  \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
 }
 \)
 \rn{Split}
@@ -1333,7 +1336,6 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \)
 \rn{Single}
 \end{tabular}
-%%% TODO: Clarify s's?
 \caption{\,Derivation rules for branching%.
 %All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
 %Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
@@ -1421,8 +1423,9 @@ whose root nodes are the result of applying \rn{Split} on $t\typ{\delta}$,
 by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is
 $\thD$-unsatisfiable
 for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
-Since by exhaustiveness, all models of $\thD$ entail (exactly) one equality $t \teq \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)$,
-this means $\Ec$ is $\thD$-unsatisfiable.
+Since by exhaustiveness, all models of $\thD$ entail (exactly) one
+$\DISC{\negvthinspace j}$,
+$\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child node of $\Ec$ is a closed derivation tree
 whose root node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
 In all these cases, $\Ec \models_{\thD} t \teq u$.
@@ -1981,10 +1984,8 @@ M_i$, then $x \teq \const{C}( x )$ is an %(possible)
 explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
 The rules of the calculus are implemented as follows. For all rules with
 conclusion $\bot$, we report the union of the explanations for all premises is
-$\thD$-unsatisfiable. For \rn{Split}, we add a clause %of the form
-$t \teq \const{C}_1\bigl( \const s^1_1( t ), \ldots, \const s^{n_{1\!}}_1( t ) \bigr)
-\mathrel\lor \cdots \mathrel\lor t \teq \const{C}_m\bigl( \const s^1_m( t ),
-\ldots, \const s^{n_m}_m( t ) \bigr)$ to $F$.
+$\thD$-unsatisfiable. For \rn{Split}, we add the exhaustiveness clause %of the form
+$\DISC{1} \mathrel\lor \cdots \mathrel\lor \DISC{m}$ to $F$.
 Decisions on which branch to take are thus performed externally by the SAT
 solver. % and not by the theory solver.
 All other rules add equalities to the
