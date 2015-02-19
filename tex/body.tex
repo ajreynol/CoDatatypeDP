@@ -1921,8 +1921,8 @@ $\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPr
 If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
 which is $\ValC \ec{t}$.
 If $j \neq \jPrime$, since \rn{Cong} does not apply,
-$\smash{\const s^k_{\negvthinspace j}( u )}$ and $\smash{\const s^k_{\negvthinspace j}( u' )}$
-are in distinct equivalence classes only if $u$ and $u'$ are in distinct equivalence classes.
+any term of the form $\smash{\const s^k_{\negvthinspace j}( u' )}$ not occurring in $\ec{t}$ 
+is such that $u$ and $u'$ are in distinct equivalence classes.
 Due to the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\M( u ) \neq \M( u' )$ for all such $u$, $u'$.
 Thus, we may interpret $\smash{\M(\const s^k_{\negvthinspace j})( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
@@ -2026,8 +2026,8 @@ formulas involving datatypes and codatatypes.
 However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes:
 Since quantified formulas may entail cardinality constraints on uninterpreted types $\ty{u}$,
 we may no longer assume that they are of infinite cardinality.
-When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \relax{incomplete},
-due to the overly restrictive preconditions on \rn{Split} and \rn{Single}.
+When assuming that a finite type has infinite cardinality, the calculus presented in this paper is \relax{incomplete}
+since it may fail to recognize cases when the preconditions of \rn{Split} and \rn{Single} hold.
 This does not %necessarily
 impact the correctness of the procedure in this setting,
 since %by assumption
@@ -2039,7 +2039,7 @@ For example, consider the $\ty{stream}_{\,\ty{u}}$ codatatype, where $\ty{u}$ is
 This type has cardinality precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
 the implementation adds the clause %of the form
-$\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y \mathrel\vee s \teq t$ to $F$.
+$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F$.
 \begin{rep}In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.\end{rep}
 
 %\paragraph{Optimizations.}
@@ -2050,7 +2050,7 @@ We briefly mention the main ones.
 %
 Discriminators are part of the signature instead
 of being abbreviations.
-We have found that this leads to better performance because the alternative introduces terms more eagerly to $\tEc$.
+We have found that this leads to better performance since it introduces terms less eagerly to $\tEc$.
 Handling discriminators requires extending the decision procedure with several
 rules \cite{barrett-et-al-2007},
 which apply uniformly to both datatypes and codatatypes.
@@ -2084,7 +2084,7 @@ based on whether $j = \jPrime$.
 To evaluate the decision procedure, we generated benchmark problems from existing
 Isabelle formalizations using Sledgehammer.
 There are not yet many benchmarks available, since codatatypes are a
-recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. We
+recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.} We
 included all the theory files from the Isabelle distribution (Distro, 879 goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974 goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We added
