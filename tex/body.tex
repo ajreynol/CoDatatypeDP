@@ -102,7 +102,7 @@
 \newcommand\const[1]{\textsf{#1}}
 \newcommand\ty[1]{\textit{#1}}
 
-%%% @ANDY: I don't like using \qed or anything too similar (e.g. \Box) for
+%%% I don't like using \qed or anything too similar (e.g. \Box) for
 %%% anything else than "quid erat demonstrandum". I'm open to other symbols,
 %%% e.g. a filled black square. But if the example are short enough, which
 %%% they currently are, we could live with nothing.
@@ -139,7 +139,7 @@
 \newcommand{\tpath}[2]{\mathcalx{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcalx{P}_{ #2 \rightarrow #3 }( #1 )}
 %\newcommand{\interp}[2]{#1\llbracket #2 \rrbracket}
-%%% @ANDY: I prefer a notation that puts more emphasis on #2 (which is, in essence,
+%%% I prefer a notation that puts more emphasis on #2 (which is, in essence,
 %%% the object that is returned) and less on #1
 %\newcommand{\interp}[2]{\llbracket #2 \rrbracket_{#1}}
 %%% And one that doesn't look so semantic
@@ -172,7 +172,7 @@
 % change?
 \newcommand{\thO}{T_{\mathrm{o}}}
 %\newcommand{\thD}{T_{\!\mathrm{cd}}}
-%%% @ANDY: the italicized "T" makes it look as though it were a variable;
+%%% the italicized "T" makes it look as though it were a variable;
 %%% and the subscript means we have two layers of subscripts in things like
 %%% \model_\thD (although we could drop the "T" and keep only the subscript
 %%% like you did in the string paper).
@@ -1248,7 +1248,7 @@ make progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
 \const{S}(\const{S}(y))$ must be equal to the entire term\begin{rep}
 as demonstrated next\end{rep}.
 
-%% @ANDY: Minor terminology point:
+%% Minor terminology point:
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
 %% unless it's a constant, it doesn't have a (first-order) type. So I'm rephrasing.
 
@@ -1299,14 +1299,6 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \xend
 \end{examplex}
 
-%%% @ANDY: I explicitly write "|\delta| is finite" instead of "\delta is finite"
-%%% to emphasize the dependency on the model. In principle, some types are
-%%% interpreted finitely in some models and infinitely in others. In Isabelle,
-%%% those wouldn't be considered "finite" types, but they wouldn't be "infinite"
-%%% either. (We have Haskell-style type classes for both of these concepts.)
-%%% Naturally, thanks to our assumptions at the beginning of Sect. 3, our types
-%%% are either finite or infinite.
-
 \begin{figure}[t!]
 \normalsize
 \centering
@@ -1319,7 +1311,10 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \\
   \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
   \text{ or }
-  \bigl( \delta \in \Data \text{ and } \left|\delta\right| \text{ is finite} \bigr)
+  \bigl( \delta \in \Data \text{ and } %\left|
+  \delta
+  %\right|
+  \text{ is finite} \bigr)
 }{
   \Ec := \Ec,\: \DISC{1} %\ROR
   \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
@@ -1436,7 +1431,7 @@ In all these cases, $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
 For \rn{Unique}, the construction of $\Val$ indicates that the values of $t$ and $u$ are equivalent in all models of $\Ec$.
-For \rn{Single}, $t$~and~$u$ must have the same value since the cardinality of their type is $1$.
+For \rn{Single}, $t$~and~$u$ must have the same value since the cardinality of their type is one.
 By the induction hypothesis, $\Ec \mathrel\cup t \teq u$ is $\thD$-unsatisfiable
 and thus $\Ec$ is $\thD$-unsatisfiable.
 \qed
@@ -1450,8 +1445,6 @@ The proof relies on a specific model $\M$ of $\thD$ that satisfies $\Ec$.
 First, we define the set of interpretations of the theory $\thD$,
 which requires additional terminology concerning $\mu$-terms.
 Given a $\mu$-term $t$ with subterm $u$,
-%%% @ANDY: I'm taking the liberty of renaming "interpretation" to "expansion". Interpretation
-%%% sounds semantic to me (although it is sometimes used for syntactic transformations).
 the \emph{expansion of $u$ with respect to $t$} is the $\mu$-term $\interp{t}{u}^\emptyset$,
 abbreviated to
 $\interp{t}{u}$, as returned by the following recursive function:
@@ -1710,7 +1703,7 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
   x & \text{if $t$ is of the form $\MU {x}.\; u$.} 
 \end{cases}}$
 
-%%% @ANDY: I think it's enough to point this out clearly in the introduction.
+%%% I think it's enough to point this out clearly in the introduction.
 %%% At least, that always worked fine for my other papers. :)
 %
 %\begin{conf}
