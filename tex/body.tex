@@ -337,7 +337,7 @@ format, implemented by most SMT
 solvers, has been extended with a syntax for datatypes.
 In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in
-\begin{conf}\goodbreak\noindent\end{conf}%  %%% TYPESETTING: terrible hack
+\begin{conf}\goodbreak\noindent\end{conf}%  %%% TYPESETTING: terrible HACK
 combination (Section~\ref{sec:the-ground-decision-procedure}).
 The procedure is described abstractly as a calculus and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
@@ -664,10 +664,10 @@ Types can be declared together in a mutual fashion even if they are not actually
 us.
 \end{rep}%
 %
-In addition, nothing forbids non(co)recursive specifications
+In addition, non(co)recursive specifications
 such~as
 \begin{conf}%
-\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} \,=\, \const{None} \,\mid\, \const{Some}(\tau)$.%
+\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} \,=\, \const{None} \,\mid\, \const{Some}(\tau)$
 \end{conf}%
 \begin{rep}%
 \[\begin{aligned}[t]
@@ -675,8 +675,10 @@ such~as
       \keyw{codatatype}~\vthinspace\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
 \end{aligned}
 \]
-At the semantic level, it makes no difference whether such types are
-introduced as datatypes or as codatatypes.
+\end{rep}%
+are permitted.
+\begin{rep}At the semantic level, it makes no difference whether
+such types are introduced as datatypes or as codatatypes.
 \end{rep}%
 %Without loss of generality, we consider that these types are datatypes
 %instead of codatatypes.
@@ -1074,9 +1076,7 @@ are saturated.
 \label{fig:cc-rules}
 \end{figure}
 
-\kern-1.5pt %% TYPESETTING hack
-
-\paragraph{Phase 1: Computing the Bidirectional Closure.}
+\paragraph{Phase 1: Computing the Bidirectional Closure \rm(\figurename~\ref{fig:cc-rules}).}
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
 whereas the \rn{Inject} and \rn{Clash} rules together compute (downward) unification.
 For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Inject},
@@ -1091,50 +1091,7 @@ Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class in $\Ec$ that contains $t$.
 
-\begin{figure}[t!]
-\vspace*{+3pt} %% TYPESETTING HACK
-\normalsize
-\centering
-\begin{tabular}{c}
-\(
-\inferrule{
-%  t\typ{\delta}
-%  \betweenantes
-  \delta \in \Data
-  \betweenantes
-  %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
-  \Val \smash{\ec{t\typ{\delta}}} = \MU x.\; u
-  \betweenantes
-  x \in \FV( u )
-}{
-  \bot
-}
-\)
-\rn{Acyclic}
-\\[4\jot]
-\(
-\inferrule{
-% t, u\typ{\delta}
-% \betweenantes
- \delta \in \Codata
- \betweenantes
- %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
- \Val \smash{\ec{t\typ{\delta}}} \aequiv \Val \smash{\ec{u\typ{\delta}}}
-}{
- \Ec := \Ec,\: t \teq u
-}
-\)
-\rn{Unique}
-\end{tabular}
-\vspace*{-3pt} %% TYPESETTING HACK
-\caption{\,Derivation rules for acyclicity and uniqueness%.
-}
-\label{fig:ab-rules}
-\end{figure}
-
-\kern-1.5pt %% TYPESETTING hack
-
-\paragraph{Phase 2: Applying Acyclicity and Uniqueness.}
+\paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(\figurename~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 The premises of the rules that make up the second phase refer to a mapping $\Val$
 that associates a $\mu$-term with each equivalence class as its representative.
@@ -1188,6 +1145,47 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 %For convienience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
+
+\begin{figure}[t!]
+%\vspace*{+3pt}
+\normalsize
+\centering
+\begin{tabular}{c}
+\(
+\inferrule{
+%  t\typ{\delta}
+%  \betweenantes
+  \delta \in \Data
+  \betweenantes
+  %\ttpath{\Ec}{\ec{t}}{\ec{t}} \neq \emptyset
+  \Val \smash{\ec{t\typ{\delta}}} = \MU x.\; u
+  \betweenantes
+  x \in \FV( u )
+}{
+  \bot
+}
+\)
+\rn{Acyclic}
+\\[4\jot]
+\(
+\inferrule{
+% t, u\typ{\delta}
+% \betweenantes
+ \delta \in \Codata
+ \betweenantes
+ %\tpath{\Ec}{\ec{t}} = \tpath{\Ec}{\ec{u}}\sigma \neq \emptyset
+ \Val \smash{\ec{t\typ{\delta}}} \aequiv \Val \smash{\ec{u\typ{\delta}}}
+}{
+ \Ec := \Ec,\: t \teq u
+}
+\)
+\rn{Unique}
+\end{tabular}
+\vspace*{-3pt} %% TYPESETTING HACK
+\caption{\,Derivation rules for acyclicity and uniqueness%.
+}
+\label{fig:ab-rules}
+\end{figure}
 
 The mapping $\Val$, on which the rules depend, is computed as follows.
 %
@@ -1355,7 +1353,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \label{fig:split-rule}
 \end{figure}
 
-\paragraph{Phase 3: Branching.}
+\paragraph{Phase 3: Branching \rm(\figurename~\ref{fig:split-rule}).}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
 the equivalence class of $t$ must contain a
 $\delta$ constructor term.
