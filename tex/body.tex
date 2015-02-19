@@ -1546,7 +1546,10 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 We now define the class of interpretations for $\thD$.
 $\M( \tau )$ denotes the interpretation type $\tau$ in $\M$---that is, a set of
 domain elements for that type.
-For a term $t\typ{\tau}$, $\M( t ) \in \M( \tau )$ denotes the interpretation of $t$ in $\M$.
+%For a term $t\typ{\tau}$, $\M( t ) \in \M( \tau )$ denotes the interpretation of $t$ in $\M$.
+$\M( f )$ denotes the interpretation of a function $f$ in $\M$.
+If $f$ is of type $ \tau_1 \times \cdots \times \tau_n \to \tau$,
+then $\M( f )$ is a total function of type $ \M( \tau_1 ) \times \cdots \times \M( \tau_n ) \to \M( \tau )$.
 %To simplify the presentation,
 All types are interpreted as sets of $\mu$-terms, but
 only values of types in $\Codata$ may contain cycles.
@@ -1564,28 +1567,31 @@ An interpretation $\J$ is \emph{normal} if these conditions are met:
 \begin{enumerate}
 \item
 For each type $\tau$,
-$\J( \tau )$ is a maximal set of closed normal $\mu$-terms of that type that are
+$\J( \tau )$ contains a maximal set of closed normal $\mu$-terms of that type that are
 unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
-$\J( \const{C}( \vec t \,) )$ is the value
+$\J( \const{C} )( \J( \vec t ) \,)$ is the value
 in $\J( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \J( \vec t \,) )}$, where $x$ is fresh.
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-if $\J( t )$ is of the form $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
-then $\J\negvvthinspace\bigl( \const s^k_{\negvthinspace j}( t ) \bigr)$ is the value
+if $\J( t )$ is $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
+then $\J\negvvthinspace( \const s^k_{\negvthinspace j} )\bigl( \J( t ) \bigr)$ is the value
 in $\J( \tau )$ that is $\alpha$-equivalent to
 $\interp{\J( t )}{u_k}$.
 \end{enumerate}
 \end{definition}
 
-Strictly speaking, normal interpretations are not models of codatatypes,
-because they are restricted to an $\omega$-regular values, whereas actual models must
-also cater for acyclic infinite terms. However, by monotonicity of ground
-constraints, it is trivial to extend a normal interpretation to an actual model.
-In the following, we focus on the former and unapologetically call them
-models.
+% AJR : rewording above "contains" makes this paragraph not necessary?  this reworded definition is more accurate and doesn't break the proofs.
+%  maybe comment that acyclic infinite values are included but are irrelevant for our purposes?
+
+%Strictly speaking, normal interpretations are not models of codatatypes,
+%because they are restricted to an $\omega$-regular values, whereas actual models must
+%also cater for acyclic infinite terms. However, by monotonicity of ground
+%constraints, it is trivial to extend a normal interpretation to an actual model.
+%In the following, we focus on the former and unapologetically call them
+%models.
 
 When constructing a model $\M$ of $\Ec$,
 it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.
@@ -1876,7 +1882,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
-We consider a normal model $\M$
+We consider a normal interpretation $\M$
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
 For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
