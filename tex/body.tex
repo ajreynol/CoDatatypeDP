@@ -149,8 +149,6 @@
 \newcommand{\ec}[1]{[#1]}
 \newcommand{\JJJJ}{\mathcal{\!J\!}}
 \newcommand{\J}{\mathcalx{J}}
-%\newcommand{\M}{\mathcalx{M}}
-\newcommand{\M}{\mathcalx{J}}
 \newcommand{\Val}{\mathcalx{A}\vvthinspace}
 \newcommand{\ValC}{\mathcalx{A}^\star}
 \newcommand{\Var}{\mathcalx{V}}
@@ -1440,7 +1438,7 @@ and thus $\Ec$ is $\thD$-unsatisfiable.
 It remains to show the converse of the previous theorem: If a derivation tree
 with root node $\Ec$ contains a saturated node, then $\Ec$ is
 $\thD$-satisfiable.
-The proof relies on a specific model $\M$ of $\thD$ that satisfies $\Ec$.
+The proof relies on a specific model $\J$ of $\thD$ that satisfies $\Ec$.
 
 First, we define the set of interpretations of the theory $\thD$,
 which requires additional terminology concerning $\mu$-terms.
@@ -1544,12 +1542,12 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 \end{rep}
 
 We now define the class of interpretations for $\thD$.
-$\M( \tau )$ denotes the interpretation type $\tau$ in $\M$---that is, a set of
+$\J( \tau )$ denotes the interpretation type $\tau$ in $\J$---that is, a set of
 domain elements for that type.
-%For a term $t\typ{\tau}$, $\M( t ) \in \M( \tau )$ denotes the interpretation of $t$ in $\M$.
-$\M( f )$ denotes the interpretation of a function $f$ in $\M$.
+%For a term $t\typ{\tau}$, $\J( t ) \in \J( \tau )$ denotes the interpretation of $t$ in $\J$.
+$\J( f )$ denotes the interpretation of a function $f$ in $\J$.
 If $f$ is of type $ \tau_1 \times \cdots \times \tau_n \to \tau$,
-then $\M( f )$ is a total function of type $ \M( \tau_1 ) \times \cdots \times \M( \tau_n ) \to \M( \tau )$.
+then $\J( f )$ is a total function of type $ \J( \tau_1 ) \times \cdots \times \J( \tau_n ) \to \J( \tau )$.
 %To simplify the presentation,
 All types are interpreted as sets of $\mu$-terms, but
 only values of types in $\Codata$ may contain cycles.
@@ -1571,7 +1569,7 @@ $\J( \tau )$ contains a maximal set of closed normal $\mu$-terms of that type th
 unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
-$\J( \const{C} )( \J( \vec t ) \,)$ is the value
+$\J( \const{C} )( \J( \vec t \,))$ is the value
 in $\J( \tau )$ that is $\alpha$-equivalent to
 $\nf{\MU x.\; \const{C}( \J( \vec t \,) )}$, where $x$ is fresh.
 \item
@@ -1583,18 +1581,14 @@ $\interp{\J( t )}{u_k}$.
 \end{enumerate}
 \end{definition}
 
-% AJR : rewording above "contains" makes this paragraph not necessary?  this reworded definition is more accurate and doesn't break the proofs.
-%  maybe comment that acyclic infinite values are included but are irrelevant for our purposes?
+Not all normal interpretations are actually models of codatatypes, because
+models must contain all possible infinite terms, not only cyclic ones. However,
+only cyclic terms are interesting to us, and by monotonicity of ground
+constraints it is trivial to extend a normal interpretation to an actual model.
+Hence, we focus on normal interpretations.
 
-%Strictly speaking, normal interpretations are not models of codatatypes,
-%because they are restricted to an $\omega$-regular values, whereas actual models must
-%also cater for acyclic infinite terms. However, by monotonicity of ground
-%constraints, it is trivial to extend a normal interpretation to an actual model.
-%In the following, we focus on the former and unapologetically call them
-%models.
-
-When constructing a model $\M$ of $\Ec$,
-it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.
+When constructing a model $\J$ of $\Ec$,
+it remains only to specify how $\J$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
 
 First, we need the following definitions.
@@ -1698,7 +1692,7 @@ After the substitution, $\Val \ec{v} = \MU {\Varec{v}}.\; \const{D}( \MU {\Varec
 which has normal form $\MU {\Varec{v}}.\; \const{D}( {\Varec{v}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$.
 However, this contradicts the disequality $z \not\teq v$ in~$\Ec$.
-On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\Terms^{\smash{\M}}_{{\Varec{z}}}( \Val )$,
+On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
 For example, we may assign a value such as
 $\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$ or
@@ -1879,26 +1873,26 @@ If there exists a derivation tree with root node $\Ec$ containing a saturated no
 \end{theorem}
 \begin{proof}
 Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
-%We will construct a model $\M$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where
+%We will construct a model $\J$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where
 %all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
-We consider a normal interpretation $\M$
+We consider a normal interpretation $\J$
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
-For the latter, let $\M( x )$ be the value in $\M$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
+For the latter, let $\J( x )$ be the value in $\J$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
 which by Lemma~\ref{lem:interpretation-completion}\PART{1} is guaranteed to exist.
 
-We first show $\M$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
+We first show $\J$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 We show,
 by structural induction on $t$,
-that $\M( t ) \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
-which since $\M$ is normal, implies $\M \models t_1 \teq t_2$.
+that $\J( t ) \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
+which since $\J$ is normal, implies $\J \models t_1 \teq t_2$.
 
-If $t$ is a variable, then $\M( t ) \vsim \ValC \ec{ t }$ by construction.
+If $t$ is a variable, then $\J( t ) \vsim \ValC \ec{ t }$ by construction.
 
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
-then $\M( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \M( u_1 ), \ldots, \M( u_n ) ) }$ for some fresh $x$,
+then $\J( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \J( u_1 ), \ldots, \J( u_n ) ) }$ for some fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$.
 Call this term $t_u$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
@@ -1916,8 +1910,8 @@ For each $i$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
 $\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
 Thus $\interp{t_u}{u_\iPrime} \vsim \interp{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
 %By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
-Thus, $\M( t ) \vsim t_u \vsim \ValC \ec{t}$, and
-we have $\M( t ) \vsim \ValC \ec{t}$.
+Thus, $\J( t ) \vsim t_u \vsim \ValC \ec{t}$, and
+we have $\J( t ) \vsim \ValC \ec{t}$.
 
 If $t$ is a selector term %of the form
 $\const s^k_{\negvthinspace j}( u )$,
@@ -1933,22 +1927,22 @@ where
 $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$
 for each $i$ and thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
 $\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
-If $j = \jPrime$, then $\M( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
+If $j = \jPrime$, then $\J( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
 which is $\ValC \ec{t}$.
 If $j \neq \jPrime$, since \rn{Cong} does not apply,
 any term of the form $\smash{\const s^k_{\negvthinspace j}( u' )}$ not occurring in $\ec{t}$ 
 is such that $u$ and $u'$ are in distinct equivalence classes.
-Due to the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\M( u ) \neq \M( u' )$ for all such $u$, $u'$.
-Thus, we may interpret $\smash{\M(\const s^k_{\negvthinspace j})( \M( u ) )}$ as the value in $\M( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
+Due to the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\J( u ) \neq \J( u' )$ for all such $u$, $u'$.
+Thus, we may interpret $\smash{\J(\const s^k_{\negvthinspace j})( \J( u ) )}$ as the value in $\J( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
-We now show that all disequalities in $\Fc$ are satisfied by $\M$.
+We now show that all disequalities in $\Fc$ are satisfied by $\J$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
-Since $\M( t_1 ) \vsim \ValC \ec{t_1}$ and $\M( t_2 ) \vsim \ValC \ec{t_2}$,
-by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\M( t_1 ) \neq \M( t_2 )$, and thus $\M \models t_1 \tneq t_2$.
+Since $\J( t_1 ) \vsim \ValC \ec{t_1}$ and $\J( t_2 ) \vsim \ValC \ec{t_2}$,
+by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\J( t_1 ) \neq \J( t_2 )$, and thus $\J \models t_1 \tneq t_2$.
 
-Since by assumption $\Fc$ contains only equalities and disequalities, we have $\M \models \Fc$,
-and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\M$.
+Since by assumption $\Fc$ contains only equalities and disequalities, we have $\J \models \Fc$,
+and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\J$.
 \qed
 \end{proof}
 
