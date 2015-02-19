@@ -1709,11 +1709,11 @@ For example, we may assign a value such as
 $\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$ or
 $\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$
 to ${\Varec{z}}$.
-Legal substitutions for ${\Varec{z}}$ may cause the range of $\Val$ to contain abnormal terms.
+\begin{rep}Legal substitutions for ${\Varec{z}}$ may cause the range of $\Val$ to contain abnormal terms.
 For example, after assigning $\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$ to $\Varec{z}$, we have
 $\Val \ec{u} = \MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) ) )$,
 with normal form
-$\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{u}} ) )$.
+$\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{u}} ) )$.\end{rep}
 \xend
 \end{examplex}
 
@@ -1756,7 +1756,7 @@ By assumption, $\tau \not\in \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
 If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\ref{lem:corecursive-singletons},
 the cardinality of $\tau$ must be one.
-Since \rn{Single} does not apply to $\Ec$,
+Since \rn{Single} does not apply, % to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
 and thus there are no terms in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$ of type $\tau$.
 This is a contradiction, since %our %model
@@ -1776,8 +1776,8 @@ Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\
 We first show that (2) and (3) hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
 each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t )$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
-are such that $j = \jPrime$ since \rn{Clash} does not apply to $\Ec$,
-and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply to $\Ec$.
+are such that $j = \jPrime$ since \rn{Clash} does not apply, % to $\Ec$,
+and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply. % to $\Ec$.
 Thus,
 $\Val$ was constructed by applying a sequence of substitutions
 where all substitutions for variables ${\Varec{z}}$
@@ -1802,7 +1802,7 @@ Since $\Val \ec{x}$ is a minimal, it
 contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
 where $\expand{\Val \ec{x}}{ t_i } \aequiv \expand{\Val \ec{x} }{ u_i }$ for some $i$. % \in [n]$.
 Due to the construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for some $i$. % \in [n]$.
-Since \rn{Cong} does not apply to $\Ec$
+Since \rn{Cong} does not apply, % to $\Ec$
 we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
 By (2), $\expand{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
 and $\expand{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
@@ -1909,7 +1909,7 @@ Call this term $t_u$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
+Since \rn{Inject} and \rn{Clash} do not apply, % to $\Fc$,
 by the construction of $\ValC$ we have $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 where
@@ -1931,26 +1931,26 @@ $\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 %where $\expand{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
+Since \rn{Inject} and \rn{Clash} do not apply, % to $\Fc$,
 by construction $\ValC$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where
 $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$
 for each $i$ and thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
 $\expand{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
-If $j = \jPrime$, then $\interp{\J}{t}$ is $\alpha$-equivalent with $\expand{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
-which is $\ValC \ec{t}$.
+If $j = \jPrime$, then $\interp{\J}{t}$ is $\alpha$-equivalent with $\expand{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}
+= \ValC \ec{t}$.
 If $j \neq \jPrime$, since \rn{Cong} does not apply,
 any term of the form $\smash{\const s^k_{\negvthinspace j}( u' )}$ not occurring in $\ec{t}$ 
-is such that $u$ and $u'$ are in distinct equivalence classes.
-Due to the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{u} \neq \interp{\J}{u'}$ for all such $u$, $u'$.
+is such that $[u] \not= [u']$.
+By the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{u} \neq \interp{\J}{u'}$ for all such $u$, $u'$.
 Thus, we may interpret $\smash{\interp{\J}{\const s^k_{\negvthinspace j}}( \interp{\J}{u} )}$ as the value in $\interp{\J}{\tau}$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\J$.
-Say $t_1 \tneq t_2 \in \Fc$.
-Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
-Since $\interp{\J}{t_1} \vsim \ValC \ec{t_1}$ and $\interp{\J}{t_2} \vsim \ValC \ec{t_2}$,
-by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{t_1} \neq \interp{\J}{t_2}$, and thus $\J \models t_1 \tneq t_2$.
+Assume $t \tneq u \in \Fc$.
+Since \rn{Conflict} does not apply, $t \teq u \not\in \Fc$ and thus $\ec{t}$ and $\ec{u}$ are distinct.
+Since $\interp{\J}{t} \vsim \ValC \ec{t}$ and $\interp{\J}{u} \vsim \ValC \ec{u}$,
+by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{t} \neq \interp{\J}{u}$, and thus $\J \models t \tneq u$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\J \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\J$.
@@ -2068,17 +2068,16 @@ $(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F$.
 The implementation of the decision procedure uses several optimizations
 following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 %and are not reflected in the presentation of the calculus.
-We briefly mention the main ones.
-%
-Discriminators are part of the signature instead
-of being abbreviations.
-We have found that this leads to better performance since it introduces terms less eagerly to $\tEc$.
-Handling discriminators requires extending the decision procedure with several
+\begin{rep}We briefly mention the main ones. \end{rep}%
+Discriminators are part of the signature and not abbreviations.
+This requires extending the decision procedure with several
 rules \cite{barrett-et-al-2007},
-which apply uniformly to both datatypes and codatatypes.
-Also, selectors are collapsed eagerly:
+which apply uniformly to datatypes and codatatypes.
+This approach often leads to better performance because it introduces terms
+less eagerly to $\tEc$.
+Selectors are collapsed eagerly:
 If $\const s^k_{\negvthinspace j}( t ) \in \tEc$ and $t =
-\const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, we immediately add
+\const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, the solver directly adds
 $\smash{\const s^k_{\negvthinspace j}( t ) \teq u_k}$ to $\Ec$, whereas the presented calculus
 would apply \rn{Split} and \rn{Inject} before adding this equality. 
 \begin{rep}  % lower priority to mention this
