@@ -147,7 +147,8 @@
 %\newcommand{\expand}[2]{\lceil #2 \rceil_{#1}}
 \newcommand{\expand}[2]{\langle \smash{#2} \rangle_{#1}}
 
-\newcommand{\interp}[2]{#1(#2)}
+%\newcommand{\interp}[2]{#1(#2)}
+\newcommand{\interp}[2]{{#2}^{#1}}
 
 \newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
 \newcommand{\ec}[1]{[#1]}
@@ -1548,9 +1549,9 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\expand{t}{u}
 We now define the class of interpretations for $\thD$.
 $\interp{\J}{\tau}$ denotes the interpretation type $\tau$ in $\J$---that is, a set of
 domain elements for that type.
-$\interp{\J}{f}$ denotes the interpretation of a function $f$ in $\J$.
-If $f$ is of type $ \tau_1 \times \cdots \times \tau_n \to \tau$,
-then $\interp{\J}{f}$ is a total function of type $ \interp{\J}{\tau_1} \times \cdots \times \interp{\J}{\tau_n} \to \interp{\J}{\tau}$.
+$\interp{\J}{\const{f}}$ denotes the interpretation of a function $\const{f}$ in $\J$.
+If $\const{f}$ is of type $ \tau_1 \times \cdots \times \tau_n \to \tau$,
+then $\interp{\J}{\const{f}}$ is a total function from $\interp{\J}{\tau_1} \times \cdots \times \interp{\J}{\tau_n}$ to $\interp{\J}{\tau}$.
 %To simplify the presentation,
 All types are interpreted as sets of $\mu$-terms, but
 only values of types in $\Codata$ may contain cycles.
