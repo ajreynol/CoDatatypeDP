@@ -2006,7 +2006,7 @@ assignments $M$.
 
 Prior to constructing a model for $F\!$, the theory solver does not explicitly construct $\mu$-terms nor the mapping $\Val$.
 Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
-To recognize when the precondition of \rn{Acyclic} holds,
+To detect whether \rn{Acyclic} applies,
 the procedure considers each equivalence class $\ec{t}$ containing a datatype constructor $\const{C}( t_1, \ldots, t_n )$.
 It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all arguments of constructors in these equivalence classes recursively.
 If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
@@ -2047,8 +2047,8 @@ $\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y \mathrel\vee s \teq t$ to $F$.
 \begin{rep}In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.\end{rep}
 
 %\paragraph{Optimizations.}
-The implementation of the decision procedure uses several optimizations which
-follow the approach outlined by Barrett et al. \cite{barrett-et-al-2007}.
+The implementation of the decision procedure uses several optimizations
+following the lines of Barrett et al. \cite{barrett-et-al-2007}.
 %and are not reflected in the presentation of the calculus.
 We briefly mention the main ones.
 %
