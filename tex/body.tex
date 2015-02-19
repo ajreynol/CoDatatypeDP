@@ -629,11 +629,10 @@ and $\smash{\const{s}_{i\negvthinspace j}^{\,k} : \delta_i \to \tau_{i\negvthins
 Defaults are assumed for the selector names if they are omitted.
 The $\delta$ constructors and selectors are denoted by $\Ctr^\delta$ and
 $\Sel^\delta$.
-
+%
 For types with several constructors, it is customary to provide discriminators
-$\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. However,
-it is not necessary to extend the signature:
-We can simply let $\const{d}_{i\negvthinspace j}(t)$
+$\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. Instead of extending $\Funcs$,
+we let $\const{d}_{i\negvthinspace j}(t)$
 abbreviate
 $t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
 %This will simplify the presentation. % of the decision procedure.
@@ -661,16 +660,16 @@ A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
 type of an argument to one of $\delta$'s constructors. Semantically, a set of
 types is \emph{mutually} (\emph{co})\emph{recursive} if and only if the
 associated dependency graph is strongly connected.
+A type is (\emph{co})\emph{recursive} if it belongs to such a set of types.
 \begin{rep}%
 Types can be declared together in a mutual fashion even if they are not actually
 (co)recursive. The semantic notion is more precise and is the one that interests
 us.
 \end{rep}%
 %
-In addition, non(co)recursive specifications
-such~as
+Non(co)recursive type specifications such~as
 \begin{conf}%
-\vthinspace$\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} \,=\, \const{None} \,\mid\, \const{Some}(\tau)$
+\vthinspace $\keyw{datatype}~\vthinspace\ty{option}_{\,\tau} \,=\, \const{None} \,\mid\, \const{Some}(\tau)$
 \end{conf}%
 \begin{rep}%
 \[\begin{aligned}[t]
@@ -766,7 +765,7 @@ where the induction hypothesis $\mathit{IH}_{i\negvthinspace j}^k(x)$
 denotes either $P_{\iPrime}(x)$ if there exists some $\iPrime$ such that
 the formula is type-correct or else $\top$\end{rep}.
 %
-The axiom schema ensures that the interpretation of datatypes
+The schema ensures that the interpretation of datatypes
 is standard.
 For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
 induction prohibits nonstandard models, which could contain cyclic values---e.g.,
@@ -863,7 +862,7 @@ and
 where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$. We call such types
 \emph{corecursive singletons}. For the decision procedure, it will be
-crucial to detect these types. %, even if they rarely arise in practice.
+crucial to detect these. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
 above is altered to make \ty{unit} an ordinary type, \ty{b} and \ty{c} will be
 singletons precisely when \ty{unit} is interpreted as a singleton.
