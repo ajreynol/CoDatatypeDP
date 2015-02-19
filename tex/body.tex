@@ -1098,8 +1098,8 @@ that associates a $\mu$-term with each equivalence class as its representative.
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
 % for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
-A $\mu$-term $t\typ{\tau}$ describes a class of $\tau$ values
-that terms in that equivalence class can take in the models of $\Ec$.
+The $\mu$-term $\Val[t\typ{\tau}]$ describes a class of $\tau$ values
+that $t$ and other members of $t$'s equivalence class can take in models of $\Ec$.
 %either in the case when $\tau$ is a codatatype or datatype type,
 When $\tau$ is a datatype, % \in \Data$,
 a cyclic $\mu$-term describes an infeasible class of values.
@@ -1359,7 +1359,8 @@ the equivalence class of $t$ must contain a
 $\delta$ constructor term.
 This is enforced in the third phase by the \rn{Split} rule.
 A companion rule, \rn{Single}, focuses on the degenerate case where two
-terms from $\tEc$ have a corecursive singleton type
+terms %from $\tEc$
+have a corecursive singleton type
 %(Section~\ref{sec:the-theory-of-co-datatypes})
 and must therefore be equal. Both
 \rn{Split}'s finiteness assumption %on the datatype
@@ -1367,8 +1368,8 @@ and \rn{Single}'s singleton
 constraint %on the codatatype
 can be evaluated statically
 based on a recursive computation of the cardinalities of the
-constructors' argument types. This step relies on the assumption that all types
-in $\Nondata$ are infinite.
+constructors' argument types. This step relies on the assumption that
+ordinary types are infinite.
 
 \paragraph{Correctness.}
 Correctness means that if there exists a closed derivation tree with root node
@@ -1589,7 +1590,7 @@ $\interp{\J( t )}{u_k}$.
 
 In the following, we consider only normal interpretations.
 When constructing a model $\M$ for $\Ec$,
-it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.%
+it remains only to specify how $\M$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
 
 %First, we need the following definition.
@@ -1665,7 +1666,7 @@ After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as fol
 \end{array}\]
 %
 To construct a completion $\ValC$, we must choose values for the free
-variables of $\Val$, namely ${\Varec{y}}$ and ${\Varec{z}}$.
+variables of $\Val$, specifically ${\Varec{y}}$ and ${\Varec{z}}$.
 Modulo $\alpha$-equivalence, $\smash{\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )} =
 %\begin{array}{c}
 \{
@@ -1850,14 +1851,15 @@ we have that $\ValC$ satisfies (2) and (3).
 Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
 interpretation $\J$ can be constructed that satisfies $\Ec$. Property~\PART{1} states that the
 values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal
-interpretation. In particular, this means they are closed, normal, and acyclic when
+interpretation. This means they are closed, normal, and acyclic when
 required. Property~\PART{2} states that the interpretation of all subterms in the
 range of $\ValC$ depends on its associated variable only. In other words, the
 interpretation of a subterm $t$ where $\muvar(t) = {\Varec{x}}$ is equal to
-$\ValC \ec{x}$, independently of the context in which it is interpreted.
+$\ValC \ec{x}$, independently of the context. % in which it is interpreted.
 Property~\PART{3} states that $\ValC$ is injective (modulo
-$\alpha$-equivalence), which in the following ensures that a distinct value can
-be associated with each equivalence class.
+$\alpha$-equivalence), which ensures %in the following
+that distinct values are
+assigned to distinct equivalence classes.
 
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
@@ -2022,10 +2024,10 @@ and $v$, it deduces that \rn{Unique} applies to $u$ and $v$.
 
 %\paragraph{Extension to Quantified Formulas.}
 While the decision procedure is restricted to ground constraints,
-in practice we often want to solve problems that combine reasoning about universal axioms and existential conjectures,
+in practice we often want to solve problems that feature universal axioms and existential conjectures,
 where checking satisfiability requires reasoning about such ground constraints in the presence of universally quantified formulas.
-Many SMT solvers, including CVC4, support reasoning about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
-These methods extend naturally to quantified formulas over the signature of the theory of datatypes and codatatypes.
+Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
+These methods extend naturally to quantified formulas involving datatypes and codatatypes.
 
 However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes:
 Since quantified formulas may entail cardinality constraints on uninterpreted types $\ty{u}$,
@@ -2087,11 +2089,11 @@ based on whether $j = \jPrime$.
 
 To evaluate the decision procedure, we generated benchmark problems from existing
 Isabelle formalizations using Sledgehammer.
-Codatatypes being a recent addition to Isabelle
-\cite{blanchette-et-al-2014-impl}, benchmarks are not abundant. We
+There are not yet many benchmarks available, since codatatypes are a
+recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. We
 included all the theory files from the Isabelle distribution (Distro, 879 goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974 goals) \cite{klein-et-al-afp}
-that define codatatypes falling within the supported fragment. We also included
+that define codatatypes falling within the supported fragment. We added
 two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
 goals), about Bird and Stern--Brocot trees. To exercise the support
 for datatypes, the benchmarks were complemented by theories about lists
@@ -2105,10 +2107,10 @@ For each goal in each theory file, Sledgehammer was invoked to select
 256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB~2
 along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
 given to CVC4, running for up to 60 seconds on the StarExec cluster
-\cite{stump-et-al-2014-starexec}. Problems involving no (co)datatypes were
-filtered out. Due to the lack of machinery for reconstructing inferences about
-(co)datatypes in Isabelle, the external solver is trusted as an oracle in these
-experiments.
+\cite{stump-et-al-2014-starexec}.
+%TODO: Keep or not? Problems not involving (co)datatypes were filtered out.
+Due to the lack of machinery for reconstructing inferences about (co)datatypes
+in Isabelle, the solver is trusted as an oracle in these experiments.
 
 CVC4 was run on each problem several times, with the support for datatypes and
 codatatypes either enabled or disabled. The contributions of the acyclicity and
@@ -2226,7 +2228,7 @@ of the theory solver for datatypes in CVC4.
 %
 Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
 Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
-codatatype or at least benevolently tolerated it, both of which we are thankful
+codatatypes or at least benevolently tolerated it, both of which we are thankful
 for.
 %
 Peter Gammie and Andreas Lochbihler shared their private
@@ -2235,7 +2237,7 @@ Andrei Popescu helped clarify our thoughts regarding the axiomatization of
 codatatypes. Dmitriy Traytel took part in discussions about degenerate
 codatatypes.
 %
-Andreas Lochbihler suggested several textual improvements.
+Andreas Lochbihler and Mark Summerfield suggested several textual improvements.
 The second author's research was partially supported by the Deutsche
 Forschungs\-gemein\-schaft (DFG) project
 \relax{Hardening the Hammer} (grant Ni\,491\slash 14-1).
