@@ -1608,18 +1608,18 @@ such that $v \vsimv{x} \interp{t}{u}$ for some term $t$ with subterm $u$ occurri
 
 The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
 assigns values from $\J$ to unassigned variables in the domain of $\Val$.
-We construct $\ValC$ by initially taking $\ValC := \nf{\Val}$
+We construct $\ValC$ by initially setting $\ValC := \nf{\Val}$
 and by exhaustively applying the following rule:%
 \[
 \hbox{\(
 \inferrule{
-  {\Varec{x}}\typ{\tau} \in \FV( \Val )
+  {\Varec{x}}\typ{\tau} \in \FV( \ValC )
   \betweenantes
   \MU {\Varec{x}}.\; t \aequiv v
   \betweenantes
   v \in \J( \tau )
   \betweenantes
-  v \not\in \Terms^{\smash{\J}}_{\Varec{x}}(\Val)
+  v \not\in \Terms^{\smash{\J}}_{\Varec{x}}(\ValC)
 }{
   \ValC := \nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
 }
@@ -1628,7 +1628,7 @@ and by exhaustively applying the following rule:%
 }
 \]
 %
-The rule chooses an unassigned variable in $\ValC$ and assigns it a fresh
+Given an unassigned variable in $\ValC$, this rule assigns it a fresh
 value---one that does not occur in $\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$
 modulo $\alpha$-equivalence.
 %\rem{TODO: What guarantees that such a value exists? (Answer: infinitely many values
