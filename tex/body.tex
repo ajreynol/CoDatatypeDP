@@ -325,7 +325,7 @@ terms, and only those. For example, the coinductive specification
 %
 (using an ML-like syntax) introduces a type that
 models the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
-using Peano notation, but extended with an
+using Peano notation but extended with an
 infinite value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
 The equation $\const{S}(\infty) \teq \infty$ holds as expected,
 because both sides expand to the infinite term
@@ -349,8 +349,8 @@ In this \thewordpaper, we introduce a unified decision procedure for ground
 problems involving datatypes and codatatypes in
 \begin{conf}\goodbreak\noindent\end{conf}%  %%% TYPESETTING: terrible HACK
 combination (Section~\ref{sec:the-ground-decision-procedure}).
-The procedure is described abstractly as a calculus and is
-designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
+The procedure is described abstractly as a calculus and can be
+composed via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007}, which only covers
 datatypes.
 To our knowledge, our procedure is the first of its kind for the theory of
@@ -385,7 +385,7 @@ allowed\begin{conf}, with no base case\end{conf}\begin{rep}; the
 corresponding datatype would be rejected as non-well-founded
 \cite{blanchette-et-al-2015-esop}\end{rep}.
 
-Second, \emph{a uniqueness rule replaces the acyclicity rule of datatypes.}
+Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
 Cyclic constraints such as
 $\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes but satisfiable for codatatypes.
@@ -1663,7 +1663,9 @@ The last precondition is admittedly rather technical. Its role is to ensure that
 $\ValC$ remains injective modulo $\alpha$-equivalence. A simpler, less efficient
 way to proceed would be to compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
 injectivity afterward. Injectivity is important to satisfy disequality constraints.
-For infinite codatatypes, it is always possible to find suitable values of $v$.
+For infinite codatatypes, it is always possible to find suitable values $v$. For example,
+if the longest cycle in $\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$ is of length $n$, a fresh value
+can be constructed with a cycle of length $n + 1$.
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
@@ -1688,8 +1690,8 @@ the mapping $\Val$ is as follows:
 \Val \ec{z} & = & {\Varec{z}}
 \end{array}\]
 %
-To construct a completion $\ValC$, we must choose values for the free
-variables of $\Val$, specifically ${\Varec{y}}$ and ${\Varec{z}}$.
+To construct a completion $\ValC$, we must choose values for ${\Varec{y}}$ and ${\Varec{z}}$,
+which are free in~$\Val$.
 Modulo $\alpha$-equivalence, $\smash{\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )} =
 %\begin{array}{c}
 \{
@@ -1700,8 +1702,8 @@ Modulo $\alpha$-equivalence, $\smash{\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )} 
 \}
 %\end{array}
 $.
-Consider a normal interpretation $\J$ that evaluates variables in $\Ec$ based on the mapping $\Val$:
-$z$ is interpreted as $\Val \ec{z}$, $y$ as $\Val \ec{y}$, and so on.
+Consider a normal interpretation $\J$ that evaluates variables in $\Ec$ based on~$\Val$:
+$\interp{\J}{u} = \Val \ec{u}$, $\interp{\J}{v} = \Val \ec{v}$, and so on.
 Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\Ec$ to be falsified by $\J$.
@@ -1712,9 +1714,10 @@ which is $\alpha$-equivalent to $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$.
 However, this contradicts the disequality $z \not\teq v$ in~$\Ec$.
 On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
-For example, we may assign a value such as
-$\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$ or
-$\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$
+We can assign a value such as
+$\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$,
+$\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$, or
+$\MU {\Varec{z}}.\; \const{C}( \const{C}( \const{D}( {\Varec{z}} ) ) )$
 to ${\Varec{z}}$.
 \begin{rep}Legal substitutions for ${\Varec{z}}$ may cause the range of $\Val$ to contain abnormal terms.
 For example, after assigning $\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$ to $\Varec{z}$, we have
