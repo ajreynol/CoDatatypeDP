@@ -1189,7 +1189,7 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
-The mapping $\Val$, on which the rules depends, is computed as follows.
+The mapping $\Val$, on which the rules depend, is computed as follows.
 %
 With each equivalence class $\ec{u\typ{\tau}}$, we associate a fresh variable $\Varec{u}\typ{\tau}$
 %of the same type as $u$
@@ -1212,7 +1212,7 @@ is refined by applying the following unfolding rule exhaustively:\strut
 %\rn{Unfold}
 }
 \]
-$\FV( \Val )$ denotes the union of the free variables occurring in $\Val$'s range,
+$\FV( \Val )$ denotes the set of free variables occurring in $\Val$'s range,
 and $\Val[x \mapsto t]$ denotes the \emph{variable-capturing} substitution of $t$ for
 $x$ in $\Val$'s range. It is easy to see that the height of terms produced as a
 result of the unfolding is bounded by the number of equivalence classes of
@@ -1240,7 +1240,7 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \xend
 \end{examplex}
 
-Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules operate as follows.
+Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules work as follows.
 For acyclicity, if $\ec{t}$ is a datatype equivalence class
 whose values $\Val \ec{t} = \MU x.\; u$ are cyclic
 (as expressed by $x \in \FV( u )$),
@@ -1248,12 +1248,12 @@ then $\Ec$ is $\thD$-unsatisfiable.
 For uniqueness, if $\ec{t}$, $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$, $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
-then $t \teq u$. This requirement may seem too restrictive, since
+then $t \teq u$. Comparison for $\alpha$-equivalence may seem too restrictive, since
 $\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ specify the same
 value despite being $\alpha$-disequivalent, but the rule will
-make some progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
-\const{S}(\const{S}(y))$ must be equal to the entire term,
-as demonstrated next.
+make progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
+\const{S}(\const{S}(y))$ must be equal to the entire term\begin{rep}
+as demonstrated next\end{rep}.
 
 %% @ANDY: Minor terminology point:
 %% A function symbol can have a "type signature" (but we're trying to avoid that terminology);
