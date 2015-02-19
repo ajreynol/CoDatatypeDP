@@ -32,7 +32,7 @@
 \makeatother
 
 %\newcommand\XXXL{DPLL}
-\newcommand\XXXL{CDCL} %% TODO: Convince Andy this is right
+\newcommand\XXXL{CDCL}
 
 \newcommand\NOK[1]{\textcolor{red}{\textbf{#1}}}
 \newcommand\OK[1]{#1}
@@ -245,7 +245,6 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 \vskip3\smallskipamount
 
 \begin{nomemoriam}
-%%% TODO: Unphantom
 \noindent\hfill\emph{\phantom{In memoriam Morgan Deters 1979--2015}}
 
 \vspace*{-6\smallskipamount}
@@ -268,7 +267,6 @@ potential of the procedure.
 \end{abstract}
 
 \begin{nomemoriam}
-%%% TODO: Unphantom
 \vskip3\smallskipamount
 \end{nomemoriam}
 
@@ -483,8 +481,6 @@ inspired by the $\mu$-calculus
 %\begin{conf}\cite{kozen-1983}\end{conf}%
 \cite[etc.]{kozen-1983,endrullis-et-al-2011}.
 
-%\textbf{TODO}:
-%  * Klop et al. (streams) Andrew Lice % http://joerg.endrullis.de/
 %  * Ro\c{s}u --- equality of streams is...
 %     http://dl.acm.org/citation.cfm?doid=1159803.1159827
 
@@ -805,11 +801,6 @@ For example, $\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable
 function space $\ty{nat} \to \ty{int}$.
 \end{rep}
 
-%TODO: Andy, introduce theory here. There were some ideas below in the comments
-%you might want to mention either here or in Section 3. I'm not sure what's the
-%best way to justify it though, but for the conference at least we can just claim it. (we
-%won't have the place for a proof anyway).
-
 Given a signature $\Sig$, $\thD$ refers to the \emph{theory of
 datatypes and codatatypes},
 which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\JJJJ$,
@@ -817,12 +808,10 @@ namely the ones that satisfy the %axioms --- existence of all infinite codatatyp
 properties mentioned in this section, including (co)induction. In particular, the interpretations
 in~$\JJJJ$ share the same fixed interpretation for constructor terms and correctly
 applied selector terms but may differ on wrongly applied
-selector terms and variables.
-%%% @ANDY: Variables are normally not part of the interpretation, but given by
-%%% an additional environment. Or is this done differently in the SMT community?
+selector terms and on variables.
 A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
 exists an interpretation in $\JJJJ$ that satisfies $\varphi$.
-% otherwise, it is $\thD$-unsatisfiable.  (I trust the readers' intelligence when
+% otherwise, it is $\thD$-unsatisfiable. (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
 
 For the ground theory, induction is equivalent to the acyclicity
@@ -831,9 +820,9 @@ any of their proper subterms \cite{barrett-et-al-2007}. Dually, coinduction
 is equivalent to the uniqueness axiom schema, which asserts that codatatype
 values are fully characterized by their possibly infinite expansion.
 
-\begin{rep}
-TODO: State more precisely and proof?
-\end{rep}
+%\begin{rep}
+% TODO: State more precisely and prove?
+%\end{rep}
 
 %    * :
 %        enough to consider acyclicity -- no way to specify infinite objects
@@ -1907,7 +1896,8 @@ Thus $\interp{t_u}{u_\iPrime} \vsim \interp{\ValC \ec{t}}{ w_i }$. % for each $i
 Thus, $\M( t ) \vsim t_u \vsim \ValC \ec{t}$, and
 we have $\M( t ) \vsim \ValC \ec{t}$.
 
-If $t$ is a selector term of the form $\const s^k_{\negvthinspace j}( u )$,
+If $t$ is a selector term %of the form
+$\const s^k_{\negvthinspace j}( u )$,
 since \rn{Split} does not apply to $\Fc$,
 $\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)}$ for some $\jPrime$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
@@ -2024,7 +2014,8 @@ While the decision procedure is restricted to ground constraints,
 in practice we often want to solve problems that feature universal axioms and existential conjectures,
 where checking satisfiability requires reasoning about such ground constraints in the presence of universally quantified formulas.
 Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
-These methods extend naturally to quantified formulas involving datatypes and codatatypes.
+These methods extend naturally to %quantified
+formulas involving datatypes and codatatypes.
 
 However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes:
 Since quantified formulas may entail cardinality constraints on uninterpreted types $\ty{u}$,
