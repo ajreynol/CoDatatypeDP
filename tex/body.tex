@@ -486,8 +486,9 @@ Datatypes are supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
 also generate models involving cyclic codatatype values. The $\mu$-notation is
 inspired by the $\mu$-calculus
-\begin{conf}\cite{kozen-1983}\end{conf}%
-\begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}\end{rep}.
+%\begin{conf}\cite{kozen-1983}.\end{conf}%
+%\begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}.\end{rep}%
+\cite[etc.]{kozen-1983,endrullis-et-al-2011}.
 
 %  * Ro\c{s}u --- equality of streams is...
 %     http://dl.acm.org/citation.cfm?doid=1159803.1159827
@@ -1979,31 +1980,34 @@ some optimizations.
 %%% disagree.
 
 %\paragraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
+{\looseness=-1
 The calculus is implemented as a \relax{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 constraints for its theory.
 Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a set of
-input clauses $F$ in CNF, the \XXXL($T$) procedure
+input clauses $F$ in conjunctive normal form, the \XXXL($T$) procedure
 incrementally builds partial assignments from the atomic formulas of $F$ to
 truth values such that no clause in $F$ is falsified. We can regard such a
 partial assignment as a set $M$ of true literals.
 % where $a \in M$ for all atoms $a$ that
 %it assigned the value $\top$ and $\neg\; a \in M$ for all atoms that it assigns
 %the value $\bot$.
-Then, %at a high level,
-by a variant
+%at a high level,
+By a variant
 \cite{jovanovic2011sharing} of the Nelson--Oppen method,
 each $T_i$-solver %for $i = 1, \ldots, l$  n?
 takes as input the union $M_i$
 of (1)~the purified form of $T_i$-constraints occurring in $M$, where terms
 containing symbols not belonging to $T_i$ are replaced by fresh variables\begin{rep} of the
-same type\end{rep}; (2)~additional equalities and disequalities between variables of
+same type\end{rep}; (2)~additional (dis)equalities between variables of
 types not belonging to $T_i$.
-Each $T_i$ solver
+Each $T_i$-solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
 $\neg\; C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
 When $M$ is a complete assignment for $F\!$, a theory solver can choose to do
 nothing only if $M_i$ is indeed $T_i$-satisfiable.
+
+}
 
 Assume $\Ec$ is initially the set $M_i$ described above. With each equality $t \teq u$ added
 to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t
@@ -2102,8 +2106,12 @@ based on whether $j = \jPrime$.
 %\section{Examples}
 %\label{sec:examples}
 
+\kern-0.7pt %% TYPESETTING: hack
+
 \section{Evaluation on Isabelle Problems}
 \label{sec:experimental-results}
+
+\kern-0.3pt %% TYPESETTING: hack
 
 \newcommand\gandl{G\&L}
 \newcommand\HD[1]{\hbox to2.25em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
@@ -2115,8 +2123,13 @@ Isabelle formalizations using Sledgehammer.
 We
 included all the theory files from the Isabelle distribution (Distro, 879 goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974 goals) \cite{klein-et-al-afp}
-that define codatatypes falling within the supported fragment. We added
-two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
+that define codatatypes falling within the supported fragment. \hfill We added
+two
+
+\pagebreak %%% TYPESETTING: hack (including \hfill)
+
+\noindent
+unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
 goals), about Bird and Stern--Brocot trees. To exercise the support
 for datatypes, the benchmarks were complemented by theories about lists
 and trees. The theories were selected before running the
