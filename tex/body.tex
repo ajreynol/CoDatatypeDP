@@ -1591,6 +1591,7 @@ When constructing a model $\J$ of $\Ec$,
 it remains only to specify how $\J$ interprets wrongly applied selector terms and variables.
 For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
 
+{\looseness=-1
 First, we need the following definitions.
 We write $t \vsimv{x} u$ if $\mu$-terms $t$ and $u$ are syntactically equivalent
 for some renaming that avoids capturing any variable other than $x$.
@@ -1606,7 +1607,10 @@ For a variable $x\typ{\tau}$ and a normal interpretation $\J$,
 we let $\Terms^{\smash{\J}}_x( \Val )$ denote the set consisting of all values
 $v \in \J( \tau )$
 such that $v \vsimv{x} \interp{t}{u}$ for some subterm $u$ of a term $t$
-occurring in the range of $\Val$. This set describes shapes of terms to avoid.
+occurring in the range of $\Val$. This set describes shapes of terms to avoid
+when assigning a $\mu$-term to $x$.
+
+}
 
 The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
 assigns values from $\J$ to unassigned variables in the domain of $\Val$.
@@ -1647,6 +1651,7 @@ The last precondition is admittedly rather technical. Its role is to ensure that
 $\ValC$ remains injective modulo $\alpha$-equivalence. A simpler, less efficient
 way to proceed would be to compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
 injectivity afterward. Injectivity is important to satisfy disequality constraints.
+For infinite codatatypes, it is always possible to find suitable values of $v$.
 
 \begin{examplex}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
@@ -1658,7 +1663,8 @@ w \teq \const{E}( y ),\;
 x \teq \const{C}( v ),\;
 z \not\teq v
 \}$.
-After applying the calculus to saturation on $\Ec$, the mapping $\Val$ is as follows:
+After applying the calculus to saturation, % on $\Ec$,
+the mapping $\Val$ is as follows:
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
 \[\begin{array}{r@{}c@{}r@{}l@{\qquad}r@{}c@{}r@{}l@{\qquad}r@{}c@{}l}
