@@ -1569,7 +1569,8 @@ An interpretation $\J$ is \emph{normal} if these conditions are met:
 \begin{enumerate}
 \item
 For each type $\tau$,
-$\interp{\J}{\tau}$ contains a maximal set of closed normal $\mu$-terms of that type that are
+%%% sets *contain* elements, they *include* other sets
+$\interp{\J}{\tau}$ includes a maximal set of closed normal $\mu$-terms of that type that are
 unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
