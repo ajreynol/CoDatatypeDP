@@ -346,7 +346,8 @@ problems involving datatypes and codatatypes in
 combination (Section~\ref{sec:the-ground-decision-procedure}).
 The procedure is described abstractly as a calculus and is
 designed to be composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
-For the datatype case, it follows the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
+It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007}, which only covers
+datatypes.
 To our knowledge, our procedure is the first of its kind for the theory of
 codatatypes.
 \begin{conf}
@@ -817,7 +818,7 @@ in~$\JJJJ$ share the same fixed interpretation for constructor terms and correct
 applied selector terms but may differ on wrongly applied
 selector terms and on variables.
 A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
-exists an interpretation in $\JJJJ$ that satisfies $\varphi$.
+exists an interpretation in $\JJJJ$ that satisfies~$\varphi$.
 % otherwise, it is $\thD$-unsatisfiable. (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
 
@@ -1588,9 +1589,9 @@ $\expand{\interp{\J}{t}}{u_k}$.
 
 Not all normal interpretations are models of codatatypes, because
 models must contain all possible infinite terms, not only cyclic ones. However,
-only cyclic terms are interesting to us, and by monotonicity of ground
-constraints it is trivial to extend any normal interpretation with additional
-values. Hence, we focus on normal interpretations.
+acyclic infinite values are uninteresting to us, and by monotonicity of ground
+constraints it is trivial to extend any normal interpretation with extra
+domain elements to obtain a genuine model if desired. %Hence, we focus on normal interpretations.
 
 When constructing a model $\J$ of $\Ec$,
 it remains only to specify how $\J$ interprets wrongly applied selector terms and variables.
