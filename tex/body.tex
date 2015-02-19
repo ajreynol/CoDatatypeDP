@@ -1069,7 +1069,7 @@ are saturated.
 \)
 \rn{Clash}
 \end{tabular}
-\vspace*{-3pt} %% TYPESETTING HACK
+%\vspace*{-3pt} %% TYPESETTING HACK
 \caption{\,Derivation rules for bidirectional closure%.
 }
 \label{fig:cc-rules}
@@ -1180,7 +1180,7 @@ $\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
 \)
 \rn{Unique}
 \end{tabular}
-\vspace*{-3pt} %% TYPESETTING HACK
+%\vspace*{-3pt} %% TYPESETTING HACK
 \caption{\,Derivation rules for acyclicity and uniqueness%.
 }
 \label{fig:ab-rules}
@@ -1426,11 +1426,12 @@ whose root nodes are the result of applying \rn{Split} on $t\typ{\delta}$,
 by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is
 $\thD$-unsatisfiable
 for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
-Since by exhaustiveness, all models of $\thD$ entail (exactly) one
+Since by exhaustiveness, all models of $\thD$ entail exactly one
 $\DISC{\negvthinspace j}$,
 $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child node of $\Ec$ is a closed derivation tree
-whose root node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
+whose root
+node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
 In all these cases, $\Ec \models_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
@@ -1496,23 +1497,23 @@ is $\alpha$-equivalent to
 $\expand{t}{y} =
 \MU y.\; \const{C}\bigl( \expand{t}{y}^{\smash{\{y\}}} \bigr) =
 \MU y.\; \const{C}( y )$.
-The term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
-since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $t$,
+The term $u = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
+since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $u$,
 noting that
 %
-$\expand{t}{\MU y.\; \const{C}( x )}
- = \MU y.\; \const{C}\bigl( \expand{t}{x}^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \expand{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \expand{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
+$\expand{u}{\MU y.\; \const{C}( x )}
+ = \MU y.\; \const{C}\bigl( \expand{u}{x}^{\smash{\{y\}}} \bigr)
+ = \MU y.\; \const{C}\bigl( \expand{u}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
+ = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \expand{u}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
  = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )$
-is $\alpha$-equivalent to $\expand{t}{x} = t$.
+is $\alpha$-equivalent to $\expand{u}{x} = u$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$,
 its \emph{normal form} $\nf{t}$ is obtained
 by replacing all of the self-similar subterms of $t$ with $x$
 %and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
-and by recursively normalizing the subterms.
+and by recursively normalizing the other subterms.
 For variables, $\nf{x} = x$.
 Thus, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
@@ -1548,8 +1549,8 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\expand{t}{u}
 \end{rep}
 
 We now define the class of interpretations for $\thD$.
-$\interp{\J}{\tau}$ denotes the interpretation type $\tau$ in $\J$---that is, a set of
-domain elements for that type.
+$\interp{\J}{\tau}$ denotes the interpretation type $\tau$ in $\J$---that is, a
+nonempty set of domain elements for that type.
 $\interp{\J}{\const{f}}$ denotes the interpretation of a function $\const{f}$ in $\J$.
 If $\const{f}$ is of type $ \tau_1 \times \cdots \times \tau_n \to \tau$,
 then $\interp{\J}{\const{f}}$ is a total function from $\interp{\J}{\tau_1} \times \cdots \times \interp{\J}{\tau_n}$ to $\interp{\J}{\tau}$.
@@ -1573,6 +1574,7 @@ For each type $\tau$,
 %%% sets *contain* elements, they *include* other sets
 $\interp{\J}{\tau}$ includes a maximal set of closed normal $\mu$-terms of that type that are
 unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
+\pagebreak[2] %% TYPESETTING
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
 $\interp{\J}{\const{C}}( \interp{\J}{\vec t} )$ is the value
@@ -1891,38 +1893,39 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
 We consider a normal interpretation $\J$
 that interprets wrongly applied selectors based on equality information in $\Fc$
-and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
-For the latter, let $\interp{\J}{x}$ be the value in $\J$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
+and that interprets the variables of $\Fc$ based on the completion $\ValC$.
+% of %the mapping $\Val$. % from phase~2.
+For the variables, let $\interp{\J}{x\typ{\tau}}$ be the value in $\J(\tau)$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
 which by Lemma~\ref{lem:interpretation-completion}\PART{1} is guaranteed to exist.
 
-We first show $\J$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
-We show,
-by structural induction on $t$,
+We first show that $\J$ satisfies all equalities $t_1 \teq t_2 \in \Fc$. % where $t_1$ and $t_2$ have type $\tau$.
+To achieve this, we show
+by structural induction on $t\typ\tau$
 that $\interp{\J}{t} \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
-which since $\J$ is normal, implies $\J \models t_1 \teq t_2$.
+which implies $\J \models t_1 \teq t_2$ since $\J$ is normal.
 
 If $t$ is a variable, then $\interp{\J}{t} \vsim \ValC \ec{ t }$ by construction.
 
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
 then $\interp{\J}{t}$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \interp{\J}{u_1}, \ldots, \interp{\J}{u_n} ) }$ for some fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$.
-Call this term $t_u$.
+Call this term $t'$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply, % to $\Fc$,
-by the construction of $\ValC$ we have $\ValC \ec{t}$ is a term
-of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
+Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
+by the construction of $\ValC$ we have that $\ValC \ec{t}$ is a term
+of the form $\MU {\Varec{t}}.\; \const{C}( w_1,\allowbreak \ldots,\allowbreak w_n )$
 where
 $\muvar(w_i) = {\Varec{u_i}}$ for each $i$.  Thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
 $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
-For each $i$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
+For each $i$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t'$.
 \begin{rep}By Lemma~\ref{lem:mu-norm-arg},\end{rep}%
 \begin{conf}Clearly,\end{conf} %% TODO: Fix! ;)
-$\expand{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
-Thus $\expand{t_u}{u_\iPrime} \vsim \expand{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
-%By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
-Thus, $\interp{\J}{t} \vsim t_u \vsim \ValC \ec{t}$, and
+$\expand{t'}{u_\iPrime} \vsim \ValC \ec{u_i}$.
+Thus $\expand{t'}{u_\iPrime} \vsim \expand{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
+%By Lemma~\ref{lem:mu-cong}, we have $t' \vsim t_w$.
+Thus, $\interp{\J}{t} \vsim t' \vsim \ValC \ec{t}$, and
 we have $\interp{\J}{t} \vsim \ValC \ec{t}$.
 
 If $t$ is a selector term %of the form
