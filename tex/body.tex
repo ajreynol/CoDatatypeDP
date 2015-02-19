@@ -1616,7 +1616,7 @@ but
 $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
 For a variable $x\typ{\tau}$ and a normal interpretation $\J$,
-we let $\Terms^{\smash{\J}}_x( \Val )$ denote the set consisting of all values
+we let $\Terms_{\smash{\J}}^x( \Val )$ denote the set consisting of all values
 $v \in \interp{\J}{\tau}$
 such that $v \vsimv{x} \expand{t}{u}$ for some subterm $u$ of a term $t$
 occurring in the range of $\Val$. This set describes shapes of terms to avoid
@@ -1637,7 +1637,7 @@ and by exhaustively applying the following rule:%
   \betweenantes
   v \in \interp{\J}{\tau}
   \betweenantes
-  v \not\in \Terms^{\smash{\J}}_{\Varec{x}}(\ValC)
+  v \not\in \Terms_{\smash{\J}}^{\Varec{x}}(\ValC)
 }{
   \ValC := \nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
 }
@@ -1647,13 +1647,13 @@ and by exhaustively applying the following rule:%
 \]
 %
 Given an unassigned variable in $\ValC$, this rule assigns it a fresh
-value---one that does not occur in $\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$
+value---one that does not occur in $\Terms_{\smash{\J}}^{\Varec{x}}(\ValC)$
 modulo $\alpha$-equivalence---excluding
 not only existing terms in the range of $\ValC$ but also
 terms that could emerge as a result of the update.
 %\rem{TODO: What guarantees that such a value exists? (Answer: infinitely many values
 %of codatatypes, of which only finitely many are in
-%$\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$?)}
+%$\Terms_{\smash{\J}}^{\Varec{x}}(\ValC)$?)}
 Since this update removes one
 variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
 )$, the process eventually terminates. We normalize all terms in
@@ -1664,7 +1664,7 @@ $\ValC$ remains injective modulo $\alpha$-equivalence. A simpler, less efficient
 way to proceed would be to compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
 injectivity afterward. Injectivity is important to satisfy disequality constraints.
 For infinite codatatypes, it is always possible to find suitable values $v$. For example,
-if the longest cycle in $\Terms^{\smash{\J}}_{\Varec{x}}(\ValC)$ is of length $n$, a fresh value
+if the longest cycle in $\Terms_{\smash{\J}}^{\Varec{x}}(\ValC)$ is of length $n$, a fresh value
 can be constructed with a cycle of length $n + 1$.
 
 \begin{examplex}
@@ -1692,7 +1692,7 @@ the mapping $\Val$ is as follows:
 %
 To construct a completion $\ValC$, we must choose values for ${\Varec{y}}$ and ${\Varec{z}}$,
 which are free in~$\Val$.
-Modulo $\alpha$-equivalence, $\smash{\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )} =
+Modulo $\alpha$-equivalence, $\smash{\Terms_{\smash{\J}}^{{\Varec{z}}}( \Val )} =
 %\begin{array}{c}
 \{
 \MU a.\: \const{C}( a ),\:
@@ -1704,7 +1704,7 @@ Modulo $\alpha$-equivalence, $\smash{\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )} 
 $.
 Consider a normal interpretation $\J$ that evaluates variables in $\Ec$ based on~$\Val$:
 $\interp{\J}{u} = \Val \ec{u}$, $\interp{\J}{v} = \Val \ec{v}$, and so on.
-Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$
+Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\Terms_{\smash{\J}}^{{\Varec{z}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
 which in turn may cause $\Ec$ to be falsified by $\J$.
 For example, assign $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$ for ${\Varec{z}}$.
@@ -1712,7 +1712,7 @@ After the substitution, $\Val \ec{v} = \MU {\Varec{v}}.\; \const{D}( \MU {\Varec
 which has normal form $\MU {\Varec{v}}.\; \const{D}( {\Varec{v}} )$,
 which is $\alpha$-equivalent to $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$.
 However, this contradicts the disequality $z \not\teq v$ in~$\Ec$.
-On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\Terms^{\smash{\J}}_{{\Varec{z}}}( \Val )$,
+On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\Terms_{\smash{\J}}^{{\Varec{z}}}( \Val )$,
 the values in the range of $\Val$ remain $\alpha$-disequivalent.
 We can assign a value such as
 $\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$,
@@ -1766,14 +1766,14 @@ If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\r
 the cardinality of $\tau$ must be one.
 Since \rn{Single} does not apply, % to $\Ec$,
 there is only one equivalence class of type $\tau$ in $\Ec$,
-and thus there are no terms in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$ of type $\tau$.
+and thus there are no terms in $\Terms_{\smash{\J}}^{\Varec{y}}(\ValC)$ of type $\tau$.
 This is a contradiction, since %our %model
 completion can assign the value in the domain of $\tau$ to ${\Varec{y}}$.
 Now, consider the case when $\tau$ is infinite.
 This is also a contradiction,
-since there are only a finite number of closed terms in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$,
+since there are only a finite number of closed terms in $\Terms_{\smash{\J}}^{\Varec{y}}(\ValC)$,
 and thus %our %model
-completion can assign a value not occurring in $\Terms^{\smash{\J}}_{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
+completion can assign a value not occurring in $\Terms_{\smash{\J}}^{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
 By construction, $\ValC \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
 Moreover, the construction of $\ValC$ applies substitutions of the form
@@ -1821,7 +1821,7 @@ We now show that if (2) and (3) hold for some $\Val_1$,
 they also hold for $\nf{\Val_1 \sigma}$,
 where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
 ${\Varec{x}} \in FV( \Val_1 )$,
-and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\Terms^{\smash{\J}}_{\Varec{x}}(\Val_1)$.
+and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\Terms_{\smash{\J}}^{\Varec{x}}(\Val_1)$.
 To show (2),
 by assumption of (2) on $\Val_1$, we have $\expand{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
@@ -1857,7 +1857,7 @@ we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
 or else the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
 Since $\expand{\Val_1 \ec{y}}{t_1}$ is normal,
-there is a closed $\mu$-term $v \in \Terms^{\smash{\J}}_{\Varec{x}}( \Val_1 )$
+there is a closed $\mu$-term $v \in \Terms_{\smash{\J}}^{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on the selection of $\MU {\Varec{x}}.\; t$,
 we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$,
