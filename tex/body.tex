@@ -138,13 +138,17 @@
 \newcommand\ROR{\betweenantes}
 \newcommand{\tpath}[2]{\mathcalx{P}_{ #2 \rightarrow \_ }( #1 )}
 \newcommand{\ttpath}[3]{\mathcalx{P}_{ #2 \rightarrow #3 }( #1 )}
-%\newcommand{\interp}[2]{#1\llbracket #2 \rrbracket}
+
+%\newcommand{\expand}[2]{#1\llbracket #2 \rrbracket}
 %%% I prefer a notation that puts more emphasis on #2 (which is, in essence,
 %%% the object that is returned) and less on #1
-%\newcommand{\interp}[2]{\llbracket #2 \rrbracket_{#1}}
+%\newcommand{\expand}[2]{\llbracket #2 \rrbracket_{#1}}
 %%% And one that doesn't look so semantic
-%\newcommand{\interp}[2]{\lceil #2 \rceil_{#1}}
-\newcommand{\interp}[2]{\langle \smash{#2} \rangle_{#1}}
+%\newcommand{\expand}[2]{\lceil #2 \rceil_{#1}}
+\newcommand{\expand}[2]{\langle \smash{#2} \rangle_{#1}}
+
+\newcommand{\interp}[2]{#1(#2)}
+
 \newcommand{\dpath}[3]{\delta^{#1}_{#2}( #3 )}
 \newcommand{\ec}[1]{[#1]}
 \newcommand{\JJJJ}{\mathcal{\!J\!}}
@@ -1443,22 +1447,22 @@ The proof relies on a specific model $\J$ of $\thD$ that satisfies $\Ec$.
 First, we define the set of interpretations of the theory $\thD$,
 which requires additional terminology concerning $\mu$-terms.
 Given a $\mu$-term $t$ with subterm $u$,
-the \emph{expansion of $u$ with respect to $t$} is the $\mu$-term $\interp{t}{u}^\emptyset$,
+the \emph{expansion of $u$ with respect to $t$} is the $\mu$-term $\expand{t}{u}^\emptyset$,
 abbreviated to
-$\interp{t}{u}$, as returned by the following recursive function:
+$\expand{t}{u}$, as returned by the following recursive function:
 %where $x \leadsto \MU x.\; \const{C}( \vec u ) \in t$ indicates that $\MU x.\;
 %\const{C}( \vec u )$ is the subterm of $t$ that binds this occurrence of
 %variable $x$:
 \[\begin{array}{r@{}c@{}l}
-\interp{t}{x}^B & {} \,=\, {} &
+\expand{t}{x}^B & {} \,=\, {} &
 \textstyle\relax{\begin{cases}
-    \MU x.\; \const{C}\smash{\bigl( \interp{t}{ \vec u}^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if this $x \notin B$ is
+    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u}^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if this $x \notin B$ is
     bound by $\MU x.\; \const{C}( \vec u )$ in $t$}  \\[-\jot]
     x & \text{otherwise}
 \end{cases}} ~ \\
-\interp{t}{\MU x.\; \const{C}( \vec u )}^B & = &
+\expand{t}{\MU x.\; \const{C}( \vec u )}^B & = &
 \textstyle\begin{cases}
-    \MU x.\; \const{C}\smash{\bigl( \interp{t}{ \vec u }^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if }x \not\in B \\[-\jot]
+    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u }^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if }x \not\in B \\[-\jot]
     x & \text{otherwise}
 \end{cases}
 \end{array}\]
@@ -1466,7 +1470,7 @@ The recursion will eventually terminate because each recursion adds one bound
 variable to $B$ and there are finitely many distinct bound variables in a $\mu$-term.
 Intuitively, the expansion of a subterm is a stand-alone
 $\mu$-term that denotes the same value as the original subterm---e.g.,
-$\interp{\MU x.\: \const{C}(\MU y.\: \const{D}(x))}{\MU y.\: \const{D}(x)} =
+$\expand{\MU x.\: \const{C}(\MU y.\: \const{D}(x))}{\MU y.\: \const{D}(x)} =
  \MU y.\: \const{D}(\MU x.\: \const{C}(y))$.
 %
 %\rem{TODO: add small examples}
@@ -1477,29 +1481,29 @@ is a \emph{self-similar subterm} of~$t$ if
 $u$ is a proper subterm of $t$,
 $t$ is of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$,
 $u$ is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
-and $\interp{t}{ t_k } \aequiv \interp{t}{ u_k }$ for all $k$. % \in [n]
+and $\expand{t}{ t_k } \aequiv \expand{t}{ u_k }$ for all $k$. % \in [n]
 The term $t$ is \emph{normal} if it does not contain a self-similar subterm
 and all of its proper subterms are also normal.
 For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal
 because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
 Their arguments have the same expansion with respect to~$t$:
-$\interp{t}{\MU y.\; \const{C}( y )} =
-\MU y.\; \const{C}\bigl( \interp{t}{y}^{\smash{\{y\}}} \bigr) =
+$\expand{t}{\MU y.\; \const{C}( y )} =
+\MU y.\; \const{C}\bigl( \expand{t}{y}^{\smash{\{y\}}} \bigr) =
 \MU y.\; \const{C}( y )$
 is $\alpha$-equivalent to
-$\interp{t}{y} =
-\MU y.\; \const{C}\bigl( \interp{t}{y}^{\smash{\{y\}}} \bigr) =
+$\expand{t}{y} =
+\MU y.\; \const{C}\bigl( \expand{t}{y}^{\smash{\{y\}}} \bigr) =
 \MU y.\; \const{C}( y )$.
 The term $t = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
 since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $t$,
 noting that
 %
-$\interp{t}{\MU y.\; \const{C}( x )}
- = \MU y.\; \const{C}\bigl( \interp{t}{x}^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \interp{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \interp{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
+$\expand{t}{\MU y.\; \const{C}( x )}
+ = \MU y.\; \const{C}\bigl( \expand{t}{x}^{\smash{\{y\}}} \bigr)
+ = \MU y.\; \const{C}\bigl( \expand{t}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
+ = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \expand{t}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
  = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )$
-is $\alpha$-equivalent to $\interp{t}{x} = t$.
+is $\alpha$-equivalent to $\expand{t}{x} = t$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
 
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$,
@@ -1514,7 +1518,7 @@ Thus, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( 
 \begin{lemma}
 \label{lem:mu-norm-arg}
 If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
-then $\vec u \vsim \interp{t}{\vec w}$\vthinspace.
+then $\vec u \vsim \expand{t}{\vec w}$\vthinspace.
 \end{lemma}
 % TODO:
 %\begin{proof}
@@ -1523,7 +1527,7 @@ then $\vec u \vsim \interp{t}{\vec w}$\vthinspace.
 
 \begin{lemma}
 \label{lem:mu-norm-interp}
-If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}$ is normal.
+If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\expand{t}{u}$ is normal.
 \end{lemma}
 % TODO:
 %\begin{proof}
@@ -1533,7 +1537,7 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 %\begin{lemma}
 %\label{lem:mu-cong}
 %If $t_u = \MU x.\; \const{C}( \vec u )$ and $t_w = \MU y.\; \const{C}( \vec w )$ are in normal form,
-%then $\interp{t_u}{ \vec u } \vsim \interp{t_w}{ \vec w }$ if and only if $t_u \vsim t_w$.
+%then $\expand{t_u}{ \vec u } \vsim \expand{t_w}{ \vec w }$ if and only if $t_u \vsim t_w$.
 %\end{lemma}
 %\begin{proof}
 %\rem{TODO}
@@ -1542,12 +1546,11 @@ If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\interp{t}{u}
 \end{rep}
 
 We now define the class of interpretations for $\thD$.
-$\J( \tau )$ denotes the interpretation type $\tau$ in $\J$---that is, a set of
+$\interp{\J}{\tau}$ denotes the interpretation type $\tau$ in $\J$---that is, a set of
 domain elements for that type.
-%For a term $t\typ{\tau}$, $\J( t ) \in \J( \tau )$ denotes the interpretation of $t$ in $\J$.
-$\J( f )$ denotes the interpretation of a function $f$ in $\J$.
+$\interp{\J}{f}$ denotes the interpretation of a function $f$ in $\J$.
 If $f$ is of type $ \tau_1 \times \cdots \times \tau_n \to \tau$,
-then $\J( f )$ is a total function of type $ \J( \tau_1 ) \times \cdots \times \J( \tau_n ) \to \J( \tau )$.
+then $\interp{\J}{f}$ is a total function of type $ \interp{\J}{\tau_1} \times \cdots \times \interp{\J}{\tau_n} \to \interp{\J}{\tau}$.
 %To simplify the presentation,
 All types are interpreted as sets of $\mu$-terms, but
 only values of types in $\Codata$ may contain cycles.
@@ -1565,19 +1568,19 @@ An interpretation $\J$ is \emph{normal} if these conditions are met:
 \begin{enumerate}
 \item
 For each type $\tau$,
-$\J( \tau )$ contains a maximal set of closed normal $\mu$-terms of that type that are
+$\interp{\J}{\tau}$ contains a maximal set of closed normal $\mu$-terms of that type that are
 unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
-$\J( \const{C} )( \J( \vec t \,))$ is the value
-in $\J( \tau )$ that is $\alpha$-equivalent to
-$\nf{\MU x.\; \const{C}( \J( \vec t \,) )}$, where $x$ is fresh.
+$\interp{\J}{\const{C}}( \interp{\J}{\vec t} )$ is the value
+in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
+$\nf{\MU x.\; \const{C}( \interp{\J}{\vec t} )}$, where $x$ is fresh.
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-if $\J( t )$ is $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
-then $\J\negvvthinspace( \const s^k_{\negvthinspace j} )\bigl( \J( t ) \bigr)$ is the value
-in $\J( \tau )$ that is $\alpha$-equivalent to
-$\interp{\J( t )}{u_k}$.
+if $\interp{\J}{t}$ is $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$, 
+then $\J\negvvthinspace( \const s^k_{\negvthinspace j} )\bigl( \interp{\J}{t} \bigr)$ is the value
+in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
+$\expand{\interp{\J}{t}}{u_k}$.
 \end{enumerate}
 \end{definition}
 
@@ -1605,8 +1608,8 @@ $\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
 $\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
 For a variable $x\typ{\tau}$ and a normal interpretation $\J$,
 we let $\Terms^{\smash{\J}}_x( \Val )$ denote the set consisting of all values
-$v \in \J( \tau )$
-such that $v \vsimv{x} \interp{t}{u}$ for some subterm $u$ of a term $t$
+$v \in \interp{\J}{\tau}$
+such that $v \vsimv{x} \expand{t}{u}$ for some subterm $u$ of a term $t$
 occurring in the range of $\Val$. This set describes shapes of terms to avoid
 when assigning a $\mu$-term to $x$.
 
@@ -1623,7 +1626,7 @@ and by exhaustively applying the following rule:%
   \betweenantes
   \MU {\Varec{x}}.\; t \aequiv v
   \betweenantes
-  v \in \J( \tau )
+  v \in \interp{\J}{\tau}
   \betweenantes
   v \not\in \Terms^{\smash{\J}}_{\Varec{x}}(\ValC)
 }{
@@ -1663,7 +1666,7 @@ w \teq \const{E}( y ),\;
 x \teq \const{C}( v ),\;
 z \not\teq v
 \}$.
-After applying the calculus to saturation, % on $\Ec$,
+After applying the calculus to saturation on $\Ec$,
 the mapping $\Val$ is as follows:
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
@@ -1732,9 +1735,9 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \smash{\begin{cases}
 If $\Val$ is constructed for a saturated set $\Ec$
 and $\ValC$ is a completion of $\Val$ for a normal interpretation $\J$, the following properties hold:
 \begin{enumerate}
-\item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\J( \tau )$.
+\item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
 \item[\rm (2)]
-$\ValC \ec{x} = \interp{\ValC \ec{y}}{ t }$ for
+$\ValC \ec{x} = \expand{\ValC \ec{y}}{ t }$ for
 all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$.
 \item[\rm (3)]
 $\ValC \ec{x} \vsim \ValC \ec{y}$ if and only if $\ec{x} = \ec{y}$.
@@ -1766,7 +1769,7 @@ Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data
 Moreover, the construction of $\ValC$ applies substitutions of the form
 $\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}}$ is not a codatatype.
 Thus, $\ValC \ec{x}$ is acyclic when $\tau \not\in \Codata$.
-Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\J( \tau )$.
+Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
 
 We first show that (2) and (3) hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
@@ -1782,10 +1785,10 @@ Say $\Val \ec{y}$ has a subterm $t$ where $\muvar(t) = {\Varec{x}}$.
 Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
 Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ are interpreted in
-the expansion of $\interp{\Val \ec{y}}{ t }$ as a term
+the expansion of $\expand{\Val \ec{y}}{ t }$ as a term
 constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. %\rem{TODO: more detail}
 Thus, we have
-$\interp{\Val \ec{y}}{ t } = \interp{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and thus (2) holds for $\Val$.
+$\expand{\Val \ec{y}}{ t } = \expand{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and thus (2) holds for $\Val$.
 Property (3) holds for $\Val$ since \rn{Unique} does not apply.
 
 We now show that $\Val = \nf{\Val}$.
@@ -1795,12 +1798,12 @@ Due to the construction of $\Val$,
 we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for some $i$ % \in [n]$.
 Since $\Val \ec{x}$ is a minimal, it
 contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
-where $\interp{\Val \ec{x}}{ t_i } \aequiv \interp{\Val \ec{x} }{ u_i }$ for some $i$. % \in [n]$.
+where $\expand{\Val \ec{x}}{ t_i } \aequiv \expand{\Val \ec{x} }{ u_i }$ for some $i$. % \in [n]$.
 Due to the construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for some $i$. % \in [n]$.
 Since \rn{Cong} does not apply to $\Ec$
 we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
-By (2), $\interp{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
-and $\interp{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
+By (2), $\expand{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
+and $\expand{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
 which are not $\alpha$-equivalent by (3), contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a self-similar subterm of $\Val \ec{x}$.
 Thus, $\Val = \nf{\Val}$, and (2) and (3) hold for $\nf{\Val}$.
 
@@ -1810,10 +1813,10 @@ where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{
 ${\Varec{x}} \in FV( \Val_1 )$,
 and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\Terms^{\smash{\J}}_{\Varec{x}}(\Val_1)$.
 To show (2),
-by assumption of (2) on $\Val_1$, we have $\interp{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
+by assumption of (2) on $\Val_1$, we have $\expand{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
 all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
-Thus, $\interp{\Val_1 \sigma \ec{y}}{ u } = \Val_1 \sigma \ec{x}$ and
-$\interp{\nf{\Val_1 \sigma} \ec{y}}{ u } = \nf{\Val_1 \sigma} \ec{x}$.
+Thus, $\expand{\Val_1 \sigma \ec{y}}{ u } = \Val_1 \sigma \ec{x}$ and
+$\expand{\nf{\Val_1 \sigma} \ec{y}}{ u } = \nf{\Val_1 \sigma} \ec{x}$.
 To show (3),
 consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
 and assume by contradiction that $\nf{\Val_1 \sigma} \ec{y} \aequiv \nf{\Val_1 \sigma} \ec{z}$.
@@ -1843,11 +1846,11 @@ Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\MU {\Varec{x}}.\; t$,
 we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
 or else the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
-Since $\interp{\Val_1 \ec{y}}{t_1}$ is normal,
+Since $\expand{\Val_1 \ec{y}}{t_1}$ is normal,
 there is a closed $\mu$-term $v \in \Terms^{\smash{\J}}_{\Varec{x}}( \Val_1 )$
-such that $v \vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$.
+such that $v \vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on the selection of $\MU {\Varec{x}}.\; t$,
-we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \interp{\Val_1 \ec{y}}{t_1}$,
+we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$,
 which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$. %\rem{TODO: more detail}
 
@@ -1886,38 +1889,38 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 We consider a normal interpretation $\J$
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$ of the mapping $\Val$ from phase~2.
-For the latter, let $\J( x )$ be the value in $\J$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
+For the latter, let $\interp{\J}{x}$ be the value in $\J$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
 which by Lemma~\ref{lem:interpretation-completion}\PART{1} is guaranteed to exist.
 
 We first show $\J$ satisfies all equalities in $t_1 \teq t_2 \in \Fc$, where $t_1$ and $t_2$ have type $\tau$.
 We show,
 by structural induction on $t$,
-that $\J( t ) \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
+that $\interp{\J}{t} \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
 which since $\J$ is normal, implies $\J \models t_1 \teq t_2$.
 
-If $t$ is a variable, then $\J( t ) \vsim \ValC \ec{ t }$ by construction.
+If $t$ is a variable, then $\interp{\J}{t} \vsim \ValC \ec{ t }$ by construction.
 
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
-then $\J( t )$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \J( u_1 ), \ldots, \J( u_n ) ) }$ for some fresh $x$,
+then $\interp{\J}{t}$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \interp{\J}{u_1}, \ldots, \interp{\J}{u_n} ) }$ for some fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$.
 Call this term $t_u$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
-%where $\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
+%where $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by the construction of $\ValC$ we have $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 where
 $\muvar(w_i) = {\Varec{u_i}}$ for each $i$.  Thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
-$\interp{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
+$\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t_u$.
 \begin{rep}By Lemma~\ref{lem:mu-norm-arg},\end{rep}%
 \begin{conf}Clearly,\end{conf} %% TODO: Fix! ;)
-$\interp{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
-Thus $\interp{t_u}{u_\iPrime} \vsim \interp{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
+$\expand{t_u}{u_\iPrime} \vsim \ValC \ec{u_i}$.
+Thus $\expand{t_u}{u_\iPrime} \vsim \expand{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
 %By Lemma~\ref{lem:mu-cong}, we have $t_u \vsim t_w$.
-Thus, $\J( t ) \vsim t_u \vsim \ValC \ec{t}$, and
-we have $\J( t ) \vsim \ValC \ec{t}$.
+Thus, $\interp{\J}{t} \vsim t_u \vsim \ValC \ec{t}$, and
+we have $\interp{\J}{t} \vsim \ValC \ec{t}$.
 
 If $t$ is a selector term %of the form
 $\const s^k_{\negvthinspace j}( u )$,
@@ -1925,27 +1928,27 @@ since \rn{Split} does not apply to $\Fc$,
 $\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)}$ for some $\jPrime$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
-%where $\interp{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
+%where $\expand{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
 Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
 by construction $\ValC$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where
 $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$
 for each $i$ and thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
-$\interp{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
-If $j = \jPrime$, then $\J( t )$ is $\alpha$-equivalent with $\interp{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
+$\expand{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
+If $j = \jPrime$, then $\interp{\J}{t}$ is $\alpha$-equivalent with $\expand{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}$,
 which is $\ValC \ec{t}$.
 If $j \neq \jPrime$, since \rn{Cong} does not apply,
 any term of the form $\smash{\const s^k_{\negvthinspace j}( u' )}$ not occurring in $\ec{t}$ 
 is such that $u$ and $u'$ are in distinct equivalence classes.
-Due to the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\J( u ) \neq \J( u' )$ for all such $u$, $u'$.
-Thus, we may interpret $\smash{\J(\const s^k_{\negvthinspace j})( \J( u ) )}$ as the value in $\J( \tau )$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
+Due to the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{u} \neq \interp{\J}{u'}$ for all such $u$, $u'$.
+Thus, we may interpret $\smash{\interp{\J}{\const s^k_{\negvthinspace j}}( \interp{\J}{u} )}$ as the value in $\interp{\J}{\tau}$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\J$.
 Say $t_1 \tneq t_2 \in \Fc$.
 Since \rn{Conflict} does not apply, $t_1 \teq t_2 \not\in \Fc$ and thus $\ec{t_1}$ and $\ec{t_2}$ are distinct.
-Since $\J( t_1 ) \vsim \ValC \ec{t_1}$ and $\J( t_2 ) \vsim \ValC \ec{t_2}$,
-by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\J( t_1 ) \neq \J( t_2 )$, and thus $\J \models t_1 \tneq t_2$.
+Since $\interp{\J}{t_1} \vsim \ValC \ec{t_1}$ and $\interp{\J}{t_2} \vsim \ValC \ec{t_2}$,
+by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{t_1} \neq \interp{\J}{t_2}$, and thus $\J \models t_1 \tneq t_2$.
 
 Since by assumption $\Fc$ contains only equalities and disequalities, we have $\J \models \Fc$,
 and since $\Fc$ is a superset of $\Ec$, we have that $\Ec$ is satisfied by $\J$.
