@@ -1962,21 +1962,22 @@ constraints for its theory.
 Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a set of
 input clauses $F$ in CNF, the \XXXL($T$) procedure
 incrementally builds partial assignments from the atomic formulas of $F$ to
-truth values such that no clause in $F$ is falsified. We can interpret such a
+truth values such that no clause in $F$ is falsified. We can regard such a
 partial assignment as a set $M$ of literals where $a \in M$ for all atoms $a$ that
 it assigned the value $\top$ and $\neg\; a \in M$ for all atoms that it assigns
 the value $\bot$. Then, %at a high level,
 by a variant
 \cite{jovanovic2011sharing} of the Nelson--Oppen method,
-each $T_i$-solver for $i = 1, \ldots, l$ takes as input a combination
+each $T_i$-solver %for $i = 1, \ldots, l$  n?
+takes as input a combination
 of (1) the purified form of $T_i$-constraints occurring in $M$, where terms
-containing symbols not belonging to $T_i$ are replaced by fresh variables \begin{rep}of the
+containing symbols not belonging to $T_i$ are replaced by fresh variables\begin{rep} of the
 same type\end{rep}; (2) additional equalities and disequalities between variables of
 types not belonging to $T_i$. Let us call this set $M_i$. Each $T_i$ solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
 $\neg\; C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
-When $M$ is a complete assignment for $F\!$, a theory solver can only choose to do
-nothing when $M_i$ is indeed $T_i$-satisfiable.
+When $M$ is a complete assignment for $F\!$, a theory solver can choose to do
+nothing only if $M_i$ is indeed $T_i$-satisfiable.
 
 Assume $\Ec$ is initially the set $M_i$ described above. With each equality $t \teq s$ added
 to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t
