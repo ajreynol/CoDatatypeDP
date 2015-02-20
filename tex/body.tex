@@ -641,7 +641,7 @@ For types with several constructors, it is customary to provide discriminators
 $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. Instead of extending $\Funcs$,
 we let $\const{d}_{i\negvthinspace j}(t)$
 abbreviate
-$t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(x), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(x)\bigr)$.
+$t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(t), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(t)\bigr)$.
 %This will simplify the presentation. % of the decision procedure.
 
 \begin{rep}%
@@ -817,14 +817,15 @@ function space $\ty{nat} \to \ty{int}$.
 
 Given a signature $\Sig$, $\thD$ refers to the \emph{theory of
 datatypes and codatatypes},
-which in addition to $\Sig$ defines a class of $\Sig$-interpretations $\JJJJ$,
+which %in addition to $\Sig$
+defines a class of $\Sig$-interpretations $\JJJJ$,
 namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
-properties mentioned in this section, including (co)induction. In particular, the interpretations
-in~$\JJJJ$ share the same fixed interpretation for constructor terms and correctly
-applied selector terms but may differ on wrongly applied
-selector terms and on variables.
-A formula $\varphi$ is $\thD$-\emph{satisfiable} if there
-exists an interpretation in $\JJJJ$ that satisfies~$\varphi$.
+properties mentioned in this section, including (co)induction. The interpretations
+in~$\JJJJ$ share the same interpretation for constructor terms and correctly
+applied selector terms (modulo renaming of domain elements) but may differ on
+variables and wrongly applied selector terms.
+A formula is $\thD$-\emph{satisfiable} if there
+exists an interpretation in $\JJJJ$ that satisfies it.
 % otherwise, it is $\thD$-unsatisfiable. (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
 
@@ -849,8 +850,8 @@ values are fully characterized by their possibly infinite expansion.
 
 %\ourparagraph{Special Cases.}
 {\looseness=-1
-Some codatatypes are so degenerate as to have infinite values
-even though they are finite. A simple example is
+Some codatatypes are so degenerate as be finite even though they
+have infinite values. A simple example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
 unique value is $\MU a.\; \const{A}(a)$. Other specimens are
 $\ty{stream}_{\,\ty{unit}\,}$
