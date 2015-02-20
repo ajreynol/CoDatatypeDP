@@ -735,7 +735,7 @@ $\jPrime$, and $k$ within bounds\end{rep}:
   \\[-1\jot]
 \text{Injectivity:}\quad
   & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
-    \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(x_1,\ldots,x_{k-1},y,x_{k+1},\ldots,x_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y}
+    \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(y_1,\ldots,y_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y_k}
   \\[-1\jot]
 \text{Exhaustiveness:}\quad
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
@@ -2041,17 +2041,17 @@ It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all constructor arguments in these eq
 If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
 To recognize when the precondition of \rn{Unique} holds,
 the procedure considers the set $\SSS$ of all codatatype equivalence classes.
-It\begin{conf}%
-\pagebreak
-\noindent
-\end{conf}
+It
+%
+\begin{conf}\goodbreak\noindent\end{conf}%
 simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
 while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
-and the equivalence of their arguments of type $\Nondata$.
-It then partitions each set in this partition in the same manner recursively.
+and the equivalence of their arguments of ordinary types.
+It then partitions each set %in this partition %in the same manner
+recursively.
 If %after doing so,
 the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
-and $v$, it deduces that \rn{Unique} applies to $u$ and $v$.
+and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
 
 %\ourparagraph{Extension to Quantified Formulas.}
 While the decision procedure is restricted to ground constraints,
