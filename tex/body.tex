@@ -5,7 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[scaled=.82]{beramono}
-\usepackage[scaled=.9]{helvet}
+\usepackage[scaled=.95]{helvet}
 \usepackage{booktabs}
 \usepackage{bussproofs}
 \usepackage{calc}
@@ -2196,7 +2196,7 @@ more expensive rules, make a contribution.
 %  it and explaining it (and, before that, understanding it)
 %
 Three proofs were found thanks to
-the \rn{Acyclic} rule and four required the \rn{Unique} rule. Among the latter,
+the acyclicity rule and four required uniqueness. Among the latter,
 three are simple proofs of the form
 \keyw{by}~\textit{coinduction}~\textit{auto}
 in Isabelle \cite{blanchette-et-al-2014-impl}.
@@ -2239,8 +2239,10 @@ with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, it would be useful to implement
 proof reconstruction for (co)data\-type inferences in Isabelle.
 CVC4 cound be interfaced for generating counterexamples in proof assistants, as
-an alternative to Nitpick. Finally, it might be worthwhile to extend SMT solvers
-with dedicated support for (co)recursive functions.
+an alternative to Nitpick; in this context, the acyclicity and uniqueness
+rules are essential to exclude spurious models. Finally, it might be
+worthwhile to extend SMT solvers with dedicated support for (co)recursive
+functions.
 
 %Finally, it might be possible to go
 %further in terms of supporting nested and mixed (co)recursion and quantified
