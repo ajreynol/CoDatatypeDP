@@ -1662,15 +1662,17 @@ variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
 the range of $\ValC$ at each step.
 
 %The last precondition is admittedly rather technical.
-Ensuring disequality constraints are satisfied by an interpretation based on $\ValC$
-relies on showing that $\ValC$ is injective modulo $\alpha$-equivalence.
-The last precondition in the above rule ensures that $\ValC$ remains injective after each substitution.
-More precisely, the set $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is an overapproximation of the values
-that, when assigned to ${\Varec{x}}$, cause values in the range of $\ValC$ to become $\alpha$-equivalent.
+To ensure disequality constraints are satisfied by an interpretation based on $\ValC$,
+it suffices that $\ValC$ is injective modulo $\alpha$-equivalence.
+This invariant holds initially, and
+the last precondition in the above rule ensures that it is maintained.
+%More precisely,
+The set $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is an overapproximation of the values
+that, when assigned to ${\Varec{x}}$, will cause values in the range of $\ValC$ to become $\alpha$-equivalent.
 %This precondition is not strictly necessary in practice, 
 %as one could compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
 %injectivity afterward, repeating until a suitable value is found.
-For infinite codatatypes, it is always possible to find suitable values $v$,
+For infinite codatatypes, it is always possible to find fresh values $v$
 because $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is a finite set.
 %Injectivity is important to satisfy disequality constraints.
 %For infinite codatatypes, it is always possible to find suitable values $v$.
