@@ -1783,7 +1783,7 @@ Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\
 
 We first show that (2) and (3) hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
-each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t )$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
+each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t \,)$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
 are such that $j = \jPrime$ since \rn{Clash} does not apply, % to $\Ec$,
 and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply. % to $\Ec$.
 Thus,
@@ -1844,13 +1844,13 @@ If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
 then $\nf{\Val_1 \sigma} \ec{y}$ (resp. $\nf{\Val_1 \sigma} \ec{z}$)
 contains $t_1$ (resp. $t_2$) at position $p$,
 and $\nf{\Val_1 \sigma} \ec{z}$ (resp. $\nf{\Val_1 \sigma} \ec{y}$) does not.
-If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t )$
+If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t \,)$
 and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
 then the expansion %\rem{TODO: define}
 of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position $p$.
 Since $t_1$ and $t_2$ are minimal,
-say $t_1$ is of the form $\MU w.\; \const{C}( \vec t )$,
+say $t_1$ is of the form $\MU w.\; \const{C}( \vec t \,)$,
 and $t_2$ is ${\Varec{x}}$.
 Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\MU {\Varec{x}}.\; t$,
 we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
@@ -2053,22 +2053,22 @@ Many SMT solvers, including CVC4, can reason about quantified formulas using inc
 These methods extend naturally to %quantified
 formulas involving datatypes and codatatypes.
 
-However, the presence of quantified formulas poses an additional challenge in the context of (co)datatypes:
-Since quantified formulas may entail cardinality constraints on uninterpreted types $\ty{u}$,
-we may no longer assume that they are of infinite cardinality.
-When assuming that a finite type has infinite cardinality, the calculus
+However, the presence of quantified formulas poses an additional challenge in
+the context of (co)datatypes. Quantified formulas may entail an upper bound on
+the cardinality of an uninterpreted type $\ty{u}$.
+When assuming that $\ty{u}$ has infinite cardinality, the calculus
 presented in this paper is \relax{incomplete}
 since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
 applied.
 This does not %necessarily
 impact the correctness of the procedure in this setting,
 since %by assumption
-the solver is already incomplete when quantified formulas are present.
+the solver is already incomplete in the presence of quantified formulas.
 Nonetheless, two techniques help increase the precision of the solver.
 First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of uninterpreted types.
 Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
-For example, consider the $\ty{stream}_{\,\ty{u}}$ codatatype, where $\ty{u}$ is uninterpreted.
-This type has cardinality precisely when $\ty{u}$ has cardinality one.
+For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
+has cardinality precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
 the implementation adds the clause %of the form
 $(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F$.
@@ -2094,12 +2094,12 @@ would apply \rn{Split} and \rn{Inject} before adding this equality.
 To reduce the number of unique constraints considered by the calculus, we
 compute a normal form for constraints as a preprocessing step. In particular, we
 replace $t \teq s$ by $s \teq t$ if $s$ is less than $t$ based on a term
-ordering, replace $\const{C}_{\negvthinspace j}( \vec t ) \teq
-\const{C}_{\negvthinspace\jPrime}( \vec u )$ with $\bot$ when $j \neq \jPrime$,
-replace all selector terms of the form $\const{s}^{\,k}_{\negvthinspace j}(
-\const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$ by $t_k$, and replace
-occurrences of discriminators $\const{d}_{\negvthinspace j}(
-\const{C}_{\negvthinspace\jPrime}( \vec t ) )$ by $\top$ or $\bot$
+ordering, replace $\smash{\const{C}_{\negvthinspace j}( \vec t \,) \teq
+\const{C}_{\negvthinspace\jPrime}( \vec u )}$ with $\bot$ when $j \neq \jPrime$,
+replace all selector terms of the form $\smash{\const{s}^{\,k}_{\negvthinspace j}(
+\const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )}$ by $t_k$, and replace
+occurrences of discriminators $\smash{\const{d}_{\negvthinspace j}(
+\const{C}_{\negvthinspace\jPrime}( \vec t \,) )}$ by $\top$ or $\bot$
 based on whether $j = \jPrime$.
 
 %\section{Examples}
@@ -2120,9 +2120,9 @@ included all the theory files from the Isabelle distribution (Distro, 879 goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974 goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We added
 two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
-goals), about Bird and Stern--Brocot trees. To exercise the support
-for datatypes, the benchmarks were complemented by theories about lists
-and trees. The theories were selected before running the
+goals), about Bird and Stern--Brocot trees. To exercise the datatype-specific
+part of the decision procedure, the benchmarks were complemented by theories
+about lists and trees. The theories were selected before running the
 experiments. The experimental data are publicly available.%
 \footnote{\url{http://www21.in.tum.de/~blanchet/codp_data.tgz}}
 
