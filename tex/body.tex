@@ -1983,27 +1983,25 @@ some of the optimizations.
 
 %\ourparagraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
 {\looseness=-1
-The calculus is implemented as a \relax{theory solver} of CVC4, that is, a
+The decision procedure is implemented as a \relax{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 constraints for its theory.
 Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a set of
 input clauses $F$ in conjunctive normal form, the \XXXL($T$) procedure
-incrementally builds partial assignments from the atomic formulas of $F$ to
-truth values such that no clause in $F$ is falsified. We can regard such a
+incrementally builds partial assignments of
+truth values to the atoms of $F$ such that no clause in $F$ is falsified. We can regard such a
 partial assignment as a set $M$ of true literals.
 % where $a \in M$ for all atoms $a$ that
 %it assigned the value $\top$ and $\neg\; a \in M$ for all atoms that it assigns
 %the value $\bot$.
 %at a high level,
-By a variant
-\cite{jovanovic2011sharing} of the Nelson--Oppen method,
+By a variant of the Nelson--Oppen method \cite{jovanovic2011sharing,nelson-oppen-1979},
 each $T_i$-solver %for $i = 1, \ldots, l$  n?
 takes as input the union $M_i$
-of (1)~the purified form of $T_i$-constraints occurring in $M$, where terms
-containing symbols not belonging to $T_i$ are replaced by fresh variables\begin{rep} of the
-same type\end{rep}; (2)~additional (dis)equalities between variables of
-types not belonging to $T_i$.
-Each $T_i$-solver
+of (1)~the purified form of $T_i$-constraints occurring in $M$, where fresh
+variables replace terms containing symbols not belonging to~$T_i$;
+(2)~additional (dis)equalities between variables of types not belonging to
+$T_i$. Each $T_i$-solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
 $\neg\; C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
 When $M$ is a complete assignment for $F\!$, a theory solver can choose to do
