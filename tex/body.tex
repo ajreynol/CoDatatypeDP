@@ -1966,7 +1966,9 @@ we have that $\Ec$ is satisfied by $\J$.
 \qed
 \end{proof}
 
-By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the calculus is sound and complete for $\thD$.
+By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
+calculus is sound and complete for the ground $\thD$ theory, and we can
+rightly call it a decision procedure.
 
 \section{Implementation as a Theory Solver in CVC4}
 \label{sec:implementation-as-a-theory-solver-in-cvc4}
@@ -2116,8 +2118,8 @@ Isabelle formalizations using Sledgehammer.
 %There are not yet many benchmarks available, since codatatypes are a
 %recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.}
 We
-included all the theory files from the Isabelle distribution (Distro, 879 goals)
-and the \emph{Archive of Formal Proofs} (AFP, 2974 goals) \cite{klein-et-al-afp}
+included all the theory files from the Isabelle distribution (Distro, 879~goals)
+and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We added
 two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
 goals), about Bird and Stern--Brocot trees. To exercise the datatype-specific
@@ -2128,8 +2130,8 @@ experiments. The experimental data are publicly available.%
 
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
-For each goal in each theory file, Sledgehammer was invoked to select
-256~lemmas as axioms, which were then monomorphized and translated to SMT-LIB~2
+For each goal in each theory, Sledgehammer was invoked to select up to
+256~lemmas, which were monomorphized and translated to SMT-LIB~2
 along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
 given to CVC4, running for up to 60 seconds on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
@@ -2143,7 +2145,7 @@ uniqueness rules were also measured, to find out whether these somewhat
 expensive rules are useful in practice. Even when the decision procedure is
 disabled, some of the generated axioms typically include basic properties of
 constructors and selectors, which the decision procedure would recognize as
-tautologies. Z3 is included for comparison. % when this is possible.
+tautologies. Z3 is included for comparison when this makes sense.
 %This allows us to answer the question, \relax{What are the
 %benefits of activating the decision procedure as opposed to letting
 %Sledgehammer do what it would normally do?}
@@ -2161,7 +2163,7 @@ tautologies. Z3 is included for comparison. % when this is possible.
 \begin{table*}[t!]
 \normalsize
 \begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}cc@{\kern.5em}cc@{\kern.5em}cc@{\kern1.3em}cc@{\;}}
-  & \multicolumn{2}{c}{Distro} & \multicolumn{2}{c}{AFP} & \multicolumn{2}{c}{\gandl} & \multicolumn{2}{c}{Overall} \\
+  & \multicolumn{2}{c}{Distro} & \multicolumn{2}{c}{AFP} & \multicolumn{2}{c}{\gandl} & \multicolumn{2}{c}{Overall} \\[-0.5pt]
   & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}
 \MIDRULE
 No (co)datatypes
@@ -2186,7 +2188,7 @@ Full (co)datatypes
 \end{table*}
 
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
-makes a difference across all theories. It accounts for an overall success rate
+makes a difference across all three benchmark suites. It accounts for an overall success rate
 increase of over \OK{5\%}. Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
 %* and finally, we look in more detail at one or two such proofs, by presenting
