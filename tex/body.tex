@@ -363,7 +363,7 @@ Detailed proofs of soundness and completeness are included in a technical report
 Datatypes and codatatypes share many properties, so it makes sense
 to consider them together. There are, however, at least three important
 differences.
-
+%
 First, \emph{codatatypes need not be well-founded.}
 For example, the type
 
@@ -384,7 +384,7 @@ of infinite sequences or streams over an element type $\tau$ is
 allowed\begin{conf}, with no base case\end{conf}\begin{rep}; the
 corresponding datatype would be rejected as non-well-founded
 \cite{blanchette-et-al-2015-esop}\end{rep}.
-
+%
 Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
 Cyclic constraints such as
 $\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
@@ -393,8 +393,8 @@ However, the uniqueness principle states that two bisimilar values---i.e., two v
 having the same possibly infinite expansion---must be equal; from $\const{x}
 \teq \const{S}(\const{x})$ and
 $\const{y} \teq \const{S}(\const{y})$, it deduces $\const{x} \teq \const{y}$.
-The acyclicity and uniqueness rules are needed to ensure completeness on
-ground problems. %and the absence of spurious models.
+The acyclicity and uniqueness rules are needed to ensure completeness
+(model soundness) on ground problems. %and the absence of spurious models.
 They cannot be expressed as finite axiomatizations, so they naturally belong in
 a decision procedure.
 %    * in particular, acyclicity and uniqueness are necessary for some proofs
@@ -406,9 +406,10 @@ a decision procedure.
 %widely recognized that decision procedures can be more efficient than
 %axiomatizations.)
 %axiom.
-
+%
 Third, \emph{it must be possible to express cyclic }(\emph{regular}) \emph{values as closed terms and
-to enumerate them.} This is necessary both for finite model finding (modulo theories)
+to enumerate them.} This is necessary both for finite model finding
+%modulo theories
 and for theory combinations. The $\mu$-binder notation associates a name with
 a subterm; it is used to represent cyclic values in the generated
 models\begin{rep} and in the metatheory\end{rep}. For example,
