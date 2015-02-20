@@ -1134,11 +1134,8 @@ $\FV( u )$ denotes the variables occurring freely in~$u$.
 %then $\MU x.\; \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
 %
 A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
-it contains no free variables. \,It is \emph{cyclic} if %and only if --- ditto
-it contains a bound variable. \,The
-\goodbreak %%% TYPESETTING: horrible hacks (including two \,'s)
-\noindent
-$\alpha$-\emph{equivalence} relation $t \aequiv u$
+it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
+it contains a bound variable. The $\alpha$-\emph{equivalence} relation $t \aequiv u$
 indicates that the $\mu$-terms $t$ and $u$
 are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables\begin{rep}---e.g.,
 %$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
@@ -2048,9 +2045,7 @@ the procedure considers each equivalence class $\ec{t}$ containing a datatype co
 It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all constructor arguments in these equivalence classes recursively.
 If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
 To recognize when the precondition of \rn{Unique} holds,
-the procedure considers the set $\SSS$ of all codatatype equivalence classes.
-It
-%
+the procedure considers the set $\SSS$ of all codatatype equivalence classes. It
 \begin{conf}\goodbreak\noindent\end{conf}%
 simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
 while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
