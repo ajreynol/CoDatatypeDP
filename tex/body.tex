@@ -1452,7 +1452,7 @@ and thus $\Ec$ is $\thD$-unsatisfiable.
 It remains to show the converse of the previous theorem: If a derivation tree
 with root node $\Ec$ contains a saturated node, then $\Ec$ is
 $\thD$-satisfiable.
-The proof relies on a specific model $\J$ of $\thD$ that satisfies $\Ec$.
+The proof relies on a specific interpretation $\J$ that satisfies $\Ec$.
 
 First, we define the set of interpretations of the theory $\thD$,
 which requires additional terminology concerning $\mu$-terms.
@@ -1559,7 +1559,7 @@ We now define the class of interpretations for $\thD$.
 $\interp{\J}{\tau}$ denotes the interpretation type $\tau$ in $\J$---that is, a
 nonempty set of domain elements for that type.
 $\interp{\J}{\const{f}}$ denotes the interpretation of a function $\const{f}$ in $\J$.
-If $\const{f}$ is of type $ \tau_1 \times \cdots \times \tau_n \to \tau$,
+If $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$,
 then $\interp{\J}{\const{f}}$ is a total function from $\interp{\J}{\tau_1} \times \cdots \times \interp{\J}{\tau_n}$ to $\interp{\J}{\tau}$.
 %To simplify the presentation,
 All types are interpreted as sets of $\mu$-terms, but
