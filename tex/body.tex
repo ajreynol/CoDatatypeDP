@@ -1197,7 +1197,7 @@ The mapping $\Val$, on which the rules depend, is computed as follows.
 With each equivalence class $\ec{u\typ{\tau}}$, we associate a fresh variable $\Varec{u}\typ{\tau}$
 %of the same type as $u$
 %not occurring in $\tEc$,
-and set $\Val\ec{u} := {\Varec{u}}$. Therefore, there are initially no
+and set $\Val\ec{u} := {\Varec{u}}$, that is to say there are initially no
 constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
 is refined by applying the following unfolding rule exhaustively:\strut
 \[
@@ -1660,11 +1660,19 @@ variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
 )$, the process eventually terminates. We normalize all terms in
 the range of $\ValC$ at each step.
 
-The last precondition is admittedly rather technical. Its role is to ensure that
-$\ValC$ remains injective modulo $\alpha$-equivalence. A simpler, less efficient
-way to proceed would be to compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
-injectivity afterward. Injectivity is important to satisfy disequality constraints.
-For infinite codatatypes, it is always possible to find suitable values $v$.
+%The last precondition is admittedly rather technical.
+Ensuring disequality constraints are satisfied by an interpretation based on $\ValC$
+relies on showing that $\ValC$ is injective modulo $\alpha$-equivalence.
+The last precondition in the above rule ensures that $\ValC$ remains injective after each substitution.
+More precisely, the set $\Terms_{\smash{\J}}^{\Varec{x}}(\ValC)$ is an overapproximation of the values
+that, when assigned to ${\Varec{x}}$, cause values in the range of $\ValC$ to become $\alpha$-equivalent.
+This precondition is not strictly necessary in practice, 
+as one could compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
+injectivity afterward, repeating until a suitable value is found.
+For infinite codatatypes, it is always possible to find suitable values $v$,
+due to the fact that $\Terms_{\smash{\J}}^{\Varec{x}}(\ValC)$ is a finite set.
+%Injectivity is important to satisfy disequality constraints.
+%For infinite codatatypes, it is always possible to find suitable values $v$.
 %For example,
 %if the longest cycle in $\Terms_{\smash{\J}}^{\Varec{x}}(\ValC)$ is of length $n$, a fresh value
 %can be constructed with a cycle of length $n + 1$.
