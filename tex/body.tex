@@ -273,7 +273,7 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 We present a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
 uniqueness rule that identifies observationally equal values, also in the presence of cyclic
-($\omega$-regular) data. The procedure decides ground and universal
+(regular) data. The procedure decides ground and universal
 problems and is composable via the Nelson--Oppen method. It has been
 implemented in CVC4, a state-of-the-art SMT solver. An evaluation based on
 problems generated from theories developed with Isabelle demonstrates the
@@ -325,7 +325,7 @@ terms, and only those. For example, the coinductive specification
 %
 (using an ML-like syntax) introduces a type that
 models the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
-using Peano notation but extended with an
+in Peano notation but extended with an
 infinite value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
 The equation $\const{S}(\infty) \teq \infty$ holds as expected,
 because both sides expand to the infinite term
@@ -407,7 +407,7 @@ a decision procedure.
 %axiomatizations.)
 %axiom.
 
-Third, \emph{it must be possible to express cyclic }(\emph{$\omega$-regular}) \emph{values as closed terms and
+Third, \emph{it must be possible to express cyclic }(\emph{regular}) \emph{values as closed terms and
 to enumerate them.} This is necessary both for finite model finding (modulo theories)
 and for theory combinations. The $\mu$-binder notation associates a name with
 a subterm; it is used to represent cyclic values in the generated
@@ -1272,10 +1272,10 @@ and $\{ \const{S}(y) \}$.
 Constructing $\Val$ yields
 \begin{align*}
 \Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x}) &
-\enskip %% TYPESETTING
+\kern0.25em %% TYPESETTING
 \Val \ec{y} & \,=\,
 \MU {\Varec{y}}.\; \const{S}(\smash{\MU {\VAREC{\const{S}(y)}}}.\; \const{S}( {\Varec{y}} ) )
-\enskip %% TYPESETTING
+\kern0.25em %% TYPESETTING
  &
 \Val \ec{\const{S}(y)} & =
 \MU {\VAREC{\const{S}(y)}}.\; \const{S}(\MU {\Varec{y}}.\; \const{S}( {\VAREC{\const{S}(y)}} ) )
@@ -1703,7 +1703,7 @@ Modulo $\alpha$-equivalence, $\smash{\Terms_{\smash{\J}}^{{\Varec{z}}}( \Val )} 
 \}
 %\end{array}
 $.
-Consider a normal interpretation $\J$ that evaluates variables in $\Ec$ based on~$\Val$:
+Now consider a normal interpretation $\J$ that evaluates variables in $\Ec$ based on~$\Val$:
 $\interp{\J}{u} = \Val \ec{u}$, $\interp{\J}{v} = \Val \ec{v}$, and so on.
 Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\Terms_{\smash{\J}}^{{\Varec{z}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
