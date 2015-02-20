@@ -2140,13 +2140,14 @@ given to CVC4, running for up to 60 seconds on the StarExec cluster
 Due to the lack of machinery for reconstructing inferences about (co)datatypes
 in Isabelle, the solver is trusted as an oracle in these experiments.
 
-CVC4 was run on each problem several times, with the support for datatypes and
-codatatypes either enabled or disabled. The contributions of the acyclicity and
-uniqueness rules were also measured, to find out whether these somewhat
-expensive rules are useful in practice. Even when the decision procedure is
-disabled, some of the generated axioms typically include basic properties of
-constructors and selectors, which the decision procedure would recognize as
-tautologies. Z3 is included for comparison when this makes sense.
+The development version of CVC4 was run on each problem several times, with the
+support for datatypes and codatatypes either enabled or disabled. The
+contributions of the acyclicity and uniqueness rules were also measured, to find
+out whether these somewhat expensive rules are useful in practice. Even when the
+decision procedure is disabled, some of the generated axioms typically include
+basic properties of constructors and selectors, which the decision procedure
+would recognize as tautologies. Z3 version 4.3.2 is included for comparison.
+% when this makes sense.
 %This allows us to answer the question, \relax{What are the
 %benefits of activating the decision procedure as opposed to letting
 %Sledgehammer do what it would normally do?}
@@ -2190,11 +2191,11 @@ Full (co)datatypes
 
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
 makes a difference across all three benchmark suites. It accounts for an overall
-success rate increase of over \OK{5\%}, which is quite significant. The
-practical usefulness of interpreted (co)datatypes appears roughly comparable to
-that of arithmetic \cite{blanchette-et-al-2013-smt}.
-The raw data also reveals that the
-stronger decision procedures almost completely subsume the weaker ones. 
+success rate increase of over \OK{5\%}, which is quite significant. For Isabelle
+users, the practical usefulness of interpreted (co)datatypes appears roughly
+comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}. The raw data
+also reveals that the stronger decision procedures almost fully subsume the weaker
+ones.
 
 Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
