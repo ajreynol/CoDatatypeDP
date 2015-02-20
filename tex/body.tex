@@ -2165,24 +2165,24 @@ tautologies. Z3 is included for comparison when this makes sense.
 \normalsize
 \begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}cc@{\kern.5em}cc@{\kern.5em}cc@{\kern1.3em}cc@{\;}}
   & \multicolumn{2}{c}{Distro} & \multicolumn{2}{c}{AFP} & \multicolumn{2}{c}{\gandl} & \multicolumn{2}{c}{Overall} \\[-0.5pt]
-  & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}
+  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
 \MIDRULE
 No (co)datatypes
-  & 209 & 221 & 777 & 775 & 51 & 52 & 1037 & 1048 \\%[\jot]
+  & 221 & 209 & 775 & 777 & 52 & 51 & 1048 & 1037 \\%[\jot]
 %Datatype simplification only
 %  &  \\
 Datatypes without \rn{Acyclic}
-  & -- & 227 & -- & 780 & -- & 52 & -- & 1059 \\
+  & 227 & -- & 780 & -- & 52 & -- & 1059 & -- \\
 Full datatypes
-  & 213 & 227 & 791 & 786 & 51 & 52 & 1055 & 1065 \\%[\jot]
+  & 227 & 213 & 786 & 791 & 52 & 51 & 1065 & 1055 \\%[\jot]
 %Codatatype simplification only
 %  &  \\
 Codatatypes without \rn{Unique}\!\!
-  & -- & 222 & -- & 804 & -- & 56 & -- & 1082 \\
+  & 222 & -- & 804 & -- & 56 & -- & 1082 & -- \\
 Full codatatypes
-  & -- & 223 & -- & 804 & -- & \bfseries 59 & -- & 1086 \\%[\jot]
+  & 223 & -- & 804 & -- & \bfseries 59 & -- & 1086 & -- \\%[\jot]
 Full (co)datatypes
-  & -- & \bfseries 229 & -- & \bfseries 815 & -- & \bfseries 59 & -- & \bfseries 1103% \\[\jot]
+  & \bfseries 229 & -- & \bfseries 815 & -- & \bfseries 59 & -- & \bfseries 1103 & -- %\\[\jot]
 \end{tabular}\end{center}
 \caption{\,Number of solved goals for the three benchmark suites}
 \label{tab:bench}
