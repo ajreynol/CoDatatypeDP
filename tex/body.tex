@@ -38,7 +38,7 @@
 \newcommand\ourparagraph[1]{\paragraph{{#1}}}
 \newcommand\beforefig{\rm}
 
-\newcommand\DISC[1]{t \teq \const{C}_{#1}\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
+\newcommand\DISC[1]{t \teq \const{C}_{#1}\negvthinspace\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
 %\newcommand\DISC[1]{\const{d}_{#1}(t)}
 
 %\newcommand\XXXL{DPLL}
@@ -236,7 +236,7 @@
 \include{defs}
 
 \hyphenation{data-type data-types co-data-type co-data-types isa-belle sledge-hammer
-non-redun-dant}
+non-redun-dant counter-examples counter-example}
 
 
 \begin{document}
@@ -476,9 +476,9 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
-\begin{rep}\ourparagraph{Related Work.} Despite\end{rep}%
-\begin{conf}Despite\end{conf} its age,
-Barrett et al.\ \cite{barrett-et-al-2007} still provides a good account of
+\begin{rep}\ourparagraph{Related Work.} Barrett\end{rep}%
+\begin{conf}Barrett\end{conf}
+et al.\ \cite{barrett-et-al-2007} provide a good account of
 related work. Since then, datatypes have been added to the SMT solver
 Z3 \cite{de-moura-bjoerner-2008} \begin{rep}in unpublished work by Leonardo de Moura \end{rep}and to a SPASS-like %prototypical
 superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
@@ -1986,7 +1986,6 @@ some of the optimizations.
 %%% disagree.
 
 %\ourparagraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
-{\looseness=-1
 The decision procedure is implemented as a \relax{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 constraints for its theory.
@@ -1996,7 +1995,7 @@ incrementally builds partial assignments of
 truth values to the atoms of $F$ such that no clause in $F$ is falsified. We can regard such a
 partial assignment as a set $M$ of true literals.
 % where $a \in M$ for all atoms $a$ that
-%it assigned the value $\top$ and $\neg\; a \in M$ for all atoms that it assigns
+%it assigned the value $\top$ and $\neg\, a \in M$ for all atoms that it assigns
 %the value $\bot$.
 %at a high level,
 By a variant of the Nelson--Oppen method \cite{jovanovic2011sharing,nelson-oppen-1979},
@@ -2007,11 +2006,9 @@ variables replace terms containing symbols not belonging to~$T_i$;
 (2)~additional (dis)equalities between variables of types not belonging to
 $T_i$. Each $T_i$-solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
-$\neg\; C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
+$\neg\, C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
 When $M$ is a complete assignment for $F\!$, a theory solver can choose to do
 nothing only if $M_i$ is indeed $T_i$-satisfiable.
-
-}
 
 Assume $\Ec$ is initially the set $M_i$ described above. With each equality $t \teq u$ added
 to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t
@@ -2139,7 +2136,8 @@ goals), about Bird and Stern--Brocot trees. To exercise the datatype
 support, the benchmarks were complemented by theories
 about lists and trees. The theories were selected before running the
 experiments. The experimental data are publicly available.%
-\footnote{\url{http://www21.in.tum.de/~blanchet/codp_data.tgz}}
+\footnote{\url{http://lara.epfl.ch/~reynolds/CADE2015-cdt/}}
+%http://www21.in.tum.de/~blanchet/codp_data.tgz}}
 
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
@@ -2241,8 +2239,10 @@ where \const{\nummodden} is defined as $\const{\nummodden} =
 We introduced a decision procedure for the ground theory of datatypes and
 codatatypes. Our main
 contribution has been the support for codatatypes. Both the metatheory and
-the implementation in CVC4 rely on $\mu$-terms to represent cyclic values,
-a complication specific to codatatypes.
+the implementation in CVC4 rely on $\mu$-terms to represent cyclic values.
+Although this aspect is primarily motivated by codatatypes, it enables
+a uniform account of datatypes and codatatypes---in particular,
+the acyclicity rule for datatypes exploits $\mu$-terms to detect cycles.
 % are not very
 % difficult per se, but there are tricky corner cases to take care of if we care
 % about completeness (which we do).
@@ -2254,7 +2254,7 @@ This work is part of a program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, it would be useful to implement
 proof reconstruction for (co)data\-type inferences in Isabelle.
-CVC4 cound be interfaced for generating counterexamples in proof assistants, as
+CVC4 could also be interfaced for generating counterexamples in proof assistants, as
 an alternative to Nitpick; in this context, the acyclicity and uniqueness
 rules are crucial to exclude spurious countermodels. Finally, it might be
 worthwhile to extend SMT solvers with dedicated support for (co)recursive
