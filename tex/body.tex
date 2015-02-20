@@ -5,7 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[scaled=.82]{beramono}
-\usepackage[scaled=.95]{helvet}
+\usepackage[scaled=.88]{helvet}
 \usepackage{booktabs}
 \usepackage{bussproofs}
 \usepackage{calc}
@@ -134,8 +134,7 @@
 \newcommand{\vdom}{\mathsf{dom}}
 \newcommand{\tEc}{\Terms(\Ec)}
 \newcommand{\tcEc}{\Terms^\AST(\Ec)}
-\newcommand{\rn}[1]{\textsf{\small #1}}
-\newcommand{\cvc}{\textsc{cvc}{\small 4}\xspace}
+\newcommand{\rn}[1]{\textsf{#1}}
 \newcommand{\teq}{\approx}
 \newcommand{\tneq}{\not\teq}
 \newcommand{\rem}[1]{\textcolor{red}{[#1]}}
@@ -2034,15 +2033,19 @@ eagerly---that is, for partial satisfying assignments $M$---while the rules in
 phases~2 and~3 are performed only for complete satisfying
 assignments $M$.
 
-Prior to constructing a model for $F\!$, the theory solver does not explicitly construct $\mu$-terms nor the mapping $\Val$.
+Before constructing a model for $F\!$, the theory solver constructs neither $\mu$-terms nor the mapping $\Val$.
 Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
 To detect whether \rn{Acyclic} applies,
 the procedure considers each equivalence class $\ec{t}$ containing a datatype constructor $\const{C}( t_1, \ldots, t_n )$.
-It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all arguments of constructors in these equivalence classes recursively.
+It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all constructor arguments in these equivalence classes recursively.
 If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
 To recognize when the precondition of \rn{Unique} holds,
 the procedure considers the set $\SSS$ of all codatatype equivalence classes.
-It simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
+It\begin{conf}%
+\pagebreak
+\noindent
+\end{conf}
+simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
 while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
 and the equivalence of their arguments of type $\Nondata$.
 It then partitions each set in this partition in the same manner recursively.
@@ -2062,7 +2065,7 @@ However, the presence of quantified formulas poses an additional challenge in
 the context of (co)datatypes. Quantified formulas may entail an upper bound on
 the cardinality of an uninterpreted type $\ty{u}$.
 When assuming that $\ty{u}$ has infinite cardinality, the calculus
-presented in this paper is \relax{incomplete}
+presented in Section~\ref{sec:the-ground-decision-procedure} is \relax{incomplete}
 since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
 applied.
 This does not %necessarily
@@ -2076,7 +2079,7 @@ For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninte
 has cardinality one precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
 the implementation adds the clause %of the form
-$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F$.
+$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F\!$.
 \begin{rep}In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.\end{rep}
 
 %\ourparagraph{Optimizations.}
@@ -2107,6 +2110,13 @@ occurrences of discriminators $\smash{\const{d}_{\negvthinspace j}(
 \const{C}_{\negvthinspace\jPrime}( \vec t \,) )}$ by $\top$ or $\bot$
 based on whether $j = \jPrime$.
 
+The efficiency properties of the procedure are mostly as described in Barrett et
+al.\ \cite{barrett-et-al-2007}. In particular, it is theoretically and
+empirically advantageous to delay applications of \rn{Split} as long as
+possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
+they require traversing the equivalence classes, which is why they are part of
+phase~2.
+
 %\section{Examples}
 %\label{sec:examples}
 
@@ -2125,8 +2135,8 @@ included all the theory files from the Isabelle distribution (Distro, 879~goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We added
 two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
-goals), about Bird and Stern--Brocot trees. To exercise the datatype-specific
-part of the decision procedure, the benchmarks were complemented by theories
+goals), about Bird and Stern--Brocot trees. To exercise the datatype
+support, the benchmarks were complemented by theories
 about lists and trees. The theories were selected before running the
 experiments. The experimental data are publicly available.%
 \footnote{\url{http://www21.in.tum.de/~blanchet/codp_data.tgz}}
@@ -2144,11 +2154,13 @@ in Isabelle, the solver is trusted as an oracle in these experiments.
 
 The development version of CVC4 was run on each problem several times, with the
 support for datatypes and codatatypes either enabled or disabled. The
-contributions of the acyclicity and uniqueness rules were also measured, to find
-out whether these somewhat expensive rules are useful in practice. Even when the
-decision procedure is disabled, some of the generated axioms typically include
-basic properties of constructors and selectors, which the decision procedure
-would recognize as tautologies. Z3 version 4.3.2 is included for comparison.
+contributions of the acyclicity and uniqueness rules were also measured.
+% to find
+% out whether these somewhat expensive rules are useful in practice.
+Even when the
+decision procedure is disabled, the problems may contain
+basic lemmas about constructors and selectors, allowing some (co)datatype
+reasoning. Z3 4.3.2 is included for comparison.
 % when this makes sense.
 %This allows us to answer the question, \relax{What are the
 %benefits of activating the decision procedure as opposed to letting
