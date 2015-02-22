@@ -991,8 +991,9 @@ various terms occurring in $\Ec$.
 %The derivation rules are given in \relax{guarded assignment form},
 %where
 %
-The rules belonging to a phase have priority over those of the subsequent
-phases. Rules are applied until the derivation tree is closed or all leaf nodes
+The rules belonging to a phase have priority over those of %the
+subsequent
+phases. The rules are applied until the derivation tree is closed or all leaf nodes
 are saturated.
 
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
@@ -1085,8 +1086,9 @@ are saturated.
 \end{figure}
 
 \ourparagraph{Phase 1: Computing the Bidirectional Closure \beforefig(\figurename~\ref{fig:cc-rules}).}
-In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the (upward) congruence closure,
-whereas the \rn{Inject} and \rn{Clash} rules together compute (downward) unification.
+In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
+whereas the \rn{Inject} and \rn{Clash} rules %together
+compute the unification (downward) closure.
 For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Inject},
 and failures to unify equated terms are recognized by \rn{Clash}.
 The \rn{Conflict} rule recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
