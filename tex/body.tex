@@ -272,8 +272,8 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 %processes.
 We present a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
-uniqueness rule that identifies observationally equal values, also in the presence of cyclic
-(regular) data. The procedure decides ground and universal
+uniqueness rule that identifies observationally equal codatatype values, also in the presence of
+cyclic data. The procedure decides ground and universal
 problems and is composable via the Nelson--Oppen method. It has been
 implemented in CVC4, a state-of-the-art SMT solver. An evaluation based on
 problems generated from theories developed with Isabelle demonstrates the
@@ -356,7 +356,7 @@ only datatypes.
 To our knowledge, our procedure is the first of its kind for the theory of
 codatatypes.
 \begin{conf}
-Detailed proofs of soundness and completeness are included in a technical report
+Detailed proofs of completeness are included in a technical report
 \cite{our-report}.
 \end{conf}%
 
@@ -604,8 +604,8 @@ family of ground types including
 $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
 and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}\end{rep}.
 
-\newcommand\elll{\kern.05ex \ell\kern.05ex}
-\newcommand\elllx{\kern.05ex \ell\kern.05ex}
+\newcommand\elll{\kern.0515ex \ell\kern.0515ex}
+\newcommand\elllx{\kern.0515ex \ell\kern.0515ex}
 
 Each (co)datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
@@ -639,10 +639,10 @@ Defaults are assumed for the selector names if they are omitted.
 The $\delta$ constructors and selectors are denoted by $\Ctr^\delta$ and
 $\Sel^\delta$.
 %
-For types with several constructors, it is customary to provide discriminators
+For types with several constructors, it is useful to provide discriminators
 $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$. Instead of extending $\Funcs$,
 we let $\const{d}_{i\negvthinspace j}(t)$
-abbreviate
+be an abbreviation for
 $t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(t), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(t)\bigr)$.
 %This will simplify the presentation. % of the decision procedure.
 
@@ -885,10 +885,10 @@ it is easy to characterize this degenerate case.
 \begin{lemma}%[Corecursive Singletons]%
 \label{lem:corecursive-singletons}%
 \afterDot
-Let $\delta$ be a corecursive codatatype. The domain interpreting $\delta$ is
-either infinite or a singleton. In the latter case, $\delta$ necessarily has a
-single constructor, whose arguments have types that are interpreted as
-singleton domains.
+Let $\delta$ be a corecursive codatatype. For any interpretation in $\JJJJ$,
+the domain interpreting $\delta$ is either infinite or a singleton. In the
+latter case, $\delta$ necessarily has a single constructor, whose arguments have
+types that are interpreted as singleton domains.
 \end{lemma}
 
 \begin{rep}
@@ -1904,7 +1904,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %We will construct a model $\J$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where
 %all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
-%The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc$.
+%The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc\!$.
 We consider a normal interpretation $\J$
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$.
@@ -1912,7 +1912,7 @@ and that interprets the variables of $\Fc$ based on the completion $\ValC$.
 For the variables, let $\interp{\J}{x\typ{\tau}}$ be the value in $\J(\tau)$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
 which by Lemma~\ref{lem:interpretation-completion}\PART{1} is guaranteed to exist.
 
-We first show that $\J$ satisfies all equalities $t_1 \teq t_2 \in \Fc$. % where $t_1$ and $t_2$ have type $\tau$.
+We first show that $\J$ satisfies all equalities $t_1 \teq t_2 \in \Fc\!$. % where $t_1$ and $t_2$ have type $\tau$.
 To achieve this, we show
 by structural induction on $t\typ\tau$
 that $\interp{\J}{t} \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
@@ -1927,7 +1927,7 @@ Call this term $t'$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply to $\Fc$,
+Since \rn{Inject} and \rn{Clash} do not apply to $\Fc\!$,
 by the construction of $\ValC$ we have that $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1,\allowbreak \ldots,\allowbreak w_n )$
 where
@@ -1944,12 +1944,12 @@ we have $\interp{\J}{t} \vsim \ValC \ec{t}$.
 
 If $t$ is a selector term %of the form
 $\const s^k_{\negvthinspace j}( u )$,
-since \rn{Split} does not apply to $\Fc$,
+since \rn{Split} does not apply to $\Fc\!$,
 $\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)}$ for some $\jPrime$.
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 %where $\expand{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply, % to $\Fc$,
+Since \rn{Inject} and \rn{Clash} do not apply, % to $\Fc\!$,
 by construction $\ValC$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where
@@ -1965,15 +1965,15 @@ By the induction hypothesis and Lemma~\ref{lem:interpretation-completion}\PART{3
 Thus, we may interpret $\smash{\interp{\J}{\const s^k_{\negvthinspace j}}( \interp{\J}{u} )}$ as the value in $\interp{\J}{\tau}$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
 
 We now show that all disequalities in $\Fc$ are satisfied by $\J$.
-Assume $t \tneq u \in \Fc$.
+Assume $t \tneq u \in \Fc\!$.
 Since \rn{Conflict} does not apply, $t \teq u \not\in \Fc$ and thus $\ec{t}$ and $\ec{u}$ are distinct.
 Since $\interp{\J}{t} \vsim \ValC \ec{t}$ and $\interp{\J}{u} \vsim \ValC \ec{u}$,
 by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{t} \neq \interp{\J}{u}$, and thus $\J \models t \tneq u$.
 
-Since by assumption $\Fc$ contains only equalities and disequalities, we have $\J \models \Fc$,
-and since $\Ec \subseteq \Fc$,
+Since by assumption $\Fc$ contains only equalities and disequalities, we have $\J \models \Fc\!$,
+and since $\Ec \subseteq \Fc\!$,
 % is a superset of $\Ec$,
-we have that $\Ec$ is satisfied by $\J$.
+we conclude that $\J \models \Ec$.
 \qed
 \end{proof}
 
