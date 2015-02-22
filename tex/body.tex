@@ -305,7 +305,7 @@ properties that can be exploited in automated reasoners.
 
 To represent infinite objects, % such as $\const{S}(\const{S}(\const{S}(\ldots))$,
 a natural choice is to turn to coinductive datatypes, or \emph{codatatypes},
-the non-well-founded dual of inductive \emph{datatypes}.
+the non-well-founded dual of inductive \emph{datatypes.}
 %
 Despite their reputation for being esoteric, codatatypes have a
 role to play in computer science. The verified C compiler CompCert
@@ -733,14 +733,14 @@ $\jPrime$, and $k$ within bounds\end{rep}:
 \text{Distinctness:}\quad
   & %\forall \bar x, \bar y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \quad\text{if $j \not= \jPrime$}}
-  \\[-1\jot]
+  \\[-0.5\jot]
 \text{Injectivity:}\quad
   & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(y_1,\ldots,y_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y_k}
-  \\[-1\jot]
+  \\[-0.5\jot]
 \text{Exhaustiveness:}\quad
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
-  \\[-1\jot]
+  \\[-0.5\jot]
 \text{Selection:}\quad
   & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) \teq x_k}
 \end{aligned}
