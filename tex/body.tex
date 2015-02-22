@@ -408,7 +408,7 @@ a decision procedure.
 %axiom.
 %
 Third, \emph{it must be possible to express cyclic }(\emph{regular}) \emph{values as closed terms and
-to enumerate them.} This is necessary both for finite model finding
+to enumerate them.} This is necessary both for finite model finding \cite{reynolds-et-al-2013}
 %modulo theories
 and for theory combinations. The $\mu$-binder notation associates a name with
 a subterm; it is used to represent cyclic values in the generated
@@ -2230,7 +2230,7 @@ Three proofs were found thanks to
 the acyclicity rule and four required uniqueness. Among the latter,
 three are simple proofs of the form
 \keyw{by}~\textit{coinduction}~\textit{auto}
-in Isabelle \cite{blanchette-et-al-2014-impl}.
+in Isabelle\begin{rep} \cite{blanchette-et-al-2014-impl}\end{rep}.
 The fourth proof, by Gammie and Lochbihler, is more elaborate:
 %
 \begin{quote}
@@ -2266,11 +2266,11 @@ This work is part of a program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, it would be useful to implement
 proof reconstruction for (co)data\-type inferences in Isabelle.
-CVC4 could also be interfaced for generating counterexamples in proof assistants, as
-an alternative to Nitpick; in this context, the acyclicity and uniqueness
-rules are crucial to exclude spurious countermodels. Finally, it might be
-worthwhile to extend SMT solvers with dedicated support for (co)recursive
-functions.
+CVC4's finite model finding capabilities \cite{reynolds-et-al-2013} could also
+be interfaced for generating counterexamples in proof assistants, as an
+alternative to Nitpick; in this context, the acyclicity and uniqueness rules are
+crucial to exclude spurious countermodels. Finally, it might be worthwhile to
+extend SMT solvers with dedicated support for (co)recursive functions.
 
 %Finally, it might be possible to go
 %further in terms of supporting nested and mixed (co)recursion and quantified
