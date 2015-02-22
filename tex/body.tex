@@ -5,7 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[scaled=.82]{beramono}
-\usepackage[scaled=.88]{helvet}
+\usepackage[scaled=.86]{helvet}
 \usepackage{booktabs}
 \usepackage{bussproofs}
 \usepackage{calc}
@@ -387,12 +387,12 @@ corresponding datatype would be rejected as non-well-founded
 %
 Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
 Cyclic constraints such as
-$\const{x} \teq \const{S}(\const{x})$ %, where $\const{C}$ is a constructor,
+$x \teq \const{S}(x)$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes but satisfiable for codatatypes.
 However, the uniqueness principle states that two bisimilar values---i.e., two values
-having the same possibly infinite expansion---must be equal; from $\const{x}
-\teq \const{S}(\const{x})$ and
-$\const{y} \teq \const{S}(\const{y})$, it deduces $\const{x} \teq \const{y}$.
+having the same possibly infinite expansion---must be equal; from $x
+\teq \const{S}(x)$ and
+$y \teq \const{S}(y)$, it deduces $x \teq y$.
 The acyclicity and uniqueness rules are needed to ensure completeness
 (model soundness) on ground problems. %and the absence of spurious models.
 They cannot be expressed as finite axiomatizations, so they naturally belong in
@@ -1089,7 +1089,8 @@ are saturated.
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
 whereas the \rn{Inject} and \rn{Clash} rules %together
 compute the unification (downward) closure.
-For unification, additional equalities are inferred based on the injectivity of constructors by \rn{Inject},
+For unification, %additional
+equalities are inferred based on the injectivity of constructors by \rn{Inject},
 and failures to unify equated terms are recognized by \rn{Clash}.
 The \rn{Conflict} rule recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
 
@@ -1104,7 +1105,7 @@ denote the equivalence class in $\Ec$ that contains $t$.
 \ourparagraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 The premises of the rules that make up the second phase refer to a mapping $\Val$
-that associates a $\mu$-term with each equivalence class as its representative.
+that associates with each equivalence class a $\mu$-term as its representative.
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
 % for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
@@ -1119,7 +1120,7 @@ Formally, $\mu$-\emph{terms} are defined recursively as being either a variable 
 or an applied constructor
 $\MU x.\: \const{C}( \vec t\, )$ for some $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ of the expected types.
-The variable $x$ need not occur freely in the $\mu$-binder's body, in which case
+The variable~$x$ need not occur freely in the $\mu$-binder's body, in which case
 the binder can be omitted.
 In the \rn{Acyclic} rule,
 $\FV( u )$ denotes the variables occurring freely in~$u$.
