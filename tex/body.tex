@@ -1978,16 +1978,16 @@ we have that $\Ec$ is satisfied by $\J$.
 \end{proof}
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
-calculus is sound and complete for the ground $\thD$ theory, and we can
+calculus is sound and complete for the ground $\thD$ theory. We can
 rightly call it a decision procedure.
 
 \section{Implementation as a Theory Solver in CVC4}
 \label{sec:implementation-as-a-theory-solver-in-cvc4}
 
 The ground decision procedure for (co)datatypes
-was presented at a high level of abstraction. This section describes
-the main aspects of the implementation within the SMT solver CVC4:\ the
-integration into CDCL($T$), the extension to quantified formulas, and
+was presented at a high level of abstraction, omitting quite a few details. This
+section describes the main aspects of the implementation within the SMT solver
+CVC4:\ the integration into CDCL($T$), the extension to quantified formulas, and
 some of the optimizations.
 
 %%% @ANDY: I'm trying without \ourparagraph's, to save space but also to make the
@@ -2114,9 +2114,9 @@ occurrences of discriminators $\smash{\const{d}_{\negvthinspace j}(
 \const{C}_{\negvthinspace\jPrime}( \vec t \,) )}$ by $\top$ or $\bot$
 based on whether $j = \jPrime$.
 
-The efficiency properties of the procedure are mostly as described in Barrett et
-al.\ \cite{barrett-et-al-2007}. In particular, it is theoretically and
-empirically advantageous to delay applications of \rn{Split} as long as
+The efficiency properties of the procedure are mostly as described by Barrett et
+al.\ \cite{barrett-et-al-2007}. In particular, it is both theoretically and
+empirically beneficial to delay applications of \rn{Split} as long as
 possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
 they require traversing the equivalence classes, which is why they are part of
 phase~2.
@@ -2138,8 +2138,9 @@ We
 included all the theory files from the Isabelle distribution (Distro, 879~goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We added
-two unpublished theories by Peter Gammie and Andreas Lochbihler (\gandl, 317
-goals), about Bird and Stern--Brocot trees. To exercise the datatype
+two unpublished theories about Bird and Stern--Brocot trees
+by Peter Gammie and Andreas Lochbihler (\gandl,
+317~goals). To exercise the datatype
 support, the benchmarks were complemented by theories
 about lists and trees. The theories were selected before running the
 experiments. The experimental data are publicly available.%
@@ -2211,10 +2212,11 @@ Full (co)datatypes
 The results are summarized in Table~\ref{tab:bench}. The decision procedure
 makes a difference across all three benchmark suites. It accounts for an overall
 success rate increase of over \OK{5\%}, which is quite significant. For Isabelle
-users, the practical usefulness of interpreted (co)datatypes appears roughly
-comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}. The raw data
-also reveals that the stronger decision procedures almost fully subsume the weaker
-ones.
+users, the practical usefulness of interpreted (co)datatypes is roughly
+comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}, although this
+obviously depends a lot on the application. The raw evaluation data also
+reveals that the stronger decision procedures almost completely subsume the
+weaker ones in practice.
 
 Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
