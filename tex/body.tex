@@ -196,7 +196,7 @@
 
 \newcommand\Data{\Types_{\mathrm{dt}}}
 \newcommand\Codata{\Types_{\mathrm{codt}}}
-\newcommand\Nondata{\Types_{\mathrm{un}}}
+\newcommand\Nondata{\Types_{\mathrm{ord}}}
 
 \newcommand\Ctr{\Funcs_{\smash{\mathrm{ctr}}}}
 \newcommand\Sel{\Funcs_{\smash{\mathrm{sel}}}}
@@ -581,23 +581,24 @@ Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the %remaining
-\emph{uninterpreted types}. The function symbols are partitioned into $\Funcs = \Ctr
-\mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
-\emph{selectors}. There is no need to consider further function symbols
-because they can be abstracted away as variables when combining theories.
+\emph{ordinary types} (which can be interpreted or not). The function symbols are
+partitioned into $\Funcs = \Ctr \mathrel{\uplus} \Sel$, where $\Ctr$ are the
+\emph{constructors} and $\Sel$ are the \emph{selectors}. There is no need to
+consider further function symbols because they can be abstracted away as
+variables when combining theories.
 %(Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
 %Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
 %examples.
 
 %\ourparagraph{Specifications.}
 In an SMT problem, the signature is typically given by specifying first the
-uninterpreted types in any order, then the (co)datatypes with their constructors
+uninterpreted ordinary types in any order, then the (co)datatypes with their constructors
 and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
 finally any other function symbols.
 %
 Each (co)datatype specification consists of $\ell$~mutually recursive types that are
-either all datatypes or all codatatypes. Polymorphic types, nested
-(co)recursion, and datatype--codatatype mixtures fall outside this fragment%
+either all datatypes or all codatatypes. \begin{rep}Polymorphic types, nested
+(co)recursion,\end{rep}\begin{conf}Nested (co)recursion\end{conf} and datatype--codatatype mixtures fall outside this fragment%
 \dotReportFootnote{%
 In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
 should not raise any special difficulties. Nesting datatypes inside datatypes,
@@ -606,16 +607,12 @@ and likewise for codatatypes, can be reduced to the mutual case
 mixed nested (co)recursion as well as
 (co)recursion through a non-(co)datatype (both of which make sense
 \cite{blanchette-et-al-2014-codata}).}
-We allow ourselves some notational parameterization
+\begin{rep}We allow ourselves some notational parameterization
 % at the metalevel
-through subscripts%
-\begin{conf}
-(e.g., $\ty{stream}_{\,\tau}$)%
-\end{conf}%
-\begin{rep}---for example, $\ty{stream}_{\,\tau}$ denotes a
+through subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
 family of ground types including
 $\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
-and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}\end{rep}.
+and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.\end{rep}
 
 \newcommand\elll{\kern.0515ex \ell\kern.0515ex}
 \newcommand\elllx{\kern.0515ex \ell\kern.0515ex}
@@ -623,7 +620,7 @@ and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}\end{rep}.
 Each (co)datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
 arguments and returns a $\delta$ value. The argument types must be either
-uninterpreted, among the already known (co)datatypes, or among the (co)datatypes
+ordinary, among the already known (co)datatypes, or among the (co)datatypes
 being introduced.
 %
 To every argument corresponds a selector. The names for the (co)data\-types, the
@@ -748,14 +745,14 @@ $\jPrime$, and $k$ within bounds\end{rep}:
 \text{Distinctness:}\quad
   & %\forall \bar x, \bar y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \quad\text{if $j \not= \jPrime$}}
-  \\[-0.5\jot]
+  \\[-1\jot]
 \text{Injectivity:}\quad
   & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(y_1,\ldots,y_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y_k}
-  \\[-0.5\jot]
+  \\[-1\jot]
 \text{Exhaustiveness:}\quad
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
-  \\[-0.5\jot]
+  \\[-1\jot]
 \text{Selection:}\quad
   & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) \teq x_k}
 \end{aligned}
@@ -964,17 +961,14 @@ First, all codatatypes %in $\Codata$
 are corecursive. This is reasonable
 because noncorecursive codatatypes can be seen as nonrecursive
 datatypes.
-Second, all uninterpreted types have infinite cardinality.
+Second, all ordinary types have infinite cardinality.
 Without quantifiers, the constraints $\Ec$ cannot entail an upper
-bound on the cardinality of any such type, so it is safe to consider these types
-infinite.%
-%\footnote{%
-%The theory could be extended This is not very restrictive, because in principle each interpreted type in
-%$\Nondata$ having finite cardinality~$n$
-%can be replaced by a %n enumeration
-%datatype with $n$~nullary constructors
-%\cite{barrett-et-al-2007}.
-%}
+bound on the cardinality of any uninterpreted type, so it is safe to consider these types
+infinite. As for ordinary types interpreted finitely by other theories (e.g.,
+bit vectors), each interpreted type having finite cardinality~$n$
+can be replaced by a %n enumeration
+datatype with $n$~nullary constructors
+\cite{barrett-et-al-2007}.
 
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
@@ -985,7 +979,7 @@ A derivation rule can be applied to $\Ec$ if %all
 the %specified
 preconditions are met.
 The conclusion either specifies equalities to be added to $\Ec$
-or is $\bot$. % (contradiction).
+or is $\bot$ (contradiction).
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
 One rule has multiple conclusions, % separated by $\ror$,
@@ -995,7 +989,12 @@ An application of a rule is \emph{redundant} if one of its non-$\bot$
 conclusions leaves $\Ec$ unchanged.
 A \emph{derivation tree} is a %finite
 tree whose nodes are finite sets of
-equalities and where child nodes are obtained by a nonredundant application of a
+equalities, such that child nodes are obtained by a nonredundant application of~a%
+\begin{conf}
+\par
+\pagebreak %% TYPESETTING: crude hack
+\noindent
+\end{conf}\begin{rep} \end{rep}%
 derivation rule to the parent. A derivation tree is \emph{closed} if all of
 its leaf nodes are $\bot$. A node is \emph{saturated} if no nonredundant
 instance of a rule can be applied to it.
@@ -1027,6 +1026,108 @@ are saturated.
 %Following the conventions from~\cite{},
 %the derivation rules of our calculus are given in \emph{guarded assignment form},
 %where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
+
+\ourparagraph{Phase 1: Computing the Bidirectional Closure \beforefig(\figurename~\ref{fig:cc-rules}).}
+In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
+whereas the \rn{Inject} and \rn{Clash} rules %together
+compute the unification (downward) closure.
+For unification, %additional
+equalities are inferred based on the injectivity of constructors by \rn{Inject},
+and failures to unify equated terms are recognized by \rn{Clash}.
+The \rn{Conflict} rule recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
+
+Let $\tEc$ denote the set of $\Sig$-terms occurring in $\Ec$.
+At the end of the first phase, $\Ec$ induces an equivalence
+relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and
+only if $t \teq u \in \Ec$.
+Thus, we can regard $\Ec$ as a set of
+equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
+denote the equivalence class of $t$ in $\Ec$.
+
+\ourparagraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
+%For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
+The premises of the rules that make up the second phase refer to a mapping $\Val$
+that associates with each equivalence class a $\mu$-term as its representative.
+%
+Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
+or an applied constructor
+$\MU x.\: \const{C}( \vec t\, )$ for some $\const{C} \in \Ctr$ and
+$\mu$-terms $\vec t$ of the expected types.
+The variable~$x$ need not occur free in the $\mu$-binder's body, in which case
+the binder can be omitted.
+
+$\FV( t )$ denotes the set of free variables occurring in the $\mu$-term~$t$.
+A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
+it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
+it contains a bound variable. The $\alpha$\emph{-equiv\-alence} relation $t \aequiv u$
+indicates that the $\mu$-terms $t$ and $u$
+are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables\begin{rep}---e.g.,
+%$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
+$\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$,
+but
+$\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
+\not\aequiv \MU y.\; \const{D}( y, x )$\end{rep}.
+Two $\mu$-terms can denote the same value despite being $\alpha$-disequivalent---e.g.,
+$\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
+%In the \rn{Acyclic} rule,
+
+%Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
+%(Section~\ref{sec:introduction}).
+% for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
+%either in the case when $\tau$ is a codatatype or datatype type,
+%$\tau \notin \Codata$.
+
+%%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
+%
+%For uniformity, we also consider $%\MU x.\;
+%\const{c}$ to be a $\mu$-term if $\const{c}$ is a constant of type $\tau \in \Nondata$.
+%
+%%% I think this should be clear enough from the "Conventions" paragraph at the
+%%% end of the introduction.
+%%
+% which we define recursively:
+%if $\const{C} : \vec \tau \rightarrow \upsilon$
+%and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
+%then $\MU x.\; \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
+%
+%, or informally are \emph{observationally equivalent}.
+%For convenience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
+%where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
+%where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
+
+The $\mu$-term $\Val[t\typ{\tau}]$ describes a class of $\tau$ values
+that $t$ and other members of $t$'s equivalence class can take in models of $\Ec$.
+When $\tau$ is a datatype, % \in \Data$,
+a cyclic $\mu$-term describes an infeasible class of values.
+
+The mapping $\Val$ is computed as follows.
+%
+With each equivalence class $\ec{u\typ{\tau}}$, we associate a fresh variable $\Varec{u}\typ{\tau}$
+%of the same type as $u$
+%not occurring in $\tEc$,
+and set $\Val\ec{u} := {\Varec{u}}$, that is to say there are initially no
+constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
+is refined by applying the following unfolding rule exhaustively:\strut
+\[
+\hbox{\(
+\inferrule{
+  {\Varec{u}} \in \FV( \Val )
+  \betweenantes
+  \const{C}( t_1, \ldots, t_n ) \in \ec{u}
+  \betweenantes
+  \const{C} \in \Ctr
+}{
+  \Val := \Val [{\Varec{u}} \mapsto \MU {\Varec{u}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )]
+}
+\)
+%\rn{Unfold}
+}
+\]
+$\FV( \Val )$ denotes the set of free variables occurring in $\Val$'s range,
+and $\Val[x \mapsto t]$ denotes the \emph{variable-capturing} substitution of $t$ for
+$x$ in $\Val$'s range. It is easy to see that the height of terms produced as a
+result of the unfolding is bounded by the number of equivalence classes of
+$\Ec$, and thus the construction of $\Val$ will terminate.
 
 \begin{figure}[t!]
 \normalsize
@@ -1099,82 +1200,14 @@ are saturated.
 \)
 \rn{Clash}
 \end{tabular}
-%\vspace*{-3pt} %% TYPESETTING HACK
+\vspace*{-2pt} %% TYPESETTING HACK
 \caption{\,Derivation rules for bidirectional closure%.
 }
 \label{fig:cc-rules}
 \end{figure}
 
-\ourparagraph{Phase 1: Computing the Bidirectional Closure \beforefig(\figurename~\ref{fig:cc-rules}).}
-In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
-whereas the \rn{Inject} and \rn{Clash} rules %together
-compute the unification (downward) closure.
-For unification, %additional
-equalities are inferred based on the injectivity of constructors by \rn{Inject},
-and failures to unify equated terms are recognized by \rn{Clash}.
-The \rn{Conflict} rule recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
-
-Let $\tEc$ denote the set of $\Sig$-terms occurring in $\Ec$.
-At the end of the first phase, $\Ec$ induces an equivalence
-relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and
-only if $t \teq u \in \Ec$.
-Thus, we can regard $\Ec$ as a set of
-equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
-denote the equivalence class of $t$ in $\Ec$.
-
-\ourparagraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
-%For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
-The premises of the rules that make up the second phase refer to a mapping $\Val$
-that associates with each equivalence class a $\mu$-term as its representative.
-%
-Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
-or an applied constructor
-$\MU x.\: \const{C}( \vec t\, )$ for some $\const{C} \in \Ctr$ and
-$\mu$-terms $\vec t$ of the expected types.
-The variable~$x$ need not occur free in the $\mu$-binder's body, in which case
-the binder can be omitted.
-
-$\FV( t )$ denotes the set of free variables occurring in the $\mu$-term~$t$.
-A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
-it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
-it contains a bound variable. The $\alpha$\emph{-equiv\-alence} relation $t \aequiv u$
-indicates that the $\mu$-terms $t$ and $u$
-are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound variables\begin{rep}---e.g.,
-%$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
-$\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$,
-but
-$\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
-\not\aequiv \MU y.\; \const{D}( y, x )$\end{rep}.
-Two $\mu$-terms can denote the same value despite being $\alpha$-disequivalent---e.g.,
-$\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
-%In the \rn{Acyclic} rule,
-
-%Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
-%(Section~\ref{sec:introduction}).
-% for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
-%either in the case when $\tau$ is a codatatype or datatype type,
-%$\tau \notin \Codata$.
-
-%%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
-%
-%For uniformity, we also consider $%\MU x.\;
-%\const{c}$ to be a $\mu$-term if $\const{c}$ is a constant of type $\tau \in \Nondata$.
-%
-%%% I think this should be clear enough from the "Conventions" paragraph at the
-%%% end of the introduction.
-%%
-% which we define recursively:
-%if $\const{C} : \vec \tau \rightarrow \upsilon$
-%and $\vec v$ are well-typed $\mu$-terms of type $\vec \tau$ under the assumption that $x$ has type $\upsilon$,
-%then $\MU x.\; \const{C}( \vec v )$ is a well-typed term of type $\upsilon$.
-%
-%, or informally are \emph{observationally equivalent}.
-%For convenience, we use $\mu$-terms to refer to (classes of) values for both codatatype and datatype terms,
-%where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
-%where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
-
 \begin{figure}[t!]
-%\vspace*{+3pt}
+\vspace*{+6pt} %% TYPESETTING HACK
 \normalsize
 \centering
 \begin{tabular}{@{}c@{}}
@@ -1207,45 +1240,56 @@ $\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 \)
 \rn{Unique}
 \end{tabular}
-%\vspace*{-3pt} %% TYPESETTING HACK
+\vspace*{-2pt} %% TYPESETTING HACK
 \caption{\,Derivation rules for acyclicity and uniqueness%.
 }
 \label{fig:ab-rules}
 \end{figure}
 
-The $\mu$-term $\Val[t\typ{\tau}]$ describes a class of $\tau$ values
-that $t$ and other members of $t$'s equivalence class can take in models of $\Ec$.
-When $\tau$ is a datatype, % \in \Data$,
-a cyclic $\mu$-term describes an infeasible class of values.
-
-The mapping $\Val$ is computed as follows.
-%
-With each equivalence class $\ec{u\typ{\tau}}$, we associate a fresh variable $\Varec{u}\typ{\tau}$
-%of the same type as $u$
-%not occurring in $\tEc$,
-and set $\Val\ec{u} := {\Varec{u}}$, that is to say there are initially no
-constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
-is refined by applying the following unfolding rule exhaustively:\strut
-\[
-\hbox{\(
+\begin{figure}[t!]
+\vspace*{+6pt} %% TYPESETTING HACK
+\normalsize
+\centering
+\begin{tabular}{c}
+\(
 \inferrule{
-  {\Varec{u}} \in \FV( \Val )
+  t\typ{\delta} \in \tEc
   \betweenantes
-  \const{C}( t_1, \ldots, t_n ) \in \ec{u}
-  \betweenantes
-  \const{C} \in \Ctr
+  \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
+\\
+  \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
+  \text{ or }
+  \bigl( \delta \in \Data \text{ and } %\left|
+  \delta
+  %\right|
+  \text{ is finite} \bigr)
 }{
-  \Val := \Val [{\Varec{u}} \mapsto \MU {\Varec{u}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )]
+  \Ec := \Ec,\: \DISC{1} %\ROR
+  \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
 }
 \)
-%\rn{Unfold}
+\rn{Split}
+\\[5\jot]
+\(
+\inferrule{
+  t\typ{\delta}, u\typ{\delta} \in \tEc
+  \betweenantes
+  \delta \in \Codata
+  \betweenantes
+  \delta \text{ is a singleton}
+}{
+  \Ec := \Ec,\: t \teq u
 }
-\]
-$\FV( \Val )$ denotes the set of free variables occurring in $\Val$'s range,
-and $\Val[x \mapsto t]$ denotes the \emph{variable-capturing} substitution of $t$ for
-$x$ in $\Val$'s range. It is easy to see that the height of terms produced as a
-result of the unfolding is bounded by the number of equivalence classes of
-$\Ec$, and thus the construction of $\Val$ will terminate.
+\)
+\rn{Single}
+\end{tabular}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Derivation rules for branching%.
+%All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
+%Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
+}
+\label{fig:split-rule}
+\end{figure}
 
 \begin{examplex}
 Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and~$\ec{z}$
@@ -1334,49 +1378,6 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \rn{Unique} can finally derive $x \teq y$.
 \xend
 \end{examplex}
-
-\begin{figure}[t!]
-\normalsize
-\centering
-\begin{tabular}{c}
-\(
-\inferrule{
-  t\typ{\delta} \in \tEc
-  \betweenantes
-  \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
-\\
-  \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
-  \text{ or }
-  \bigl( \delta \in \Data \text{ and } %\left|
-  \delta
-  %\right|
-  \text{ is finite} \bigr)
-}{
-  \Ec := \Ec,\: \DISC{1} %\ROR
-  \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
-}
-\)
-\rn{Split}
-\\[5\jot]
-\(
-\inferrule{
-  t\typ{\delta}, u\typ{\delta} \in \tEc
-  \betweenantes
-  \delta \in \Codata
-  \betweenantes
-  \delta \text{ is a singleton}
-}{
-  \Ec := \Ec,\: t \teq u
-}
-\)
-\rn{Single}
-\end{tabular}
-\caption{\,Derivation rules for branching%.
-%All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
-%Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
-}
-\label{fig:split-rule}
-\end{figure}
 
 \ourparagraph{Phase 3: Branching \beforefig(\figurename~\ref{fig:split-rule}).}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
