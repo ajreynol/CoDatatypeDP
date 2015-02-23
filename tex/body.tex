@@ -1467,7 +1467,7 @@ $\thD$-satisfiable.
 The proof relies on a specific interpretation $\J$ that satisfies $\Ec$.
 
 First, we define the set of interpretations of the theory $\thD$,
-which requires additional terminology concerning $\mu$-terms.
+which requires custom terminology concerning $\mu$-terms.
 Given a $\mu$-term $t$ with subterm $u$,
 the \emph{expansion of $u$ with respect to $t$} is the $\mu$-term $\expand{t}{u}^\emptyset$,
 abbreviated to
@@ -1479,8 +1479,8 @@ $\expand{t}{u}$, as returned by the following recursive function:
 \expand{t}{x}^B & {} \,=\, {} &
 \textstyle\relax{\begin{cases}
     x & \text{if $x \in B$}   \\[-\jot]
-    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u}^{\smash{B \,\uplus\, \{ x \}}}\bigr)} & \text{if this occurrence of $x$ is
-    bound by $\MU x.\; \const{C}( \vec u )$ in $t$}
+    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u}^{\smash{B \,\uplus\, \{ x \}}}\bigr)} & \text{if
+    $\MU x.\; \const{C}( \vec u )$ binds this occurrence of $x \notin B$ in $t$}
 \end{cases}} ~ \\
 \expand{t}{\MU x.\; \const{C}( \vec u )}^B & = &
 \textstyle\begin{cases}
