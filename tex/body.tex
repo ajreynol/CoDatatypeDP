@@ -332,7 +332,7 @@ because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
 value~$\infty$.
 Compared with the conventional inductive definition
-\begin{conf}$\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}$, \end{conf}%
+\begin{conf}$\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}$\vvthinspace, \end{conf}%
 \begin{rep}\[\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]\end{rep}%
 %with a dedicated constructor for representing infinity, the
 the codatatype avoids
@@ -347,7 +347,7 @@ format, implemented by most SMT
 %(satisfiability modulo theories)
 solvers, has been extended with a syntax for datatypes.
 In this \thewordpaper, we introduce a
-unified \hfill decision \hfill procedure \hfill for \hfill universal \hfill problems \hfill involving \hfill datatypes \hfill and \hfill codatatypes
+unified \hfill decision \hfill procedure \hfill for \hfill universal \hfill problems \hfill involving \hfill datatypes \hfill and \hfill codatatypes%
 \begin{conf}\goodbreak\noindent\end{conf}%  %%% TYPESETTING: terrible HACK
 in combination (Section~\ref{sec:the-decision-procedure}).
 The procedure is described abstractly as a calculus and can be
@@ -845,12 +845,12 @@ exists an interpretation in $\JJJJ$ that satisfies it.
 % otherwise, it is $\thD$-unsatisfiable. (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
 
-For the universal theory, induction is equivalent to the acyclicity
+For deciding universal formulas, induction can be replaced by the acyclicity
 axiom schema, which states that constructor terms cannot be equal to
-any of their proper subterms. %\cite{barrett-et-al-2007}.
-Dually, coinduction
-is equivalent to the uniqueness axiom schema, which asserts that codatatype
-values are fully characterized by their possibly infinite expansion.
+any of their proper subterms \cite{barrett-et-al-2007}.
+Dually, coinduction can be replaced by the uniqueness axiom schema, which
+asserts that codatatype values are fully characterized by their possibly
+infinite expansion \cite[Theorem 8.1, 2$\,{\Leftrightarrow}\,$5]{rutten-2000}.
 
 %\begin{rep}
 % TODO: State more precisely and prove?
