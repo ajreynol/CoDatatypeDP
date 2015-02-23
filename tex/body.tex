@@ -290,7 +290,7 @@ potential of the procedure.
 \label{sec:introduction}
 
 Freely generated inductive datatypes are ubiquitous in functional programs and
-logical specifications. They are especially
+formal specifications. They are especially
 useful to represent finite data structures in computer science applications but
 also arise in formalized mathematics.
 They can be implemented efficiently and enjoy
@@ -318,7 +318,7 @@ infinit\-e constructor terms are also legitimate values for codatatypes
 (Section~\ref{sec:co-datatypes}). Intuitively, the
 values of a codatatype consist of all well-typed finite and infinite ground
 constructor
-terms, and only those. For example, the coinductive specification
+terms, and only those. As a simple example, the coinductive specification
 %
 \[\keyw{codatatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat})\]
 %
@@ -351,8 +351,7 @@ unified \hfill decision \hfill procedure \hfill for \hfill universal \hfill prob
 \begin{rep} \end{rep}%
 in combination (Section~\ref{sec:the-decision-procedure}).
 The procedure is described abstractly as a %tableau-like
-calculus and can be
-composed via the Nelson--Oppen method \cite{nelson-oppen-1979}.
+calculus and is composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007}, which covers
 only datatypes.
 %To our knowledge, our procedure is the first of its kind for the theory of
@@ -427,7 +426,7 @@ stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9,
 
 %%% 1090909 is a prime number
 
-The procedure is implemented in the SMT solver CVC4 \cite{barrett-et-al-2011} as a combination
+Our procedure is implemented in the SMT solver CVC4 \cite{barrett-et-al-2011} as a combination
 of rewriting and a theory solver (Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
 It consists of about 2000 lines of \cpp{} code, %among which \NOK{1600} are
 most of which are shared between datatypes and codatatypes. The code is
@@ -501,7 +500,7 @@ implemented in Leon \cite{suter-et-al-2011} and RADA \cite{pham-et-al-2013}.
 Datatypes are supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
 also generate models involving cyclic codatatype values.
-Cyclic values have been studied extensively under the headings of
+Cyclic values have been studied extensively under the heading of
 regular or rational trees---see Carayol and Morvan
 \cite{carayol-morvan-2006} and Djellou et al.\ \cite{djelloul-et-al-2008}
 for recent work.
@@ -792,10 +791,10 @@ where the induction hypothesis $\mathit{IH}_{i\negvthinspace j}^k(x)$
 denotes either $P_{\iPrime}(x)$ if there exists some $\iPrime$ such that
 the formula is type-correct or else $\top$\end{rep}.
 %
-The schema ensures that the interpretation of datatypes
-is standard.
+%The schema ensures that the interpretation of datatypes
+%is standard.
 For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
-induction prohibits nonstandard models, which could contain cyclic values---e.g.,
+induction prohibits models that contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
 
