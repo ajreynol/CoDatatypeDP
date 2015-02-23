@@ -292,7 +292,7 @@ potential of the procedure.
 Freely generated inductive datatypes are ubiquitous in functional programs and
 logical specifications. They are especially
 useful to represent finite data structures in computer science applications but
-also arise when formalizing mathematics.
+also arise in formalized mathematics.
 They can be implemented efficiently and enjoy
 properties that can be exploited in automated reasoners.
 %
@@ -349,7 +349,8 @@ In this \thewordpaper, we introduce a
 unified \hfill decision \hfill procedure \hfill for \hfill universal \hfill problems \hfill involving \hfill datatypes \hfill and \hfill codatatypes%
 \begin{conf}\goodbreak\noindent\end{conf}%  %%% TYPESETTING: terrible HACK
 in combination (Section~\ref{sec:the-decision-procedure}).
-The procedure is described abstractly as a calculus and can be
+The procedure is described abstractly as a %tableau-like
+calculus and can be
 composed via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007}, which covers
 only datatypes.
@@ -530,7 +531,7 @@ The $\mu$-notation is inspired by the $\mu$-calculus
 \end{conf}
 
 \ourparagraph{Conventions.}
-The setting is a monomorphic (or many-sorted) first-order logic.
+Our setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are atomic sorts and interpreted as
 nonempty domains. The set~$\Types$ must contain a
@@ -562,7 +563,7 @@ $\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
 The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep};
 other predicates can be represented as functions to $\ty{bool}$\begin{rep},
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$\end{rep}.
-The notation $t\typ{\tau}$ indicates that term $t$ has type~$\tau$.
+The notation $t\typ{\tau}$ stands for a term $t$ of type~$\tau$.
 \begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbreviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
 Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
