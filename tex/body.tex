@@ -390,12 +390,14 @@ corresponding datatype would be rejected as non-well-founded
 Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
 Cyclic constraints such as
 $x \teq \const{S}(x)$ %, where $\const{C}$ is a constructor,
-are unsatisfiable for datatypes but satisfiable for codatatypes.
-However, the uniqueness principle states that two bisimilar values---i.e., two values
-having the same possibly infinite expansion---must be equal; from $x
+are unsatisfiable for datatypes,
+thanks to an acyclicity rule,
+but satisfiable for codatatypes. 
+For the latter, a uniqueness rule ensures that two values
+having the same infinite expansion must be equal; from $x
 \teq \const{S}(x)$ and
 $y \teq \const{S}(y)$, it deduces $x \teq y$.
-The acyclicity and uniqueness rules are needed to ensure completeness
+These two rules are needed to ensure completeness
 (model soundness) on ground problems. %and the absence of spurious models.
 They cannot be expressed as finite axiomatizations, so they naturally belong in
 a decision procedure.
