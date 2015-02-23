@@ -1530,7 +1530,7 @@ is $\alpha$-equivalent to
 $\expand{t}{y} =
 \MU y.\; \const{C}\bigl( \expand{t}{y}^{\smash{\{y\}}} \bigr) =
 \MU y.\; \const{C}( y )$.
-The term $u = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also abnormal,
+The term $u = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also not normal,
 since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $u$,
 noting that
 %
@@ -2108,7 +2108,7 @@ since %by assumption
 the solver is already incomplete in the presence of quantified formulas.
 Nonetheless, two techniques help increase the precision of the solver.
 First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
-ordinary types.
+uninterpreted types.
 Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
 For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
 has cardinality one precisely when $\ty{u}$ has cardinality one.
