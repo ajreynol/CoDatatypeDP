@@ -777,7 +777,7 @@ constructor is left completely unspecified.
 %      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
 %        and not in other models
 %
-Datatypes are additionally characterized by an induction axiom schema\begin{rep}:
+Datatypes are additionally characterized by an induction principle\begin{rep}:
 %
 \[
 \begin{aligned}[t]
@@ -790,9 +790,7 @@ Datatypes are additionally characterized by an induction axiom schema\begin{rep}
 where the induction hypothesis $\mathit{IH}_{i\negvthinspace j}^k(x)$
 denotes either $P_{\iPrime}(x)$ if there exists some $\iPrime$ such that
 the formula is type-correct or else $\top$\end{rep}.
-%
-%The schema ensures that the interpretation of datatypes
-%is standard.
+The principle ensures that the interpretation of datatypes is standard.
 For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
 induction prohibits models that contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
@@ -819,7 +817,7 @@ witnesses $R_i$ that are required to be bisimulations:
 where $x \sim y$ denotes either $R_{\iPrime}[x, y]$ if there exists some
 $\iPrime$ such that the formula is type-correct or $x \teq y$ otherwise.
 \end{rep}%
-This schema encodes a form of extensionality:\ Two values that yield the same
+This axiom encodes a form of extensionality:\ Two values that yield the same
 observations must be equal, where the observations are made through
 selectors and discriminators.
 %
