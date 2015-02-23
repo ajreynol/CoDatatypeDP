@@ -353,10 +353,12 @@ The procedure is described abstractly as a calculus and can be
 composed via the Nelson--Oppen method \cite{nelson-oppen-1979}.
 It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007}, which covers
 only datatypes.
-To our knowledge, our procedure is the first of its kind for the theory of
-codatatypes.
+%To our knowledge, our procedure is the first of its kind for the theory of
+%codatatypes.
 \begin{conf}
-Detailed proofs of completeness are included in a technical report
+Detailed proofs %of completeness
+are included in a %technical
+report
 \cite{our-report}.
 \end{conf}%
 
@@ -480,7 +482,7 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 \begin{rep}\ourparagraph{Related Work.} Barrett\end{rep}%
 \begin{conf}Barrett\end{conf}
 et al.\ \cite{barrett-et-al-2007} provide a good account of
-related work as of 2007. Since then, datatypes have been added not only to CVC4
+related work on datatypes as of 2007. Since then, datatypes have been added not only to CVC4
 but also to the SMT solver
 Z3 \cite{de-moura-bjoerner-2008} \begin{rep}in unpublished work by Leonardo de Moura \end{rep}and \begin{rep}to \end{rep}a SPASS-like %prototypical
 superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
@@ -492,10 +494,16 @@ implemented in Leon \cite{suter-et-al-2011} and RADA \cite{pham-et-al-2013}.
 %
 Datatypes are supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
-also generate models involving cyclic codatatype values. The $\mu$-notation is
-inspired by the $\mu$-calculus
+also generate models involving cyclic codatatype values.
+Cyclic values have been studied extensively under the headings of
+regular or rational trees---see Carayol and Morvan
+\cite{carayol-morvan-2006} and Djellou et al.\ \cite{djelloul-et-al-2008}
+for recent work.
+The $\mu$-notation is inspired by the $\mu$-calculus
 \begin{conf}\cite{kozen-1983}.\end{conf}
 \begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}.\end{rep}
+
+%, notably in the context of constraint logic programming
 
 %  * Ro\c{s}u --- equality of streams is...
 %     http://dl.acm.org/citation.cfm?doid=1159803.1159827
@@ -2278,8 +2286,9 @@ extend SMT solvers with dedicated support for (co)recursive functions.
 %further in terms of supporting nested and mixed (co)recursion and quantified
 %ormulas over (co)datatypes in solvers.
 
+{\footnotesize
 \def\ackname{Acknowledgment}
-\ourparagraph{\ackname.}
+\ourparagraph{\footnotesize\ackname.}
 We owe a great debt to the development team of CVC4,
 including Clark Barrett and Cesare Tinelli,
 and in particular Morgan Deters,
@@ -2298,9 +2307,11 @@ codatatypes and indicated related work. Dmitriy Traytel took part in discussions
 about degenerate codatatypes.
 %
 Pascal Fontaine, Andreas Lochbihler, Christophe Ringeissen, Mark Summerfield,
-and Dmitriy Traytel suggested several textual improvements. The second author's
+and Dmitriy Traytel suggested many textual improvements. The second author's
 research was partially supported by the Deutsche Forschungs\-gemein\-schaft
 (DFG) project \relax{Hardening the Hammer} (grant Ni\,491\slash 14-1).
+
+}
 
 \bibliographystyle{splncs03}
 \bibliography{bib}{}
