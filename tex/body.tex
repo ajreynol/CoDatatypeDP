@@ -332,10 +332,10 @@ because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
 value~$\infty$.
 Compared with the conventional inductive definition
-\begin{rep}
-\[\keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
-\end{rep}
-with a dedicated constructor for representing infinity, the codatatype avoids
+\begin{conf}$\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}$, \end{conf}%
+\begin{rep}\[\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]\end{rep}%
+%with a dedicated constructor for representing infinity, the
+the codatatype avoids
 one case by unifying the finite and infinite nonzero cases.
 
 Datatypes and codatatypes are an integral part of many proof assistants,
