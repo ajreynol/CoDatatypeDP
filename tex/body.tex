@@ -2119,7 +2119,7 @@ would apply \rn{Split} and \rn{Inject} before adding this equality.
 
 To reduce the number of unique literals considered by the calculus, we
 compute a normal form for literals as a preprocessing step. In particular, we
-replace $u \teq t$ by $t \teq u$ if $t$ is less than $u$ based on a term
+replace $u \teq t$ by $t \teq u$ if $t$ is smaller than $u$ with respect to a term
 ordering, replace $\smash{\const{C}_{\negvthinspace j}( \vec t \,) \teq
 \const{C}_{\negvthinspace\jPrime}( \vec u )}$ with $\bot$ when $j \neq \jPrime$,
 replace all selector terms of the form $\smash{\const{s}^{\,k}_{\negvthinspace j}(
@@ -2134,6 +2134,8 @@ empirically beneficial to delay applications of \rn{Split} as long as
 possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
 they require traversing the equivalence classes, which is why they are part of
 phase~2.
+
+\kern-1pt
 
 %\section{Examples}
 %\label{sec:examples}
@@ -2151,12 +2153,17 @@ Isabelle formalizations using Sledgehammer.
 We
 included all the theory files from the Isabelle distribution (Distro, 879~goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
-that define codatatypes falling within the supported fragment. We added
+that define codatatypes falling within the supported fragment. We also
+
+%%% TYPESETTING: Terrible hack
+\pagebreak
+\noindent
+added
 two unpublished theories about Bird and Stern--Brocot trees
 by Peter Gammie and Andreas Lochbihler (\gandl,
 317~goals). To exercise the datatype
 support, the benchmarks were complemented by theories
-about lists and trees. The theories were selected before running the
+about lists and trees. The theories were selected before conducting the
 experiments. The experimental data are publicly available.%
 \footnote{\url{http://lara.epfl.ch/~reynolds/CADE2015-cdt/}}
 %http://www21.in.tum.de/~blanchet/codp_data.tgz}}
@@ -2166,11 +2173,12 @@ experiments. The experimental data are publicly available.%
 For each goal in each theory, Sledgehammer was invoked to select up to
 256~lemmas, which were monomorphized and translated to SMT-LIB~2
 along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
-given to CVC4, running for up to 60 seconds on the StarExec cluster
-\cite{stump-et-al-2014-starexec}.
+given to the development version of CVC4 and to Z3 4.3.2, each running for up to 60
+seconds on the StarExec cluster \cite{stump-et-al-2014-starexec}.
 %TODO: Keep or not? Problems not involving (co)datatypes were filtered out.
 Due to the lack of machinery for reconstructing inferences about (co)datatypes
-in Isabelle, the solver is trusted as an oracle in these experiments.
+in Isabelle, the solvers are trusted as oracles in these experiments. Z3
+is included for comparison.
 
 The development version of CVC4 was run on each problem several times, with the
 support for datatypes and codatatypes either enabled or disabled. The
@@ -2180,7 +2188,7 @@ contributions of the acyclicity and uniqueness rules were also measured.
 Even when the
 decision procedure is disabled, the problems may contain
 basic lemmas about constructors and selectors, allowing some (co)datatype
-reasoning. Z3 4.3.2 is included for comparison.
+reasoning.
 % when this makes sense.
 %This allows us to answer the question, \relax{What are the
 %benefits of activating the decision procedure as opposed to letting
