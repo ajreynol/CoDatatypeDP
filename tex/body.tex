@@ -196,7 +196,7 @@
 
 \newcommand\Data{\Types_{\mathrm{dt}}}
 \newcommand\Codata{\Types_{\mathrm{codt}}}
-\newcommand\Nondata{\Types_{\mathrm{ord}}}
+\newcommand\Nondata{\Types_{\mathrm{un}}}
 
 \newcommand\Ctr{\Funcs_{\smash{\mathrm{ctr}}}}
 \newcommand\Sel{\Funcs_{\smash{\mathrm{sel}}}}
@@ -575,11 +575,10 @@ Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 %    (terminology: freely-generated, inductive, algebraic, ..., sometimes
 %    with different meanings; we'll clarify below what we use)
 
-{\looseness=-1
-We fix a first-order signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
+We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the %remaining
-\emph{ordinary types}. The function symbols are partitioned into $\Funcs = \Ctr
+\emph{uninterpreted types}. The function symbols are partitioned into $\Funcs = \Ctr
 \mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
 \emph{selectors}. There is no need to consider further function symbols
 because they can be abstracted away as variables when combining theories.
@@ -587,11 +586,9 @@ because they can be abstracted away as variables when combining theories.
 %Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
 %examples.
 
-}
-
 %\ourparagraph{Specifications.}
 In an SMT problem, the signature is typically given by specifying first the
-uninterpreted ordinary types in any order, then the (co)datatypes with their constructors
+uninterpreted types in any order, then the (co)datatypes with their constructors
 and selectors in groups of mutually (co)recursive groups of (co)datatypes, and
 finally any other function symbols.
 %
@@ -623,7 +620,7 @@ and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}\end{rep}.
 Each (co)datatype $\delta$ is equipped with
 $m \ge 1$ constructors, and each constructor for $\delta$ takes zero or more
 arguments and returns a $\delta$ value. The argument types must be either
-ordinary, among the already known (co)datatypes, or among the (co)datatypes
+uninterpreted, among the already known (co)datatypes, or among the (co)datatypes
 being introduced.
 %
 To every argument corresponds a selector. The names for the (co)data\-types, the
@@ -889,9 +886,9 @@ where \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \emph{corecursive singletons}. For the decision procedure, it will be
 crucial to detect these. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
-above is altered to make \ty{unit} an ordinary type, \ty{b} and \ty{c} will be
+above is altered to make \ty{unit} an uninterpreted type, \ty{b} and \ty{c} will be
 singletons precisely when \ty{unit} is interpreted as a singleton.
-Fortunately, \begin{rep}given cardinalities for the ordinary types, \end{rep}%
+Fortunately, \begin{rep}given cardinalities for the uninterpreted types, \end{rep}%
 it is easy to characterize this degenerate case.
 
 }
@@ -935,7 +932,7 @@ that the type has at most one value.
 %    C(0, C(1, C(0, ...))) and C(0, C(1, C(1, ...)))
 %    can use that to create infinitely alternation patterns
 %  * leaves us with the case of a single constructor
-% * since we are looking at a specific model, we can assume all ordinary
+% * since we are looking at a specific model, we can assume all uninterpreted
 %   types are finite datatypes with nullary constructors corresponding to their
 %   elements
 % * if two
@@ -955,18 +952,20 @@ procedure is formulated as a tableau-like calculus.
 
 To simplify the presentation, we make a few assumptions about
 $\Sig$.
-First, all codatatypes in $\Codata$ are corecursive. This is reasonable
+First, all codatatypes %in $\Codata$
+are corecursive. This is reasonable
 because noncorecursive codatatypes can be seen as nonrecursive
 datatypes.
-Second, all types $\tau \in \Nondata$ have infinite cardinality.
-This is not very restrictive, because in principle each interpreted type in
-$\Nondata$ having finite cardinality~$n$
-can be replaced by a %n enumeration
-datatype with $n$~nullary constructors
-\cite{barrett-et-al-2007}.
-As for uninterpreted types, since the literals in $\Ec$
-are ground, they cannot entail an upper
-bound on the cardinality of any such type, so it is safe to consider these types infinite.
+Second, all uninterpreted types have infinite cardinality.
+Since the literals in $\Ec$ are ground, they cannot entail an upper
+bound on the cardinality of any such type, so it is safe to consider these types infinite.%
+%\footnote{%
+%The theory could be extended This is not very restrictive, because in principle each interpreted type in
+%$\Nondata$ having finite cardinality~$n$
+%can be replaced by a %n enumeration
+%datatype with $n$~nullary constructors
+%\cite{barrett-et-al-2007}.
+%}
 
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
@@ -1145,7 +1144,7 @@ $\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 %(Section~\ref{sec:introduction}).
 % for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
 %either in the case when $\tau$ is a codatatype or datatype type,
-%$\tau \not\in \Codata$.
+%$\tau \notin \Codata$.
 
 %%% But there are no constants of type $\tau \in \Nondata$ -- at most variables!
 %
@@ -1386,7 +1385,7 @@ constraint %on the codatatype
 can be evaluated statically
 based on a recursive computation of the cardinalities of the
 constructors' argument types.
-%This step relies on the assumption that ordinary types are infinite.
+%This step relies on the assumption that uninterpreted types are infinite.
 
 \ourparagraph{Correctness.}
 Correctness means that if there exists a closed derivation tree with root node
@@ -1597,7 +1596,7 @@ An interpretation $\J$ is \emph{normal} if these conditions are met:
 For each type $\tau$,
 %%% sets *contain* elements, they *include* other sets
 $\interp{\J}{\tau}$ includes a maximal set of closed normal $\mu$-terms of that type that are
-unique up to $\alpha$-equivalence and acyclic if $\tau \not\in \Codata$.
+unique up to $\alpha$-equivalence and acyclic if $\tau \notin \Codata$.
 \item
 For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
 $\interp{\J}{\const{C}}( \interp{\J}{\vec t} )$ is the value
@@ -1656,7 +1655,7 @@ and by exhaustively applying the following rule:%
   \betweenantes
   v \in \interp{\J}{\tau}
   \betweenantes
-  v \not\in \BAD_{\smash{\J}}^{\Varec{x}}(\ValC)
+  v \notin \BAD_{\smash{\J}}^{\Varec{x}}(\ValC)
 }{
   \ValC := \nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
 }
@@ -1790,8 +1789,8 @@ Assume by contradiction that $\ValC$ contained a free variable ${\Varec{y}}$ for
 Then it must be the case that $\ec{y}$ does not contain a constructor term,
 or else ${\Varec{y}}$ would not occur as a free variable in $\Val$.
 Consider the case when $\tau$ is finite.
-By assumption, $\tau \not\in \Nondata$.
-Since \rn{Split} does not apply to $\Ec$, we have $\tau \not\in \Data$.
+By assumption, $\tau \notin \Nondata$.
+Since \rn{Split} does not apply to $\Ec$, we have $\tau \notin \Data$.
 If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\ref{lem:corecursive-singletons},
 the cardinality of $\tau$ must be one.
 Since \rn{Single} does not apply, % to $\Ec$,
@@ -1808,7 +1807,7 @@ By construction, $\ValC \ec{x}$ is normal.
 Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
 Moreover, the construction of $\ValC$ applies substitutions of the form
 $\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}}$ is not a codatatype.
-Thus, $\ValC \ec{x}$ is acyclic when $\tau \not\in \Codata$.
+Thus, $\ValC \ec{x}$ is acyclic when $\tau \notin \Codata$.
 Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
 
 We first show that (2) and (3) hold initially for $\Val$.
@@ -1985,7 +1984,7 @@ Thus, we may interpret $\smash{\interp{\J}{\const s^k_{\negvthinspace j}}( \inte
 
 We now show that all disequalities in $\Fc$ are satisfied by $\J$.
 Assume $t \tneq u \in \Fc\!$.
-Since \rn{Conflict} does not apply, $t \teq u \not\in \Fc$ and thus $\ec{t}$ and $\ec{u}$ are distinct.
+Since \rn{Conflict} does not apply, $t \teq u \notin \Fc$ and thus $\ec{t}$ and $\ec{u}$ are distinct.
 Since $\interp{\J}{t} \vsim \ValC \ec{t}$ and $\interp{\J}{u} \vsim \ValC \ec{u}$,
 by Lemma~\ref{lem:interpretation-completion}\PART{3}, $\interp{\J}{t} \neq \interp{\J}{u}$, and thus $\J \models t \tneq u$.
 
@@ -2069,7 +2068,7 @@ the procedure considers the set $\SSS$ of all codatatype equivalence classes. It
 \begin{conf}\goodbreak\noindent\end{conf}%
 simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
 while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
-and the equivalence of their arguments of ordinary types.
+and the equivalence of their arguments of uninterpreted types.
 It then partitions each set %in this partition %in the same manner
 recursively.
 If %after doing so,
