@@ -578,6 +578,7 @@ Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 %    (terminology: freely-generated, inductive, algebraic, ..., sometimes
 %    with different meanings; we'll clarify below what we use)
 
+{\looseness=-1
 We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the %remaining
@@ -585,11 +586,14 @@ $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Dat
 partitioned into $\Funcs = \Ctr \mathrel{\uplus} \Sel$, where $\Ctr$ are the
 \emph{constructors} and $\Sel$ are the \emph{selectors}. There is no need to
 consider further function symbols because they can be abstracted away as
-variables when combining theories. $\mathrm\Sigma$-terms are standard first-order terms,
+variables when combining theories. $\mathrm\Sigma$-terms are standard first-order terms
+over $\mathrm\Sigma$,
 without $\mu$-binders.
 %(Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
 %Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
 %examples.
+
+}
 
 %\ourparagraph{Specifications.}
 In an SMT problem, the signature is typically given by specifying first the
