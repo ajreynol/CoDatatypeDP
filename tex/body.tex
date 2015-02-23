@@ -1475,17 +1475,17 @@ $\expand{t}{u}$, as returned by the following recursive function:
 %where $x \leadsto \MU x.\; \const{C}( \vec u ) \in t$ indicates that $\MU x.\;
 %\const{C}( \vec u )$ is the subterm of $t$ that binds this occurrence of
 %variable $x$:
-\[\begin{array}{r@{}c@{}l}
+\[\begin{array}{@{}r@{}c@{}l@{}}
 \expand{t}{x}^B & {} \,=\, {} &
 \textstyle\relax{\begin{cases}
-    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u}^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if this $x \notin B$ is
-    bound by $\MU x.\; \const{C}( \vec u )$ in $t$}  \\[-\jot]
-    x & \text{otherwise}
+    x & \text{if $x \in B$}   \\[-\jot]
+    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u}^{\smash{B \,\uplus\, \{ x \}}}\bigr)} & \text{if this occurrence of $x$ is
+    bound by $\MU x.\; \const{C}( \vec u )$ in $t$}
 \end{cases}} ~ \\
 \expand{t}{\MU x.\; \const{C}( \vec u )}^B & = &
 \textstyle\begin{cases}
-    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u }^{\smash{B \,\cup\, \{ x \}}}\bigr)} & \text{if }x \not\in B \\[-\jot]
-    x & \text{otherwise}
+    x & \text{if $x \in B$} \\[-\jot]
+    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u }^{\smash{B \,\uplus\, \{ x \}}}\bigr)} & \text{otherwise}
 \end{cases}
 \end{array}\]
 The recursion will eventually terminate because each recursion adds one bound
