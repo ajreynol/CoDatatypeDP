@@ -844,13 +844,14 @@ A formula is $\thD$-\emph{satisfiable} if there
 exists an interpretation in $\JJJJ$ that satisfies it.
 % otherwise, it is $\thD$-unsatisfiable. (I trust the readers' intelligence when
 % it comes to English prefixes like non-, in-, un-, and a-.)
-
+%
 For deciding universal formulas, induction can be replaced by the acyclicity
 axiom schema, which states that constructor terms cannot be equal to
 any of their proper subterms \cite{barrett-et-al-2007}.
-Dually, coinduction can be replaced by the uniqueness axiom schema, which
-asserts that codatatype values are fully characterized by their possibly
-infinite expansion \cite[Theorem 8.1, 2$\,{\Leftrightarrow}\,$5]{rutten-2000}.
+Dually, coinduction can be replaced by the uniqueness schema, which
+asserts that codatatype values are fully characterized by their %possibly
+%infinite
+expansion \cite[Theorem 8.1, 2$\,{\Leftrightarrow}\,$5]{rutten-2000}.
 
 %\begin{rep}
 % TODO: State more precisely and prove?
@@ -867,7 +868,7 @@ infinite expansion \cite[Theorem 8.1, 2$\,{\Leftrightarrow}\,$5]{rutten-2000}.
 
 %\ourparagraph{Special Cases.}
 {\looseness=-1
-Some codatatypes are so degenerate as be finite even though they
+Some codatatypes are so degenerate as to be finite even though they
 have infinite values. A simple example is
 \vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, whose
 unique value is $\MU a.\; \const{A}(a)$. Other specimens are
@@ -875,12 +876,12 @@ $\ty{stream}_{\,\ty{unit}\,}$
 and
 \begin{conf}%
 \vthinspace$\keyw{codatatype}~\ty{b} = \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit})
-~\keyw{and}~ \ty{c} = \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})$,
+~\keyw{and}~ \ty{c} = \const{C}(\ty{a},\: \ty{b},\: \ty{c})$,
 \end{conf}%
 \begin{rep}%
 \[\begin{aligned}[t]
       \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-1\jot]
-      \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{unit},\: \ty{b},\: \ty{c})
+      \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{b},\: \ty{c})
 \end{aligned}
 \]
 \end{rep}%
@@ -949,8 +950,12 @@ Given a fixed signature~$\Sig$,
 the decision procedure for the universal theory of (co)data\-types %$\thD$
 determines the
 $\thD$-satisfiability of finite sets $\Ec$ of literals:\ equalities
-and disequalities between $\Sig$-terms. The
-procedure is formulated as a tableau-like calculus.
+and disequalities between $\Sig$-terms,
+whose variables are interpreted existentially.
+The procedure is formulated as a tableau-like calculus.
+%Following the tradition of refutational theorem proving,
+Proving a universal quantifier-free conjecture is reduced to showing that
+its negation is unsatisfiable.
 % whose derivation rules are applied until saturation or contradiction.
 
 To simplify the presentation, we make a few assumptions about
