@@ -1091,13 +1091,13 @@ equalities are inferred based on the injectivity of constructors by \rn{Inject},
 and failures to unify equated terms are recognized by \rn{Clash}.
 The \rn{Conflict} rule recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
 
-At the end of this phase, $\Ec$ induces an equivalence
-relation over the set of $\Sig$-terms occurring in $\Ec$,
-denoted by $\tEc$, such that two terms $t$ and $u$ are equivalent if and
+Let $\tEc$ denote the set of $\Sig$-terms occurring in $\Ec$.
+At the end of the first phase, $\Ec$ induces an equivalence
+relation over $\tEc$ such that two terms $t$ and $u$ are equivalent if and
 only if $t \teq u \in \Ec$.
 Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
-denote the equivalence class in $\Ec$ that contains $t$.
+denote the equivalence class of $t$ in $\Ec$.
 
 \ourparagraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
@@ -1108,7 +1108,7 @@ Formally, $\mu$-\emph{terms} are defined recursively as being either a variable 
 or an applied constructor
 $\MU x.\: \const{C}( \vec t\, )$ for some $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ of the expected types.
-The variable~$x$ need not occur freely in the $\mu$-binder's body, in which case
+The variable~$x$ need not occur free in the $\mu$-binder's body, in which case
 the binder can be omitted.
 
 $\FV( t )$ denotes the set of free variables occurring in the $\mu$-term~$t$.
@@ -1123,7 +1123,7 @@ but
 $\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
 \not\aequiv \MU y.\; \const{D}( y, x )$\end{rep}.
 Two $\mu$-terms can denote the same value despite being $\alpha$-disequivalent---e.g.,
-$\MU x.\; \const{C}( x ) \not\aequiv \MU y.\; \const{C}( \const{C}( y ) )$.
+$\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 %In the \rn{Acyclic} rule,
 
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
@@ -1496,7 +1496,7 @@ $u$ is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\expand{t}{ t_k } \aequiv \expand{t}{ u_k }$ for all $k$. % \in [n]
 The term $t$ is \emph{normal} if it does not contain a self-similar subterm
 and all of its proper subterms are also normal.
-For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is abnormal
+For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is not normal
 because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
 Their arguments have the same expansion with respect to~$t$:
 $\expand{t}{\MU y.\; \const{C}( y )} =
