@@ -383,7 +383,7 @@ For example, the type
 
 \noindent
 of infinite sequences or streams over an element type $\tau$ is
-allowed\begin{conf}, with no base case\end{conf}\begin{rep}; the
+allowed\begin{conf}, even though it has no base case\end{conf}\begin{rep}; the
 corresponding datatype would be rejected as non-well-founded
 \cite{blanchette-et-al-2015-esop}\end{rep}.
 %
@@ -579,7 +579,8 @@ $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Dat
 \emph{ordinary types}. The function symbols are partitioned into $\Funcs = \Ctr
 \mathrel{\uplus} \Sel$, where $\Ctr$ are the \emph{constructors} and $\Sel$ are the
 \emph{selectors}. There is no need to consider further function symbols
-because they can be abstracted away as variables when combining theories.
+because they can be abstracted away as variables when combining theories
+(Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
 %Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
 %examples.
 
@@ -810,8 +811,8 @@ witnesses $R_i$ that are required to be bisimulations:
 where $x \sim y$ denotes either $R_{\iPrime}[x, y]$ if there exists some
 $\iPrime$ such that the formula is type-correct or $x \teq y$ otherwise.
 \end{rep}%
-This axiom schema guarantees that two values that yield the same
-observations must be equal, where the observations are made by using the
+This schema encodes a form of extensionality:\ Two values that yield the same
+observations must be equal, where the observations are made through
 selectors and discriminators.
 %
 \begin{rep}\par\end{rep}
@@ -841,7 +842,8 @@ exists an interpretation in $\JJJJ$ that satisfies it.
 
 For the ground theory, induction is equivalent to the acyclicity
 axiom schema, which states that constructor terms cannot be equal to
-any of their proper subterms \cite{barrett-et-al-2007}. Dually, coinduction
+any of their proper subterms. %\cite{barrett-et-al-2007}.
+Dually, coinduction
 is equivalent to the uniqueness axiom schema, which asserts that codatatype
 values are fully characterized by their possibly infinite expansion.
 
