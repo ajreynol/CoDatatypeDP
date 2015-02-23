@@ -2262,13 +2262,14 @@ the acyclicity rule for datatypes exploits $\mu$-terms to detect cycles.
 The empirical results on Isabelle benchmarks
 confirm that CVC4's new capabilities improve the state of the art.
 
-This work is part of a program that aims at enriching automatic provers
+This work is part of a wider program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, it would be useful to implement
 proof reconstruction for (co)data\-type inferences in Isabelle.
 CVC4's finite model finding capabilities \cite{reynolds-et-al-2013} could also
-be interfaced for generating counterexamples in proof assistants, as an
-alternative to Nitpick; in this context, the acyclicity and uniqueness rules are
+be interfaced for generating counterexamples in proof assistants,
+as an alternative to Nitpick;
+in this context, the acyclicity and uniqueness rules are
 crucial to exclude spurious countermodels. Finally, it might be worthwhile to
 extend SMT solvers with dedicated support for (co)recursive functions.
 
