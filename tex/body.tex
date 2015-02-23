@@ -494,9 +494,8 @@ Datatypes are supported by the higher-order model finder Refute
 \cite{weber-2008}. Its successor, Nitpick \cite{blanchette-nipkow-2010}, can
 also generate models involving cyclic codatatype values. The $\mu$-notation is
 inspired by the $\mu$-calculus
-%\begin{conf}\cite{kozen-1983}.\end{conf}%
-%\begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}.\end{rep}%
-\cite[etc.]{kozen-1983,endrullis-et-al-2011}.
+\begin{conf}\cite{kozen-1983}.\end{conf}
+\begin{rep}\cite[etc.]{kozen-1983,endrullis-et-al-2011}.\end{rep}
 
 %  * Ro\c{s}u --- equality of streams is...
 %     http://dl.acm.org/citation.cfm?doid=1159803.1159827
@@ -628,7 +627,8 @@ Schematically:
 \!(\keyw{co})\keyw{datatype}\;\,
   \delta_1 & {}=\, \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m_1\!}(\ldots)} \\[-.5\jot]
    \smash{\vdots\,\,\,} \\[-1.5\jot]
-  \keyw{and}\; \,\delta_{\elllx} & =\, \smash{\const{C}_{\elll 1\!}(\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \ldots, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}})} \mid \cdots \mid \smash{\const{C}_{\elll m_{\elllx}\!}(\ldots)}
+  \keyw{and}\; \,\delta_{\elllx} & =\, \smash{\const{C}_{\elll 1\!}(%\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \ldots, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}}
+  \ldots)} \mid \cdots \mid \smash{\const{C}_{\elll m_{\elllx}\!}(\ldots)}
 \end{aligned}
 \]
 %
@@ -933,7 +933,7 @@ that the type has at most one value.
 Given a fixed signature~$\Sig$,
 the decision procedure for the ground theory of (co)datatypes %$\thD$
 determines the
-$\thD$-satisfiability of finite sets $\Ec$ of constraints:\ equalities
+$\thD$-satisfiability of finite sets $\Ec$ of literals:\ equalities
 and disequalities between ground $\Sig$-terms. The
 procedure is formulated as a tableau-like calculus.
 % whose derivation rules are applied until saturation or contradiction.
@@ -949,13 +949,13 @@ $\Nondata$ having finite cardinality~$n$
 can be replaced by a %n enumeration
 datatype with $n$~nullary constructors
 \cite{barrett-et-al-2007}.
-As for uninterpreted types, since the constraints in $\Ec$
+As for uninterpreted types, since the literals in $\Ec$
 are ground, they cannot entail an upper
 bound on the cardinality of any such type, so it is safe to consider these types infinite.
 
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
-%are simplified to $t_k$. All constraints added to $\Ec$ are also implicitly
+%are simplified to $t_k$. All literals added to $\Ec$ are also implicitly
 %normalized in this manner.
 
 {\looseness=-1
@@ -998,7 +998,7 @@ are saturated.
 
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
 %are simplified to $t_i$, and moreover assume that all %additional
-%constraints added to $\Ec$ are normalized in this manner.
+%literals added to $\Ec$ are normalized in this manner.
 %We present the calculus in three steps.
 %In the first step, we compute the bidirectional closure of $\Ec$;
 %in the second step, we make inferences based on acyclicity and uniqueness;
@@ -1599,7 +1599,7 @@ $\expand{\interp{\J}{t}}{u_k}$.
 Not all normal interpretations are models of codatatypes, because
 models must contain all possible infinite terms, not only cyclic ones. However,
 acyclic infinite values are uninteresting to us, and by monotonicity of ground
-constraints it is trivial to extend any normal interpretation with extra
+literals it is trivial to extend any normal interpretation with extra
 domain elements to obtain a genuine model if desired. %Hence, we focus on normal interpretations.
 
 When constructing a model $\J$ of $\Ec$,
@@ -1663,7 +1663,7 @@ variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
 the range of $\ValC$ at each step.
 
 %The last precondition is admittedly rather technical.
-To ensure disequality constraints are satisfied by an interpretation based on $\ValC$,
+To ensure disequality literals are satisfied by an interpretation based on $\ValC$,
 it suffices that $\ValC$ is injective modulo $\alpha$-equivalence.
 This invariant holds initially, and
 the last precondition in the above rule ensures that it is maintained.
@@ -1675,7 +1675,7 @@ that, when assigned to ${\Varec{x}}$, will cause values in the range of $\ValC$ 
 %injectivity afterward, repeating until a suitable value is found.
 For infinite codatatypes, it is always possible to find fresh values $v$
 because $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is a finite set.
-%Injectivity is important to satisfy disequality constraints.
+%Injectivity is important to satisfy disequality literals.
 %For infinite codatatypes, it is always possible to find suitable values $v$.
 %For example,
 %if the longest cycle in $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is of length $n$, a fresh value
@@ -2000,7 +2000,7 @@ some of the optimizations.
 %\ourparagraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
 The decision procedure is implemented as a \relax{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
-constraints for its theory.
+literals for its theory.
 Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a set of
 input clauses $F$ in conjunctive normal form, the \XXXL($T$) procedure
 incrementally builds partial assignments of
@@ -2013,7 +2013,7 @@ partial assignment as a set $M$ of true literals.
 By a variant of the Nelson--Oppen method \cite{jovanovic2011sharing,nelson-oppen-1979},
 each $T_i$-solver %for $i = 1, \ldots, l$  n?
 takes as input the union $M_i$
-of (1)~the purified form of $T_i$-constraints occurring in $M$, where fresh
+of (1)~the purified form of $T_i$-literals occurring in $M$, where fresh
 variables replace terms containing symbols not belonging to~$T_i$;
 (2)~additional (dis)equalities between variables of types not belonging to
 $T_i$. Each $T_i$-solver
@@ -2061,9 +2061,9 @@ the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
 and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
 
 %\ourparagraph{Extension to Quantified Formulas.}
-While the decision procedure is restricted to ground constraints,
+While the decision procedure is restricted to ground literals,
 in practice we often want to solve problems that feature universal axioms and existential conjectures,
-where checking satisfiability requires reasoning about such ground constraints in the presence of universally quantified formulas.
+where checking satisfiability requires reasoning about such ground literals in the presence of universally quantified formulas.
 Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
 These methods extend naturally to %quantified
 formulas involving datatypes and codatatypes.
@@ -2106,8 +2106,8 @@ If $\const s^k_{\negvthinspace j}( t ) \in \tEc$ and $t =
 $\smash{\const s^k_{\negvthinspace j}( t ) \teq u_k}$ to $\Ec$, whereas the presented calculus
 would apply \rn{Split} and \rn{Inject} before adding this equality.
 
-To reduce the number of unique constraints considered by the calculus, we
-compute a normal form for constraints as a preprocessing step. In particular, we
+To reduce the number of unique literals considered by the calculus, we
+compute a normal form for literals as a preprocessing step. In particular, we
 replace $u \teq t$ by $t \teq u$ if $t$ is less than $u$ based on a term
 ordering, replace $\smash{\const{C}_{\negvthinspace j}( \vec t \,) \teq
 \const{C}_{\negvthinspace\jPrime}( \vec u )}$ with $\bot$ when $j \neq \jPrime$,
