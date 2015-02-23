@@ -745,14 +745,14 @@ $\jPrime$, and $k$ within bounds\end{rep}:
 \text{Distinctness:}\quad
   & %\forall \bar x, \bar y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \quad\text{if $j \not= \jPrime$}}
-  \\[-1\jot]
+  \\[-0.5\jot]
 \text{Injectivity:}\quad
   & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(y_1,\ldots,y_{n_{i\negvthinspace j}}) \longrightarrow x_k \teq y_k}
-  \\[-1\jot]
+  \\[-0.5\jot]
 \text{Exhaustiveness:}\quad
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
-  \\[-1\jot]
+  \\[-0.5\jot]
 \text{Selection:}\quad
   & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) \teq x_k}
 \end{aligned}
@@ -889,7 +889,7 @@ crucial to detect these. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
 above is altered to make \ty{unit} an uninterpreted type, \ty{b} and \ty{c} will be
 singletons precisely when \ty{unit} is interpreted as a singleton.
-Fortunately, \begin{rep}given cardinalities for the uninterpreted types, \end{rep}%
+Fortunately, \begin{rep}given cardinalities for the ordinary types, \end{rep}%
 it is easy to characterize this degenerate case.
 
 }
@@ -966,7 +966,7 @@ Without quantifiers, the constraints $\Ec$ cannot entail an upper
 bound on the cardinality of any uninterpreted type, so it is safe to consider these types
 infinite. As for ordinary types interpreted finitely by other theories (e.g.,
 bit vectors), each interpreted type having finite cardinality~$n$
-can be replaced by a %n enumeration
+can be viewed as a %n enumeration
 datatype with $n$~nullary constructors
 \cite{barrett-et-al-2007}.
 
@@ -989,12 +989,7 @@ An application of a rule is \emph{redundant} if one of its non-$\bot$
 conclusions leaves $\Ec$ unchanged.
 A \emph{derivation tree} is a %finite
 tree whose nodes are finite sets of
-equalities, such that child nodes are obtained by a nonredundant application of~a%
-\begin{conf}
-\par
-\pagebreak %% TYPESETTING: crude hack
-\noindent
-\end{conf}\begin{rep} \end{rep}%
+equalities, such that child nodes are obtained by a nonredundant application of a
 derivation rule to the parent. A derivation tree is \emph{closed} if all of
 its leaf nodes are $\bot$. A node is \emph{saturated} if no nonredundant
 instance of a rule can be applied to it.
@@ -2077,7 +2072,7 @@ the procedure considers the set $\SSS$ of all codatatype equivalence classes. It
 \begin{conf}\goodbreak\noindent\end{conf}%
 simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
 while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
-and the equivalence of their arguments of uninterpreted types.
+and the equivalence of their arguments of ordinary types.
 It then partitions each set %in this partition %in the same manner
 recursively.
 If %after doing so,
@@ -2107,7 +2102,8 @@ impact the correctness of the procedure in this setting,
 since %by assumption
 the solver is already incomplete in the presence of quantified formulas.
 Nonetheless, two techniques help increase the precision of the solver.
-First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of uninterpreted types.
+First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
+ordinary types.
 Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
 For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
 has cardinality one precisely when $\ty{u}$ has cardinality one.
