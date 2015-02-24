@@ -2183,15 +2183,19 @@ experiments. The experimental data are publicly available.%
 
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
+{\looseness=-1
 For each goal in each theory, Sledgehammer was invoked to select up to
 256~lemmas, which were monomorphized and translated to SMT-LIB~2
 along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
-given to the development version of CVC4 and to Z3 4.3.2, each running for up to 60
-seconds on the StarExec cluster \cite{stump-et-al-2014-starexec}.
-%TODO: Keep or not? Problems not involving (co)datatypes were filtered out.
+given to the development version of CVC4 and to Z3 4.3.2 for comparison, each
+running for up to 60 seconds on the StarExec cluster
+\cite{stump-et-al-2014-starexec}.
+%Problems not involving (co)datatypes were left out.
 Due to the lack of machinery for reconstructing inferences about (co)datatypes
-in Isabelle, the solvers are trusted as oracles in these experiments. Z3
-is included for comparison.
+in Isabelle, the solvers are trusted as oracles. % in these experiments.
+%Z3 is included for comparison.
+
+}
 
 The development version of CVC4 was run on each problem several times, with the
 support for datatypes and codatatypes either enabled or disabled. The
