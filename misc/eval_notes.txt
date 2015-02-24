@@ -1,13 +1,11 @@
 vi ~/isabelle/src/HOL/Mirabelle/Mirabelle.thy
 # ADD: declare [[cvc4_extensions]]
 
-/Users/blanchette/isabelle/src/HOL/SMT.thy:declare [[cvc4_extensions]]
-
 export `isabelle getenv CVC4_SOLVER`
 mv $CVC4_SOLVER{,.xxx}
 
-mkdir /tmp/smt_codata_bench_v8
-cd /tmp/smt_codata_bench_v8
+mkdir /tmp/smt_codata_bench_v9
+cd /tmp/smt_codata_bench_v9
 
 mkdir -p nada/distro/koenig
 mkdir -p nada/distro/stream_processor
@@ -105,38 +103,38 @@ mkdir -p both/gandl/bird_bnf
 
 #Distro:
 
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/distro/koenig/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Koenig.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/distro/stream_processor/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Stream_Processor.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/distro/gram_lang/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Gram_Lang.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/distro/parallel/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Parallel.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/distro/process/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Process.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/distro/stream/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Library/Stream.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/distro/rbt_impl/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Library/RBT_Impl.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/distro/koenig/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Koenig.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/distro/stream_processor/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Stream_Processor.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/distro/gram_lang/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Gram_Lang.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/distro/parallel/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Derivation_Trees/Parallel.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/distro/process/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Datatype_Examples/Process.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/distro/stream/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Library/Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/distro/rbt_impl/,fact_filter=mepo,max_facts=256]" ~/isabelle/src/HOL/Library/RBT_Impl.thy
 
 #AFP:
 
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/coinductive_list_prefix/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List_Prefix.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/coinductive_list/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/coinductive_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_Stream.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/hamming_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Hamming_Stream.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/koenigslemma/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Koenigslemma.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/tllist/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/TLList.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/lmirror/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/LMirror.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/llist2/,fact_filter=mepo,max_facts=256]" $AFP/Lazy-Lists-II/LList2.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/abstract_completeness/,fact_filter=mepo,max_facts=256]" $AFP/Abstract_Completeness/Abstract_Completeness.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/huffman/,fact_filter=mepo,max_facts=256]" $AFP/Huffman/Huffman.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/bindag/,fact_filter=mepo,max_facts=256]" $AFP/BDD/BinDag.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/splay_tree_analysis/,fact_filter=mepo,max_facts=256]" $AFP/Amortized_Complexity/Splay_Tree_Analysis.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/afp/sorted_list_operations/,fact_filter=mepo,max_facts=256]" $AFP/Collections/Lib/Sorted_List_Operations.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/coinductive_list_prefix/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List_Prefix.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/coinductive_list/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_List.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/coinductive_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Coinductive_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/hamming_stream/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Hamming_Stream.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/koenigslemma/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/Koenigslemma.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/tllist/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/TLList.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/lmirror/,fact_filter=mepo,max_facts=256]" $AFP/Coinductive/Examples/LMirror.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/llist2/,fact_filter=mepo,max_facts=256]" $AFP/Lazy-Lists-II/LList2.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/abstract_completeness/,fact_filter=mepo,max_facts=256]" $AFP/Abstract_Completeness/Abstract_Completeness.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/huffman/,fact_filter=mepo,max_facts=256]" $AFP/Huffman/Huffman.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/bindag/,fact_filter=mepo,max_facts=256]" $AFP/BDD/BinDag.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/splay_tree_analysis/,fact_filter=mepo,max_facts=256]" $AFP/Amortized_Complexity/Splay_Tree_Analysis.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/afp/sorted_list_operations/,fact_filter=mepo,max_facts=256]" $AFP/Collections/Lib/Sorted_List_Operations.thy
 
 #Lochbihler & Gammie:
 
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/gandl/stern_brocot_bnf/,fact_filter=mepo,max_facts=256]" ~/hgs/cade2015-codp/thy/gandl/SternBrocotBNF.thy
-isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slicing=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v8/both/gandl/bird_bnf/,fact_filter=mepo,max_facts=256]" ~/hgs/cade2015-codp/thy/gandl/BirdBNF.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/gandl/stern_brocot_bnf/,fact_filter=mepo,max_facts=256]" ~/hgs/cade2015-codp/thy/gandl/SternBrocotBNF.thy
+isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimize=false,preplay=false,keep=/tmp/smt_codata_bench_v9/both/gandl/bird_bnf/,fact_filter=mepo,max_facts=256]" ~/hgs/cade2015-codp/thy/gandl/BirdBNF.thy
 
 ###
 
-cd /tmp/smt_codata_bench_v8
+cd /tmp/smt_codata_bench_v9
 find . -name '*.smt_out' | xargs rm
 grep -r -L 'declare-.*datatypes' . | xargs rm
 
@@ -145,9 +143,9 @@ grep -r -L 'declare-.*datatypes' . | xargs rm
 ~/hgs/cade2015-codp/tools/undata both/gandl/*/*.smt_in
 
 cd ..
-find smt_codata_bench_v8/ -name '*.smt_out' | xargs rm
+find smt_codata_bench_v9/ -name '*.smt_out' | xargs rm
 
-tar zcvf smt_codata_bench_v8.tgz smt_codata_bench_v8/
-scp smt_codata_bench_v8.tgz mb:.html-data/
+tar zcvf smt_codata_bench_v9.tgz smt_codata_bench_v9/
+scp smt_codata_bench_v9.tgz mb:.html-data/
 
 mv $CVC4_SOLVER{.xxx,}
