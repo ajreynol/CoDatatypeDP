@@ -434,7 +434,7 @@ integrated in the development version of the solver and is expected to be part
 of the CVC4~1.5 release.
 %
 An evaluation on %hand-crafted examples and on
-problems generated from Isabelle theories using the Sledgehammer tool \cite{paulson-blanchette-2010}
+problems generated from Isabelle theories using the Sledgehammer tool \cite{blanchette-et-al-2013-smt}
 demonstrates the usefulness of the approach (Section~\ref{sec:experimental-results}).
 
 %  * useful both for proving and for model finding
@@ -2013,8 +2013,9 @@ rightly call it a decision procedure.
 
 The decision procedure was presented at a high level of abstraction, omitting
 quite a few details. This section describes the main aspects of the
-implementation within the SMT solver CVC4:\ the integration into CDCL($T$), the
-extension to quantified formulas, and some of the optimizations.
+implementation within the SMT solver CVC4:\ the integration into \XXXL($T$)
+\cite{ganzinger-et-al-2004}, the extension to quantified formulas, and some of
+the optimizations.
 
 %%% @ANDY: I'm trying without \ourparagraph's, to save space but also to make the
 %%% section look more like a whole than a random list of stuff. Revert if you
@@ -2297,11 +2298,11 @@ with high-level features and at reducing the gap between automatic and
 interactive theorem proving. As future work, it would be useful to implement
 proof reconstruction for (co)data\-type inferences in Isabelle.
 CVC4's finite model finding capabilities \cite{reynolds-et-al-2013} could also
-be interfaced for generating counterexamples in proof assistants,
-as an alternative to Nitpick;
+be interfaced for generating counterexamples in proof assistants;
+%as an alternative to Nitpick;
 in this context, the acyclicity and uniqueness rules are
 crucial to exclude spurious countermodels. Finally, it might be worthwhile to
-extend SMT solvers with dedicated support for (co)recursive functions.
+extend SMT solvers with dedicated support for (co)recursion.
 
 %Finally, it might be possible to go
 %further in terms of supporting nested and mixed (co)recursion and quantified
@@ -2310,10 +2311,12 @@ extend SMT solvers with dedicated support for (co)recursive functions.
 {\footnotesize
 \def\ackname{Acknowledgment}
 \ourparagraph{\footnotesize\ackname.}
+\looseness=-1
 We owe a great debt to the development team of CVC4,
 including Clark Barrett and Cesare Tinelli,
 and in particular Morgan Deters,
-who jointly with the first author developed the initial version
+who jointly with the first author
+developed the initial version
 of the theory solver for datatypes in CVC4.
 %
 Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
@@ -2321,17 +2324,17 @@ Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
 codatatypes or at least benevolently tolerated it, both of which we are thankful
 for.
 %
-Peter Gammie and Andreas Lochbihler shared their private
-theories with us so we could include them in the benchmarks.
+Peter Gammie and Andreas Lochbihler provided useful benchmarks.
 Andrei Popescu helped clarify our thoughts regarding codatatypes and indicated
 related work. Dmitriy Traytel took part in discussions about degenerate
 codatatypes.
 %
 Pascal Fontaine, Andreas Lochbihler, Andrei Popescu, Christophe Ringeissen, Mark
-Summerfield, and Dmitriy Traytel suggested many textual improvements. The second
-author's research was partially supported by the Deutsche
-Forschungs\-gemein\-schaft (DFG) project \relax{Hardening the Hammer} (grant
-Ni\,491\slash 14-1).
+Summerfield, and Dmitriy Traytel suggested many textual improvements.
+The second author's
+research was partially supported by the Deutsche
+Forschungs\-gemein\-schaft %(DFG)
+project \relax{Hardening the Hammer} (grant Ni\,491\slash 14-1).
 
 }
 
