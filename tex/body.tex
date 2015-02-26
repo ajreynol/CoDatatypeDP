@@ -2169,12 +2169,12 @@ Isabelle formalizations using Sledgehammer.
 %There are not yet many benchmarks available, since codatatypes are a
 %recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.}
 We
-included all the theory files from the Isabelle distribution (Distro, \NOK{1123}~goals)
-and the \emph{Archive of Formal Proofs} (AFP, \OK{2995}~goals) \cite{klein-et-al-afp}
+included all the theory files from the Isabelle distribution (Distro, 879~goals)
+and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We
 added two unpublished theories about Bird and Stern--Brocot trees
 by Peter Gammie and Andreas Lochbihler (\gandl,
-\OK{316}~goals). To exercise the datatype
+317~goals). To exercise the datatype
 support, the benchmarks were complemented by theories
 about lists and trees. The theories were selected before conducting the
 experiments. The experimental data are publicly available.%
@@ -2188,7 +2188,7 @@ For each goal in each theory, Sledgehammer was invoked to select up to
 256~lemmas, which were monomorphized and translated to SMT-LIB~2
 along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
 given to the development version of CVC4 and to Z3 4.3.2 for comparison, each
-running for up to \OK{60}~s on the StarExec cluster
+running for up to 60~s on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
 Problems not involving any (co)datatypes were left out.
 Due to the lack of machinery for reconstructing inferences about (co)datatypes
@@ -2228,21 +2228,21 @@ reasoning.
   & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
 \MIDRULE
 No (co)datatypes
-  & 584 & 522 & 1476 & 1261 & 92 & 87 & 2152 & 1870 \\%[\jot]
+  & 221 & 209 & 775 & 777 & 52 & 51 & 1048 & 1037 \\%[\jot]
 %Datatype simplification only
 %  &  \\
 Datatypes without \rn{Acyclic}
-  & 582 & -- & \bfseries 1481 & -- & 92 & -- & 2155 & -- \\
+  & 227 & -- & 780 & -- & 52 & -- & 1059 & -- \\
 Full datatypes
-  & 582 & 522 & \bfseries 1481 & 1256 & 92 & 85 & 2155 & 1863 \\%[\jot]
+  & 227 & 213 & 786 & 791 & 52 & 51 & 1065 & 1055 \\%[\jot]
 %Codatatype simplification only
 %  &  \\
 Codatatypes without \rn{Unique}\!\!
-  & 583 & -- & 1474 & -- & 89 & -- & 2146 & -- \\
+  & 222 & -- & 804 & -- & 56 & -- & 1082 & -- \\
 Full codatatypes
-  & \bfseries 586 & -- & 1475 & -- & \bfseries 99 & -- & 2160 & -- \\%[\jot]
+  & 223 & -- & 804 & -- & \bfseries 59 & -- & 1086 & -- \\%[\jot]
 Full (co)datatypes
-  & 584 & -- & 1480 & -- & \bfseries 99 & -- & \bfseries 2163 & -- %\\[\jot]
+  & \bfseries 229 & -- & \bfseries 815 & -- & \bfseries 59 & -- & \bfseries 1103 & -- %\\[\jot]
 \end{tabular}\end{center}
 \caption{\,Number of solved goals for the three benchmark suites}
 \label{tab:bench}
