@@ -137,15 +137,14 @@ isabelle mirabelle "sledgehammer[prover=cvc4,prover_timeout=1,slice=false,minimi
 cd /tmp/smt_codata_bench_v9
 find . -name '*.smt_out' | xargs rm
 grep -r -L 'declare-.*datatypes' . | xargs rm
+find . -name '*.smt_in' | nl
 
 ~/hgs/cade2015-codp/tools/undata both/distro/*/*.smt_in
 ~/hgs/cade2015-codp/tools/undata both/afp/*/*.smt_in
 ~/hgs/cade2015-codp/tools/undata both/gandl/*/*.smt_in
 
 cd ..
-find smt_codata_bench_v9/ -name '*.smt_out' | xargs rm
-
 tar zcvf smt_codata_bench_v9.tgz smt_codata_bench_v9/
-scp smt_codata_bench_v9.tgz mb:.html-data/
+scp smt_codata_bench_v9.tgz ll:/local/web-homepages/jablanch/stuff/
 
 mv $CVC4_SOLVER{.xxx,}

@@ -1,0 +1,77 @@
+diff -r dab298aabf6b misc/eval_notes.txt
+--- a/misc/eval_notes.txt	Tue Feb 24 18:24:51 2015 +0100
++++ b/misc/eval_notes.txt	Thu Feb 26 13:58:32 2015 +0100
+@@ -137,15 +137,14 @@
+ cd /tmp/smt_codata_bench_v9
+ find . -name '*.smt_out' | xargs rm
+ grep -r -L 'declare-.*datatypes' . | xargs rm
++find . -name '*.smt_in' | nl
+ 
+ ~/hgs/cade2015-codp/tools/undata both/distro/*/*.smt_in
+ ~/hgs/cade2015-codp/tools/undata both/afp/*/*.smt_in
+ ~/hgs/cade2015-codp/tools/undata both/gandl/*/*.smt_in
+ 
+ cd ..
+-find smt_codata_bench_v9/ -name '*.smt_out' | xargs rm
+-
+ tar zcvf smt_codata_bench_v9.tgz smt_codata_bench_v9/
+-scp smt_codata_bench_v9.tgz mb:.html-data/
++scp smt_codata_bench_v9.tgz ll:/local/web-homepages/jablanch/stuff/
+ 
+ mv $CVC4_SOLVER{.xxx,}
+diff -r dab298aabf6b tex/body.tex
+--- a/tex/body.tex	Tue Feb 24 18:24:51 2015 +0100
++++ b/tex/body.tex	Thu Feb 26 13:58:32 2015 +0100
+@@ -2169,12 +2169,12 @@
+ %There are not yet many benchmarks available, since codatatypes are a
+ %recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.}
+ We
+-included all the theory files from the Isabelle distribution (Distro, 879~goals)
+-and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
++included all the theory files from the Isabelle distribution (Distro, \NOK{1123}~goals)
++and the \emph{Archive of Formal Proofs} (AFP, \OK{2995}~goals) \cite{klein-et-al-afp}
+ that define codatatypes falling within the supported fragment. We
+ added two unpublished theories about Bird and Stern--Brocot trees
+ by Peter Gammie and Andreas Lochbihler (\gandl,
+-317~goals). To exercise the datatype
++\OK{316}~goals). To exercise the datatype
+ support, the benchmarks were complemented by theories
+ about lists and trees. The theories were selected before conducting the
+ experiments. The experimental data are publicly available.%
+@@ -2188,7 +2188,7 @@
+ 256~lemmas, which were monomorphized and translated to SMT-LIB~2
+ along with the goal \cite{blanchette-et-al-2013-smt}. The resulting problem was
+ given to the development version of CVC4 and to Z3 4.3.2 for comparison, each
+-running for up to 60~s on the StarExec cluster
++running for up to \OK{60}~s on the StarExec cluster
+ \cite{stump-et-al-2014-starexec}.
+ Problems not involving any (co)datatypes were left out.
+ Due to the lack of machinery for reconstructing inferences about (co)datatypes
+@@ -2228,21 +2228,21 @@
+   & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
+ \MIDRULE
+ No (co)datatypes
+-  & 221 & 209 & 775 & 777 & 52 & 51 & 1048 & 1037 \\%[\jot]
++  & 584 & 522 & 1476 & 1261 & 92 & 87 & 2152 & 1870 \\%[\jot]
+ %Datatype simplification only
+ %  &  \\
+ Datatypes without \rn{Acyclic}
+-  & 227 & -- & 780 & -- & 52 & -- & 1059 & -- \\
++  & 582 & -- & \bfseries 1481 & -- & 92 & -- & 2155 & -- \\
+ Full datatypes
+-  & 227 & 213 & 786 & 791 & 52 & 51 & 1065 & 1055 \\%[\jot]
++  & 582 & 522 & \bfseries 1481 & 1256 & 92 & 85 & 2155 & 1863 \\%[\jot]
+ %Codatatype simplification only
+ %  &  \\
+ Codatatypes without \rn{Unique}\!\!
+-  & 222 & -- & 804 & -- & 56 & -- & 1082 & -- \\
++  & 583 & -- & 1474 & -- & 89 & -- & 2146 & -- \\
+ Full codatatypes
+-  & 223 & -- & 804 & -- & \bfseries 59 & -- & 1086 & -- \\%[\jot]
++  & \bfseries 586 & -- & 1475 & -- & \bfseries 99 & -- & 2160 & -- \\%[\jot]
+ Full (co)datatypes
+-  & \bfseries 229 & -- & \bfseries 815 & -- & \bfseries 59 & -- & \bfseries 1103 & -- %\\[\jot]
++  & 584 & -- & 1480 & -- & \bfseries 99 & -- & \bfseries 2163 & -- %\\[\jot]
+ \end{tabular}\end{center}
+ \caption{\,Number of solved goals for the three benchmark suites}
+ \label{tab:bench}
