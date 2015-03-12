@@ -271,8 +271,8 @@ Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
 %processes.
 We present a decision procedure that combines reasoning about
 datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
-uniqueness rule that identifies observationally equal codatatype values, also in the presence of
-cyclic data. The procedure decides universal
+uniqueness rule that identifies observationally equal codatatype values,
+including cyclic values. The procedure decides universal
 problems and is composable via the Nelson--Oppen method. It has been
 implemented in CVC4, a state-of-the-art SMT solver. An evaluation based on
 problems generated from theories developed with Isabelle demonstrates the
@@ -322,20 +322,26 @@ terms, and only those. As a simple example, the coinductive specification
 %
 \[\keyw{codatatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat})\]
 %
-(using an ML-like syntax) introduces a type that
+%(using an ML-like syntax)
+{\looseness=-1
+introduces a type that
 models the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
 in Peano notation but extended with an
 infinite value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
 The equation $\const{S}(\infty) \teq \infty$ holds as expected,
 because both sides expand to the infinite term
-$\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies the
-value~$\infty$.
-Compared with the conventional inductive definition
+$\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies
+%the value~
+$\infty$.
+Compared with the conventional %inductive
+definition
 \begin{conf}$\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}$\vvthinspace, \end{conf}%
 \begin{rep}\[\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]\end{rep}%
 %with a dedicated constructor for representing infinity, the
 the codatatype avoids
-one case by unifying the finite and infinite nonzero cases.
+one case by unifying the infinite and finite nonzero cases.
+
+}
 
 {\looseness=-1
 Datatypes and codatatypes are an integral part of many proof assistants,
@@ -356,7 +362,7 @@ It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007}, which
 only datatypes.
 %To our knowledge, our procedure is the first of its kind for the theory of
 %codatatypes.
-\begin{conf}
+\begin{conf}%
 Detailed proofs %of completeness
 are included in a %technical
 report
