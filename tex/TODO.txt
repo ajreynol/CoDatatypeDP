@@ -1,0 +1,21 @@
+  * Perhaps the authors could give some details about the impact (if any) of
+    the new procedure on the execution time of the benchmarks that could be
+    solved already without datatypes, or say if there are instances in which
+    using the new procedure fails but the old ones succeeded. I'm referring in
+    particular to a sentence at the end of section 5 that says "the stronger
+    decision procedures *almost completely subsume* the weaker ones in
+    practice". What does this "almost completely" mean exactly?
+
+  * One thing is to improved is that, whereas the theoretical description uses
+    a mapping A to check the applicability of the (probably) two most important
+    rules, in the implementation section a high-level description of how to
+    implement the rules without constructing A is described. I would move that
+    explanation the the theoretical part, explaining why A is necessary (it is
+    necessary for the correctness proofs, I guess) and explaining in more
+    detail which is the relationship between A and what is implemented in
+    practice.
+
+  * It would be nice if the authors made it clearer how the results of this
+    paper follow on from the earlier work they generalize. In particular, I
+    found it unclear how much of the previous procedure was reused or whether
+    it was just used to guide the development of the new calculus.

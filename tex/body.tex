@@ -289,7 +289,7 @@ potential of the procedure.
 \section{Introduction}
 \label{sec:introduction}
 
-Freely generated inductive datatypes are ubiquitous in functional programs and
+Freely generated algebraic datatypes are ubiquitous in functional programs and
 formal specifications. They are especially
 useful to represent finite data structures in computer science applications but
 also arise in formalized mathematics.
@@ -303,8 +303,8 @@ properties that can be exploited in automated reasoners.
 %only allow values of the form $\const{S}(\ldots(\const{S}(\const{Z}))\ldots)$.
 
 To represent infinite objects, % such as $\const{S}(\const{S}(\const{S}(\ldots))$,
-a natural choice is to turn to coinductive datatypes, or \emph{codatatypes},
-the non-well-founded dual of inductive \emph{datatypes.}
+a natural choice is to turn to coalgebraic datatypes, or \emph{codatatypes},
+the non-well-founded dual of algebraic \emph{datatypes.}
 %
 Despite their reputation for being esoteric, codatatypes have a
 role to play in computer science. The verified C compiler CompCert
@@ -318,7 +318,7 @@ infinit\-e constructor terms are also legitimate values for codatatypes
 (Section~\ref{sec:co-datatypes}). Intuitively, the
 values of a codatatype consist of all well-typed finite and infinite ground
 constructor
-terms, and only those. As a simple example, the coinductive specification
+terms, and only those. As a simple example, the coalgebraic specification
 %
 \[\keyw{codatatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat})\]
 %
@@ -333,7 +333,7 @@ because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies
 %the value~
 $\infty$.
-Compared with the conventional %inductive
+Compared with the conventional %algebraic
 definition
 \begin{conf}$\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}$\vvthinspace, \end{conf}%
 \begin{rep}\[\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]\end{rep}%
