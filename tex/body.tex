@@ -498,7 +498,8 @@ but also to the SMT solver
 Z3 \cite{de-moura-bjoerner-2008} \begin{rep}in unpublished work by Leonardo de Moura \end{rep}and \begin{rep}to \end{rep}a SPASS-like %prototypical
 superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
 Closely related are the automatic structural
-induction in both kinds of provers \cite{kersani-peltier-2013,cruanes-201x,wand-weidenbach-201x,reynolds-kuncak-2015},
+% cruanes-201x,wand-weidenbach-201x,  -- both were rejected
+induction in both kinds of provers \cite{kersani-peltier-2013,reynolds-kuncak-2015},
 the (co)datatype and (co)induction support in Dafny \cite{leino-moskal-2014},
 and the (semi-)decision procedures for datatypes
 implemented in Leon \cite{suter-et-al-2011} and RADA \cite{pham-et-al-2013}.
@@ -610,7 +611,8 @@ finally any other function symbols.
 %
 Each (co)datatype specification consists of $\ell$~mutually recursive types that are
 either all datatypes or all codatatypes. \begin{rep}Polymorphic types, nested
-(co)recursion,\end{rep}\begin{conf}Nested (co)recursion\end{conf} and datatype--codatatype mixtures fall outside this fragment%
+(co)recursion,\end{rep}\begin{conf}Nested (co)recursion\end{conf} and datatype--codatatype mixtures
+fall outside this fragment%
 \dotReportFootnote{%
 In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
 should not raise any special difficulties. Nesting datatypes inside datatypes,
@@ -2343,7 +2345,7 @@ Summerfield, and Dmitriy Traytel suggested many textual improvements.
 The second author's
 research was partially supported by the Deutsche
 Forschungs\-gemein\-schaft %(DFG)
-project \relax{Hardening the Hammer} (grant Ni\,491\slash 14-1).
+project \relax{Hardening the Hammer} (grant NI\,491\slash 14-1).
 
 }
 
