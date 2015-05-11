@@ -1054,16 +1054,17 @@ denote the equivalence class of $t$ in $\Ec$.
 
 \ourparagraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
-The premises of the rules that make up the second phase refer to a mapping $\Val$
+%The premises of the rules that make up the second phase refer to
+We describe the rules in this phase in terms of a mapping $\Val$
 that associates with each equivalence class a $\mu$-term as its representative.
-%
+\rem{Not explicitly constructed, add here?}
+
 Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
 or an applied constructor
 $\MU x.\: \const{C}( \vec t\, )$ for some $\const{C} \in \Ctr$ and
 $\mu$-terms $\vec t$ of the expected types.
 The variable~$x$ need not occur free in the $\mu$-binder's body, in which case
 the binder can be omitted.
-
 $\FV( t )$ denotes the set of free variables occurring in the $\mu$-term~$t$.
 A $\mu$-term is \emph{closed} if %and only if --- by convention, "and only if" is not necessary for *definitions* (but add it back if you disagree)
 it contains no free variables. It is \emph{cyclic} if %and only if --- ditto
@@ -1108,7 +1109,7 @@ that $t$ and other members of $t$'s equivalence class can take in models of $\Ec
 When $\tau$ is a datatype, % \in \Data$,
 a cyclic $\mu$-term describes an infeasible class of values.
 
-The mapping $\Val$ is computed as follows.
+The mapping $\Val$ is defined as follows.
 %
 With each equivalence class $\ec{u\typ{\tau}}$, we associate a fresh variable $\Varec{u}\typ{\tau}$
 %of the same type as $u$
@@ -2018,6 +2019,8 @@ we conclude that $\J \models \Ec$.
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
 calculus is sound and complete for the universal theory of (co)datatypes. We can
 rightly call it a decision procedure for that theory.
+We remark that the proof of solution soundness is constructive,
+meaning that it provides a method for constructing a model for a saturated configuration, by means of the mapping $\ValC$.
 
 \section{Implementation as a Theory Solver in CVC4}
 \label{sec:implementation-as-a-theory-solver-in-cvc4}
@@ -2155,12 +2158,16 @@ occurrences of discriminators $\smash{\const{d}_{\negvthinspace j}(
 \const{C}_{\negvthinspace\jPrime}( \vec t \,) )}$ by $\top$ or $\bot$
 based on whether $j = \jPrime$.
 
-An evaluation of the efficiency of the procedure is described by Barrett et
-al.\ \cite{barrett-et-al-2007}. In particular, it is both theoretically and
-empirically beneficial to delay applications of \rn{Split} as long as
-possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
-they require traversing the equivalence classes, which is why they are part of
-phase~2.
+% AJR : this paragraph may have been what confused Reviewer #2. It does suggest that we are copying verbatim what was in CVC3 (which is what Reviewer #2 thought).
+% Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation), 
+% maybe we should just remove this paragraph.
+
+%An evaluation of the efficiency of the procedure is described by Barrett et
+%al.\ \cite{barrett-et-al-2007}. In particular, it is both theoretically and
+%empirically beneficial to delay applications of \rn{Split} as long as
+%possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
+%they require traversing the equivalence classes, which is why they are part of
+%phase~2.
 
 \kern-1pt
 
@@ -2262,6 +2269,8 @@ comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}, although this
 obviously depends on the application. The raw evaluation data also
 suggest that the theoretically stronger decision procedures almost completely
 subsume the weaker ones in practice.
+In particular, we encountered only one benchmark over the entire set of 4170 benchmarks
+that was solved by a configuration of CVC4 and unsolved by a configuration of CVC4 with more features enabled.
 
 Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
