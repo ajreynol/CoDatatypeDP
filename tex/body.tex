@@ -1447,7 +1447,7 @@ because all chains of selectors applied to $t$ are finite.
 Let $\SSSS \AST$ be the union of all sets $\SSSS \AST_t$ where $t \in D$,
 and let $\tcEc$ be the set of subterms of
 %
-$\Ec \mathrel\cup \{ \const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr) \mid t\typ{\delta} \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \Ctr^\delta \}$.
+$\Ec \mathrel\cup \{ \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)} \mid \smash{t\typ{\delta} \in \SSS \mathrel\cup \SSSS \AST{,}~ \const C_{\negvthinspace j} \in \smash{\Ctr^\delta}} \}$.
 %
 In a derivation tree with root node~$\Ec$,
 it can be shown by induction
@@ -2148,7 +2148,7 @@ following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 \begin{rep}We briefly mention the main ones. \end{rep}%
 Discriminators are part of the signature and not abbreviations.
 This requires extending the decision procedure with several
-rules \cite{barrett-et-al-2007},
+rules, % \cite{barrett-et-al-2007},
 which apply uniformly to datatypes and codatatypes.
 This approach often leads to better performance because it introduces terms
 less eagerly to $\tEc$.
@@ -2191,7 +2191,7 @@ phase~2.
 \newcommand\HD[1]{\hbox to2.25em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
 To evaluate the decision procedure, we generated benchmark problems from existing
-Isabelle formalizations using Sledgehammer.
+Isabelle formalizations using Sledgehammer \cite{blanchette-et-al-2013-smt}.
 %There are not yet many benchmarks available, since codatatypes are a
 %recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.}
 We
@@ -2213,8 +2213,8 @@ online.%
 For each goal in each theory, Sledgehammer selected about 16~lemmas,
 %\end{conf}%
 %\begin{rep}a fixed number of lemmas\end{rep},
-which were monomorphized and translated to SMT-LIB~2 along with the goal
-\cite{blanchette-et-al-2013-smt}. The resulting problem was given to the
+which were monomorphized and translated to SMT-LIB~2 along with the goal.
+The resulting problem was given to the
 development version of CVC4 and to Z3 4.3.2 for comparison, each running for
 up to 60~s on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
