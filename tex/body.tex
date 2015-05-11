@@ -358,8 +358,8 @@ unified \hfill decision \hfill procedure \hfill for \hfill universal \hfill prob
 in combination (Section~\ref{sec:the-decision-procedure}).
 The procedure is described abstractly as a %tableau-like
 calculus and is composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
-It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007}, which covers
-only datatypes.
+It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007},
+which covers only datatypes.
 %To our knowledge, our procedure is the first of its kind for the theory of
 %codatatypes.
 \begin{conf}%
@@ -407,7 +407,7 @@ having the same infinite expansion must be equal; from $x
 \teq \const{S}(x)$ and
 $y \teq \const{S}(y)$, it deduces $x \teq y$.
 These two rules are needed to ensure completeness
-(model soundness) on universal problems. %and the absence of spurious models.
+(solution soundness) on universal problems. %and the absence of spurious models.
 They cannot be expressed as finite axiomatizations, so they naturally belong in
 a decision procedure.
 %    * in particular, acyclicity and uniqueness are necessary for some proofs
@@ -493,7 +493,9 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 \begin{rep}\ourparagraph{Related Work.} Barrett\end{rep}%
 \begin{conf}Barrett\end{conf}
 et al.\ \cite{barrett-et-al-2007} provide a good account of
-related work on datatypes as of 2007. Since then, datatypes have been added not only to CVC4
+related work on datatypes as of 2007, in addition to describing their
+implementation in CVC3.
+Since then, datatypes have been added not only to CVC4 (a complete rewrite of CVC3)
 but also to the SMT solver
 Z3 \cite{de-moura-bjoerner-2008} \begin{rep}in unpublished work by Leonardo de Moura \end{rep}and \begin{rep}to \end{rep}a SPASS-like %prototypical
 superposition prover \begin{rep}by Daniel Wand\end{rep} \cite{wand-2014}.
@@ -534,7 +536,7 @@ The $\mu$-notation is inspired by the $\mu$-calculus
 %     * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
 
 \begin{conf}
-\kern-2.9pt %%% TYPESETTING: Crude hack
+\kern-3pt %%% TYPESETTING: Crude hack
 \end{conf}
 
 \ourparagraph{Conventions.}
@@ -567,13 +569,13 @@ parentheses in terms.
 \end{rep}
 The set $\Funcs$ must at least contain
 $\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
-The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols\end{rep};
-other predicates can be represented as functions to $\ty{bool}$\begin{rep},
+The only predicate is equality ($\teq$)\begin{rep} and belongs to the logical symbols;
+other predicates can be represented as functions to $\ty{bool}$,
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$\end{rep}.
 The notation $t\typ{\tau}$ stands for a term $t$ of type~$\tau$.
 \begin{rep}The operator $\bigwedge_{\,i}\, \varphi_i$ abbreviates a conjunction
-$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$. \end{rep}%
-Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
+$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
+Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.\end{rep}
 
 %* although nothing prevents composing the decision procedure with theories
 %  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
@@ -965,7 +967,10 @@ whose variables are interpreted existentially.
 The procedure is formulated as a tableau-like calculus.
 %Following the tradition of refutational theorem proving,
 Proving a universal quantifier-free conjecture is reduced to showing that
-its negation is unsatisfiable.
+its negation is unsatisfiable. The presentation is
+inspired by Barrett et al.\ \cite{barrett-et-al-2007} but
+higher-level, using unoriented equations instead of oriented ones.
+
 % whose derivation rules are applied until saturation or contradiction.
 
 To simplify the presentation, we make a few assumptions about
@@ -2167,7 +2172,7 @@ based on whether $j = \jPrime$.
 % Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation), 
 % maybe we should just remove this paragraph.
 
-As Barrett et al.\ \cite{barrett-et-al-2007} observed for their calculus,
+As Barrett et al.\ \cite{barrett-et-al-2007} observed for their procedure,
 it is both theoretically and
 empirically beneficial to delay applications of \rn{Split} as long as
 possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
