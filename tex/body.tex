@@ -1496,7 +1496,7 @@ which requires custom terminology concerning $\mu$-terms.
 Given a $\mu$-term $t$ with subterm $u$,
 the \emph{expansion of $u$ with respect to $t$} is the $\mu$-term $\expand{t}{u}^\emptyset$,
 abbreviated to
-$\expand{t}{u}$, as returned by the following recursive function:
+$\expand{t}{u}$, as returned by the function
 %where $x \leadsto \MU x.\; \const{C}( \vec u ) \in t$ indicates that $\MU x.\;
 %\const{C}( \vec u )$ is the subterm of $t$ that binds this occurrence of
 %variable $x$:
@@ -1637,6 +1637,8 @@ models must contain all possible infinite terms, not only cyclic ones. However,
 acyclic infinite values are uninteresting to us, and for quantifier-free
 formulas it is trivial to extend any normal interpretation with extra
 domain elements to obtain a genuine model if desired. %Hence, we focus on normal interpretations.
+
+\pagebreak[2]
 
 When constructing a model $\J$ of $\Ec$,
 it remains only to specify how $\J$ interprets wrongly applied selector terms and variables.
@@ -1782,6 +1784,8 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \relax{\begin{cases}
   t & \text{if $t$ is a variable} \\[-\jot]
   x & \text{if $t$ is of the form $\MU {x}.\; u$.}
 \end{cases}}$
+
+\pagebreak[2]
 
 %%% I think it's enough to point this out clearly in the introduction.
 %%% At least, that always worked fine for my other papers. :)
@@ -2191,11 +2195,12 @@ and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We
 added two unpublished theories about Bird and Stern--Brocot trees
 by Peter Gammie and Andreas Lochbihler (\gandl,
-317~goals). To exercise the datatype
-support, the benchmarks were complemented by theories
-about lists and trees. The theories were selected before conducting the
-experiments. The experimental data are publicly available.%
+317~goals). To exercise the datatype support, theories about lists and trees
+were added to the first two benchmark sets. The theories were selected before
+conducting any experiments. The experimental data are available
+online.%
 \footnote{\url{http://lara.epfl.ch/~reynolds/CADE2015-cdt/}}
+
 %http://www21.in.tum.de/~blanchet/codp_data.tgz}}
 
 %  & 879 & 2974\phantom{0} & 317 & 4170
@@ -2283,9 +2288,9 @@ success rate increase of over \OK{5\%}, which is quite significant.
 %obviously depends on the application.
 The raw evaluation data also
 suggest that the theoretically stronger decision procedures almost completely
-subsume the weaker ones in practice.
-In particular, we encountered only one benchmark over the entire set of \OK{4170} benchmarks
-that was solved by a configuration of CVC4 and unsolved by a configuration of CVC4 with more features enabled.
+subsume the weaker ones in practice: We encountered only one goal (out of \OK{4170})
+that was solved by a configuration of CVC4 and unsolved by a configuration of
+CVC4 with more features enabled.
 
 Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
