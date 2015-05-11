@@ -2019,8 +2019,9 @@ we conclude that $\J \models \Ec$.
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
 calculus is sound and complete for the universal theory of (co)datatypes. We can
 rightly call it a decision procedure for that theory.
-We remark that the proof of solution soundness is constructive,
-meaning that it provides a method for constructing a model for a saturated configuration, by means of the mapping $\ValC$.
+The proof of solution soundness is constructive in that it provides a
+method for constructing a model for a saturated configuration, by means of the
+mapping $\ValC$.
 
 \section{Implementation as a Theory Solver in CVC4}
 \label{sec:implementation-as-a-theory-solver-in-cvc4}
@@ -2162,12 +2163,12 @@ based on whether $j = \jPrime$.
 % Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation), 
 % maybe we should just remove this paragraph.
 
-%An evaluation of the efficiency of the procedure is described by Barrett et
-%al.\ \cite{barrett-et-al-2007}. In particular, it is both theoretically and
-%empirically beneficial to delay applications of \rn{Split} as long as
-%possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
-%they require traversing the equivalence classes, which is why they are part of
-%phase~2.
+As Barrett et al.\ \cite{barrett-et-al-2007} observed for their calculus,
+it is both theoretically and
+empirically beneficial to delay applications of \rn{Split} as long as
+possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
+they require traversing the equivalence classes, which is why they are part of
+phase~2.
 
 \kern-1pt
 
