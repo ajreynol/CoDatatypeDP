@@ -1,0 +1,15 @@
+Reviewer 1:
+
+Regarding the evaluation, analysis of raw data http://lara.epfl.ch/~reynolds/CADE2015-cdt/ shows that the overhead of using the more expensive rules (Acyclic and Unique) is negligible for this set. The 1059 benchmarks solved by both CVC4 (full datatypes) and CVC4 (datatypes without Acyclic) are solved collectively in 48.7 and 48.4 seconds respectively, and the 1082 benchmarks solved by both CVC4 (full codatatypes) and CVC4 (codatatypes without Unique) are solved in 54.0 and 54.1 seconds respectively. Notice that these rules may increase runtime due to the time spent on computing when they are applicable, but may also decrease runtime due to the solver's ability to find a smaller proof. We will comment on this point in the evaluation.
+
+The statement "the stronger decision procedures almost completely subsume the weaker ones in practice" references the fact that in only 1 case (out of 4170) did a configuration with a weaker decision procedure solve a benchmark that was unsolved by a stronger one. Such outliers are common for benchmarks containing universally quantified formulas, since as we mention in Section 4, the SMT solver is generally incomplete when such formulas are present. We will make this statement explicit.
+
+Reviewer 2 and 3:
+
+We should clarify the relationship between this paper and Barrett et al [2], which discussed an implementation of the datatypes theory solver in CVC3. Regarding implementation, CVC4 was a from-scratch rewrite of CVC3, and does not share any code used in [2]. These two implementations share the same ideas, but differ significantly in practice, even when restricted to datatypes only. For instance, the implementation in CVC4 is built on top of a general-purpose data structure for efficient congruence closure that represents equivalence classes as circular lists, whereas the one in CVC3 uses a union-find data structure. Some of these differences are implicitly reflected in the calculus, in that [2] describes the use of oriented equations, whereas this paper does not. The datatypes theory solver in CVC4 is (as of yet) unpublished work. We will elaborate on this relationship in the paper.
+
+Reviewer 2:
+
+While the addition of codatatypes adds only two rules to the calculus, in our opinion, in terms of metatheory, the difference is significant. Most notably, the proof of completeness in this paper is not a straightforward lifting of the proof completeness in [2]. Since the proof from Section 4 of [2] does not include codatatypes, the proof of completeness in this paper required both a different formalization of values (as closed normal mu-terms), and new reasoning to recognize the set of (possibly cyclic) values V^x_I that may lead us to non-models when constructing A*.
+
+We will add more details regarding the role of A and A* (notice they are required not only to argue for correctness, but also for the SMT solver to be model-producing). We will also comment more on how they are implemented, which we will reference earlier in the paper.
