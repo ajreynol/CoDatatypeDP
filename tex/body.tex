@@ -160,7 +160,7 @@
 \newcommand{\JJJJ}{\mathcal{\!J\!}}
 \newcommand{\J}{\mathcalx{J}}
 \newcommand{\Val}{\mathcalx{A}\vvthinspace}
-\newcommand{\ValC}{\mathcalx{A}^\star}
+\newcommand{\ValC}{\smash{\mathcalx{A}^\star}}
 \newcommand{\Var}{\mathcalx{V}}
 %\newcommand{\Varec}[1]{\Var{\ec{#1}}}
 \newcommand{\Varec}[1]{\vvthinspace\widetilde{#1}\vvthinspace}
@@ -1531,12 +1531,13 @@ $\expand{\MU x.\: \const{C}(\MU y.\: \const{D}(x))}{\MU y.\: \const{D}(x)} =
 The $\mu$-term $u$
 is a \emph{self-similar subterm} of~$t$ if
 $u$ is a proper subterm of $t$,
-$t$ is of the form $\MU x.\; \const{C}( t_1, \ldots, t_n )$,
-$u$ is of the form $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
+$t$ and $u$ are of the forms $\MU x.\; \const{C}( t_1, \ldots, t_n )$
+and $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\expand{t}{ t_k } \aequiv \expand{t}{ u_k }$ for all $k$. % \in [n]
-The term $t$ is \emph{normal} if it does not contain a self-similar subterm
+The $\mu$-term $t$ is \emph{normal} if it does not contain %any
+self-similar subterms
 and all of its proper subterms are also normal.
-For example, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is not normal
+Thus, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is not normal
 because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
 Their arguments have the same expansion with respect to~$t$:
 $\expand{t}{\MU y.\; \const{C}( y )} =
@@ -1552,8 +1553,8 @@ noting that
 %
 $\expand{u}{\MU y.\; \const{C}( x )}
  = \MU y.\; \const{C}\bigl( \expand{u}{x}^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \expand{u}{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \MU x.\; \const{C}( \expand{u}{\MU y.\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
+ = \MU y.\; \const{C}\bigl( \expand{u}{\MU x.\allowbreak\; \const{C}( \MU y.\allowbreak\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
+ = \MU y.\; \const{C}\bigl( \MU x.\allowbreak\; \const{C}( \expand{u}{\MU y.\allowbreak\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
  = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )$
 is $\alpha$-equivalent to $\expand{u}{x} = u$.
 % for the renaming $\{ x \mapsto y, y \mapsto x \}$.
@@ -1622,12 +1623,14 @@ An interpretation $\J$ is \emph{normal} if these conditions are met:
 For each type $\tau$,
 %%% sets *contain* elements, they *include* other sets
 $\interp{\J}{\tau}$ includes a maximal set of closed normal $\mu$-terms of that type that are
-unique up to $\alpha$-equivalence and acyclic if $\tau \notin \Codata$.
+unique up to $\alpha$-equivalence and acyclic if $\tau \notin \Codata$.\strut
+
 \item
-For each constructor term $\const{C}( \vec t \,)$ of type $\tau$,
+For each constructor term $\vphantom{s^k}\const{C}( \vec t \,)$ of type $\tau$,
 $\interp{\J}{\const{C}}( \interp{\J}{\vec t} )$ is the value
 in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
-$\nf{\MU x.\; \const{C}( \interp{\J}{\vec t} )}$, where $x$ is fresh.
+$\nf{\MU x.\; \const{C}( \interp{\J}{\vec t} )}$, where $x$ is fresh.\strut
+
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
 if $\interp{\J}{t}$ is $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$,
@@ -1652,7 +1655,7 @@ For the latter, this will be based on the mapping $\Val$ computed in phase~2 of 
 {\looseness=-1
 First, we need the following definitions.
 We write $t \vsimv{x} u$ if $\mu$-terms $t$ and $u$ are syntactically equivalent
-for some renaming that avoids capturing any variable other than $x$.
+for some renaming that avoids capturing any variable other than~$x$.
 For example,
 $\MU x.\; \const{D}( x ) \vsimv{y} \MU x.\; \const{D}( y )$
 (by renaming $y$ to $x$),
@@ -1997,12 +2000,12 @@ $\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime
 %By Lemma~\ref{lem:interpretation-completion}\PART{2} and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
 %$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 %where $\expand{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply, % to $\Fc\!$,
-by construction $\ValC$ must be of the form
+Since \rn{Inject} and \rn{Clash} are not applicable, % to $\Fc\!$,
+by construction $\ValC\ec{u}$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where
 $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$
-for each $i$ and thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
+for each $i$, and thus by Lemma~\ref{lem:interpretation-completion}\PART{2},
 $\expand{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
 If $j = \jPrime$, then $\interp{\J}{t}$ is $\alpha$-equivalent with $\expand{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}
 = \ValC \ec{t}$.
@@ -2055,7 +2058,7 @@ incrementally builds partial assignments of
 truth values to the atoms of $F$ such that no clause in $F$ is falsified. We can regard such a
 partial assignment as a set $M$ of true literals.
 % where $a \in M$ for all atoms $a$ that
-%it assigned the value $\top$ and $\neg\, a \in M$ for all atoms that it assigns
+%it assigned the value $\top$ and $\neg\: a \in M$ for all atoms that it assigns
 %the value $\bot$.
 %at a high level,
 By a variant of the Nelson--Oppen method \cite{jovanovic2011sharing,nelson-oppen-1979},
@@ -2066,7 +2069,7 @@ variables replace terms containing symbols not belonging to~$T_i$;
 (2)~additional (dis)equalities between variables of types not belonging to
 $T_i$. Each $T_i$-solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
-$\neg\, C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
+$\neg\: C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
 When $M$ is a complete assignment for $F\!$, a theory solver can choose to do
 nothing only if $M_i$ is indeed $T_i$-satisfiable.
 
