@@ -7,34 +7,15 @@
 \usepackage[scaled=.86]{helvet}
 \usepackage{booktabs}
 \usepackage{bussproofs}
-\usepackage{calc}
 \usepackage{cite}
 \usepackage{mathptmx}
-%\usepackage{txfonts}
-%\usepackage{mathrsfs}
-%\usepackage{pifont}
-%\usepackage{smallcap}
 \usepackage{mathpartir}
 \usepackage{stmaryrd}
 \usepackage{subfigure}
-\usepackage[usenames]{color}
-%\usepackage{graphicx}
-%\usepackage{newcent}
 \usepackage{textcomp}
-%\usepackage{tipa}
-\usepackage{units}
 \usepackage{url}
 \usepackage[all]{xy}
 
-\makeatletter
-\def\spnXwtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}%
-                         \@addtoreset{#1}{chapter}}%
-\makeatother
-
-%\newcommand\ourparagraph[1]{\paragraph{\upshape\textbf{#1}}}
-%\newcommand\beforefig{}
-
-\newcommand\ourparagraph[1]{\paragraph{{#1}}}
 \newcommand\beforefig{\rm}
 
 \newcommand\DISC[1]{t \teq \const{C}_{#1}\negvthinspace\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
@@ -58,6 +39,12 @@
 \newcommand\MU{\vvthinspace\mu\vvthinspace}
 
 %%% not part of shared counter
+
+\makeatletter
+\def\spnXwtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}%
+                         \@addtoreset{#1}{chapter}}%
+\makeatother
+
 \spnXwtheorem{examplex}{Example}{\itshape}{\rmfamily}
 
 \newcommand\MIDRULE{
@@ -490,7 +477,7 @@ demonstrates the usefulness of the approach (Section~\ref{sec:experimental-resul
 %    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
 %    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
 
-\begin{rep}\ourparagraph{Related Work.} Barrett\end{rep}%
+\begin{rep}\paragraph{Related Work.} Barrett\end{rep}%
 \begin{conf}Barrett\end{conf}
 et al.\ \cite{barrett-et-al-2007} provide a good account of
 related work on datatypes as of 2007, in addition to describing their
@@ -539,7 +526,7 @@ The $\mu$-notation is inspired by the $\mu$-calculus
 \kern-3pt %%% TYPESETTING: Crude hack
 \end{conf}
 
-\ourparagraph{Conventions.}
+\paragraph{Conventions.}
 Our setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
 set of function symbols $\Funcs$. Types are atomic sorts and interpreted as
@@ -604,7 +591,7 @@ without $\mu$-binders.
 
 }
 
-%\ourparagraph{Specifications.}
+%\paragraph{Specifications.}
 In an SMT problem, the signature is typically given by specifying first the
 uninterpreted %ordinary
 types in any order, then the (co)datatypes with their constructors
@@ -728,7 +715,6 @@ such types are introduced as datatypes or as codatatypes.
 %the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 %nonemptiness.
 
-%\ourparagraph{Characterization.}
 One way to characterize datatypes %semantically
 is as the initial model of the
 selector--constructor equations \cite{barrett-et-al-2007}.
@@ -878,7 +864,6 @@ expansion \cite[Theorem 8.1, 2$\,{\Leftrightarrow}\,$5]{rutten-2000}.
 %        consider uniqueness -- no way to express that certain infinite
 %        acyclic objects do not exist
 
-%\ourparagraph{Special Cases.}
 {\looseness=-1
 Some codatatypes are so degenerate as to be finite even though they
 have infinite values. A simple example is
@@ -1040,7 +1025,7 @@ are saturated.
 %the derivation rules of our calculus are given in \emph{guarded assignment form},
 %where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
 
-\ourparagraph{Phase 1: Computing the Bidirectional Closure \beforefig(\figurename~\ref{fig:cc-rules}).}
+\paragraph{Phase 1: Computing the Bidirectional Closure \beforefig(\figurename~\ref{fig:cc-rules}).}
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
 whereas the \rn{Inject} and \rn{Clash} rules %together
 compute the unification (downward) closure.
@@ -1057,7 +1042,7 @@ Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class of $t$ in $\Ec$.
 
-\ourparagraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
+\paragraph{Phase 2: Applying Acyclicity and Uniqueness \beforefig(\figurename~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 %The premises of the rules that make up the second phase refer to
 We describe the rules in this phase in terms of a mapping $\Val$
@@ -1393,7 +1378,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \xend
 \end{examplex}
 
-\ourparagraph{Phase 3: Branching \beforefig(\figurename~\ref{fig:split-rule}).}
+\paragraph{Phase 3: Branching \beforefig(\figurename~\ref{fig:split-rule}).}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
 $t$'s equivalence class must contain a
 $\delta$ constructor term.
@@ -1411,7 +1396,7 @@ based on a recursive computation of the cardinalities of the
 constructors' argument types.
 %This step relies on the assumption that uninterpreted types are infinite.
 
-\ourparagraph{Correctness.}
+\paragraph{Correctness.}
 Correctness means that if there exists a closed derivation tree with root node
 $\Ec$, then $\Ec$ is $\thD$-unsatisfiable; and if there exists
 a derivation tree with root node $\Ec$ that contains a saturated node, then
@@ -2044,11 +2029,10 @@ implementation within the SMT solver CVC4:\ the integration into \XXXL($T$)
 \cite{ganzinger-et-al-2004}, the extension to quantified formulas, and some of
 the optimizations.
 
-%%% @ANDY: I'm trying without \ourparagraph's, to save space but also to make the
+%%% @ANDY: I'm trying without \paragraph's, to save space but also to make the
 %%% section look more like a whole than a random list of stuff. Revert if you
 %%% disagree.
 
-%\ourparagraph{Integration into {\relax\XXXL($T\negvthinspace$)}.}
 The decision procedure is implemented as a \relax{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 literals for its theory.
@@ -2111,7 +2095,6 @@ If %after doing so,
 the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
 and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
 
-%\ourparagraph{Extension to Quantified Formulas.}
 While the decision procedure is restricted to universal conjectures, in practice
 we often want to solve problems that feature universal axioms and existential
 conjectures.
@@ -2144,7 +2127,6 @@ the implementation adds the clause %of the form
 $(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F\!$.
 \begin{rep}In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.\end{rep}
 
-%\ourparagraph{Optimizations.}
 The implementation of the decision procedure uses several optimizations
 following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 %and are not reflected in the presentation of the calculus.
