@@ -1,5 +1,11 @@
 %%% TODO: Give small example where Single is needed
 
+%%% GOOD IDEAS in impl of codata models:
+%%% 1. de Bruijn
+%%% 2. enum: "X nat"
+%%% 3. norm by DFA minim
+%%% 4. check membership in bad set by matching
+
 \documentclass[smallcondensed,draft]{svjour3}
 
 \usepackage[T1]{fontenc}
@@ -24,11 +30,7 @@
 
 \newcommand\MU{\vvthinspace\mu\vvthinspace}
 
-\makeatletter
-\def\spnXwtheorem#1#2#3#4{\@spynthm{#1}{#2}{#3}{#4}%
-                         \@addtoreset{#1}{chapter}}%
-\makeatother
-\spnXwtheorem{examplex}{Example}{\itshape}{\rmfamily}
+\spnewtheorem{examplex}{Example}{\itshape}{\rmfamily}
 
 \newcommand\MIDRULE{
 \\[-1pt] %%% TYPESETTING HACK
@@ -143,12 +145,6 @@
 
 \DeclareSymbolFont{letters}{OML}{txmi}{m}{it}
 
-\makeatletter
-\ps@myheadings
-\makeatother
-
-\include{defs}
-
 \hyphenation{data-type data-types co-data-type co-data-types isa-belle sledge-hammer
 non-redun-dant counter-examples counter-example mono-morph-ize mono-morph-ized}
 
@@ -156,21 +152,24 @@ non-redun-dant counter-examples counter-example mono-morph-ize mono-morph-ized}
 
 \title{A Decision Procedure for (Co)datatypes in SMT Solvers}
 
-\author {Andrew Reynolds\inst{1} \and Jasmin Christian Blanchette\inst{2,3}}
+\author {Andrew Reynolds \and Jasmin Christian Blanchette}
 \authorrunning {A. Reynolds \and J. C. Blanchette}
+
 \institute{
-\'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), Switzerland
+Andrew Reynolds
+\at \'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), Switzerland
 \and
-Inria Nancy \& LORIA, Villers-l\`es-Nancy, France
-\and
-Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany
-}
+Jasmin Christian Blanchette%, funded by DFG grant \textit{Hardening the Hammer} (Ni\,491\slash 14-1)
+\at Inria \& LORIA, Nancy, France \\
+Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany}
 
 \maketitle
 
 \vskip3\smallskipamount
 
 \noindent\hfill\emph{\relax{In memoriam Morgan Deters 1979--2015}}
+
+\bigskip
 
 \begin{abstract}
 %Codatatypes naturally capture potentially infinite data structures and
@@ -234,12 +233,6 @@ because both sides expand to the infinite term
 $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies
 %the value~
 $\infty$.
-Compared with the conventional %algebraic
-definition
-\[\vthinspace \keyw{datatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat}) \,\mid\, \const{Infty}\]
-%with a dedicated constructor for representing infinity, the
-the codatatype avoids
-one case by unifying the infinite and finite nonzero cases.
 
 Datatypes and codatatypes are an integral part of many proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
@@ -2180,11 +2173,11 @@ the Deutsche
 Forschungs\-gemein\-schaft %(DFG)
 project ``Den Hammer h\"arten'' (grant NI\,491\slash 14-1)
 and the Inria technological development
-action ``Contre-exemples Utilisables par Isabelle et Coq'' (CUIC).
+action ``Contre-exemples utilisables par Isabelle et Coq'' (CUIC).
 
 }
 
-\bibliographystyle{splncs03}
+\bibliographystyle{spmpsci}
 \bibliography{bib}{}
 
 \end{document}

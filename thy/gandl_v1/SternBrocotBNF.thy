@@ -101,7 +101,7 @@ lemma tree_ap_interchange:
 by(coinduction arbitrary: t) auto
 
 simproc_setup tree_ap_interchange ("x \<diamond> tree_pure y") = {*
-  fn phi => fn ctxt => fn redex => case term_of redex of
+  fn phi => fn ctxt => fn redex => case Thm.term_of redex of
       Const (@{const_name tree_ap}, _) $ Const (@{const_name tree_pure}, _) $ _ => NONE
     | _ => SOME @{thm tree_ap_interchange[folded atomize_eq]}
 *}
@@ -109,7 +109,7 @@ simproc_setup tree_ap_interchange ("x \<diamond> tree_pure y") = {*
 lemma tree_ap_strong_extensional:
   "(\<And>x. f \<diamond> tree_pure x = g \<diamond> tree_pure x) \<Longrightarrow> f = g"
 proof(coinduction arbitrary: f g)
-  case (Eq_tree f g)[rule_format]
+  case [rule_format]: (Eq_tree f g)
   have "root f = root g"
   proof
     fix x
@@ -219,7 +219,7 @@ lemmas arith_tree_defs =
   minus_tree_def
   uminus_tree_def
   times_tree_def
-  div_tree_def
+(*  div_tree_def *)
   mod_tree_def
 
 (* FIXME discard
