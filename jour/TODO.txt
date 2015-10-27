@@ -1,2 +1,12 @@
-  * update eval (JB)
-  * add para at end of intro (JB)
+AJR:
+
+  * Sect. 4: add model generation
+  * Sect. 3: simplify completeness proof
+  * new archive!
+
+JB:
+
+  * update eval
+  * add para at end of intro
+  * Sect. 2: fix parentheses in Coinduction
+    and dj(v) /\ dj(w) -> ...

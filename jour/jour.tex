@@ -403,7 +403,7 @@ The $\mu$-notation is inspired by the $\mu$-calculus
 \paragraph{Conventions.}
 Our setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
-set of function symbols $\Funcs$. Types are atomic sorts and interpreted as
+set of function symbols $\Funcs$\negvthinspace. Types are atomic sorts and interpreted as
 nonempty domains. The set~$\Types$ must contain a
 distinguished type \ty{bool} interpreted as the set of truth
 values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
@@ -645,8 +645,6 @@ For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
 induction prohibits models that contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
-
-\pagebreak[2]
 
 For codatatypes, the dual notion is called coinduction. It depends on
 witnesses $R_i$ that are required to be bisimulations:
