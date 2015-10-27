@@ -1982,7 +1982,7 @@ phase~2.
 \label{sec:experimental-results}
 
 \newcommand\gandl{G\&L}
-\newcommand\HD[1]{\hbox to2.25em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
+\newcommand\HD[1]{\hbox to2em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
 To evaluate the decision procedure, we generated benchmark problems from existing
 Isabelle formalizations using Sledgehammer \cite{blanchette-et-al-2013-smt}.
@@ -2039,13 +2039,13 @@ reasoning.
 
 \newcommand\nummodden{num\hbox{\rm\_}mod\hbox{\rm\_}den}
 
-\newcommand\captioni{\,Number of solved goals for the three benchmark suites}
-%\renewcommand\captioni{\,Number of solved goals with 16~lemmas per goal}
+\newcommand\captioni{\,Number of solved goals with 16~lemmas per goal}
+\newcommand\captionii{\,Number of solved goals with 256~lemmas per goal}
 
 \begin{table*}[t!]
 \normalsize
-\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}cc@{\kern.5em}cc@{\kern.5em}cc@{\kern1.3em}cc@{\;}}
-  & \multicolumn{2}{c}{Distro} & \multicolumn{2}{c}{AFP} & \multicolumn{2}{c}{\gandl} & \multicolumn{2}{c}{Overall} \\[-0.5pt]
+\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1.5em}c@{\kern.5em}c@{\;}}
+  & \multicolumn{2}{@{}c@{\kern1em}}{Distro} & \multicolumn{2}{@{}c@{\kern1em}}{AFP} & \multicolumn{2}{@{}c@{\kern1.5em}}{\gandl} & \multicolumn{2}{@{}c@{\;}}{Overall} \\[-0.5pt]
   & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
 \MIDRULE
 No (co)datatypes
@@ -2068,6 +2068,35 @@ Full (co)datatypes
 \caption{\captioni}
 \label{tab:benchsixteen}
 \end{table*}
+
+\begin{table*}[t!]
+\normalsize
+\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1.5em}c@{\kern.5em}c@{\;}}
+  & \multicolumn{2}{@{}c@{\kern1em}}{Distro} & \multicolumn{2}{@{}c@{\kern1em}}{AFP} & \multicolumn{2}{@{}c@{\kern1.5em}}{\gandl} & \multicolumn{2}{@{}c@{\;}}{Overall} \\[-0.5pt]
+  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
+\MIDRULE
+No (co)datatypes
+  & 221 & 209 & 775 & 777 & 52 & 51 & 1048 & 1037 \\%[\jot]
+%Datatype simplification only
+%  &  \\
+Datatypes without \rn{Acyclic}
+  & 227 & -- & 780 & -- & 52 & -- & 1059 & -- \\
+Full datatypes
+  & 227 & 213 & 786 & 791 & 52 & 51 & 1065 & 1055 \\%[\jot]
+%Codatatype simplification only
+%  &  \\
+Codatatypes without \rn{Unique}\!\!
+  & 222 & -- & 804 & -- & 56 & -- & 1082 & -- \\
+Full codatatypes
+  & 223 & -- & 804 & -- & \bfseries 59 & -- & 1086 & -- \\%[\jot]
+Full (co)datatypes
+  & \bfseries 229 & -- & \bfseries 815 & -- & \bfseries 59 & -- & \bfseries 1103 & -- %\\[\jot]
+\end{tabular}\end{center}
+\caption{\captionii}
+\label{tab:benchtwofittysix}
+\end{table*}
+
+\newpage
 
 The results are summarized in Table~\ref{tab:benchsixteen}.
 %The goals in Table \ref{tab:benchsixteen} include 16

@@ -3,6 +3,7 @@ AJR:
   * Sect. 4: add model generation
   * Sect. 3: simplify completeness proof
   * new archive!
+  * which version of Z3? 4.3.2 or 4.4.0?
 
 JB:
 
