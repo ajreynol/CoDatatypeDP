@@ -1992,7 +1992,7 @@ We
 included all the theory files from the Isabelle distribution (Distro, 879~goals)
 and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We
-added two unpublished theories about Bird and Stern--Brocot trees
+added unpublished theories about Bird and Stern--Brocot trees
 by Peter Gammie and Andreas Lochbihler (\gandl,
 317~goals). To exercise the datatype support, theories about lists and trees
 were added to the first two benchmark sets. The theories were selected before
@@ -2004,9 +2004,9 @@ online.%
 
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
-For each goal in each theory, Sledgehammer selected about 16~lemmas,
-which were monomorphized and translated to SMT-LIB~2 along with the goal.
-The resulting problem was given to the
+For each goal in each theory, we used Sledgehammer to select either 16 or
+256~lemmas, which were monomorphized and translated to SMT-LIB~2 along with the
+goal. The resulting problem was given to the
 development version of CVC4 and to Z3 4.3.2 for comparison, each running for
 up to 60~s on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
@@ -2023,7 +2023,7 @@ contributions of the acyclicity and uniqueness rules were also measured.
 Even when the
 decision procedure is disabled, the problems may contain
 basic lemmas about constructors and selectors, allowing some (co)datatype
-reasoning.
+reasoning. This is especially the case for problems generated using 256~lemmas.
 % when this makes sense.
 %This allows us to answer the question, \relax{What are the
 %benefits of activating the decision procedure as opposed to letting
@@ -2049,21 +2049,21 @@ reasoning.
   & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
 \MIDRULE
 No (co)datatypes
-  & 221 & 209 & 775 & 777 & 52 & 51 & 1048 & 1037 \\%[\jot]
+  & 287 & 282 & 765 & 771 & 47 & 44 & 1099 & 1097 \\%[\jot]
 %Datatype simplification only
 %  &  \\
 Datatypes without \rn{Acyclic}
-  & 227 & -- & 780 & -- & 52 & -- & 1059 & -- \\
+  & 298 & -- & 771 & -- & 47 & -- & 1116 & -- \\
 Full datatypes
-  & 227 & 213 & 786 & 791 & 52 & 51 & 1065 & 1055 \\%[\jot]
+  & 298 & 294 & 775 & 783 & 47 & 44 & 1120 & 1121 \\%[\jot]
 %Codatatype simplification only
 %  &  \\
 Codatatypes without \rn{Unique}\!\!
-  & 222 & -- & 804 & -- & 56 & -- & 1082 & -- \\
+  & 288 & -- & 797 & -- & 47 & -- & 1132 & -- \\
 Full codatatypes
-  & 223 & -- & 804 & -- & \bfseries 59 & -- & 1086 & -- \\%[\jot]
+  & 288 & -- & 797 & -- & \bfseries 52 & -- & 1137 & -- \\%[\jot]
 Full (co)datatypes
-  & \bfseries 229 & -- & \bfseries 815 & -- & \bfseries 59 & -- & \bfseries 1103 & -- %\\[\jot]
+  & \bfseries 299 & -- & \bfseries 806 & -- & \bfseries 52 & -- & \bfseries 1157 & -- %\\[\jot]
 \end{tabular}\end{center}
 \caption{\captioni}
 \label{tab:benchsixteen}
@@ -2076,21 +2076,21 @@ Full (co)datatypes
   & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
 \MIDRULE
 No (co)datatypes
-  & 221 & 209 & 775 & 777 & 52 & 51 & 1048 & 1037 \\%[\jot]
+  & 617 & 560 & 1503 & 1271 & 89 & 80 & 2209 & 1911 \\%[\jot]
 %Datatype simplification only
 %  &  \\
 Datatypes without \rn{Acyclic}
-  & 227 & -- & 780 & -- & 52 & -- & 1059 & -- \\
+  & 617 & -- & \bfseries 1504 & -- & 90 & -- & 2211 & -- \\
 Full datatypes
-  & 227 & 213 & 786 & 791 & 52 & 51 & 1065 & 1055 \\%[\jot]
+  & 617 & 560 & \bfseries 1504 & 1263 & 90 & 78 & 2211 & 1901 \\%[\jot]
 %Codatatype simplification only
 %  &  \\
 Codatatypes without \rn{Unique}\!\!
-  & 222 & -- & 804 & -- & 56 & -- & 1082 & -- \\
+  & 617 & -- & 1501 & -- & 90 & -- & 2208 & -- \\
 Full codatatypes
-  & 223 & -- & 804 & -- & \bfseries 59 & -- & 1086 & -- \\%[\jot]
+  & \bfseries 620 & -- & 1502 & -- & 98 & -- & \bfseries 2220 & -- \\%[\jot]
 Full (co)datatypes
-  & \bfseries 229 & -- & \bfseries 815 & -- & \bfseries 59 & -- & \bfseries 1103 & -- %\\[\jot]
+  & 619 & -- & 1501 & -- & \bfseries 99 & -- & 2219 & -- %\\[\jot]
 \end{tabular}\end{center}
 \caption{\captionii}
 \label{tab:benchtwofittysix}
