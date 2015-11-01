@@ -1,3 +1,4 @@
+%%% TODO: Mealy machine minimization
 %%% TODO: Give small example where Single is needed
 
 %%% GOOD IDEAS in impl of codata models:
@@ -1984,6 +1985,13 @@ phase~2.
 \newcommand\gandl{G\&L}
 \newcommand\HD[1]{\hbox to2em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
+  * decision procedure useful both for proving and for model finding
+  * model finding: critical, without it unsound models
+  * contribution to proving is less clear
+    * some parts can be axiomatized
+    * only acyclicity and uniqueness, but how often do they pop up in practice?
+
+
 To evaluate the decision procedure, we generated benchmark problems from existing
 Isabelle formalizations using Sledgehammer \cite{blanchette-et-al-2013-smt}.
 %There are not yet many benchmarks available, since codatatypes are a
@@ -1998,7 +2006,7 @@ by Peter Gammie and Andreas Lochbihler (\gandl,
 were added to the first two benchmark sets. The theories were selected before
 conducting any experiments. The experimental data are available
 online.%
-\footnote{\url{http://lara.epfl.ch/~reynolds/CADE2015-cdt/}}
+\footnote{\url{http://lara.epfl.ch/~reynolds/JAR-CADE2015-cdt/}}
 
 %http://www21.in.tum.de/~blanchet/codp_data.tgz}}
 
@@ -2007,7 +2015,8 @@ online.%
 For each goal in each theory, we used Sledgehammer to select either 16 or
 256~lemmas, which were monomorphized and translated to SMT-LIB~2 along with the
 goal. The resulting problem was given to the
-development version of CVC4 and to Z3 4.3.2 for comparison, each running for
+development version of CVC4 (\textbf{which revision?}) and to
+Z3 4.3.2 (\textbf{really?}) for comparison, each running for
 up to 60~s on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
 Problems not involving any (co)datatypes were left out.
@@ -2024,6 +2033,9 @@ Even when the
 decision procedure is disabled, the problems may contain
 basic lemmas about constructors and selectors, allowing some (co)datatype
 reasoning. This is especially the case for problems generated using 256~lemmas.
+The problems with 16~lemmas put more stress on the decision procedure but are
+less typical of Sledgehammer.
+
 % when this makes sense.
 %This allows us to answer the question, \relax{What are the
 %benefits of activating the decision procedure as opposed to letting
