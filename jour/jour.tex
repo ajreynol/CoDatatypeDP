@@ -1966,32 +1966,60 @@ phase~2.
 \normalsize
 \centering
 \begin{enumerate}
-\item Let $\mathcal{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{x} =_{\mathcal{U}} \ec{y}$ if and only if:
+\item Let $\mathcal{U}$ be a partition of the codatatype equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcal{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
 \begin{itemize}
-\item $\const{C}( x_1, \ldots, x_k ) \in \ec{x}$ and $\const{C}( y_1, \ldots, y_k ) \in \ec{y}$.
+\item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
 \end{itemize}
 \item Repeat until $\mathcal{U}$ is unchanged
 \begin{enumerate}
 \item $\mathcal{U}' := \emptyset$
 \item for each $U_i \in \mathcal{U}$:
 \begin{itemize}
-\item[\ ] Let $\mathcal{U}_i$ be a partition of $U_i$ such that $\ec{x} =_{\mathcal{U}_i} \ec{y}$ for distinct $\ec{x}, \ec{y}$ if and only if:
+\item[\ ] Let $\mathcal{U}_i$ be a partition of $U_i$ such that $\ec{t} =_{\mathcal{U}_i} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
 \begin{itemize}
-\item $\const{C}( x_1, \ldots, x_k ) \in \ec{x}$ and $\const{C}( y_1, \ldots, y_k ) \in \ec{y}$, and
-\item $\ec{x_j} =_{\mathcal{U}} \ec{y_j}$ for each $j = 1, \ldots, k$.
+\item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$, and
+\item $\ec{t_j} =_{\mathcal{U}} \ec{u_j}$ for each $j = 1, \ldots, k$.
 \end{itemize}
 \item[\ ] $\mathcal{U}' := \mathcal{U}' \cup \mathcal{U}_i$.
 \end{itemize}
 \item $\mathcal{U} := \mathcal{U}'$
 \end{enumerate}
-\item If distinct $t\typ{\delta}, s\typ{\delta} \in U \in \mathcal{U}$ where $\delta \in \Codata$, apply \rn{Unique} to $t,s$.
+\item If distinct $\ec{t}, \ec{u} \in U$ for some $U \in \mathcal{U}$, apply \rn{Unique} to $t,u$.
 \end{enumerate}
 \vspace*{-2pt} %% TYPESETTING HACK
 \caption{\,Algorithm for checking Uniqueness.
 }
-\label{fig:cc-rules}
+\label{fig:uniqueness-algo}
 \end{figure}
 
+\begin{figure}[t!]
+\normalsize
+\centering
+\begin{enumerate}
+\item Let $U$ be the datatype equivalence classes of $\Ec$.
+\item Repeat until $U \neq \emptyset$.
+\begin{itemize}
+\item[\ ] For some $\ec{t} \in U$, $\mathrm{traverse}( \ec{t}, U, \emptyset )$
+\end{itemize}
+\end{enumerate}
+
+\flushleft $\mathrm{traverse}( \ec{t}, U, P )$:
+\begin{enumerate}
+\item If $\ec{t} \in P$, apply \rn{Acyclic} to $t$.
+\item If $\ec{t} \in U$
+\begin{enumerate}
+\item If $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$, then for each $j = 1, \ldots k$,
+\begin{itemize}
+\item[\ ] $\mathrm{traverse}( \ec{t_j}, U, P \cup \{ \ec{t} \} )$
+\end{itemize}
+\item $U := U \textbackslash \{ \ec{t} \}$.
+\end{enumerate}
+\end{enumerate}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Algorithm for checking Acyclic.
+}
+\label{fig:acyclic-algo}
+\end{figure}
 
 
 \subsection{Model Construction}
