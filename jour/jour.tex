@@ -1966,9 +1966,9 @@ phase~2.
 \normalsize
 \centering
 \begin{enumerate}
-\item Let $\mathcal{U}$ be a partition of the codatatype equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcal{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
+\item Let $\mathcal{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcal{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
 \begin{itemize}
-\item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
+\item $t\typ{\delta}$, $u\typ{\delta}$ where $\delta \in \Codata$, and $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
 \end{itemize}
 \item Repeat until $\mathcal{U}$ is unchanged
 \begin{enumerate}
@@ -2006,7 +2006,7 @@ phase~2.
 \flushleft $\mathrm{traverse}( \ec{t}, U, P )$:
 \begin{enumerate}
 \item If $\ec{t} \in P$, apply \rn{Acyclic} to $t$.
-\item If $\ec{t} \in U$
+\item If $\ec{t} \in U$,
 \begin{enumerate}
 \item If $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$, then for each $j = 1, \ldots k$,
 \begin{itemize}
