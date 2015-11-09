@@ -1978,7 +1978,8 @@ then we recursively call $\mathrm{traverse}$ on each of $\ec{t_1}, \ldots, \ec{t
 If this succeeds, we remove $\ec{t}$ from $U$.
 
 For \rn{Unique}, Figure~\ref{fig:uniqueness-algo} considers a partition $\mathcal{U}$ of the equivalence classes of our set $\Ec$
-such that equivalence classes having a constructor term with top symbol $\const{C}$ are placed in the same subset, for each constructor $\const{C}$.
+such that codatatype equivalence classes having a constructor term with top symbol $\const{C}$ are placed in the same subset, 
+for each constructor $\const{C}$.
 We write $\ec{t} =_{\mathcal{U}} \ec{u}$ to denote that $\ec{t}$ and $\ec{u}$ reside in the same subset within $\mathcal{U}$.
 We then refine $\mathcal{U}$ by 
 constructing a partition $\mathcal{U}_i$ of each $U_i \in \mathcal{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcal{U}_i$ 
