@@ -1,3 +1,4 @@
+%%% TODO: Put http://lara.epfl.ch/~reynolds/JAR-CADE2015-cdt/ online
 %%% TODO: Mealy machine minimization
 %%% TODO: Give small example where Single is needed
 
@@ -91,7 +92,7 @@
 \newcommand{\interp}[2]{#1(#2)}
 
 \newcommand{\ec}[1]{[#1]}
-\newcommand{\JJJJ}{\mathcal{\!I\!}}
+\newcommand{\JJJJ}{\mathcal{\!J\!}}
 \newcommand{\J}{\mathcalx{J}}
 \newcommand{\Val}{\mathcalx{A}\vvthinspace}
 \newcommand{\ValC}{\smash{\mathcalx{A}^\star}}
@@ -144,9 +145,6 @@
 
 \urlstyle{ttstyle}
 
-\global\def\figurename{Figure}
-\global\def\figuresname{Figures}
-
 \DeclareSymbolFont{letters}{OML}{txmi}{m}{it}
 
 \hyphenation{data-type data-types co-data-type co-data-types isa-belle sledge-hammer
@@ -178,7 +176,7 @@ uniqueness rule that identifies observationally equal codatatype values,
 including cyclic values. The procedure decides universal
 problems and is composable via the Nelson--Oppen method. It has been
 implemented in CVC4, a state-of-the-art SMT solver. An evaluation based on
-problems generated from theories developed with Isabelle demonstrates the
+problems generated from formalizations developed with Isabelle demonstrates the
 potential of the procedure.
 \end{abstract}
 
@@ -286,8 +284,8 @@ a decision procedure.
 %axiom.
 %
 Third, \emph{it must be possible to express cyclic }(\emph{regular}) \emph{values as closed terms and
-to enumerate them.} This is necessary both for finite model finding \cite{reynolds-et-al-2013}
-%modulo theories
+to enumerate them.} This is necessary both for finite model finding
+modulo theories \cite{reynolds-et-al-2013,ge-de-moura-2009}
 and for theory combinations. The $\mu$-binder notation associates a name with
 a subterm; it is used to represent cyclic values in the metatheory and
 in the generated models. For example,
@@ -305,7 +303,8 @@ integrated in the development version of the solver and is expected to be part
 of the CVC4~1.5 release.
 %
 An evaluation on %hand-crafted examples and on
-problems generated from Isabelle theories using the Sledgehammer tool \cite{blanchette-et-al-2013-smt}
+problems generated from Isabelle/HOL \cite{nipkow-et-al-2002}
+formalizations using the Sledgehammer tool \cite{blanchette-et-al-2013-smt}
 demonstrates the usefulness of the approach (Section~\ref{sec:evaluation-on-isabelle-problems}).
 
 An earlier version of this article was presented at the CADE-25 conference in
@@ -849,7 +848,7 @@ its leaf nodes are $\bot$. A node is \emph{saturated} if no nonredundant
 instance of a rule can be applied to it.
 
 The calculus consists of three sets of rules, given in
-\figuresname~\ref{fig:cc-rules} to \ref{fig:split-rule}, corresponding to three
+Figs.\ \ref{fig:cc-rules}~to~\ref{fig:split-rule}, corresponding to three
 phases. The first phase computes the bidirectional closure of $\Ec$. The second
 phase makes inferences based on acyclicity (for datatypes) and uniqueness
 (for codatatypes).
@@ -876,7 +875,7 @@ are saturated.
 %the derivation rules of our calculus are given in \emph{guarded assignment form},
 %where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
 
-\paragraph{Phase 1: Computing the Bidirectional Closure \rm(\figurename~\ref{fig:cc-rules}).}
+\paragraph{Phase 1: Computing the Bidirectional Closure \rm(Fig.~\ref{fig:cc-rules}).}
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
 whereas the \rn{Inject} and \rn{Clash} rules %together
 compute the unification (downward) closure.
@@ -893,7 +892,7 @@ Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class of $t$ in $\Ec$.
 
-\paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(\figurename~\ref{fig:ab-rules}).}
+\paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(Fig.~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 %The premises of the rules that make up the second phase refer to
 We describe the rules in this phase in terms of a mapping $\Val$
@@ -952,10 +951,11 @@ a cyclic $\mu$-term describes an infeasible class of values.
 
 The mapping $\Val$ is defined as follows.
 %
-With each equivalence class $\ec{u\typ{\tau}}$, we associate a fresh variable $\Varec{u}\typ{\tau}$
-%of the same type as $u$
+With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
+of the same type as $u$
 %not occurring in $\tEc$,
-and set $\Val\ec{u} := {\Varec{u}}$, that is to say there are initially no
+and set $\Val\ec{u} := {\Varec{u}}$. Because $\Varec{u}$ is unspecified,
+this indicates that there are initially no
 constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
 is refined by applying the following unfolding rule exhaustively:\strut
 \[
@@ -1164,7 +1164,7 @@ respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 Given the mapping $\Val$, the \rn{Acyclic} and \rn{Unique} rules work as follows.
 For acyclicity, if $\ec{t}$ is a datatype equivalence class
 whose values $\Val \ec{t} = \MU x.\; u$ are cyclic
-(as expressed by $x \in \FV( u )$),
+(expressed by $x \in \FV( u )$),
 then $\Ec$ is $\thD$-unsatisfiable.
 For uniqueness, if $\ec{t}$, $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$, $\Val \ec{u}$ are $\alpha$-equivalent,
@@ -1222,7 +1222,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \xend
 \end{examplex}
 
-\paragraph{Phase 3: Branching \rm(\figurename~\ref{fig:split-rule}).}
+\paragraph{Phase 3: Branching \rm(Fig.~\ref{fig:split-rule}).}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
 $t$'s equivalence class must contain a
 $\delta$ constructor term.
@@ -1392,7 +1392,8 @@ Thus, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( 
 
 \begin{lemma}
 \label{lem:mu-norm-arg}
-If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$,
+If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$
+for some $\mu$-terms $\vec w$,
 then $\vec u \vsim \expand{t}{\vec w}$\vthinspace.
 \end{lemma}
 % TODO:
@@ -1438,7 +1439,7 @@ only values of types in $\Codata$ may contain cycles.
 \afterDot%
 \label{def:norm-interpretation}%
 \rm
-An interpretation $\J$ is \emph{normal} if these conditions are met:
+An interpretation $\J$ is \emph{normal} if the following conditions are met:
 \begin{enumerate}
 \item
 For each type $\tau$,
@@ -1463,11 +1464,9 @@ $\expand{\interp{\J}{t}}{u_k}$.
 
 Not all normal interpretations are models of codatatypes, because
 models must contain all possible infinite terms, not only cyclic ones. However,
-acyclic infinite values are uninteresting to us, and for quantifier-free
-formulas it is trivial to extend any normal interpretation with extra
+acyclic infinite values are not interesting for deciding universal formulas:
+For such formulas, it is trivial to extend any normal interpretation with extra
 domain elements to obtain a genuine model if desired. %Hence, we focus on normal interpretations.
-
-\pagebreak[2]
 
 When constructing a model $\J$ of $\Ec$,
 it remains only to specify how $\J$ interprets wrongly applied selector terms and variables.
@@ -1724,35 +1723,36 @@ If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t \,)$
 and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
 then the expansion %\rem{TODO: define}
 of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
-are $\alpha$-disequivalent at position $p$.
+are $\alpha$-disequivalent at position~$p$.
 Since $t_1$ and $t_2$ are minimal,
 say $t_1$ is of the form $\MU w.\; \const{C}( \vec t \,)$,
 and $t_2$ is ${\Varec{x}}$.
 Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\MU {\Varec{x}}.\; t$,
 we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
 or else the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
-are $\alpha$-disequivalent at position $p$ since they do not contain the same free variables.
+are $\alpha$-disequivalent at position~$p$ since they do not contain the same free variables.
 Since $\expand{\Val_1 \ec{y}}{t_1}$ is normal,
 there is a closed $\mu$-term $v \in \BAD_{\smash{\J}}^{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on the selection of $\MU {\Varec{x}}.\; t$,
 we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$,
 which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
-are $\alpha$-disequivalent at position $p$. %\rem{TODO: more detail}
+are $\alpha$-disequivalent at position~$p$. %\rem{TODO: more detail}
 
 Thus, by induction on the number of applications of the above rule used to obtain $\ValC$,
 we have that $\ValC$ satisfies (2) and (3).
 \qed
 \end{proof}
 
-Intuitively, this lemma states three properties of $\ValC$ that ensure a normal
-interpretation $\J$ can be constructed that satisfies $\Ec$. Property~(1) states that the
-values in the range of $\ValC$ are $\alpha$-equivalent to a value in normal
-interpretation. This means they are closed, normal, and acyclic when
-required. Property~(2) states that the interpretation of all subterms in the
-range of $\ValC$ depends on its associated variable only. In other words, the
-interpretation of a subterm $t$ where $\muvar(t) = {\Varec{x}}$ is equal to
-$\ValC \ec{x}$, independently of the context. % in which it is interpreted.
+Intuitively, this lemma states three properties of $\ValC$ that together ensure that
+a normal interpretation~$\J$ can be constructed that satisfies $\Ec$.
+Property~(1) states that the values in the range of $\ValC$ are
+$\alpha$-equivalent to a value in normal interpretation. This means they are
+closed, normal, and acyclic when required. Property~(2) states that the
+interpretation of all subterms in the range of $\ValC$ depends on its associated
+variable only. In other words, the interpretation of a subterm $t$ where
+$\muvar(t) = {\Varec{x}}$ is equal to
+$\ValC \ec{x}$, independently of the context.
 Property~(3) states that $\ValC$ is injective (modulo
 $\alpha$-equivalence), which ensures %in the following
 that distinct values are
@@ -1773,7 +1773,8 @@ We consider a normal interpretation $\J$
 that interprets wrongly applied selectors based on equality information in $\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$.
 % of %the mapping $\Val$. % from phase~2.
-For the variables, let $\interp{\J}{x\typ{\tau}}$ be the value in $\J(\tau)$ that is $\alpha$-equivalent with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
+For the variables, let $\interp{\J}{x\typ{\tau}}$ be the value in $\J(\tau)$ that is $\alpha$-equivalent
+with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
 which by Lemma~\ref{lem:interpretation-completion}(1) is guaranteed to exist.
 
 We first show that $\J$ satisfies all equalities $t_1 \teq t_2 \in \Fc\!$. % where $t_1$ and $t_2$ have type $\tau$.
@@ -1785,7 +1786,7 @@ which implies $\J \vDash t_1 \teq t_2$ since $\J$ is normal.
 If $t$ is a variable, then $\interp{\J}{t} \vsim \ValC \ec{ t }$ by construction.
 
 If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
-then $\interp{\J}{t}$ is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \interp{\J}{u_1}, \ldots, \interp{\J}{u_n} ) }$ for some fresh $x$,
+then $\interp{\J}{t}$ is $\alpha$-equivalent with $\nf{\MU x.\allowbreak\; \const{C}( \interp{\J}{u_1},\allowbreak \ldots,\allowbreak \interp{\J}{u_n} ) }$ for some fresh $x$,
 which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$.
 Call this term $t'$.
 %By Lemma~\ref{lem:interpretation-completion}(2) and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
@@ -1795,7 +1796,7 @@ Since \rn{Inject} and \rn{Clash} do not apply to $\Fc\!$,
 by the construction of $\ValC$ we have that $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1,\allowbreak \ldots,\allowbreak w_n )$
 where
-$\muvar(w_i) = {\Varec{u_i}}$ for each $i$.  Thus by Lemma~\ref{lem:interpretation-completion}(2),
+$\muvar(w_i) = {\Varec{u_i}}$ for each~$i$.  Thus by Lemma~\ref{lem:interpretation-completion}(2),
 $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t'$.
 By Lemma~\ref{lem:mu-norm-arg},
@@ -1817,7 +1818,7 @@ by construction $\ValC\ec{u}$ must be of the form
 $\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
 where
 $\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$
-for each $i$, and thus by Lemma~\ref{lem:interpretation-completion}(2),
+for each~$i$, and thus by Lemma~\ref{lem:interpretation-completion}(2),
 $\expand{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
 If $j = \jPrime$, then $\interp{\J}{t}$ is $\alpha$-equivalent with $\expand{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}
 = \ValC \ec{t}$.
@@ -1841,7 +1842,7 @@ we conclude that $\J \vDash \Ec$.
 \end{proof}
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
-calculus is sound and complete for the universal theory of (co)datatypes. We can
+calculus is sound and complete for the universal theory of (co)datatypes. We may
 rightly call it a decision procedure for that theory.
 The proof of solution soundness is constructive in that it provides a
 method for constructing a model for a saturated configuration, by means of the
@@ -1921,17 +1922,19 @@ If %after doing so,
 the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
 and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
 
-While the decision procedure is restricted to universal conjectures, in practice
-we often want to solve problems that feature universal axioms and existential
+While the decision procedure is restricted to universal conjectures, users often
+want to solve problems that feature universal axioms and existential
 conjectures.
 %%% @ANDY: not sure how to phrase this now
 %where checking satisfiability requires reasoning about ground literals in the
 %presence of universally quantified formulas.
-Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete instantiation-based methods~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
-These methods extend naturally to %quantified
+Many SMT solvers, including CVC4, can reason about quantified formulas using
+incomplete instantiation-based
+techniques~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
+These techniques extend naturally to %quantified
 formulas involving datatypes and codatatypes.
 
-However, the presence of quantified formulas poses an additional challenge in
+However, the presence of quantifiers poses an additional challenge in
 the context of (co)datatypes. Quantified formulas may entail an upper bound on
 the cardinality of an uninterpreted type $\ty{u}$.
 When assuming that $\ty{u}$ has infinite cardinality, the calculus
@@ -1941,7 +1944,7 @@ applied.
 This does not %necessarily
 impact the correctness of the procedure in this setting,
 since %by assumption
-the solver is already incomplete in the presence of quantified formulas.
+the solver is already incomplete for quantified formulas.
 Nonetheless, two techniques help increase the precision of the solver.
 First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
 uninterpreted types.
@@ -1983,7 +1986,10 @@ based on whether $j = \jPrime$.
 % Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation), 
 % maybe we should just remove this paragraph.
 
-As Barrett et al.\ \cite{barrett-et-al-2007} observed for their procedure,
+% JB to AJR: I'd rather keep the para, based on feedback by Pascal.
+
+As Barrett et al.\ %\cite{barrett-et-al-2007}
+observed for their procedure,
 it is both theoretically and
 empirically beneficial to delay applications of \rn{Split} as long as
 possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
@@ -1999,25 +2005,29 @@ phase~2.
 \newcommand\gandl{G\&L}
 \newcommand\HD[1]{\hbox to2em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
-  * decision procedure useful both for proving and for model finding
-  * model finding: critical, without it unsound models
-  * contribution to proving is less clear
-    * some parts can be axiomatized
-    * only acyclicity and uniqueness, but how often do they pop up in practice?
+The decision procedure for (co)datatypes is useful both for proving (via
+negation, in the refutational style) and finite model finding.
+It is in fact vital for finite model finding,
+because the acyclicity and uniqueness rules are necessary for solution
+soundness, without which the generated models would often be spurious. The
+contributions to proving are less clear; they depend on how often the need for
+acyclicity or uniqueness arises in practice.
 
-
-To evaluate the decision procedure, we generated benchmark problems from existing
-Isabelle formalizations using Sledgehammer \cite{blanchette-et-al-2013-smt}.
+To evaluate the decision procedure for proving conjectures,
+we generated benchmark problems from existing interactive
+proof goals arising in existing
+Isabelle formalizations, using Sledgehammer \cite{blanchette-et-al-2013-smt}
+as translator from Isabelle to SMT-LIB.
 %There are not yet many benchmarks available, since codatatypes are a
 %recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.}
 We
-included all the theory files from the Isabelle distribution (Distro, 879~goals)
-and the \emph{Archive of Formal Proofs} (AFP, 2974~goals) \cite{klein-et-al-afp}
+included all the formalizations from the Isabelle distribution (Distro, 1179~goals)
+and the \emph{Archive of Formal Proofs} (AFP, 3014~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We
-added unpublished theories about Bird and Stern--Brocot trees
+added unpublished formalizations about Bird and Stern--Brocot trees
 by Peter Gammie and Andreas Lochbihler (\gandl,
-317~goals). To exercise the datatype support, theories about lists and trees
-were added to the first two benchmark sets. The theories were selected before
+265~goals). To exercise the datatype support, formalizations about lists and trees
+were added to the first two benchmark sets. The formalizations were selected before
 conducting any experiments. The experimental data are available
 online.%
 \footnote{\url{http://lara.epfl.ch/~reynolds/JAR-CADE2015-cdt/}}
@@ -2026,19 +2036,20 @@ online.%
 
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
-For each goal in each theory, we used Sledgehammer to select either 16 or
+For each goal in each formalization, we used Sledgehammer to select either 16 or
 256~lemmas, which were monomorphized and translated to SMT-LIB~2 along with the
 goal. The resulting problem was given to the
-development version of CVC4 (\textbf{which revision?}) and to
-Z3 4.3.2 (\textbf{really?}) for comparison, each running for
+development version of CVC4 (\textbf{TODO: which revision?}) and to
+Z3 4.3.2 (\textbf{TODO: really?}) for comparison, each running for
 up to 60~s on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
 Problems not involving any (co)datatypes were left out.
-Due to the lack of machinery for reconstructing inferences about (co)datatypes
-in Isabelle, the solvers are trusted as oracles. % in these experiments.
+Due to the lack of machinery in Isabelle for parsing CVC4 proofs and
+reconstructing inferences about (co)datatypes, the solvers are trusted
+as oracles. % in these experiments.
 %Z3 is included for comparison.
 
-The development version of CVC4 was run on each problem several times, with the
+CVC4 was run on each problem several times, with the
 support for datatypes and codatatypes either enabled or disabled. The
 contributions of the acyclicity and uniqueness rules were also measured.
 % to find
@@ -2046,9 +2057,9 @@ contributions of the acyclicity and uniqueness rules were also measured.
 Even when the
 decision procedure is disabled, the problems may contain
 basic lemmas about constructors and selectors, allowing some (co)datatype
-reasoning. This is especially the case for problems generated using 256~lemmas.
+reasoning. This is especially true for problems generated using 256~lemmas.
 The problems with 16~lemmas put more stress on the decision procedure but are
-less typical of Sledgehammer.
+less typical of Sledgehammer-generated problems.
 
 % when this makes sense.
 %This allows us to answer the question, \relax{What are the
@@ -2119,12 +2130,13 @@ Full (co)datatypes
   & 619 & -- & 1501 & -- & \bfseries 99 & -- & 2219 & -- %\\[\jot]
 \end{tabular}\end{center}
 \caption{\captionii}
-\label{tab:benchtwofittysix}
+\label{tab:benchtwofiftysix}
 \end{table*}
 
 \newpage
 
-The results are summarized in Table~\ref{tab:benchsixteen}.
+The results are summarized in Tables \ref{tab:benchsixteen} and
+\ref{tab:benchtwofiftysix}.
 %The goals in Table \ref{tab:benchsixteen} include 16
 %heuristically selected lemmas (before monomorphization);
 %\cite{meng-paulson-2009-relev};
@@ -2138,21 +2150,22 @@ success rate increase of over 5\%, which is quite significant.
 %obviously depends on the application.
 The raw evaluation data also
 suggest that the theoretically stronger decision procedures almost completely
-subsume the weaker ones in practice: We encountered only one goal (out of 4170)
+subsume the weaker ones in practice. We encountered only one
+(\textbf{TODO: FIXME}) goal (out of $2 \times 4458$)
 that was solved by a configuration of CVC4 and unsolved by a configuration of
 CVC4 with more features enabled.
-
+%
 Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
 %
-Three proofs were found thanks to
-the acyclicity rule and four required uniqueness. Among the latter,
-three are simple proofs of the form
+Four proofs were found thanks to
+the acyclicity rule and 17~required uniqueness. Among the latter,
+some were simple proofs of the form
 \keyw{by}~\textit{coinduction}~\textit{auto}
-in Isabelle \cite{blanchette-et-al-2014-impl}.
-The fourth proof, by Gammie and Lochbihler, is more elaborate:
+in Isabelle \cite{blanchette-et-al-2014-impl}, while others
+required more elaborate arguments---for example:
 %
 \begin{quote}
 \keyw{lemma} \,\textit{\nummodden\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \vthinspace\Longrightarrow\vthinspace x = \const{\nummodden}$ \\
@@ -2170,7 +2183,7 @@ where \const{\nummodden} is defined as $\const{\nummodden} =
 \label{sec:conclusion}
 
 We introduced a decision procedure for the universal theory of datatypes and
-codatatypes. Our main
+codatatypes. Our principal
 contribution has been the support for codatatypes. Both the metatheory and
 the implementation in CVC4 rely on $\mu$-terms to represent cyclic values.
 Although this aspect is primarily motivated by codatatypes, it enables
@@ -2185,13 +2198,16 @@ confirm that CVC4's new capabilities improve the state of the art.
 
 This work is part of a wider program that aims at enriching automatic provers
 with high-level features and at reducing the gap between automatic and
-interactive theorem proving. As future work, it would be useful to implement
-proof reconstruction for (co)data\-type inferences in Isabelle.
-CVC4's finite model finding capabilities \cite{reynolds-et-al-2013} could also
-be interfaced for generating counterexamples in proof assistants;
+interactive theorem proving.
+We are currently interfacing CVC4's finite model finding capabilities
+for generating counterexamples in proof assistants
+\cite{reynolds-et-al-2015-smt};
 %as an alternative to Nitpick;
 in this context, the acyclicity and uniqueness rules are
-crucial to exclude spurious countermodels. Finally, it might be worthwhile to
+crucial to exclude spurious countermodels.
+As future work, it would be useful to implement
+proof reconstruction for (co)data\-type inferences in Isabelle.
+Finally, it might be worthwhile to
 extend SMT solvers with dedicated support for (co)recursion.
 
 %Finally, it might be possible to go
@@ -2221,7 +2237,7 @@ codatatypes.
 %
 Pascal Fontaine, Andreas Lochbihler, Andrei Popescu, Christophe Ringeissen, Mark
 Summerfield, Dmitriy Traytel, and the anonymous reviewers suggested many
-textual improvements. The second author's research was partially supported by
+textual improvements. The second author's work was partially supported by
 the Deutsche
 Forschungs\-gemein\-schaft %(DFG)
 project ``Den Hammer h\"arten'' (grant NI\,491\slash 14-1)
