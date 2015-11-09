@@ -1848,7 +1848,7 @@ The proof of solution soundness is constructive in that it provides a
 method for constructing a model for a saturated configuration, by means of the
 mapping $\ValC$.
 
-\section{Implementation as a Theory Solver in CVC4}
+\section{Implementation in CVC4}
 \label{sec:implementation-as-a-theory-solver-in-cvc4}
 
 The decision procedure was presented at a high level of abstraction, omitting
@@ -1860,7 +1860,7 @@ the optimizations.
 %%% @ANDY: I'm trying without \paragraph's, to save space but also to make the
 %%% section look more like a whole than a random list of stuff. Revert if you
 %%% disagree.
-
+\subsection{Theory Solver for $\thD$}
 The decision procedure is implemented as a \relax{theory solver} of CVC4, that is, a
 specialized solver for determining the satisfiability of conjunctions of
 literals for its theory.
@@ -1922,40 +1922,6 @@ If %after doing so,
 the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
 and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
 
-While the decision procedure is restricted to universal conjectures, users often
-want to solve problems that feature universal axioms and existential
-conjectures.
-%%% @ANDY: not sure how to phrase this now
-%where checking satisfiability requires reasoning about ground literals in the
-%presence of universally quantified formulas.
-Many SMT solvers, including CVC4, can reason about quantified formulas using
-incomplete instantiation-based
-techniques~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
-These techniques extend naturally to %quantified
-formulas involving datatypes and codatatypes.
-
-However, the presence of quantifiers poses an additional challenge in
-the context of (co)datatypes. Quantified formulas may entail an upper bound on
-the cardinality of an uninterpreted type $\ty{u}$.
-When assuming that $\ty{u}$ has infinite cardinality, the calculus
-presented in Section~\ref{sec:the-decision-procedure} is \relax{incomplete}
-since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
-applied.
-This does not %necessarily
-impact the correctness of the procedure in this setting,
-since %by assumption
-the solver is already incomplete for quantified formulas.
-Nonetheless, two techniques help increase the precision of the solver.
-First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
-uninterpreted types.
-Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
-For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
-has cardinality one precisely when $\ty{u}$ has cardinality one.
-If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
-the implementation adds the clause %of the form
-$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F\!$.
-In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.
-
 The implementation of the decision procedure uses several optimizations
 following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
 %and are not reflected in the presentation of the calculus.
@@ -1995,6 +1961,77 @@ empirically beneficial to delay applications of \rn{Split} as long as
 possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
 they require traversing the equivalence classes, which is why they are part of
 phase~2.
+
+\begin{figure}[t!]
+\normalsize
+\centering
+\begin{enumerate}
+\item Let $\mathcal{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{x} =_{\mathcal{U}} \ec{y}$ if and only if:
+\begin{itemize}
+\item $\const{C}( x_1, \ldots, x_k ) \in \ec{x}$ and $\const{C}( y_1, \ldots, y_k ) \in \ec{y}$.
+\end{itemize}
+\item Repeat until $\mathcal{U}$ is unchanged
+\begin{enumerate}
+\item $\mathcal{U}' := \emptyset$
+\item for each $U_i \in \mathcal{U}$:
+\begin{itemize}
+\item[\ ] Let $\mathcal{U}_i$ be a partition of $U_i$ such that $\ec{x} =_{\mathcal{U}_i} \ec{y}$ for distinct $\ec{x}, \ec{y}$ if and only if:
+\begin{itemize}
+\item $\const{C}( x_1, \ldots, x_k ) \in \ec{x}$ and $\const{C}( y_1, \ldots, y_k ) \in \ec{y}$, and
+\item $\ec{x_j} =_{\mathcal{U}} \ec{y_j}$ for each $j = 1, \ldots, k$.
+\end{itemize}
+\item[\ ] $\mathcal{U}' := \mathcal{U}' \cup \mathcal{U}_i$.
+\end{itemize}
+\item $\mathcal{U} := \mathcal{U}'$
+\end{enumerate}
+\item If distinct $t\typ{\delta}, s\typ{\delta} \in U \in \mathcal{U}$ where $\delta \in \Codata$, apply \rn{Unique} to $t,s$.
+\end{enumerate}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Algorithm for checking Uniqueness.
+}
+\label{fig:cc-rules}
+\end{figure}
+
+
+
+\subsection{Model Construction}
+
+[TODO]
+
+\subsection{Extension to Quantified Formulas}
+While the decision procedure is restricted to universal conjectures, users often
+want to solve problems that feature universal axioms and existential
+conjectures.
+%%% @ANDY: not sure how to phrase this now
+%where checking satisfiability requires reasoning about ground literals in the
+%presence of universally quantified formulas.
+Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete 
+instantiation-based 
+techniques~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
+These techniques extend naturally to %quantified
+formulas involving datatypes and codatatypes.
+
+However, the presence of quantifiers poses an additional challenge in
+the context of (co)datatypes. Quantified formulas may entail an upper bound on
+the cardinality of an uninterpreted type $\ty{u}$.
+When assuming that $\ty{u}$ has infinite cardinality, the calculus
+presented in Section~\ref{sec:the-decision-procedure} is \relax{incomplete}
+since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
+applied.
+This does not %necessarily
+impact the correctness of the procedure in this setting,
+since %by assumption
+the solver is already incomplete for quantified formulas.
+Nonetheless, two techniques help increase the precision of the solver.
+First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
+uninterpreted types.
+Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
+For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
+has cardinality one precisely when $\ty{u}$ has cardinality one.
+If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
+the implementation adds the clause %of the form
+$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F\!$.
+In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.
 
 %\section{Examples}
 %\label{sec:examples}
