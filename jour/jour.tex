@@ -1905,22 +1905,105 @@ eagerly---that is, for partial satisfying assignments $M$---while the rules in
 phases~2 and~3 are performed only for complete satisfying
 assignments $M$.
 
+\begin{figure}[t!]
+\normalsize
+\centering
+\begin{enumerate}
+\item Let $U$ be the datatype equivalence classes of $\Ec$.
+\item Repeat until $U \neq \emptyset$.
+\begin{itemize}
+\item[\ ] For some $\ec{t} \in U$, $\mathrm{traverse}( \ec{t}, U, \emptyset )$
+\end{itemize}
+\end{enumerate}
+
+\flushleft $\mathrm{traverse}( \ec{t}, U, P )$:
+\begin{enumerate}
+\item If $\ec{t} \in P$, apply \rn{Acyclic} to $t$.
+\item If $\ec{t} \in U$,
+\begin{enumerate}
+\item If $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$, then for each $j = 1, \ldots k$,
+\begin{itemize}
+\item[\ ] $\mathrm{traverse}( \ec{t_j}, U, P \cup \{ \ec{t} \} )$
+\end{itemize}
+\item $U := U \textbackslash \{ \ec{t} \}$.
+\end{enumerate}
+\end{enumerate}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Algorithm for checking \rn{Acyclic}}
+\label{fig:acyclic-algo}
+\end{figure}
+
+\begin{figure}[t!]
+\normalsize
+\centering
+\begin{enumerate}
+\item Let $\mathcal{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcal{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
+\begin{itemize}
+\item $t\typ{\delta}$, $u\typ{\delta}$ where $\delta \in \Codata$, and $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
+\end{itemize}
+\item Repeat until $\mathcal{U}$ is unchanged
+\begin{enumerate}
+\item $\mathcal{U}' := \emptyset$
+\item for each $U_i \in \mathcal{U}$:
+\begin{itemize}
+\item[\ ] Let $\mathcal{U}_i$ be a partition of $U_i$ such that $\ec{t} =_{\mathcal{U}_i} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
+\begin{itemize}
+\item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$, and
+\item $\ec{t_j} =_{\mathcal{U}} \ec{u_j}$ for each $j = 1, \ldots, k$.
+\end{itemize}
+\item[\ ] $\mathcal{U}' := \mathcal{U}' \cup \mathcal{U}_i$.
+\end{itemize}
+\item $\mathcal{U} := \mathcal{U}'$
+\end{enumerate}
+\item If distinct $\ec{t}, \ec{u} \in U$ for some $U \in \mathcal{U}$, apply \rn{Unique} to $t,u$.
+\end{enumerate}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Algorithm for checking \rn{Unique}}
+\label{fig:uniqueness-algo}
+\end{figure}
+
 Before constructing a model for $F\!$, the theory solver constructs neither $\mu$-terms nor the mapping $\Val$.
-Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
-To detect whether \rn{Acyclic} applies,
-the procedure considers each equivalence class $\ec{t}$ containing a datatype constructor $\const{C}( t_1, \ldots, t_n )$.
-It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all constructor arguments in these equivalence classes recursively.
-If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
-To recognize when the precondition of \rn{Unique} holds,
-the procedure considers the set $\SSS$ of all codatatype equivalence classes. It
-simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
-while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
-and the equivalence of their arguments of ordinary types.
-It then partitions each set %in this partition %in the same manner
-recursively.
-If %after doing so,
-the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
-and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
+Instead, we use the algorithms in Figures~\ref{fig:acyclic-algo} and~\ref{fig:uniqueness-algo}
+for determining whether the rules \rn{Acyclic} and \rn{Unique} apply to our set $\Ec$.
+
+For \rn{Acyclic}, Figure~\ref{fig:acyclic-algo} considers the set $U$ of all datatype equivalence classes of $\Ec$.
+We choose an arbitrary $\ec{t}$ in $U$ and call the recursive subprocedure $\mathrm{traverse}$,
+which takes as input the current equivalence class we are processing, the set of equivalence classes $U$ we have yet to process,
+and the set of equivalence classes $P$ we are currently processing.
+If a call to $\mathrm{traverse}( \ec{t}, U, P )$ is such that $\ec{t} \in P$,
+we know that the rule \rn{Acyclic} applies to $t$.
+Otherwise, if we have yet to process $\ec{t}$, as indicated by the condition $\ec{t} \in U$,
+then if $\ec{t}$ contains a constructor term $\const{C}( t_1, \ldots, t_k )$, 
+then we recursively call $\mathrm{traverse}$ on each of $\ec{t_1}, \ldots, \ec{t_n}$.
+If this succeeds, we remove $\ec{t}$ from $U$.
+
+For \rn{Unique}, Figure~\ref{fig:uniqueness-algo} considers a partition $\mathcal{U}$ of the equivalence classes of our set $\Ec$
+such that equivalence classes having a constructor term with top symbol $\const{C}$ are placed in the same subset, for each constructor $\const{C}$.
+We write $\ec{t} =_{\mathcal{U}} \ec{u}$ to denote that $\ec{t}$ and $\ec{u}$ reside in the same subset within $\mathcal{U}$.
+We then refine $\mathcal{U}$ by 
+constructing a partition $\mathcal{U}_i$ of each $U_i \in \mathcal{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcal{U}_i$ 
+if and only if they contain constructor terms $\const{C}( t_1, \ldots, t_k )$ and $\const{C}( u_1, \ldots, u_k )$
+where each $t_j, u_j$ are such that $\ec{t_j}$ and $\ec{u_j}$ reside in the same subset of $\mathcal{U}$ for each $j=1, \ldots, k$.
+Let $\mathcal{U'}$ be the union of each of these partitions.
+We update $\mathcal{U}$ to $\mathcal{U'}$.
+This refinement is repeated until $\mathcal{U}$ is left unchanged.
+If the resulting partition $\mathcal{U}$ contains a subset $U$ having two distinct equivalence classes $\ec{t}$ and $\ec{u}$, then \rn{Unique} applies to $t$ and $u$.
+
+%Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
+%To detect whether \rn{Acyclic} applies,
+%the procedure considers each equivalence class $\ec{t}$ containing a datatype constructor $\const{C}( t_1, \ldots, t_n )$.
+%It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all constructor arguments in these equivalence classes recursively.
+%If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
+%To recognize when the precondition of \rn{Unique} holds,
+%the procedure considers the set $\SSS$ of all codatatype equivalence classes. It
+%simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
+%while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
+%and the equivalence of their arguments of ordinary types.
+%It then partitions each set %in this partition %in the same manner
+%recursively.
+%If %after doing so,
+%the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
+%and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
 
 The implementation of the decision procedure uses several optimizations
 following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
@@ -1961,65 +2044,6 @@ empirically beneficial to delay applications of \rn{Split} as long as
 possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
 they require traversing the equivalence classes, which is why they are part of
 phase~2.
-
-\begin{figure}[t!]
-\normalsize
-\centering
-\begin{enumerate}
-\item Let $\mathcal{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcal{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
-\begin{itemize}
-\item $t\typ{\delta}$, $u\typ{\delta}$ where $\delta \in \Codata$, and $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
-\end{itemize}
-\item Repeat until $\mathcal{U}$ is unchanged
-\begin{enumerate}
-\item $\mathcal{U}' := \emptyset$
-\item for each $U_i \in \mathcal{U}$:
-\begin{itemize}
-\item[\ ] Let $\mathcal{U}_i$ be a partition of $U_i$ such that $\ec{t} =_{\mathcal{U}_i} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
-\begin{itemize}
-\item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$, and
-\item $\ec{t_j} =_{\mathcal{U}} \ec{u_j}$ for each $j = 1, \ldots, k$.
-\end{itemize}
-\item[\ ] $\mathcal{U}' := \mathcal{U}' \cup \mathcal{U}_i$.
-\end{itemize}
-\item $\mathcal{U} := \mathcal{U}'$
-\end{enumerate}
-\item If distinct $\ec{t}, \ec{u} \in U$ for some $U \in \mathcal{U}$, apply \rn{Unique} to $t,u$.
-\end{enumerate}
-\vspace*{-2pt} %% TYPESETTING HACK
-\caption{\,Algorithm for checking \rn{Unique}}
-\label{fig:uniqueness-algo}
-\end{figure}
-
-\begin{figure}[t!]
-\normalsize
-\centering
-\begin{enumerate}
-\item Let $U$ be the datatype equivalence classes of $\Ec$.
-\item Repeat until $U \neq \emptyset$.
-\begin{itemize}
-\item[\ ] For some $\ec{t} \in U$, $\mathrm{traverse}( \ec{t}, U, \emptyset )$
-\end{itemize}
-\end{enumerate}
-
-\flushleft $\mathrm{traverse}( \ec{t}, U, P )$:
-\begin{enumerate}
-\item If $\ec{t} \in P$, apply \rn{Acyclic} to $t$.
-\item If $\ec{t} \in U$,
-\begin{enumerate}
-\item If $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$, then for each $j = 1, \ldots k$,
-\begin{itemize}
-\item[\ ] $\mathrm{traverse}( \ec{t_j}, U, P \cup \{ \ec{t} \} )$
-\end{itemize}
-\item $U := U \textbackslash \{ \ec{t} \}$.
-\end{enumerate}
-\end{enumerate}
-\vspace*{-2pt} %% TYPESETTING HACK
-\caption{\,Algorithm for checking \rn{Acyclic}
-}
-\label{fig:acyclic-algo}
-\end{figure}
-
 
 \subsection{Model Construction}
 
