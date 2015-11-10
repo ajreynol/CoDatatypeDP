@@ -799,14 +799,12 @@ determines the
 $\thD$-satisfiability of finite sets $\Ec$ of literals:\ equalities
 and disequalities between $\Sig$-terms,
 whose variables are interpreted existentially.
-The procedure is formulated as a tableau-like calculus.
+The decision procedure is formulated as a tableau-like calculus.
 %Following the tradition of refutational theorem proving,
 Proving a universal quantifier-free conjecture is reduced to showing that
 its negation is unsatisfiable. The presentation is
 inspired by Barrett et al.\ \cite{barrett-et-al-2007} but
 higher-level, using unoriented equations instead of oriented ones.
-
-% whose derivation rules are applied until saturation or contradiction.
 
 To simplify the presentation, we make a few assumptions about
 $\Sig$.
@@ -823,11 +821,18 @@ can be viewed as a %n enumeration
 datatype with $n$~nullary constructors
 \cite{barrett-et-al-2007}.
 
+%AJR: would prefer splitting this section into two parts (calculus, correctness), let me know if you agree.
+\subsection{Calculus for $\thD$}
+\label{sec:calculus-for-dc}
+
+% whose derivation rules are applied until saturation or contradiction.
+
 %We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
 %We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
 %are simplified to $t_k$. All literals added to $\Ec$ are also implicitly
 %normalized in this manner.
 
+In this section, we describe the derivation rules of the calculus for $\thD$.
 A derivation rule can be applied to $\Ec$ if %all
 the %specified
 preconditions are met.
@@ -1240,7 +1245,10 @@ based on a recursive computation of the cardinalities of the
 constructors' argument types.
 %This step relies on the assumption that uninterpreted types are infinite.
 
-\paragraph{Correctness.}
+\subsection{Termination and Correctness}
+\label{sec:termination-and-correctness}
+
+We now show the termination and correctness of the calculus.
 Correctness means that if there exists a closed derivation tree with root node
 $\Ec$, then $\Ec$ is $\thD$-unsatisfiable; and if there exists
 a derivation tree with root node $\Ec$ that contains a saturated node, then
@@ -1401,10 +1409,10 @@ then $\vec u \vsim \expand{t}{\vec w}$\vthinspace.
 %\qed
 %\end{proof}
 
-\begin{lemma}
-\label{lem:mu-norm-interp}
-If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\expand{t}{u}$ is normal.
-\end{lemma}
+%\begin{lemma}
+%\label{lem:mu-norm-interp}
+%If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\expand{t}{u}$ is normal.
+%\end{lemma}
 % TODO:
 %\begin{proof}
 %\qed
@@ -1989,6 +1997,7 @@ Let $\mathcal{U'}$ be the union of each of these partitions.
 We update $\mathcal{U}$ to $\mathcal{U'}$.
 This refinement is repeated until $\mathcal{U}$ is left unchanged.
 If the resulting partition $\mathcal{U}$ contains a subset $U$ having two distinct equivalence classes $\ec{t}$ and $\ec{u}$, then \rn{Unique} applies to $t$ and $u$.
+\textbf{Mention this coincides with DFA minimization algorithm.}
 
 %Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
 %To detect whether \rn{Acyclic} applies,
@@ -2047,6 +2056,10 @@ they require traversing the equivalence classes, which is why they are part of
 phase~2.
 
 \subsection{Model Construction}
+
+The implementation is able to produce models for satisfiable inputs.
+
+
 
 [TODO]
 
@@ -2128,8 +2141,10 @@ online.%
 For each goal in each formalization, we used Sledgehammer to select either 16 or
 256~lemmas, which were monomorphized and translated to SMT-LIB~2 along with the
 goal. The resulting problem was given to the
-development version of CVC4 (\textbf{TODO: which revision?}) and to
-Z3 4.3.2 (\textbf{TODO: really?}) for comparison, each running for
+development version of CVC4 (\textbf{TODO: which revision?}) %AJR : version is from September 15 2015, git doesn't give nice revision numbers unfortunately
+and to
+Z3 4.3.2 %(\textbf{TODO: really?}) AJR : yes
+for comparison, each running for
 up to 60~s on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
 Problems not involving any (co)datatypes were left out.
