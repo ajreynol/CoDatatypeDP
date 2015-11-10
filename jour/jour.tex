@@ -896,6 +896,11 @@ only if $t \teq u \in \Ec$.
 Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class of $t$ in $\Ec$.
+Moreover, at the end of this phase, each equivalence class $\ec{t}$ contains (at most) 
+one constructor term that is unique up to congruence.
+Thus, in the subsequent phases, 
+when considering the case that $\ec{t}$ contains a constructor term,
+it is enough for our purposes to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among these.
 
 \paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(Fig.~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
@@ -957,11 +962,14 @@ a cyclic $\mu$-term describes an infeasible class of values.
 The mapping $\Val$ is defined as follows.
 %
 With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
-of the same type as $u$
-%not occurring in $\tEc$,
-and set $\Val\ec{u} := {\Varec{u}}$. Because $\Varec{u}$ is unspecified,
+of the same type as $u$. %not occurring in $\tEc$,
+%AJR : this sentence is necessary, since we are abusing the \Varec notation a bit
+For a term $t \in \tEc$, 
+we write $\Varec{t}$ to denote the variable associated with equivalence class $\ec{t}$.
+Initially, we set $\Val\ec{u} := {\Varec{u}}$ for each equivalence class $\ec{u}$. Because $\Varec{u}$ is unspecified,
 this indicates that there are initially no
-constraints on the values for any equivalence class $\ec{u}$. The mapping $\Val$
+constraints on the values for any equivalence class $\ec{u}$. 
+The mapping $\Val$
 is refined by applying the following unfolding rule exhaustively:\strut
 \[
 \hbox{\(
@@ -1212,7 +1220,7 @@ the \rn{Unique} rule applies to derive $y \teq \const{S}(y)$.
 %
 At this point, phase~1 is activated again, % to XXX the equivalence classes,
 yielding
-$\{ x,\, \const{S}(x) \}$ and
+$\{ x,\, \const{S}(x) \}$ andwill
 $\{ y,\, \const{S}(y),\allowbreak\, \const{S}(\const{S}(y)) \}$.
 The mapping $\Val$ is updated accordingly:
 \begin{align*}
@@ -2058,10 +2066,16 @@ phase~2.
 \subsection{Model Construction}
 
 The implementation is able to produce models for satisfiable inputs.
+As described in Section~\ref{sec:termination-and-correctness},
+given a saturated set $\Ec$, we may construct a map $\ValC$ from variables (corresponding to the equivalence classes of $\Ec$) to closed normal $\MU$-terms.
+%In practice, this requires a fair enumerator for each (co)datatype $\tau$.
+
+%Recall that to assign a value $\MU {\Varec{x}}.\; t$ to variable 
+
+%We do not explicitly construct the set $\BAD_{\smash{\J}}^x( \Val )$.
+%Instead, 
 
 
-
-[TODO]
 
 \subsection{Extension to Quantified Formulas}
 While the decision procedure is restricted to universal conjectures, users often
