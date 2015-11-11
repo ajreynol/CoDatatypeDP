@@ -2005,7 +2005,7 @@ Let $\mathcal{U'}$ be the union of each of these partitions.
 We update $\mathcal{U}$ to $\mathcal{U'}$.
 This refinement is repeated until $\mathcal{U}$ is left unchanged.
 If the resulting partition $\mathcal{U}$ contains a subset $U$ having two distinct equivalence classes $\ec{t}$ and $\ec{u}$, then \rn{Unique} applies to $t$ and $u$.
-\textbf{Mention this coincides with DFA minimization algorithm.}
+This algorithm is similar to the classic algorithm for minimizing deterministic finite automata (DFA). \textbf{maybe cite?}
 
 %Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
 %To detect whether \rn{Acyclic} applies,
@@ -2065,17 +2065,26 @@ phase~2.
 
 \subsection{Model Construction}
 
-The implementation is able to produce models for satisfiable inputs.
+When instructed, the implementation produces models for satisfiable inputs.
 As described in Section~\ref{sec:termination-and-correctness},
-given a saturated set $\Ec$, we may construct a map $\ValC$ from variables (corresponding to the equivalence classes of $\Ec$) to closed normal $\MU$-terms.
-%In practice, this requires a fair enumerator for each (co)datatype $\tau$.
+given a saturated set $\Ec$, we may construct a map $\ValC$ from 
+the equivalence classes of $\Ec$ to closed normal $\MU$-terms.
+Recall our construction of $\ValC$ requires picking values $\MU {\Varec{x}}.\; t$ for each $\Varec{x} \in \FV( \ValC )$
+such that $\MU {\Varec{x}}.\; t$ does not occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
+To pick values $\MU {\Varec{x}}.\; t$, we use a fair enumerator for each (co)datatype $\tau$ which enumerates the values
+of type $\tau$ in a normal interpretation, which are closed normal $\MU$-terms.
+Concretely, we enumerate a stream of \emph{every} $\MU$-term of our signature $\Sigma$ in a fair manner,
+discarding whose that have free variables or are not normal.
+For those that are closed and normal, we then check whether they occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$,
+which we do not explicitly construct.
+%We do not explicitly construct the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
+Instead, to check if a term $\MU {\Varec{x}}.\; t$ occurs in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$, 
+we check if it is alpha-equivalent to a closed-term $(\MU {\Varec{y}}.\; u) \{ \Varec{x} \mapsto z \}$ for
+some $\MU {\Varec{y}}.\; u$ in the range of $\ValC$ and variable $z$.
+This can be efficiently checked by matching the term $\MU {\Varec{x}}.\; t$ with the term $\MU {\Varec{y}}.\; u$.
 
-%Recall that to assign a value $\MU {\Varec{x}}.\; t$ to variable 
-
-%We do not explicitly construct the set $\BAD_{\smash{\J}}^x( \Val )$.
-%Instead, 
-
-
+%Once the mapping $\ValC$ is constructed, our model $\J$ interprets
+%$\J( x ) = \ValC \ec{x}$ for each variable $x$ occurring free in $\Ec$.
 
 \subsection{Extension to Quantified Formulas}
 While the decision procedure is restricted to universal conjectures, users often
