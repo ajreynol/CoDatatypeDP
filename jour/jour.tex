@@ -822,7 +822,11 @@ datatype with $n$~nullary constructors
 \cite{barrett-et-al-2007}.
 
 %AJR: would prefer splitting this section into two parts (calculus, correctness), let me know if you agree.
-\subsection{Calculus for $\thD$}
+%JB: I fully agree, but I tuned the titles a little bit. Also, I tried
+%%% to avoid such "meta" (or "road-sign") wording as
+%%% "This section will describe such-and-such".
+
+\subsection{A Calculus for $\thD$}
 \label{sec:calculus-for-dc}
 
 % whose derivation rules are applied until saturation or contradiction.
@@ -832,9 +836,9 @@ datatype with $n$~nullary constructors
 %are simplified to $t_k$. All literals added to $\Ec$ are also implicitly
 %normalized in this manner.
 
-In this section, we describe the derivation rules of the calculus for $\thD$.
+Our calculus for $\thD$ consists of derivation rules.
 A derivation rule can be applied to $\Ec$ if %all
-the %specified
+the specified
 preconditions are met.
 The conclusion either specifies equalities to be added to $\Ec$
 or is $\bot$ (contradiction).
@@ -852,9 +856,9 @@ derivation rule to the parent. A derivation tree is \emph{closed} if all of
 its leaf nodes are $\bot$. A node is \emph{saturated} if no nonredundant
 instance of a rule can be applied to it.
 
-The calculus consists of three sets of rules, given in
+The derivation rules are partitioned into three sets of rules, given in
 Figs.\ \ref{fig:cc-rules}~to~\ref{fig:split-rule}, corresponding to three
-phases. The first phase computes the bidirectional closure of $\Ec$. The second
+phases of the calculus. The first phase computes the bidirectional closure of $\Ec$. The second
 phase makes inferences based on acyclicity (for datatypes) and uniqueness
 (for codatatypes).
 The third phase performs case distinctions on constructors for
@@ -896,11 +900,13 @@ only if $t \teq u \in \Ec$.
 Thus, we can regard $\Ec$ as a set of
 equivalence classes of terms. For a term $t \in \tEc$, we write $\ec{t}$ to
 denote the equivalence class of $t$ in $\Ec$.
-Moreover, at the end of this phase, each equivalence class $\ec{t}$ contains (at most) 
+Moreover, at the end of this phase, each equivalence class $\ec{t}$ contains
+at most %%% JB: dropped ()'s
 one constructor term that is unique up to congruence.
 Thus, in the subsequent phases, 
 when considering the case that $\ec{t}$ contains a constructor term,
-it is enough for our purposes to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among these.
+it is enough %for our purposes
+to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among these.
 
 \paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(Fig.~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
@@ -963,9 +969,9 @@ The mapping $\Val$ is defined as follows.
 %
 With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
 of the same type as $u$. %not occurring in $\tEc$,
-%AJR : this sentence is necessary, since we are abusing the \Varec notation a bit
 For a term $t \in \tEc$, 
-we write $\Varec{t}$ to denote the variable associated with equivalence class $\ec{t}$.
+we write $\Varec{t}$ to denote the variable associated with
+the equivalence class $\ec{t}$.
 Initially, we set $\Val\ec{u} := {\Varec{u}}$ for each equivalence class $\ec{u}$. Because $\Varec{u}$ is unspecified,
 this indicates that there are initially no
 constraints on the values for any equivalence class $\ec{u}$. 
@@ -1253,7 +1259,7 @@ based on a recursive computation of the cardinalities of the
 constructors' argument types.
 %This step relies on the assumption that uninterpreted types are infinite.
 
-\subsection{Termination and Correctness}
+\subsection{Termination and Correctness of the Calculus}
 \label{sec:termination-and-correctness}
 
 We now show the termination and correctness of the calculus.
