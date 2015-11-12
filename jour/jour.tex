@@ -1427,7 +1427,6 @@ then $\vec u \vsim \expand{t}{\vec w}$\vthinspace.
 %\label{lem:mu-norm-interp}
 %If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\expand{t}{u}$ is normal.
 %\end{lemma}
-% TODO:
 %\begin{proof}
 %\qed
 %\end{proof}
@@ -1875,15 +1874,15 @@ mapping $\ValC$.
 
 The decision procedure was presented at a high level of abstraction, omitting
 quite a few details. This section describes the main aspects of the
-implementation within the SMT solver CVC4:\ the integration into CDCL($T$)
-\cite{ganzinger-et-al-2004}, the extension to quantified formulas, and some of
-the optimizations.
+implementation within the SMT solver CVC4:\ the integration of the
+procedure into CDCL($T$)
+\cite{ganzinger-et-al-2004}, the construction of models with $\mu$-terms,
+and the extension of the procedure to quantified formulas.
+%, and some of the optimizations.
 
-%%% @ANDY: I'm trying without \paragraph's, to save space but also to make the
-%%% section look more like a whole than a random list of stuff. Revert if you
-%%% disagree.
-\subsection{Theory Solver for $\thD$}
-The decision procedure is implemented as a \relax{theory solver} of CVC4, that is, a
+\subsection{A Theory Solver for $\thD$}
+
+The decision procedure is implemented as a \relax{theory solver} of CVC4---that is, a
 specialized solver for determining the satisfiability of conjunctions of
 literals for its theory.
 Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a set of
@@ -1898,10 +1897,14 @@ partial assignment as a set $M$ of true literals.
 By a variant of the Nelson--Oppen method \cite{jovanovic2011sharing,nelson-oppen-1979},
 each $T_i$-solver %for $i = 1, \ldots, l$  n?
 takes as input the union $M_i$
-of (1)~the purified form of $T_i$-literals occurring in $M$, where fresh
+of
+\begin{itemize}
+\item the purified form of $T_i$-literals occurring in $M$, where fresh
 variables replace terms containing symbols not belonging to~$T_i$;
-(2)~additional (dis)equalities between variables of types not belonging to
-$T_i$. Each $T_i$-solver
+\item additional (dis)equalities between variables of types not belonging to
+$T_i$.
+\end{itemize}
+Each $T_i$-solver
 either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
 $\neg\: C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
 When $M$ is a complete assignment for $F\!$, a theory solver can choose to do
@@ -1930,27 +1933,34 @@ assignments $M$.
 \begin{figure}[t!]
 \normalsize
 \centering
+\flushleft $\rn{Acyclic}(t)$:
+
+\vspace*{-\topsep}
+
 \begin{enumerate}
 \item Let $U$ be the datatype equivalence classes of $\Ec$.
-\item Repeat until $U \neq \emptyset$.
+\item Repeat until $U \neq \emptyset$:
 \begin{itemize}
-\item[\ ] For some $\ec{t} \in U$, $\mathrm{traverse}( \ec{t}, U, \emptyset )$
+\item[\ ] For some $\ec{t} \in U$, $\rn{Traverse}( \ec{t}, U, \emptyset )$.
 \end{itemize}
 \end{enumerate}
 
-\flushleft $\mathrm{traverse}( \ec{t}, U, P )$:
+\flushleft $\rn{Traverse}( \ec{t}, U, P )$:
+
+\vspace*{-\topsep}
+
 \begin{enumerate}
-\item If $\ec{t} \in P$, apply \rn{Acyclic} to $t$.
-\item If $\ec{t} \in U$,
+\item If $\ec{t} \in P$, $\rn{Acyclic}(t)$.
+\item If $\ec{t} \in U$:
 \begin{enumerate}
-\item If $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$, then for each $j = 1, \ldots k$,
+\item[2.1.] If $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$, then for each $j = 1, \ldots k$:
 \begin{itemize}
-\item[\ ] $\mathrm{traverse}( \ec{t_j}, U, P \cup \{ \ec{t} \} )$
+\item[2.1.1.] $\rn{Traverse}( \ec{t_j}, U, P \cup \{ \ec{t} \} )$.
 \end{itemize}
-\item $U := U \textbackslash \{ \ec{t} \}$.
+\item[2.2.] $U := U \textbackslash \{ \ec{t} \}$.
 \end{enumerate}
 \end{enumerate}
-\vspace*{-2pt} %% TYPESETTING HACK
+\vspace*{-\topsep}
 \caption{\,Algorithm for checking \rn{Acyclic}}
 \label{fig:acyclic-algo}
 \end{figure}
@@ -1958,60 +1968,69 @@ assignments $M$.
 \begin{figure}[t!]
 \normalsize
 \centering
+
+\flushleft $\rn{Unique}(t, u)$:
+
+\vspace*{-\topsep}
+
 \begin{enumerate}
-\item Let $\mathcal{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcal{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
-\begin{itemize}
-\item $t\typ{\delta}$, $u\typ{\delta}$ where $\delta \in \Codata$, and $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
-\end{itemize}
-\item Repeat until $\mathcal{U}$ is unchanged
+\item Let $\mathcalx{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcalx{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if
+  $t$, $u$ have type $\delta \in \Codata$,
+  $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$,
+  and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
+
+\item Repeat until $\mathcalx{U}$ is unchanged:
 \begin{enumerate}
-\item $\mathcal{U}' := \emptyset$
-\item for each $U_i \in \mathcal{U}$:
+\item[2.1.] $\mathcalx{U}' := \emptyset$.
+\item[2.2.] For each $U_i \in \mathcalx{U}$:
 \begin{itemize}
-\item[\ ] Let $\mathcal{U}_i$ be a partition of $U_i$ such that $\ec{t} =_{\mathcal{U}_i} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if:
+\item[2.2.1.] Let $\mathcalx{U}_i$ be a partition of $U_i$ such that $\ec{t} =_{\mathcalx{U}_i} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if
 \begin{itemize}
 \item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$, and
-\item $\ec{t_j} =_{\mathcal{U}} \ec{u_j}$ for each $j = 1, \ldots, k$.
+\item $\ec{t_j} =_{\mathcalx{U}} \ec{u_j}$ for each $j = 1, \ldots, k$.
 \end{itemize}
-\item[\ ] $\mathcal{U}' := \mathcal{U}' \cup \mathcal{U}_i$.
+\item[2.2.2.] $\mathcalx{U}' := \mathcalx{U}' \cup \mathcalx{U}_i$.
 \end{itemize}
-\item $\mathcal{U} := \mathcal{U}'$
+\item[2.3.] $\mathcalx{U} := \mathcalx{U}'$.
 \end{enumerate}
-\item If distinct $\ec{t}, \ec{u} \in U$ for some $U \in \mathcal{U}$, apply \rn{Unique} to $t,u$.
+\item If distinct $\ec{t}, \ec{u} \in U$ for some $U \in \mathcalx{U}$, $\rn{Unique}(t,u)$.
 \end{enumerate}
-\vspace*{-2pt} %% TYPESETTING HACK
+\vspace*{-\topsep}
 \caption{\,Algorithm for checking \rn{Unique}}
 \label{fig:uniqueness-algo}
 \end{figure}
 
 Before constructing a model for $F\!$, the theory solver constructs neither $\mu$-terms nor the mapping $\Val$.
-Instead, we use the algorithms in Figures~\ref{fig:acyclic-algo} and~\ref{fig:uniqueness-algo}
-for determining whether the rules \rn{Acyclic} and \rn{Unique} apply to our set $\Ec$.
+Instead, it relies on the algorithms in Figs.~\ref{fig:acyclic-algo} and~\ref{fig:uniqueness-algo}
+for determining whether the rules \rn{Acyclic} and \rn{Unique} apply to the set $\Ec$.
 
-For \rn{Acyclic}, Figure~\ref{fig:acyclic-algo} considers the set $U$ of all datatype equivalence classes of $\Ec$.
-We choose an arbitrary $\ec{t}$ in $U$ and call the recursive subprocedure $\mathrm{traverse}$,
+For \rn{Acyclic}, Fig.~\ref{fig:acyclic-algo} considers the set $U$ of all datatype equivalence classes of $\Ec$.
+We choose an arbitrary $\ec{t}$ in $U$ and call the recursive subprocedure $\rn{Traverse}$,
 which takes as input the current equivalence class we are processing, the set of equivalence classes $U$ we have yet to process,
 and the set of equivalence classes $P$ we are currently processing.
-If a call to $\mathrm{traverse}( \ec{t}, U, P )$ is such that $\ec{t} \in P$,
+If a call to $\rn{Traverse}( \ec{t}, U, P )$ is such that $\ec{t} \in P$,
 we know that the rule \rn{Acyclic} applies to $t$.
 Otherwise, if we have yet to process $\ec{t}$, as indicated by the condition $\ec{t} \in U$,
 then if $\ec{t}$ contains a constructor term $\const{C}( t_1, \ldots, t_k )$, 
-then we recursively call $\mathrm{traverse}$ on each of $\ec{t_1}, \ldots, \ec{t_n}$.
+then we recursively call $\rn{Traverse}$ on each of $\ec{t_1}, \ldots, \ec{t_n}$.
 If this succeeds, we remove $\ec{t}$ from $U$.
 
-For \rn{Unique}, Figure~\ref{fig:uniqueness-algo} considers a partition $\mathcal{U}$ of the equivalence classes of our set $\Ec$
+For \rn{Unique}, Fig.~\ref{fig:uniqueness-algo} considers a partition $\mathcalx{U}$ of the equivalence classes of our set $\Ec$
 such that codatatype equivalence classes having a constructor term with top symbol $\const{C}$ are placed in the same subset, 
 for each constructor $\const{C}$.
-We write $\ec{t} =_{\mathcal{U}} \ec{u}$ to denote that $\ec{t}$ and $\ec{u}$ reside in the same subset within $\mathcal{U}$.
-We then refine $\mathcal{U}$ by 
-constructing a partition $\mathcal{U}_i$ of each $U_i \in \mathcal{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcal{U}_i$ 
+We write $\ec{t} =_{\mathcalx{U}} \ec{u}$ to denote that $\ec{t}$ and $\ec{u}$ reside in the same subset within $\mathcalx{U}$.
+We then refine $\mathcalx{U}$ by 
+constructing a partition $\mathcalx{U}_i$ of each $U_i \in \mathcalx{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcalx{U}_i$ 
 if and only if they contain constructor terms $\const{C}( t_1, \ldots, t_k )$ and $\const{C}( u_1, \ldots, u_k )$
-where each $t_j, u_j$ are such that $\ec{t_j}$ and $\ec{u_j}$ reside in the same subset of $\mathcal{U}$ for each $j=1, \ldots, k$.
-Let $\mathcal{U'}$ be the union of each of these partitions.
-We update $\mathcal{U}$ to $\mathcal{U'}$.
-This refinement is repeated until $\mathcal{U}$ is left unchanged.
-If the resulting partition $\mathcal{U}$ contains a subset $U$ having two distinct equivalence classes $\ec{t}$ and $\ec{u}$, then \rn{Unique} applies to $t$ and $u$.
-This algorithm is similar to the classic algorithm for minimizing deterministic finite automata (DFA). \textbf{maybe cite?}
+where each $t_j, u_j$ are such that $\ec{t_j}$ and $\ec{u_j}$ reside in the same subset of $\mathcalx{U}$ for each $j=1, \ldots, k$.
+Let $\mathcalx{U'}$ be the union of each of these partitions.
+We update $\mathcalx{U}$ to $\mathcalx{U'}$.
+This refinement is repeated until $\mathcalx{U}$ is left unchanged.
+If the resulting partition $\mathcalx{U}$ contains a subset $U$ having two distinct equivalence classes $\ec{t}$ and $\ec{u}$, then \rn{Unique} applies to $t$ and $u$.
+This algorithm is analogous to Hopcroft's algorithm for minimizing
+deterministic finite automata \cite{hopcroft-1971}---terms correspond to
+states, argument positions $1,\ldots,k$ correspond to input symbols, and the top constructor symbol
+of a term generalizes the accepting/rejecting status of a state.
 
 %Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
 %To detect whether \rn{Acyclic} applies,
@@ -2093,6 +2112,7 @@ This can be efficiently checked by matching the term $\MU {\Varec{x}}.\; t$ with
 %$\J( x ) = \ValC \ec{x}$ for each variable $x$ occurring free in $\Ec$.
 
 \subsection{Extension to Quantified Formulas}
+
 While the decision procedure is restricted to universal conjectures, users often
 want to solve problems that feature universal axioms and existential
 conjectures.
