@@ -1,0 +1,11 @@
+diff no_co_data data_wo_acyclic | grep '<' | wc -l
+diff data_wo_acyclic full_data | grep '<' | wc -l
+diff no_co_data codata_wo_unique | grep '<' | wc -l
+diff codata_wo_unique full_codata | grep '<' | wc -l
+diff full_data full_co_data | grep '<' | wc -l
+diff full_codata full_co_data | grep '<' | wc -l
+echo
+diff no_co_data full_co_data | grep '<' | wc -l
+echo
+diff no_co_data full_co_data | grep '<' | grep ' 16' | wc -l
+diff no_co_data full_co_data | grep '<' | grep ' 256' | wc -l
