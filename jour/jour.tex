@@ -845,7 +845,7 @@ datatype with $n$~nullary constructors
 Our calculus for $\thD$ consists of derivation rules.
 A derivation rule can be applied to $\Ec$ if %all
 the specified
-preconditions are met.
+premises are met.
 The conclusion either specifies equalities to be added to $\Ec$
 or is $\bot$ (contradiction).
 % (in which case we call an application of it \emph{nonterminal})
@@ -888,7 +888,7 @@ are saturated.
 %we branch on constructor types for various terms in $\tEc$.
 %Following the conventions from~\cite{},
 %the derivation rules of our calculus are given in \emph{guarded assignment form},
-%where a rule can be applied to $\Ec$ if it meets all of the specified preconditions for $\Ec$.
+%where a rule can be applied to $\Ec$ if it meets all of the specified premises for $\Ec$.
 
 \paragraph{Phase 1: Computing the Bidirectional Closure \rm(Fig.~\ref{fig:cc-rules}).}
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
@@ -1269,7 +1269,8 @@ constructors' argument types.
 \label{sec:termination-and-correctness}
 
 We now show the termination and correctness of the calculus.
-Correctness means that if there exists a closed derivation tree with root node
+Correctness means the following:
+If there exists a closed derivation tree with root node
 $\Ec$, then $\Ec$ is $\thD$-unsatisfiable; and if there exists
 a derivation tree with root node $\Ec$ that contains a saturated node, then
 $\Ec$ is $\thD$-satisfiable.
@@ -1369,10 +1370,10 @@ $\expand{t}{u}$, as returned by the function
     \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u }^{\smash{B \,\uplus\, \{ x \}}}\bigr)} & \text{otherwise}
 \end{cases}
 \end{array}\]
-The recursion will eventually terminate because each recursion adds one bound
+The recursion will eventually terminate because each recursive call adds one bound
 variable to $B$ and there are finitely many distinct bound variables in a $\mu$-term.
-Intuitively, the expansion of a subterm is a stand-alone
-$\mu$-term that denotes the same value as the original subterm---e.g.,
+Intuitively, the expansion of a subterm is a self-contained
+$\mu$-term that denotes the same value as the original subterm---\allowbreak e.g.,
 $\expand{\MU x.\: \const{C}(\MU y.\: \const{D}(x))}{\MU y.\: \const{D}(x)} =
  \MU y.\: \const{D}(\MU x.\: \const{C}(y))$.
 %
@@ -1381,7 +1382,7 @@ $\expand{\MU x.\: \const{C}(\MU y.\: \const{D}(x))}{\MU y.\: \const{D}(x)} =
 
 The $\mu$-term $u$
 is a \emph{self-similar subterm} of~$t$ if
-$u$ is a proper subterm of $t$,
+$u$ is a proper subterm of~$t$,
 $t$ and $u$ are of the forms $\MU x.\; \const{C}( t_1, \ldots, t_n )$
 and $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
 and $\expand{t}{ t_k } \aequiv \expand{t}{ u_k }$ for all $k$. % \in [n]
@@ -1389,7 +1390,7 @@ The $\mu$-term $t$ is \emph{normal} if it does not contain %any
 self-similar subterms
 and all of its proper subterms are also normal.
 Thus, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is not normal
-because $\MU y.\; \const{C}( y )$ is a self-similar subterm of $t$.
+because $\MU y.\; \const{C}( y )$ is a self-similar subterm of~$t$.
 Their arguments have the same expansion with respect to~$t$:
 $\expand{t}{\MU y.\; \const{C}( y )} =
 \MU y.\; \const{C}\bigl( \expand{t}{y}^{\smash{\{y\}}} \bigr) =
@@ -1412,7 +1413,7 @@ is $\alpha$-equivalent to $\expand{u}{x} = u$.
 
 For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$,
 its \emph{normal form} $\nf{t}$ is obtained
-by replacing all of the self-similar subterms of $t$ with $x$
+by replacing all of the self-similar subterms of~$t$ with $x$
 %and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
 and by recursively normalizing the other subterms.
 For variables, $\nf{x} = x$.
@@ -1472,13 +1473,13 @@ An interpretation $\J$ is \emph{normal} if the following conditions are met:
 For each type $\tau$,
 %%% sets *contain* elements, they *include* other sets
 $\interp{\J}{\tau}$ includes a maximal set of closed normal $\mu$-terms of that type that are
-unique up to $\alpha$-equivalence and acyclic if $\tau \notin \Codata$.\strut
+unique up to $\alpha$-equivalence and acyclic unless $\tau \in \Codata$.\strut
 
 \item
 For each constructor term $\vphantom{s^k}\const{C}( \vec t \,)$ of type $\tau$,
-$\interp{\J}{\const{C}}( \interp{\J}{\vec t} )$ is the value
+$\interp{\J}{\const{C}}( \interp{\J}{\vec t\,} )$ is the value
 in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
-$\nf{\MU x.\; \const{C}( \interp{\J}{\vec t} )}$, where $x$ is fresh.\strut
+$\nf{\MU x.\; \const{C}( \interp{\J}{\vec t\,} )}$, where $x$ is fresh.\strut
 
 \item
 For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
@@ -1555,15 +1556,15 @@ variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
 )$, the process eventually terminates. We normalize all terms in
 the range of $\ValC$ at each step.
 
-%The last precondition is admittedly rather technical.
+%The last premise is admittedly rather technical.
 To ensure disequality literals are satisfied by an interpretation based on $\ValC$,
 it suffices that $\ValC$ is injective modulo $\alpha$-equivalence.
 This invariant holds initially, and
-the last precondition in the above rule ensures that it is maintained.
+the last premise in the above rule ensures that it is maintained.
 %More precisely,
 The set $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is an overapproximation of the values
 that, when assigned to ${\Varec{x}}$, will cause values in the range of $\ValC$ to become $\alpha$-equivalent.
-%This precondition is not strictly necessary in practice, 
+%This premise is not strictly necessary in practice, 
 %as one could compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
 %injectivity afterward, repeating until a suitable value is found.
 For infinite codatatypes, it is always possible to find fresh values $v$
@@ -2043,7 +2044,7 @@ of a term generalizes the accepting/rejecting status of a state.
 %the procedure considers each equivalence class $\ec{t}$ containing a datatype constructor $\const{C}( t_1, \ldots, t_n )$.
 %It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all constructor arguments in these equivalence classes recursively.
 %If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
-%To recognize when the precondition of \rn{Unique} holds,
+%To recognize when the premise of \rn{Unique} holds,
 %the procedure considers the set $\SSS$ of all codatatype equivalence classes. It
 %simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
 %while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
