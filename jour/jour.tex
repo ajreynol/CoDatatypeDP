@@ -467,8 +467,8 @@ consider further function symbols because they can be abstracted away as
 variables when combining theories.
 Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ in
 examples.
-$\mathrm\Sigma$-terms are standard first-order terms
-over $\mathrm\Sigma$,
+$\Sig$-terms are standard first-order terms
+over $\Sig$,
 without $\mu$-binders.
 %(Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
 
@@ -1894,18 +1894,19 @@ and the extension of the procedure to quantified formulas.
 \subsection{A Theory Solver for $\thD$}
 
 The decision procedure is implemented as a \relax{theory solver} of CVC4---that is, a
-specialized solver for determining the satisfiability of conjunctions of
+specialized procedure for determining the satisfiability of conjunctions of
 literals for its theory.
 Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a set of
 input clauses $F$ in conjunctive normal form, the CDCL($T$) procedure
 incrementally builds partial assignments of
-truth values to the atoms of $F$ such that no clause in $F$ is falsified. We can regard such a
+truth values to the atoms of~$F$ such that no clause in $F$ is falsified. We can regard such a
 partial assignment as a set $M$ of true literals.
 % where $a \in M$ for all atoms $a$ that
 %it assigned the value $\top$ and $\neg\: a \in M$ for all atoms that it assigns
 %the value $\bot$.
 %at a high level,
-By a variant of the Nelson--Oppen method \cite{jovanovic2011sharing,nelson-oppen-1979},
+By a variant \cite{jovanovic2011sharing}
+of the Nelson--Oppen method \cite{nelson-oppen-1979},
 each $T_i$-solver %for $i = 1, \ldots, l$  n?
 takes as input the union $M_i$
 of
@@ -1995,12 +1996,12 @@ assignments $M$.
 \item[2.1.] $\mathcalx{U}' := \emptyset$.
 \item[2.2.] For each $U_i \in \mathcalx{U}$:
 \begin{itemize}
-\item[2.2.1.] Let $\mathcalx{U}_i$ be a partition of $U_i$ such that $\ec{t} =_{\mathcalx{U}_i} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if
+\item[2.2.1.] Let $\mathcalx{U}_{\vthinspace i}$ be a partition of $U_i$ such that $\ec{t} =_{\mathcalx{U}_{\vthinspace i}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if
 \begin{itemize}
 \item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$, and
 \item $\ec{t_j} =_{\mathcalx{U}} \ec{u_j}$ for each $j = 1, \ldots, k$.
 \end{itemize}
-\item[2.2.2.] $\mathcalx{U}' := \mathcalx{U}' \cup \mathcalx{U}_i$.
+\item[2.2.2.] $\mathcalx{U}' := \mathcalx{U}' \cup \mathcalx{U}_{\vthinspace i}$.
 \end{itemize}
 \item[2.3.] $\mathcalx{U} := \mathcalx{U}'$.
 \end{enumerate}
@@ -2031,7 +2032,7 @@ such that codatatype equivalence classes having a constructor term with top symb
 for each constructor $\const{C}$.
 We write $\ec{t} =_{\mathcalx{U}} \ec{u}$ to denote that $\ec{t}$ and $\ec{u}$ reside in the same subset within $\mathcalx{U}$.
 We then refine $\mathcalx{U}$ by 
-constructing a partition $\mathcalx{U}_i$ of each $U_i \in \mathcalx{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcalx{U}_i$ 
+constructing a partition $\mathcalx{U}_{\vthinspace i}$ of each $U_i \in \mathcalx{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcalx{U}_{\vthinspace i}$ 
 if and only if they contain constructor terms $\const{C}( t_1, \ldots, t_k )$ and $\const{C}( u_1, \ldots, u_k )$
 where each $t_j, u_j$ are such that $\ec{t_j}$ and $\ec{u_j}$ reside in the same subset of $\mathcalx{U}$ for each $j=1, \ldots, k$.
 Let $\mathcalx{U'}$ be the union of each of these partitions.
@@ -2106,14 +2107,15 @@ As described in Section~\ref{sec:termination-and-correctness},
 given a saturated set $\Ec$, we %may
 construct a map $\ValC$ from 
 the equivalence classes of $\Ec$ to closed normal $\MU$-terms.
-Recall that our construction of $\ValC$ requires picking values $\MU {\Varec{x}}.\; t$ for each $\Varec{x} \in \FV( \ValC )$
+Recall that our construction of $\ValC$ requires choosing values $\MU {\Varec{x}}.\; t$ for each $\Varec{x} \in \FV( \ValC )$
 such that $\MU {\Varec{x}}.\; t$ does not occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
-To pick values $\MU {\Varec{x}}.\; t$, we use a fair enumerator for each (co)datatype $\tau$,
+To choose values, % $\MU {\Varec{x}}.\; t$,
+we use a fair enumerator for each (co)datatype $\tau$,
 which lists all the values
 of type $\tau$ in a normal interpretation. %, which are closed normal $\MU$-terms.
 
 %Concretely,
-For codatatypes, we enumerate a stream of \relax{every} $\MU$-term of our signature $\Sigma$ in a fair manner,
+For codatatypes, we enumerate a stream of \relax{every} $\MU$-term of our signature $\Sig$ in a fair manner,
 discarding those that have free variables or are not normal.
 For those that are closed and normal, we then check whether they occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
 This set does not need to be explicitly constructed.
@@ -2138,13 +2140,13 @@ conjectures.
 Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete 
 instantiation-based 
 techniques~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
-These techniques extend naturally to %quantified
+These techniques extend naturally to quantified
 formulas involving datatypes and codatatypes.
 
 However, the presence of quantifiers poses an additional challenge in
-the context of (co)datatypes. Quantified formulas may entail an upper bound on
+the context of (co)datatypes. Quantified formulas can entail an upper bound on
 the cardinality of an uninterpreted type $\ty{u}$.
-When assuming that $\ty{u}$ has infinite cardinality, the calculus
+By assuming that uninterpreted types have infinite cardinality, the calculus
 presented in Section~\ref{sec:the-decision-procedure} is \relax{incomplete}
 since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
 applied.
@@ -2152,11 +2154,12 @@ This does not %necessarily
 impact the correctness of the procedure in this setting,
 since %by assumption
 the solver is already incomplete for quantified formulas.
+
 Nonetheless, two techniques help increase the precision of the solver.
 First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
 uninterpreted types.
 Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
-For example, the $\ty{stream}_{\vthinspace\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
+For example, the codatatype $\ty{stream}_{\vthinspace\ty{u}}$ %, where $\ty{u}$ is uninterpreted.
 has cardinality one precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
 the implementation adds the clause %of the form
@@ -2174,7 +2177,7 @@ $s$ must be equal to $t$.
 \newcommand\HD[1]{\hbox to2em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
 The decision procedure for (co)datatypes is useful both for proving (via
-negation, in the refutational style) and finite model finding.
+negation, in the refutational style) and for finite model finding.
 It is in fact vital for finite model finding,
 because the acyclicity and uniqueness rules are necessary for solution
 soundness, without which the generated models would often be
