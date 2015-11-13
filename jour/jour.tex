@@ -253,11 +253,11 @@ differences.
 %
 First, \emph{codatatypes need not be well-founded.}
 For example, the type
-$$\vthinspace\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\allowbreak\, \const{SCons}(\tau,\allowbreak\: \ty{stream}_{\,\tau})\vthinspace$$
+$$\vthinspace\keyw{codatatype}~\;\ty{stream}_{\vthinspace\tau} \,=\allowbreak\, \const{SCons}(\tau,\allowbreak\: \ty{stream}_{\vthinspace\tau})\vthinspace$$
 of infinite sequences or streams over an element type $\tau$ is
 allowed, even though it has no base case. By contrast, the
 corresponding datatype specification
-$$\vthinspace\keyw{datatype}~\;\ty{fstream}_{\,\tau} \,=\allowbreak\, \const{FSCons}(\tau,\allowbreak\: \ty{fstream}_{\,\tau})\vthinspace$$
+$$\vthinspace\keyw{datatype}~\;\ty{fstream}_{\vthinspace\tau} \,=\allowbreak\, \const{FSCons}(\tau,\allowbreak\: \ty{fstream}_{\vthinspace\tau})\vthinspace$$
 would be rejected as non-well-founded
 \cite{blanchette-et-al-2015-esop}.
 %
@@ -442,7 +442,7 @@ The notation $t\typ{\tau}$ stands for a term $t$ of type~$\tau$;
 it should not be confused with the notation~$t :\nobreak \tau$,
 which is a statement expressing that $t$ has type $\tau$.
 When applied to terms, the symbol $=$ denotes syntactic equality.
-The operator $\bigwedge_{\,i}\, \varphi_i$ abbreviates a conjunction
+The operator $\bigwedge_{\vthinspace i}\, \varphi_i$ abbreviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
 Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
@@ -490,10 +490,10 @@ mixed nested (co)recursion as well as
 at least in a higher-order setting \cite{blanchette-et-al-2014-codata}).}
 We allow ourselves some notational parameterization
 % at the metalevel
-through subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
+through subscripts---for example, $\ty{stream}_{\vthinspace\tau}$ denotes a
 family of ground types including
-$\ty{stream}_{\,\ty{int}}$, $\ty{stream}_{\,\ty{bool}}$,
-and \smash{$\ty{stream}_{\,\ty{stream}_{\,\ty{real}}}$}.
+$\ty{stream}_{\vthinspace\ty{int}}$, $\ty{stream}_{\vthinspace\ty{bool}}$,
+and \smash{$\ty{stream}_{\vthinspace\ty{stream}_{\vthinspace\ty{real}}}$}.
 
 \newcommand\elll{\kern.0515ex \ell\kern.0515ex}
 \newcommand\elllx{\kern.0515ex \ell\kern.0515ex}
@@ -510,7 +510,7 @@ distinct and different from existing names.%
 \footnote{It can be convenient to specify the same selector
 for several constructors associated with the same (co)data\-type,
 as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
-However, this is disallowed by CVC4 and Z3, so we do not consider it here.}
+However, this is disallowed by SMT-LIB, so we do not consider it here.}
 Schematically:
 %
 \[
@@ -539,18 +539,18 @@ $t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(t), \
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
-      \keyw{codatatype}\; \,\ty{llist}_{\,\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(%\const{lhead}{:}\;
+      \keyw{codatatype}\; \,\ty{llist}_{\vthinspace\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(%\const{lhead}{:}\;
       \tau,\: %\const{ltail}{:}\;
-      \ty{llist}_{\,\tau}) \\%[-.5\jot]
-      \keyw{datatype}\;\, \ty{tree}_{\,\tau} & \,=\, \const{Node}(\tau,\:\, \ty{forest}_{\,\tau}) \\[-\jot]
-      \keyw{and}\;\,\, \ty{forest}_{\,\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\,\tau},\:\, \ty{forest}_{\,\tau})
+      \ty{llist}_{\vthinspace\tau}) \\%[-.5\jot]
+      \keyw{datatype}\;\, \ty{tree}_{\vthinspace\tau} & \,=\, \const{Node}(\tau,\:\, \ty{forest}_{\vthinspace\tau}) \\[-\jot]
+      \keyw{and}\;\,\, \ty{forest}_{\vthinspace\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\vthinspace\tau},\:\, \ty{forest}_{\vthinspace\tau})
 \end{aligned}
 \]
 
 Because all types must be inhabited (nonempty), a datatype specification is
 admissible only if a ground constructor term can be exhibited.
 This rules out non-well-founded specifications such as
-\[\keyw{datatype}\;\, \ty{fstream}_{\,\tau} \,=\, \const{FSCons}(\tau,\:\, \ty{fstream}_{\,\tau})\]
+that of \ty{fstream} in Section~\ref{sec:introduction}.
 For codatatypes, no admissibility check is necessary because there is always a term,
 finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop}.
 
@@ -563,9 +563,9 @@ Types can be declared together in a mutual fashion even if they are not actually
 mutually (co)recursive. The semantic notion is more precise and is the one that interests
 us.
 
-Non(co)recursive type specifications such~as
+Non(co)recursive type specifications such~as either of
 \[\begin{aligned}[t]
-      \keyw{datatype}~\vthinspace\ty{option}_{\,\tau\!} & \,=\, \const{None} \,\mid\, \const{Some}(\tau) \\[-.5\jot]
+      \keyw{datatype}~\vthinspace\ty{option}_{\vthinspace\tau\!} & \,=\, \const{None} \,\mid\, \const{Some}(\tau) \\[-.5\jot]
       \keyw{codatatype}~\vthinspace\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
 \end{aligned}
 \]
@@ -646,8 +646,8 @@ values $v_1 : \delta_1, \ldots, v_\ell : \delta_\ell$:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{\strut$\bigwedge_{\,i,j}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\,k}\, \mathcalx{IH}[x_k]\bigr) \medrightarrow P_i[\const C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
-\UIC{\strut$\bigwedge_{\,i}\, P_i[v_i]$}
+\AXC{\strut$\bigwedge_{\vthinspace i,j}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\vthinspace k}\, \mathcalx{IH}[x_k]\bigr) \medrightarrow P_i[\const C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
+\UIC{\strut$\bigwedge_{\vthinspace i}\, P_i[v_i]$}
 \DP
 \end{aligned}
 \]
@@ -662,18 +662,18 @@ $\const{S}(\const{S}(\ldots))$.
 
 For codatatypes, the dual notion is called coinduction. It makes it possible to
 derive the equality of pairs of codatatype values
-$v_1, w_1 : \delta_1,\,\ldots,\,v_\ell, w_\ell : \delta_\ell$, based on
-coinduction witnesses $R_1,\ldots,R_\ell$ that must be supplied upon use:
+$v_1, w_1 \mathbin: \delta_1,\,\ldots,\,v_\ell, w_\ell \mathbin: \delta_\ell$, based on
+suitable coinduction witnesses $R_1,\ldots,R_\ell$:
 %
 \[
 \begin{aligned}[t]
 \text{Coinduction:}\quad
-\AXC{\strut$\begin{gathered}\textstyle \smash{\bigwedge_{\,i}\, R_i[v_i, w_i]} \\[-\jot]\textstyle
-\bigwedge_{\,i}\, \forall v\; w.\;\, R_i[v, w] \medrightarrow
-  \bigwedge_{\,j}\, \const{d}_{\negvthinspace j}(v) \mathrel\land \const{d}_{\negvthinspace j}(w)
-  \medrightarrow \bigwedge_{\,k}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
+\AXC{\strut$\begin{gathered}\textstyle \smash{\bigwedge_{\vthinspace i}\, R_i[v_i, w_i]} \\[-\jot]\textstyle
+\bigwedge_{\vthinspace i}\, \forall v\; w.\;\, R_i[v, w] \medrightarrow
+  \bigwedge_{\vthinspace j}\, \const{d}_{\negvthinspace j}(v) \mathrel\land \const{d}_{\negvthinspace j}(w)
+  \medrightarrow \bigwedge_{\vthinspace k}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
 \end{gathered}$}
-\UIC{\strut$\bigwedge_{\,i}\, v_i \teq w_i$}
+\UIC{\strut$\bigwedge_{\vthinspace i}\, v_i \teq w_i$}
 \DP
 \end{aligned}
 \]
@@ -690,14 +690,14 @@ In addition, codatatypes are guaranteed to contain all values corresponding to
 infinite ground constructor terms.
 In general, this cannot be captured by a
 first-order axiomatization, since there may be uncountably many of them.
-For example, $\ty{stream}_{\,\ty{int}}$ is isomorphic to the uncountable
+For example, $\ty{stream}_{\vthinspace\ty{int}}$ is isomorphic to the uncountable
 function space $\ty{nat} \to \ty{int}$.
 
 Given a signature $\Sig$, $\thD$ refers to the \emph{theory of
 datatypes and codatatypes},
 which %in addition to $\Sig$
 defines a class of $\Sig$-interpretations $\JJJJ$,
-namely the ones that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
+namely those that satisfy the %axioms --- existence of all infinite codatatype values cannot be axiomatized
 properties mentioned in this section, including (co)induction. The interpretations
 in~$\JJJJ$ share the same interpretation for constructor terms and correctly
 applied selector terms (up to isomorphism) %renaming of domain elements
@@ -730,9 +730,10 @@ For datatypes, any recursive specification gives rise to an infinite datatype.
 Paradoxically, this does not extend to codatatypes:
 Some codatatypes are so degenerate as to be finite even though they
 have infinite values. A simple example is
-\vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, which has a cardinality
-of one; its unique value is $\MU a.\; \const{A}(a)$. Other specimens are
-$\ty{stream}_{\,\ty{unit}\,}$
+\vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, which is corecursive
+and yet has a cardinality of one;
+its unique value is $\MU a.\; \const{A}(a)$. Other specimens are
+$\ty{stream}_{\vthinspace\ty{unit}\,}$
 and both \ty{b} and \ty{c} in the specification
 \[\begin{aligned}[t]
       \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-1\jot]
@@ -741,7 +742,8 @@ and both \ty{b} and \ty{c} in the specification
 \]
 assuming \ty{unit} is a datatype with the single constructor $\const{Unity} :
 \ty{unit}$. We call such codatatypes
-\emph{corecursive singletons}. For the decision procedure, it will be
+\emph{corecursive singletons}, or simply singletons.
+For the decision procedure, it will be
 crucial to detect these. %, even if they rarely arise in practice.
 A type may also be a corecursive singleton only in some models. If the example
 above is altered to make \ty{unit} an uninterpreted type, \ty{b} and \ty{c} will be
@@ -2149,7 +2151,7 @@ Nonetheless, two techniques help increase the precision of the solver.
 First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
 uninterpreted types.
 Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
-For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
+For example, the $\ty{stream}_{\vthinspace\ty{u}}$ codatatype %, where $\ty{u}$ is uninterpreted.
 has cardinality one precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
 the implementation adds the clause %of the form
