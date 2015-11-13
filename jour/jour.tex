@@ -2090,23 +2090,28 @@ phase~2.
 
 \subsection{Model Construction}
 
-When instructed, the implementation produces models for satisfiable inputs.
+When instructed to do so, the implementation produces models for satisfiable inputs.
 As described in Section~\ref{sec:termination-and-correctness},
-given a saturated set $\Ec$, we may construct a map $\ValC$ from 
+given a saturated set $\Ec$, we %may
+construct a map $\ValC$ from 
 the equivalence classes of $\Ec$ to closed normal $\MU$-terms.
-Recall our construction of $\ValC$ requires picking values $\MU {\Varec{x}}.\; t$ for each $\Varec{x} \in \FV( \ValC )$
+Recall that our construction of $\ValC$ requires picking values $\MU {\Varec{x}}.\; t$ for each $\Varec{x} \in \FV( \ValC )$
 such that $\MU {\Varec{x}}.\; t$ does not occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
-To pick values $\MU {\Varec{x}}.\; t$, we use a fair enumerator for each (co)datatype $\tau$ which enumerates the values
-of type $\tau$ in a normal interpretation, which are closed normal $\MU$-terms.
-Concretely, we enumerate a stream of \emph{every} $\MU$-term of our signature $\Sigma$ in a fair manner,
-discarding whose that have free variables or are not normal.
-For those that are closed and normal, we then check whether they occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$,
-which we do not explicitly construct.
+To pick values $\MU {\Varec{x}}.\; t$, we use a fair enumerator for each (co)datatype $\tau$,
+which lists all the values
+of type $\tau$ in a normal interpretation. %, which are closed normal $\MU$-terms.
+
+%Concretely,
+For codatatypes, we enumerate a stream of \relax{every} $\MU$-term of our signature $\Sigma$ in a fair manner,
+discarding those that have free variables or are not normal.
+For those that are closed and normal, we then check whether they occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
+This set does not need to be explicitly constructed.
 %We do not explicitly construct the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
-Instead, to check if a term $\MU {\Varec{x}}.\; t$ occurs in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$, 
+To determine if a term $\MU {\Varec{x}}.\; t$ occurs in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$, 
 we check if it is $\alpha$-equivalent to a closed term $(\MU {\Varec{y}}.\; u) \{ \Varec{x} \mapsto z \}$ for
 some $\MU {\Varec{y}}.\; u$ in the range of $\ValC$ and variable $z$.
-This can be efficiently checked by matching the term $\MU {\Varec{x}}.\; t$ with the term $\MU {\Varec{y}}.\; u$.
+This can be efficiently achieved by matching the term $\MU {\Varec{x}}.\; t$ with %the term
+$\MU {\Varec{y}}.\; u$.
 
 %Once the mapping $\ValC$ is constructed, our model $\J$ interprets
 %$\J( x ) = \ValC \ec{x}$ for each variable $x$ occurring free in $\Ec$.
@@ -2144,8 +2149,9 @@ For example, the $\ty{stream}_{\,\ty{u}}$ codatatype %, where $\ty{u}$ is uninte
 has cardinality one precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
 the implementation adds the clause %of the form
-$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F\!$.
-In other words, either the cardinality of $\ty{u}$ is greater than one or $s$ is equal to $t$.
+$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F\!$,
+which states that either the cardinality of $\ty{u}$ is greater than one or
+$s$ must be equal to $t$.
 
 %\section{Examples}
 %\label{sec:examples}
