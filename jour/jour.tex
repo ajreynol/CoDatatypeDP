@@ -349,7 +349,7 @@ comprehensive evaluation (Section~\ref{sec:evaluation-on-isabelle-problems}).
 %\]
 
 %  * consider a natural fragment---datatypes as supported in modern SMT solvers
-%    and the SMT-LIB 2 standard, and codatatypes as their duals
+%    and the SMT-LIB standard, and codatatypes as their duals
 %    * mutual recursion, but no polymorphism, nested recursion
 %  * integrated with Nelson--Oppen
 
@@ -488,7 +488,7 @@ and likewise for codatatypes, can be reduced to the mutual case
 \cite{gunter-1993-not}. So the only genuinely interesting cases missing are
 mixed nested (co)recursion as well as
 (co)recursion through a non-(co)datatype (both of which make sense,
-at least in a higher-order setting \cite{blanchette-et-al-2014-codata}).}
+at least in a higher-order setting \cite{blanchette-et-al-2014-impl}).}
 We allow ourselves some notational parameterization
 % at the metalevel
 through subscripts---for example, $\ty{stream}_{\vthinspace\tau}$ denotes a
@@ -510,7 +510,7 @@ constructors, and the selectors must be
 distinct and different from existing names.%
 \footnote{It can be convenient to specify the same selector
 for several constructors associated with the same (co)data\-type,
-as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-codata}.
+as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-impl}.
 However, this is disallowed by SMT-LIB, so we do not consider it here.}
 Schematically:
 %
@@ -2222,7 +2222,7 @@ online.%
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
 For each goal in each formalization, we used Sledgehammer to select either 16 or
-256~lemmas, which were monomorphized and translated to SMT-LIB~2 along with the
+256~lemmas, which were monomorphized and translated to SMT-LIB along with the
 goal. The resulting problem was given to the
 development version of CVC4
 (from 15 September 2015) and to
@@ -2332,14 +2332,14 @@ problems, it accounts for an overall
 success rate increase of over 5\%.
 Moreover, every aspect of the procedure, including the
 more expensive rules, make a contribution.
-
+%
 For the 256-lemma problems, the difference
 is much smaller, at 0.5\%.
 %For Isabelle
 %users, the practical usefulness of interpreted (co)datatypes is roughly
 %comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}, although this
 %obviously depends on the application.
-Table~\ref{tab:benchtwofiftysix} clearly indicates that
+Table~\ref{tab:benchtwofiftysix} indicates that
 the theoretically stronger decision
 procedures do not always subsume the weaker ones in practice.
 The raw data reveal that the decision procedure proved 27~goals that
