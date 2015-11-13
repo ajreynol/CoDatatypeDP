@@ -456,7 +456,7 @@ Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 %    (terminology: freely-generated, inductive, algebraic, ..., sometimes
 %    with different meanings; we'll clarify below what we use)
 
-We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned as
+We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the remaining
 \emph{ordinary types} (which can be interpreted or not). The function symbols are
@@ -486,8 +486,8 @@ should not raise any special difficulties. Nesting datatypes inside datatypes,
 and likewise for codatatypes, can be reduced to the mutual case
 \cite{gunter-1993-not}. So the only genuinely interesting cases missing are
 mixed nested (co)recursion as well as
-(co)recursion through a non-(co)datatype (both of which make sense
-\cite{blanchette-et-al-2014-codata}).}
+(co)recursion through a non-(co)datatype (both of which make sense,
+at least in a higher-order setting \cite{blanchette-et-al-2014-codata}).}
 We allow ourselves some notational parameterization
 % at the metalevel
 through subscripts---for example, $\ty{stream}_{\,\tau}$ denotes a
