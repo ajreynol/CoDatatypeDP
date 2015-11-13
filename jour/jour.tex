@@ -809,8 +809,8 @@ The decision procedure is formulated as a tableau-like calculus.
 %Following the tradition of refutational theorem proving,
 Proving a universal quantifier-free conjecture is reduced to showing that
 its negation is unsatisfiable. The presentation is
-inspired by Barrett et al.\ \cite{barrett-et-al-2007} but
-higher-level, using unoriented equations instead of oriented ones.
+inspired by Barrett et al.\ \cite{barrett-et-al-2007} but at
+a higher level, using unoriented equations instead of oriented ones.
 
 To simplify the presentation, we make a few assumptions about
 $\Sig$.
@@ -850,7 +850,7 @@ The conclusion either specifies equalities to be added to $\Ec$
 or is $\bot$ (contradiction).
 % (in which case we call an application of it \emph{nonterminal})
 % (in which case we call an application of it \emph{terminal}).
-One rule has multiple conclusions, % separated by $\ror$,
+One of the rules has multiple conclusions, % separated by $\ror$,
 denoting branching.
 %
 An application of a rule is \emph{redundant} if one of its non-$\bot$
@@ -917,8 +917,8 @@ to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among
 \paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(Fig.~\ref{fig:ab-rules}).}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 %The premises of the rules that make up the second phase refer to
-We describe the rules in this phase in terms of a mapping $\Val$
-that associates with each equivalence class a $\mu$-term as its representative.
+The rules in this phase are described in terms of a mapping $\Val$
+that assigns to each equivalence class a $\mu$-term as its representative.
 %\rem{Not explicitly constructed, add here?}
 
 Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
@@ -999,7 +999,7 @@ is refined by applying the following unfolding rule exhaustively:\strut
 }
 \]
 $\FV( \Val )$ denotes the set of free variables occurring in $\Val$'s range,
-and $\Val[x \mapsto t]$ denotes the \emph{variable-capturing} substitution of $t$ for
+and $\Val[x \mapsto t]$ denotes the variable-\emph{capturing} substitution of $t$ for
 $x$ in $\Val$'s range. It is easy to see that the height of terms produced as a
 result of the unfolding is bounded by the number of equivalence classes of
 $\Ec$, and thus the construction of $\Val$ will terminate.
