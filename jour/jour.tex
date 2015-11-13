@@ -2166,11 +2166,24 @@ The decision procedure for (co)datatypes is useful both for proving (via
 negation, in the refutational style) and finite model finding.
 It is in fact vital for finite model finding,
 because the acyclicity and uniqueness rules are necessary for solution
-soundness, without which the generated models would often be spurious. The
-contributions to proving are less clear; they depend on how often
-acyclicity and uniqueness are necessary for a proof.
+soundness, without which the generated models would often be
+spurious. For example, given the axioms
+\begin{align*}
+\const{zeros} & = \const{SCons}(0,\:\const{zeros})
+& \const{sconst}~n & = \const{SCons}(n,\:\const{sconst}~n)
+\end{align*}
+the conjecture
+$\const{zeros} = \const{sconst}~0$
+would be ``refuted'' by a spurious countermodel where
+\const{zero} and $\const{sconst}~0$ are interpreted by two distinct
+values that both correspond to the \hbox{$\mu$-term}
+$\MU s.\; \const{SCons}(0, s)$,
+violating uniqueness.
 
-To evaluate the decision procedure for proving conjectures,
+By contrast, the contributions of the decision procedure
+to proving are less clear; they depend on how
+often acyclicity and uniqueness are necessary for a proof.
+To evaluate this,
 we generated benchmark problems from existing interactive
 proof goals arising in existing
 Isabelle formalizations, using Sledgehammer \cite{blanchette-et-al-2013-smt}
@@ -2300,30 +2313,37 @@ The results are summarized in Tables \ref{tab:benchsixteen} and
 %\cite{meng-paulson-2009-relev};
 %that number is increased to 256 for Table \ref{tab:benchtwofiftysix}.
 The decision procedure
-makes a difference across all three benchmark suites. It accounts for an overall
-success rate increase of over 5\%, which is quite significant.
+makes a difference across all three benchmark suites. For the 16-lemma
+problems, it accounts for an overall
+success rate increase of over 5\%.
+Moreover, every aspect of the procedure, including the
+more expensive rules, make a contribution.
+
+For the 256-lemma problems, the difference
+is much smaller, at 0.5\%.
 %For Isabelle
 %users, the practical usefulness of interpreted (co)datatypes is roughly
 %comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}, although this
 %obviously depends on the application.
-The raw evaluation data also
-suggest that the theoretically stronger decision procedures almost completely
-subsume the weaker ones in practice. We encountered only one
-(\textbf{TODO: FIXME}) goal (out of $2 \times 4458$)
-that was solved by a configuration of CVC4 and unsolved by a configuration of
-CVC4 with more features enabled.
-%
-Moreover, every aspect of the procedure, including the
-more expensive rules, make a contribution.
+Table~\ref{tab:benchtwofiftysix} clearly indicates that
+the theoretically stronger decision
+procedures do not always subsume the weaker ones in practice.
+The raw data reveal that the decision procedure proved 27~goals that
+could not be proved without it, but failed for 17~goals that could be proved
+without it. This potentially points to poor interactions between the decision
+procedure and the quantifier instantiation module
+\cite{ReynoldsTinelliMoura14}.
+
 %* and finally, we look in more detail at one or two such proofs, by presenting
 %  it and explaining it (and, before that, understanding it)
 %
-Four proofs were found thanks to
-the acyclicity rule and 17~required uniqueness. Among the latter,
-some were simple proofs of the form
+Overall, four proofs were found thanks to
+the acyclicity rule and 17~required uniqueness. Interestingly,
+no proofs were lost by enabling these rules. Among 17 proofs requiring uniqueness,
+some were simple arguments of the form
 \keyw{by}~\textit{coinduction}~\textit{auto}
 in Isabelle \cite{blanchette-et-al-2014-impl}, while others
-required more elaborate arguments---for example:
+involved more elaborate reasoning, including the following example:
 %
 \begin{quote}
 \keyw{lemma} \,\textit{\nummodden\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \vthinspace\Longrightarrow\vthinspace x = \const{\nummodden}$ \\
