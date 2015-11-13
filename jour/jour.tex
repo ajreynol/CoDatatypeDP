@@ -76,6 +76,7 @@
 \newcommand\medrightarrow{\mathrel{{{\color{black}\relbar}\kern-0.9ex\rlap{\color{white}\ensuremath{\blacksquare}}\kern-0.9ex}\joinrel{\color{black}\rightarrow}}}
 
 \newcommand\xend{{\hfill$\scriptstyle\blacksquare$}}
+\newcommand\xqed{{\hfill$\scriptstyle\squareforqed$}}
 
 \renewcommand{\vec}[1]{\bar #1}
 \newcommand{\Ec}{E}
@@ -779,7 +780,7 @@ it is possible to encode alternation patterns using it---e.g.,
 $\const{C}(0,\: \const{C}(1,\: \const{C}(0,\: \const{C}(0,\: \ldots))))$---which
 again excludes finite models. Otherwise, the coinduction principle ensures
 that the type has at most one value.
-\qed
+\xqed
 \end{proof}
 
 %  * assume for simplicity no indirect recursion, but this does not radically
@@ -1307,7 +1308,7 @@ on the rules of the calculus that each non-root node $\Fc$ is such that
 $\Terms(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
 Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\left| \smash{\tcEc}\vphantom{X} \right|{\!}^2$,
 which is finite since $\tcEc$ is finite.
-\qed
+\xqed
 \end{proof}
 
 \begin{theorem}[Refutation Soundness]%
@@ -1340,7 +1341,7 @@ For \rn{Unique}, the construction of $\Val$ indicates that the values of $t$ and
 For \rn{Single}, $t$~and~$u$ must have the same value since the cardinality of their type is one.
 By the induction hypothesis, $\Ec \mathrel\cup t \teq u$ is $\thD$-unsatisfiable
 and thus $\Ec$ is $\thD$-unsatisfiable.
-\qed
+\xqed
 \end{proof}
 
 It remains to show the converse of the previous theorem: If a derivation tree
@@ -1614,7 +1615,7 @@ Now consider a normal interpretation $\J$ that evaluates variables in $\Ec$ base
 $\interp{\J}{u} = \Val \ec{u}$, $\interp{\J}{v} = \Val \ec{v}$, and so on.
 Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\BAD_{\smash{\J}}^{{\Varec{z}}}( \Val )$
 may cause values in the range of $\Val$ to become $\alpha$-equivalent,
-which in turn may cause $\Ec$ to be falsified by $\J$.
+which in turn may cause $\Ec$ to be falsified by~$\J$.
 For example, assign $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$ for ${\Varec{z}}$.
 After the substitution, $\Val \ec{v} = \MU {\Varec{v}}.\; \const{D}( \MU {\Varec{z}}.\; \const{D}( {\Varec{z}} ) )$,
 which has normal form $\MU {\Varec{v}}.\; \const{D}( {\Varec{v}} )$,
@@ -1627,11 +1628,13 @@ $\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$,
 $\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$, or
 $\MU {\Varec{z}}.\; \const{C}( \const{C}( \const{D}( {\Varec{z}} ) ) )$
 to ${\Varec{z}}$.
+
 Legal substitutions for ${\Varec{z}}$ may cause the range of $\Val$ to contain abnormal terms.
 For example, after assigning $\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$ to $\Varec{z}$, we have
 $\Val \ec{u} = \MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) ) )$,
 with normal form
 $\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{u}} ) )$.
+This explains why the term is normalized in the rule's conclusion.
 \xend
 \end{examplex}
 
@@ -1659,9 +1662,9 @@ $\ValC \ec{x} \vsim \ValC \ec{y}$ if and only if $\ec{x} = \ec{y}$.
 
 \begin{proof}
 To show (1), we first show that $\ValC$ contains no free variables.
-Assume by contradiction that $\ValC$ contained a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
+Assume by contradiction that $\ValC$ contains a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
 Then it must be the case that $\ec{y}$ does not contain a constructor term,
-or else ${\Varec{y}}$ would not occur as a free variable in $\Val$.
+or else ${\Varec{y}}$ would not occur as a free variable in~$\Val$.
 Consider the case when $\tau$ is finite.
 By assumption, $\tau \notin \Nondata$.
 Since \rn{Split} does not apply to $\Ec$, we have $\tau \notin \Data$.
@@ -1687,28 +1690,29 @@ Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\
 We first show that (2) and (3) hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
 each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t \,)$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
-are such that $j = \jPrime$ since \rn{Clash} does not apply, % to $\Ec$,
-and are such that $\ec{ \vec t } = \ec{ \vec u }$ since \rn{Inject} does not apply. % to $\Ec$.
+are such that $j = \jPrime$, since \rn{Clash} does not apply, % to $\Ec$,
+and are such that $\ec{ \vec t \,} = \ec{ \vec u }$, since \rn{Inject} does not apply. % to $\Ec$.
 Thus,
 $\Val$ was constructed by applying a sequence of substitutions
 where all substitutions for variables ${\Varec{z}}$
 were uniquely of the form $\{ {\Varec{z}} \mapsto \const{C}_{\negvthinspace j}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}$
 when $\ec{z}$ contains a constructor $\const{C}_{\negvthinspace j}( t_1, \ldots, t_n )$.
-Say $\Val \ec{y}$ has a subterm $t$ where $\muvar(t) = {\Varec{x}}$.
+Suppose $\Val \ec{y}$ has a subterm $t$ such that $\muvar(t) = {\Varec{x}}$.
 Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
 constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
 Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ are interpreted in
 the expansion of $\expand{\Val \ec{y}}{ t }$ as a term
 constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. %\rem{TODO: more detail}
 Thus, we have
-$\expand{\Val \ec{y}}{ t } = \expand{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and thus (2) holds for $\Val$.
+$\expand{\Val \ec{y}}{ t } = \expand{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and %thus
+(2) holds for $\Val$.
 Property (3) holds for $\Val$ since \rn{Unique} does not apply.
 
 We now show that $\Val = \nf{\Val}$.
 Assume by contradiction $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
 We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
-Due to the construction of $\Val$,
-we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for some $i$ % \in [n]$.
+Due to the construction of~$\Val$,
+we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for some $i$. % \in [n]$.
 Since $\Val \ec{x}$ is a minimal, it
 contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
 where $\expand{\Val \ec{x}}{ t_i } \aequiv \expand{\Val \ec{x} }{ u_i }$ for some $i$. % \in [n]$.
@@ -1718,7 +1722,7 @@ we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct
 By (2), $\expand{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
 and $\expand{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
 which are not $\alpha$-equivalent by (3), contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a self-similar subterm of $\Val \ec{x}$.
-Thus, $\Val = \nf{\Val}$, and (2) and (3) hold for $\nf{\Val}$.
+Thus, $\Val = \nf{\Val}$, and (2) and~(3) hold for $\nf{\Val}$.
 
 We now show that if (2) and (3) hold for some $\Val_1$,
 they also hold for $\nf{\Val_1 \sigma}$,
@@ -1735,7 +1739,7 @@ consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
 and assume by contradiction that $\nf{\Val_1 \sigma} \ec{y} \aequiv \nf{\Val_1 \sigma} \ec{z}$.
 Due to (3) for $\Val_1$,
 $\ec{y}$ and $\ec{z}$ must have (minimal) subterms
-where $t_1$ occurs in $\Val_1 \ec{y}$ the same position (call it $p$) as $t_2$ occurs in $\Val_1 \ec{z}$,
+where $t_1$ occurs in $\Val_1 \ec{y}$ the same position~$p$ as $t_2$ occurs in $\Val_1 \ec{z}$,
 and $t_1 \not\aequiv t_2$.
 %We first show that $\nf{\Val_1 \sigma} \ec{y}$ (and for the same reasons, $\nf{\Val_1 \sigma} \ec{z}$)
 %also contains position $p$.
@@ -1745,7 +1749,7 @@ and $t_1 \not\aequiv t_2$.
 %$\MU {\Varec{w}}.\; u$ that strictly contains $t_1 \sigma$.
 If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
 then $\nf{\Val_1 \sigma} \ec{y}$ (resp. $\nf{\Val_1 \sigma} \ec{z}$)
-contains $t_1$ (resp. $t_2$) at position $p$,
+contains $t_1$ (resp. $t_2$) at position~$p$,
 and $\nf{\Val_1 \sigma} \ec{z}$ (resp. $\nf{\Val_1 \sigma} \ec{y}$) does not.
 If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t \,)$
 and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
@@ -1763,13 +1767,13 @@ Since $\expand{\Val_1 \ec{y}}{t_1}$ is normal,
 there is a closed $\mu$-term $v \in \BAD_{\smash{\J}}^{\Varec{x}}( \Val_1 )$
 such that $v \vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$.
 Thus, by assumption on the selection of $\MU {\Varec{x}}.\; t$,
-we have $\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$,
+we have $\smash{\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}}$,
 which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
 are $\alpha$-disequivalent at position~$p$. %\rem{TODO: more detail}
 
 Thus, by induction on the number of applications of the above rule used to obtain $\ValC$,
 we have that $\ValC$ satisfies (2) and (3).
-\qed
+\xqed
 \end{proof}
 
 Intuitively, this lemma states three properties of $\ValC$ that together ensure that
@@ -1798,7 +1802,7 @@ Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
 %The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
 %The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc\!$.
 We consider a normal interpretation $\J$
-that interprets wrongly applied selectors based on equality information in $\Fc$
+that interprets wrongly applied selectors based on equality information in~$\Fc$
 and that interprets the variables of $\Fc$ based on the completion $\ValC$.
 % of %the mapping $\Val$. % from phase~2.
 For the variables, let $\interp{\J}{x\typ{\tau}}$ be the value in $\J(\tau)$ that is $\alpha$-equivalent
@@ -1820,7 +1824,7 @@ Call this term $t'$.
 %By Lemma~\ref{lem:interpretation-completion}(2) and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
 %of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
 %where $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply to $\Fc\!$,
+Since \rn{Inject} and \rn{Clash} do not apply to~$\Fc\!$,
 by the construction of $\ValC$ we have that $\ValC \ec{t}$ is a term
 of the form $\MU {\Varec{t}}.\; \const{C}( w_1,\allowbreak \ldots,\allowbreak w_n )$
 where
@@ -1866,7 +1870,7 @@ Since by assumption $\Fc$ contains only equalities and disequalities, we have $\
 and since $\Ec \subseteq \Fc\!$,
 % is a superset of $\Ec$,
 we conclude that $\J \vDash \Ec$.
-\qed
+\xqed
 \end{proof}
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
