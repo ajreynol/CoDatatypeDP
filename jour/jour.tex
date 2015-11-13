@@ -222,7 +222,7 @@ terms, and only those. As a simple example, the coalgebraic specification
 %(using an ML-like syntax)
 introduces a type that
 models the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
-in Peano notation but extended with an
+in Peano notation, extended with an
 infinite value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
 The equation $\const{S}(\infty) \teq \infty$ holds as expected,
 because both sides expand to the infinite term
@@ -255,8 +255,10 @@ First, \emph{codatatypes need not be well-founded.}
 For example, the type
 $$\vthinspace\keyw{codatatype}~\;\ty{stream}_{\,\tau} \,=\allowbreak\, \const{SCons}(\tau,\allowbreak\: \ty{stream}_{\,\tau})\vthinspace$$
 of infinite sequences or streams over an element type $\tau$ is
-allowed, even though it has no base case; the
-corresponding datatype would be rejected as non-well-founded
+allowed, even though it has no base case. By contrast, the
+corresponding datatype specification
+$$\vthinspace\keyw{datatype}~\;\ty{fstream}_{\,\tau} \,=\allowbreak\, \const{FSCons}(\tau,\allowbreak\: \ty{fstream}_{\,\tau})\vthinspace$$
+would be rejected as non-well-founded
 \cite{blanchette-et-al-2015-esop}.
 %
 Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
@@ -308,9 +310,9 @@ formalizations using the Sledgehammer tool \cite{blanchette-et-al-2013-smt}
 demonstrates the usefulness of the approach (Section~\ref{sec:evaluation-on-isabelle-problems}).
 
 An earlier version of this article was presented at the CADE-25 conference in
-Berlin, Germany. The article extends the conference paper with additional
+Berlin, Germany. This article extends the conference paper with additional
 background material on (co)datatypes (Section~\ref{sec:co-datatypes}), more
-elaborated metatheoretical proofs (Section~\ref{sec:the-decision-procedure}),
+detailed metatheoretical proofs (Section~\ref{sec:the-decision-procedure}),
 a description of the generation of models with $\mu$-binders in CVC4
 (Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}), and a more
 comprehensive evaluation (Section~\ref{sec:evaluation-on-isabelle-problems}).
@@ -419,7 +421,7 @@ whereas $\tau,\:\upsilon$ range over arbitrary types.
 
 Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
 distinguish them from variables (e.g., $x$, $y$).
-Names starting with an uppercase letter (e.g.,
+Symbol names starting with an uppercase letter (e.g.,
 $\const{S}$) are reserved for constructors. With each function symbol \const{f}
 is associated a list of argument types $\tau_1,\ldots,\tau_n$ (for $n \ge 0$)
 and a return type $\tau$, written
@@ -428,15 +430,17 @@ which collapses to $\const{f} : \tau$ if $n = 0$.
 %
 Functions invocations $\const{f}(t_1,\ldots,t_n)$
 apply the $n$-ary function symbol
-\const{f} to $n$ well-typed arguments $t_1 :\nobreak \tau_1$, \ldots, $t_n :
-\tau_n$. Nullary function symbols, called constants, can appear without
+\const{f} to $n$ well-typed arguments $t_1 \mathbin{:} \tau_1$, \ldots, $t_n \mathbin{:}
+\tau_n$. Nullary function symbols, also called constants, can appear without
 parentheses in terms.
 The set $\Funcs$ must at least contain
 $\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
 The only predicate is equality ($\teq$) and belongs to the logical symbols;
 other predicates can be represented as functions to $\ty{bool}$,
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
-The notation $t\typ{\tau}$ stands for a term $t$ of type~$\tau$.
+The notation $t\typ{\tau}$ stands for a term $t$ of type~$\tau$;
+it should not be confused with the notation~$t :\nobreak \tau$,
+which is a statement expressing that $t$ has type $\tau$.
 When applied to terms, the symbol $=$ denotes syntactic equality.
 The operator $\bigwedge_{\,i}\, \varphi_i$ abbreviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
