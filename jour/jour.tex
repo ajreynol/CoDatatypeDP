@@ -2167,8 +2167,8 @@ negation, in the refutational style) and finite model finding.
 It is in fact vital for finite model finding,
 because the acyclicity and uniqueness rules are necessary for solution
 soundness, without which the generated models would often be spurious. The
-contributions to proving are less clear; they depend on how often the need for
-acyclicity or uniqueness arises in practice.
+contributions to proving are less clear; they depend on how often
+acyclicity and uniqueness are necessary for a proof.
 
 To evaluate the decision procedure for proving conjectures,
 we generated benchmark problems from existing interactive
@@ -2181,9 +2181,10 @@ We
 included all the formalizations from the Isabelle distribution (Distro, 1179~goals)
 and the \emph{Archive of Formal Proofs} (AFP, 3014~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We
-added unpublished formalizations about Bird and Stern--Brocot trees
+also included unpublished formalizations about Bird and Stern--Brocot trees
 by Peter Gammie and Andreas Lochbihler (\gandl,
-265~goals). To exercise the datatype support, formalizations about lists and trees
+265~goals). To exercise the datatype support, formalizations about finite
+lists and trees
 were added to the first two benchmark sets. The formalizations were selected before
 conducting any experiments. The experimental data are available
 online.%
@@ -2196,10 +2197,9 @@ online.%
 For each goal in each formalization, we used Sledgehammer to select either 16 or
 256~lemmas, which were monomorphized and translated to SMT-LIB~2 along with the
 goal. The resulting problem was given to the
-development version (from 15 September 2015) of CVC4 %AJR : version is from September 15 2015, git doesn't give nice revision numbers unfortunately
-and to
-Z3 4.3.2 %(\textbf{TODO: really?}) AJR : yes
-for comparison, each running for
+development version of CVC4
+(from 15 September 2015) and to
+Z3 4.3.2 for comparison, each running for
 up to 60~s on the StarExec cluster
 \cite{stump-et-al-2014-starexec}.
 Problems not involving any (co)datatypes were left out.
@@ -2210,7 +2210,8 @@ as oracles. % in these experiments.
 
 CVC4 was run on each problem several times, with the
 support for datatypes and codatatypes either enabled or disabled. The
-contributions of the acyclicity and uniqueness rules were also measured.
+contributions of the acyclicity and uniqueness rules were also measured,
+by selectively enabling or disabling the rules.
 % to find
 % out whether these somewhat expensive rules are useful in practice.
 Even when the
@@ -2291,8 +2292,6 @@ Full (co)datatypes
 \caption{\captionii}
 \label{tab:benchtwofiftysix}
 \end{table*}
-
-\newpage
 
 The results are summarized in Tables \ref{tab:benchsixteen} and
 \ref{tab:benchtwofiftysix}.
