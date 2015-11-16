@@ -292,7 +292,7 @@ modulo theories \cite{reynolds-et-al-2013,ge-de-moura-2009}
 and for theory combinations. The $\mu$-binder notation associates a name with
 a subterm; it is used to represent cyclic values in the metatheory and
 in the generated models. For example,
-the $\mu$-term $\const{SCons}(1,\: \MU z.\; \const{SCons}(0,\: \const{SCons}(9,\: z)))$
+the $\mu$-term $\const{SCons}(1,\: \MU s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
 stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9,
 \ldots$\afterLdots.
 
@@ -311,7 +311,8 @@ formalizations using the Sledgehammer tool \cite{blanchette-et-al-2013-smt}
 demonstrates the usefulness of the approach (Section~\ref{sec:evaluation-on-isabelle-problems}).
 
 An earlier version of this article was presented at the CADE-25 conference in
-Berlin, Germany. This article extends the conference paper with additional
+Berlin, Germany \cite{reynolds-blanchette-2015-codata}.
+This article extends the conference paper with additional
 background material on (co)datatypes (Section~\ref{sec:co-datatypes}), more
 detailed metatheoretical proofs (Section~\ref{sec:the-decision-procedure}),
 a description of the generation of models with $\mu$-binders in CVC4
@@ -426,23 +427,26 @@ Symbol names starting with an uppercase letter (e.g.,
 $\const{S}$) are reserved for constructors. With each function symbol \const{f}
 is associated a list of argument types $\tau_1,\ldots,\tau_n$ (for $n \ge 0$)
 and a return type $\tau$, written
-$\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$,
-which collapses to $\const{f} : \tau$ if $n = 0$.
+$\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$;
+this notation collapses to $\const{f} : \tau$ if $n = 0$.
 %
 Functions invocations $\const{f}(t_1,\ldots,t_n)$
 apply the $n$-ary function symbol
-\const{f} to $n$ well-typed arguments $t_1 \mathbin{:} \tau_1$, \ldots, $t_n \mathbin{:}
-\tau_n$. Nullary function symbols, also called constants, can appear without
+\const{f} to $n$ %well-typed
+arguments $t_1 \mathbin{:} \tau_1$, \ldots, $t_n \mathbin{:}
+\tau_n$ of the right types.
+Nullary function symbols, also called constants, can appear without
 parentheses in terms.
 The set $\Funcs$ must at least contain
 $\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
-The only predicate is equality ($\teq$) and belongs to the logical symbols;
-other predicates can be represented as functions to $\ty{bool}$,
+The only predicate is equality, written $\teq$;
+it belongs to the logical symbols.
+Other predicates can be represented as functions to $\ty{bool}$,
 with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
 The notation $t\typ{\tau}$ stands for a term $t$ of type~$\tau$;
-it should not be confused with the notation~$t :\nobreak \tau$,
+it should not be confused with $t :\nobreak \tau$,
 which is a statement expressing that $t$ has type $\tau$.
-When applied to terms, the symbol $=$ denotes syntactic equality.
+When applied to terms, the standard equality symbol~$=$ denotes syntactic equality.
 The operator $\bigwedge_{\vthinspace i}\, \varphi_i$ abbreviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
 Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
@@ -483,7 +487,7 @@ Each (co)datatype specification consists of $\ell$~mutually recursive types that
 either all datatypes or all codatatypes. Polymorphic types, nested
 (co)recursion, and datatype--codatatype mixtures
 fall outside this fragment.\footnote{In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
-should not raise any special difficulties. Nesting datatypes inside datatypes,
+does not raise any special difficulties. Nesting datatypes inside datatypes,
 and likewise for codatatypes, can be reduced to the mutual case
 \cite{gunter-1993-not}. So the only genuinely interesting cases missing are
 mixed nested (co)recursion as well as
@@ -2186,10 +2190,10 @@ spurious. For example, given the axioms
 \const{zeros} & = \const{SCons}(0,\:\const{zeros})
 & \const{sconst}~n & = \const{SCons}(n,\:\const{sconst}~n)
 \end{align*}
-the conjecture
+on streams, the conjecture
 $\const{zeros} = \const{sconst}~0$
-would be ``refuted'' by a spurious countermodel where
-\const{zero} and $\const{sconst}~0$ are interpreted by two distinct
+would be ``refuted'' by a spurious countermodel that interprets
+\const{zero} and $\const{sconst}~0$ by two distinct
 values that both correspond to the \hbox{$\mu$-term}
 $\MU s.\; \const{SCons}(0, s)$,
 violating uniqueness.
@@ -2221,14 +2225,13 @@ online.%
 
 %  & 879 & 2974\phantom{0} & 317 & 4170
 
-For each goal in each formalization, we used Sledgehammer to select either 16 or
+For each proof goal in each formalization, we used Sledgehammer to select either 16 or
 256~lemmas, which were monomorphized and translated to SMT-LIB along with the
 goal. The resulting problem was given to the
 development version of CVC4
 (from 15 September 2015) and to
 Z3 4.3.2 for comparison, each running for
-up to 60~s on the StarExec cluster
-\cite{stump-et-al-2014-starexec}.
+up to 60~s on StarExec \cite{stump-et-al-2014-starexec}.
 Problems not involving any (co)datatypes were left out.
 Due to the lack of machinery in Isabelle for parsing CVC4 proofs and
 reconstructing inferences about (co)datatypes, the solvers are trusted
@@ -2331,7 +2334,7 @@ makes a difference across all three benchmark suites. For the 16-lemma
 problems, it accounts for an overall
 success rate increase of over 5\%.
 Moreover, every aspect of the procedure, including the
-more expensive rules, make a contribution.
+more expensive rules, makes a contribution.
 %
 For the 256-lemma problems, the difference
 is much smaller, at 0.5\%.
@@ -2340,9 +2343,9 @@ is much smaller, at 0.5\%.
 %comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}, although this
 %obviously depends on the application.
 Table~\ref{tab:benchtwofiftysix} indicates that
-the theoretically stronger decision
-procedures do not always subsume the weaker ones in practice.
-The raw data reveal that the decision procedure proved 27~goals that
+the theoretically stronger instances of the decision
+procedure do not always subsume the weaker ones in practice.
+The raw data reveal that the full procedure proved 27~goals that
 could not be proved without it, but failed for 17~goals that could be proved
 without it. This potentially points to poor interactions between the decision
 procedure and the quantifier instantiation module
@@ -2353,11 +2356,12 @@ procedure and the quantifier instantiation module
 %
 Overall, four proofs were found thanks to
 the acyclicity rule and 17~required uniqueness. Interestingly,
-no proofs were lost by enabling these rules. Among 17 proofs requiring uniqueness,
+no proofs were lost by enabling these rules. Among the 17 proofs requiring uniqueness,
 some were simple arguments of the form
 \keyw{by}~\textit{coinduction}~\textit{auto}
 in Isabelle \cite{blanchette-et-al-2014-impl}, while others
-involved more elaborate reasoning, including the following example:
+involved more elaborate reasoning, including the following example
+about Stern--Brocot trees:
 %
 \begin{quote}
 \keyw{lemma} \,\textit{\nummodden\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \vthinspace\Longrightarrow\vthinspace x = \const{\nummodden}$ \\
@@ -2368,18 +2372,18 @@ involved more elaborate reasoning, including the following example:
 \end{quote}
 %
 \noindent
-where \const{\nummodden} is defined as $\const{\nummodden} =
+The tree \const{\nummodden} is defined as $\const{\nummodden} =
 \const{Node}\;0\;\const{num}\;\const{\nummodden}$.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
 We introduced a decision procedure for the universal theory of datatypes and
-codatatypes. Our principal
+codatatypes. Our main
 contribution has been the support for codatatypes. Both the metatheory and
 the implementation in CVC4 rely on $\mu$-terms to represent cyclic values.
-Although this aspect is primarily motivated by codatatypes, it enables
-a uniform account of datatypes and codatatypes---in particular,
+Although this aspect is primarily motivated by codatatypes, it makes
+a uniform account of datatypes and codatatypes possible---in particular,
 the acyclicity rule for datatypes exploits $\mu$-terms to detect cycles.
 % are not very
 % difficult per se, but there are tricky corner cases to take care of if we care
