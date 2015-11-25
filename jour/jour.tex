@@ -1430,12 +1430,12 @@ and by recursively normalizing the other subterms.
 For variables, $\nf{x} = x$.
 Thus, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
 
-\begin{lemma}
-\label{lem:mu-norm-arg}
-If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$
-for some $\mu$-terms $\vec w$,
-then $\vec u \vsim \expand{t}{\vec w}$\vthinspace.
-\end{lemma}
+%\begin{lemma}
+%\label{lem:mu-norm-arg}
+%If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$
+%for some $\mu$-terms $\vec w$,
+%then $\vec u \vsim \expand{t}{\vec w}$\vthinspace.
+%\end{lemma}
 % TODO:
 %\begin{proof}
 %\qed
@@ -1841,9 +1841,10 @@ where
 $\muvar(w_i) = {\Varec{u_i}}$ for each~$i$.  Thus by Lemma~\ref{lem:interpretation-completion}(2),
 $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
 For each $i$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t'$.
-By Lemma~\ref{lem:mu-norm-arg},
-$\expand{t'}{u_\iPrime} \vsim \ValC \ec{u_i}$.
-Thus $\expand{t'}{u_\iPrime} \vsim \expand{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
+%By Lemma~\ref{lem:mu-norm-arg},
+We have that
+$\expand{t'}{u_\iPrime} \vsim \ValC \ec{u_i}$, and
+thus $\expand{t'}{u_\iPrime} \vsim \expand{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
 %By Lemma~\ref{lem:mu-cong}, we have $t' \vsim t_w$.
 Thus, $\interp{\J}{t} \vsim t' \vsim \ValC \ec{t}$, and
 we have $\interp{\J}{t} \vsim \ValC \ec{t}$.
