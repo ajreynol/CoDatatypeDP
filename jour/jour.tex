@@ -373,6 +373,8 @@ Since then, datatypes have been added not only to CVC4 (a complete rewrite of CV
 but also to the SMT solver
 Z3 \cite{de-moura-bjoerner-2008} in unpublished work by Leonardo de Moura and to a SPASS-like %prototypical
 superposition prover by Wand \cite{wand-2014}.
+In his Ph.D.\ thesis \cite{bjoerner-1998}, Bj\o rner introduced a decision procedure for
+(co)datatypes in STeP, the Stanford Temporal Prover.
 Closely related are the automatic structural
 % cruanes-201x,wand-weidenbach-201x,  -- both were rejected
 induction in SMT solvers
@@ -592,8 +594,11 @@ selector--constructor equations \cite{barrett-et-al-2007}.
 A drawback of this approach is that it does
 not naturally account for selectors applied to wrong constructors. Barrett et
 al.\ address this by parameterizing the construction by default values, but
-this gives rise to spurious equalities between unrelated terms---e.g.,
-$\const{s}_1^1(\const{C}_2) \teq \const{s}_1^1(\const{C}_3)$. This flaw
+this gives rise to spurious equalities between unrelated terms. For example,
+given
+\[\keyw{datatype}\;\, \ty{x} \,=\, \const{C}(\const{s}{:}\; \ty{int}) \mid \const{D} \mid \const{E}\]
+we would have the spurious equality
+$\const{s}(\const{D}) \teq \const{s}(\const{E})$. This flaw
 could be corrected, but the added complexity seems to suggest that selectors
 are better characterized axiomatically.
 
@@ -695,7 +700,8 @@ infinite ground constructor terms.
 In general, this cannot be captured by a
 first-order axiomatization, since there may be uncountably many of them.
 For example, $\ty{stream}_{\vthinspace\ty{int}}$ is isomorphic to the uncountable
-function space $\ty{nat} \to \ty{int}$.
+function space $\ty{nat} \to \ty{int}$. Bj\o rner gives a rigorous treatment of
+this aspect \cite{bjoerner-1998}.
 
 Given a signature $\Sig$, $\thD$ refers to the \emph{theory of
 datatypes and codatatypes},
@@ -914,7 +920,7 @@ Moreover, at the end of this phase, each equivalence class $\ec{t}$ contains
 at most %%% JB: dropped ()'s
 one constructor term that is unique up to congruence.
 Thus, in the subsequent phases, 
-when considering the case that $\ec{t}$ contains a constructor term,
+when considering the case that $\ec{t}$ contains constructor terms,
 it is enough %for our purposes
 to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among these.
 
@@ -982,7 +988,8 @@ of the same type as $u$. %not occurring in $\tEc$,
 For a term $t \in \tEc$, 
 we write $\Varec{t}$ to denote the variable associated with
 the equivalence class $\ec{t}$.
-Initially, we set $\Val\ec{u} := {\Varec{u}}$ for each equivalence class $\ec{u}$. Because $\Varec{u}$ is unspecified,
+Initially, we set $\Val\ec{u} := {\Varec{u}}$ for each equivalence class $\ec{u}$. Because $\Varec{u}$ is
+unconstrained,
 this indicates that there are initially no
 constraints on the values for any equivalence class $\ec{u}$. 
 The mapping $\Val$
@@ -1337,7 +1344,7 @@ $\Ec$ is $\thD$-unsatisfiable.
 Otherwise, the child node of $\Ec$ is a closed derivation tree
 whose root
 node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
-In all these cases, $\Ec \vDash_{\thD} t \teq u$.
+In each of these cases, $\Ec \vDash_{\thD} t \teq u$.
 For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
 For \rn{Inject}, this is a consequence of injectivity.
 For \rn{Unique}, the construction of $\Val$ indicates that the values of $t$ and $u$ are equivalent in all models of $\Ec$.
@@ -1690,7 +1697,7 @@ $\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}
 Thus, $\ValC \ec{x}$ is acyclic when $\tau \notin \Codata$.
 Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
 
-We first show that (2) and (3) hold initially for $\Val$.
+We now show that (2) and (3) hold initially for $\Val$.
 For all equivalence classes $\ec{z}$,
 each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t \,)$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
 are such that $j = \jPrime$, since \rn{Clash} does not apply, % to $\Ec$,
@@ -1869,7 +1876,7 @@ Since \rn{Conflict} does not apply, $t \teq u \notin \Fc$ and thus $\ec{t}$ and 
 Since $\interp{\J}{t} \vsim \ValC \ec{t}$ and $\interp{\J}{u} \vsim \ValC \ec{u}$,
 by Lemma~\ref{lem:interpretation-completion}(3), $\interp{\J}{t} \neq \interp{\J}{u}$, and thus $\J \vDash t \tneq u$.
 
-Since by assumption $\Fc$ contains only equalities and disequalities, we have $\J \vDash \Fc\!$,
+Since $\Fc$ contains only equalities and disequalities, we have $\J \vDash \Fc\!$,
 and since $\Ec \subseteq \Fc\!$,
 % is a superset of $\Ec$,
 we conclude that $\J \vDash \Ec$.
