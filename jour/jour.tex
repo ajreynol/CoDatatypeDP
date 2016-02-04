@@ -2184,7 +2184,7 @@ $s$ must be equal to $t$.
 \section{Evaluation on Isabelle Problems}
 \label{sec:evaluation-on-isabelle-problems}
 
-\newcommand\gandl{G\&L}
+\newcommand\gandl{SBT}
 \newcommand\HD[1]{\hbox to2em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
 The decision procedure for (co)datatypes is useful both for proving (via
@@ -2220,9 +2220,8 @@ We
 included all the formalizations from the Isabelle distribution (Distro, 1179~goals)
 and the \emph{Archive of Formal Proofs} (AFP, 3014~goals) \cite{klein-et-al-afp}
 that define codatatypes falling within the supported fragment. We
-also included unpublished formalizations about Bird and Stern--Brocot trees
-by Peter Gammie and Andreas Lochbihler (\gandl,
-265~goals). To exercise the datatype support, formalizations about finite
+also included formalizations about Bird and Stern--Brocot trees (\gandl,
+265~goals) \cite{gammie-lochbihler-2016}. To exercise the datatype support, formalizations about finite
 lists and trees
 were added to the first two benchmark sets. The formalizations were selected before
 conducting any experiments. The experimental data are available
@@ -2419,8 +2418,9 @@ extend SMT solvers with dedicated support for (co)recursion.
 %formulas over (co)datatypes in solvers.
 
 {
+\footnotesize
 \def\ackname{Acknowledgment}
-\paragraph{\ackname.}
+\paragraph{\footnotesize\ackname.}
 \looseness=-1
 We owe a great debt to the development team of CVC4,
 including Clark Barrett and Cesare Tinelli,
@@ -2434,7 +2434,7 @@ Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
 codatatypes or at least benevolently tolerated it, both of which we are thankful
 for.
 %
-Peter Gammie and Andreas Lochbihler provided useful benchmarks.
+Peter Gammie and Andreas Lochbihler pointed us to useful benchmarks.
 Andrei Popescu helped clarify our thoughts regarding codatatypes and indicated
 related work. Dmitriy Traytel took part in discussions about degenerate
 codatatypes.
