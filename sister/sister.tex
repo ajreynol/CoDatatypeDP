@@ -1,18 +1,11 @@
-%%% TODO: Put http://lara.epfl.ch/~reynolds/JAR-CADE2015-cdt/ online
-%%% TODO: Mealy machine minimization
-%%% TODO: Give small example where Single is needed
-
-%%% GOOD IDEAS in impl of codata models:
-%%% 1. de Bruijn
-%%% 2. enum: "X nat"
-%%% 3. norm by DFA minim
-%%% 4. check membership in bad set by matching
-
-\documentclass[smallcondensed,draft]{svjour3}
+\documentclass{article}
+% The file ijcai16.sty is the style file for IJCAI-16 (same as ijcai07.sty).
+\usepackage{ijcai16}
 
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage[scaled=.82]{beramono}
 \usepackage[scaled=.86]{helvet}
 \usepackage{booktabs}
@@ -33,7 +26,10 @@
 
 \newcommand\MU{\vvthinspace\mu\vvthinspace}
 
-\spnewtheorem{examplex}{Example}{\itshape}{\rmfamily}
+\newtheorem{examplex}{Example}%{\itshape}{\rmfamily}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
 
 \newcommand\MIDRULE{
 \\[-1pt] %%% TYPESETTING HACK
@@ -76,7 +72,7 @@
 \newcommand\medrightarrow{\mathrel{{{\color{black}\relbar}\kern-0.9ex\rlap{\color{white}\ensuremath{\blacksquare}}\kern-0.9ex}\joinrel{\color{black}\rightarrow}}}
 
 \newcommand\xend{{\hfill$\scriptstyle\blacksquare$}}
-\newcommand\xqed{{\hfill$\scriptstyle\squareforqed$}}
+\newcommand\xqed{{\hfill$\scriptstyle\square$}}
 
 \renewcommand{\vec}[1]{\bar #1}
 \newcommand{\Ec}{E}
@@ -156,15 +152,15 @@ non-redun-dant counter-examples counter-example mono-morph-ize mono-morph-ized}
 \title{A Decision Procedure for (Co)datatypes in SMT Solvers}
 
 \author {Andrew Reynolds \and Jasmin Christian Blanchette\thanks{In memoriam Morgan Deters 1979--2015}}
-\authorrunning {A. Reynolds \and J. C. Blanchette}
+%\authorrunning {A. Reynolds \and J. C. Blanchette}
 
-\institute{
-Andrew Reynolds
-\at \'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), Switzerland
-\and
-Jasmin Christian Blanchette%, funded by DFG grant \textit{Hardening the Hammer} (Ni\,491\slash 14-1)
-\at Inria \& LORIA, Nancy, France \\
-Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany}
+%\institute{
+%Andrew Reynolds
+%\at \'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL), Switzerland
+%\and
+%Jasmin Christian Blanchette%, funded by DFG grant \textit{Hardening the Hammer} (Ni\,491\slash 14-1)
+%\at Inria \& LORIA, Nancy, France \\
+%Max-Planck-Institut f\"ur Informatik, Saarbr\"ucken, Germany}
 
 \maketitle
 
