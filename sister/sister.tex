@@ -153,7 +153,7 @@ non-redun-dant counter-examples counter-example mono-morph-ize mono-morph-ized}
 
 \author {Andrew Reynolds \and Jasmin Christian Blanchette\thanks{In memoriam Morgan Deters 1979--2015} \\
 Department of Computer Science, The University of Iowa, USA \and \\
-Inria Nancy -- Grand Est \& LORIA Villers-l\`es-Nancy, France
+Inria Nancy -- Grand Est \& LORIA, Villers-l\`es-Nancy, France
 }
 
 %\authorrunning {A. Reynolds \and J. C. Blanchette}
@@ -231,7 +231,7 @@ values of a codatatype consist of all well-typed finite \emph{and infinite} grou
 constructor
 terms, and only those. As a simple example, the coalgebraic specification
 %
-\[\keyw{codatatype}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat})\]
+\[\keyw{codata}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat})\]
 %
 %(using an ML-like syntax)
 introduces a type that
@@ -267,11 +267,11 @@ differences.
 %
 First, \emph{codatatypes need not be well-founded.}
 For example, the type
-$$\vthinspace\keyw{codatatype}~\;\ty{stream}_{\vthinspace\tau} \,=\allowbreak\, \const{SCons}(\tau,\allowbreak\: \ty{stream}_{\vthinspace\tau})\vthinspace$$
+$$\vthinspace\keyw{codata}~\;\ty{stream}_{\vthinspace\tau} \,=\allowbreak\, \const{SCons}(\tau,\allowbreak\: \ty{stream}_{\vthinspace\tau})\vthinspace$$
 of infinite sequences or streams over an element type $\tau$ is
 allowed, even though it has no base case. By contrast, the
 corresponding datatype specification
-$$\vthinspace\keyw{datatype}~\;\ty{fstream}_{\vthinspace\tau} \,=\allowbreak\, \const{FSCons}(\tau,\allowbreak\: \ty{fstream}_{\vthinspace\tau})\vthinspace$$
+$$\vthinspace\keyw{data}~\;\ty{fstream}_{\vthinspace\tau} \,=\allowbreak\, \const{FSCons}(\tau,\allowbreak\: \ty{fstream}_{\vthinspace\tau})\vthinspace$$
 would be rejected as non-well-founded
 \cite{blanchette-et-al-2015-esop}.
 %
@@ -400,19 +400,14 @@ finally any other function symbols.
 Each (co)datatype specification consists of $\ell$~mutually recursive types that are
 either all datatypes or all codatatypes. Polymorphic types, nested
 (co)recursion, and datatype--codatatype mixtures
-fall outside this fragment.\footnote{In principle, rank-1 (top-level) polymorphism \cite{blanchette-paskevich-2013}
-does not raise any special difficulties. Nesting datatypes inside datatypes,
-and likewise for codatatypes, can be reduced to the mutual case
-\cite{gunter-1993-not}. So the only genuinely interesting cases missing are
-mixed nested (co)recursion as well as
-(co)recursion through a non-(co)datatype (both of which make sense,
-at least in a higher-order setting \cite{blanchette-et-al-2014-impl}).}
-We allow ourselves some notational parameterization
-% at the metalevel
-through subscripts---for example, $\ty{stream}_{\vthinspace\tau}$ denotes a
-family of ground types including
-$\ty{stream}_{\vthinspace\ty{int}}$, $\ty{stream}_{\vthinspace\ty{bool}}$,
-and \smash{$\ty{stream}_{\vthinspace\ty{stream}_{\vthinspace\ty{real}}}$}.
+fall outside this fragment.
+
+%We allow ourselves some notational parameterization
+%% at the metalevel
+%through subscripts---for example, $\ty{stream}_{\vthinspace\tau}$ denotes a
+%family of ground types including
+%$\ty{stream}_{\vthinspace\ty{int}}$, $\ty{stream}_{\vthinspace\ty{bool}}$,
+%and \smash{$\ty{stream}_{\vthinspace\ty{stream}_{\vthinspace\ty{real}}}$}.
 
 \newcommand\elll{\kern.0515ex \ell\kern.0515ex}
 \newcommand\elllx{\kern.0515ex \ell\kern.0515ex}
@@ -425,16 +420,12 @@ being introduced.
 %
 To every argument corresponds a selector. The names for the (co)data\-types, the
 constructors, and the selectors must be
-distinct and different from existing names.%
-\footnote{It can be convenient to specify the same selector
-for several constructors associated with the same (co)data\-type,
-as long as the argument types coincide. % \cite[Section~3]{blanchette-et-al-2014-impl}.
-However, this is disallowed by SMT-LIB, so we do not consider it here.}
+distinct and different from existing names.
 Schematically:
 %
 \[
 \begin{aligned}[t]
-\!(\keyw{co})\keyw{datatype}\;\,
+\!(\keyw{co})\keyw{data}\;\,
   \delta_1 & {}=\, \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m_1\!}(\ldots)} \\[-.5\jot]
    \smash{\vdots\,\,\,} \\[-1.5\jot]
   \keyw{and}\; \,\delta_{\elllx} & =\, \smash{\const{C}_{\elll 1\!}(%\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \ldots, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}}
@@ -456,70 +447,53 @@ be an abbreviation for
 $t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(t), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(t)\bigr)$.
 %This will simplify the presentation. % of the decision procedure.
 
-Here are a few examples of legal specifications of (co)datatype families:
-\[\begin{aligned}[t]
-      \keyw{codatatype}\; \,\ty{llist}_{\vthinspace\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(%\const{lhead}{:}\;
-      \tau,\: %\const{ltail}{:}\;
-      \ty{llist}_{\vthinspace\tau}) \\%[-.5\jot]
-      \keyw{datatype}\;\, \ty{tree}_{\vthinspace\tau} & \,=\, \const{Node}(\tau,\:\, \ty{forest}_{\vthinspace\tau}) \\[-\jot]
-      \keyw{and}\;\,\, \ty{forest}_{\vthinspace\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\vthinspace\tau},\:\, \ty{forest}_{\vthinspace\tau})
-\end{aligned}
-\]
+%A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
+%type of an argument to one of $\delta$'s constructors. Semantically, a set of
+%types is \emph{mutually} (\emph{co})\emph{recursive} if and only if the
+%associated dependency graph is strongly connected.
+%A type is (\emph{co})\emph{recursive} if it belongs to such a set of types.
+%Types can be declared together in a mutual fashion even if they are not %actually
+%mutually (co)recursive. The semantic notion is more precise and is the one %that interests
+%us.
 
-Because all types must be inhabited (nonempty), a datatype specification is
-admissible only if a ground constructor term can be exhibited.
-This rules out non-well-founded specifications such as
-that of \ty{fstream} in Section~\ref{sec:introduction}.
-For codatatypes, no admissibility check is necessary because there is always a term,
-finite or infinite, that witnesses nonemptiness \cite{blanchette-et-al-2015-esop}.
-
-A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
-type of an argument to one of $\delta$'s constructors. Semantically, a set of
-types is \emph{mutually} (\emph{co})\emph{recursive} if and only if the
-associated dependency graph is strongly connected.
-A type is (\emph{co})\emph{recursive} if it belongs to such a set of types.
-Types can be declared together in a mutual fashion even if they are not actually
-mutually (co)recursive. The semantic notion is more precise and is the one that interests
-us.
-
-Non(co)recursive type specifications such~as either of
-\[\begin{aligned}[t]
-      \keyw{datatype}~\vthinspace\ty{option}_{\vthinspace\tau\!} & \,=\, \const{None} \,\mid\, \const{Some}(\tau) \\[-.5\jot]
-      \keyw{codatatype}~\vthinspace\ty{complex} & \,=\, \const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
-\end{aligned}
-\]
-are permitted.
-At the semantic level, it makes no difference whether
-such types are introduced as datatypes or as codatatypes.
+%Non(co)recursive type specifications such~as either of
+%\[\begin{aligned}[t]
+%      \keyw{data}~\vthinspace\ty{option}_{\vthinspace\tau\!} & \,=\, %\const{None} \,\mid\, \const{Some}(\tau) \\[-.5\jot]
+%      \keyw{codata}~\vthinspace\ty{complex} & \,=\, %\const{Complex}(\const{re}{:}\; \ty{real},\; \const{im}{:}\;\ty{real})
+%\end{aligned}
+%\]
+%are permitted.
+%At the semantic level, it makes no difference whether
+%such types are introduced as datatypes or as codatatypes.
 %Without loss of generality, we consider that these types are datatypes
 %instead of codatatypes.
 
 %Given the specification
 %
-%\[\keyw{codatatype}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\:\ty{stream})\]
+%\[\keyw{codata}\;\, \ty{stream} \,=\, \const{SCons}(\ty{int},\:\ty{stream})\]
 %
 %the infinite value $\const{SCons}(0, \const{SCons}(0, \ldots))$ witnesses
 %nonemptiness.
 
-One way to characterize datatypes %semantically
-is as the initial model of the
-selector--constructor equations \cite{barrett-et-al-2007}.
-A drawback of this approach is that it does
-not naturally account for selectors applied to wrong constructors. Barrett et
-al.\ address this by parameterizing the construction by default values, but
-this gives rise to spurious equalities between unrelated terms. For example,
-given
-\[\keyw{datatype}\;\, \ty{x} \,=\, \const{C}(\const{s}{:}\; \ty{int}) \mid \const{D} \mid \const{E}\]
-we would have the spurious equality
-$\const{s}(\const{D}) \teq \const{s}(\const{E})$. This flaw
-could be corrected, but the added complexity seems to suggest that selectors
-are better characterized axiomatically.
-
-A related semantic view of datatypes is as initial algebras of suitable
-functors. Codatatypes are
-then defined dually as final coalgebras \cite{rutten-2000}. The datatypes are
-generated by their constructors, whereas the codatatypes are viewed through
-their selectors.
+%One way to characterize datatypes %semantically
+%is as the initial model of the
+%selector--constructor equations \cite{barrett-et-al-2007}.
+%A drawback of this approach is that it does
+%not naturally account for selectors applied to wrong constructors. Barrett et
+%al.\ address this by parameterizing the construction by default values, but
+%this gives rise to spurious equalities between unrelated terms. For example,
+%given
+%\[\keyw{data}\;\, \ty{x} \,=\, \const{C}(\const{s}{:}\; \ty{int}) \mid %\const{D} \mid \const{E}\]
+%we would have the spurious equality
+%$\const{s}(\const{D}) \teq \const{s}(\const{E})$. This flaw
+%could be corrected, but the added complexity seems to suggest that selectors
+%are better characterized axiomatically.
+%
+%A related semantic view of datatypes is as initial algebras of suitable
+%functors. Codatatypes are
+%then defined dually as final coalgebras \cite{rutten-2000}. The datatypes are
+%generated by their constructors, whereas the codatatypes are viewed through
+%their selectors.
 %By uniformly focusing on the constructors, the
 %axiomatic approach emphasizes the commonality between datatypes and
 %codatatypes, while sacrificing a theoretically fruitful notion of duality.
@@ -533,18 +507,18 @@ $\jPrime$, and $k$ within bounds:
 %
 \[
 \begin{aligned}[t]
-\text{Distinctness:}\quad
+\text{Distinctness:}\enskip
   & %\forall \bar x, \bar y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \quad\text{if $j \not= \jPrime$}}
   \\[-0.5\jot]
-\text{Injectivity:}\quad
+\text{Injectivity:}\enskip
   & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
     \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(y_1,\ldots,y_{n_{i\negvthinspace j}}) \medrightarrow x_k \teq y_k}
   \\[-0.5\jot]
-\text{Exhaustiveness:}\quad
+\text{Exhaustiveness:}\enskip
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
   \\[-0.5\jot]
-\text{Selection:}\quad
+\text{Selection:}\enskip
   & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) \teq x_k}
 \end{aligned}
 \]
@@ -561,60 +535,17 @@ constructor is left completely unspecified.
 %      * leave them unspecified; hence hd(nil1) = hd(nil2) in some models,
 %        and not in other models
 %
-Datatypes are additionally characterized by an induction principle for proving
-a conjunction of properties $P_1,\ldots,P_{\ell}$ over arbitrary
-values $v_1 : \delta_1, \ldots, v_\ell : \delta_\ell$:
-%
-\[
-\begin{aligned}[t]
-\text{Induction:}\quad
-\AXC{\strut$\bigwedge_{\vthinspace i,j}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\vthinspace k}\, \mathcalx{IH}[x_k]\bigr) \medrightarrow P_i[\const C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
-\UIC{\strut$\bigwedge_{\vthinspace i}\, P_i[v_i]$}
-\DP
-\end{aligned}
-\]
-The notation $\mathcalx{IH}[x]$
-denotes either $P_{\iPrime}[x]$ if there exists some $\iPrime$ such that
-the formula is type-correct or else $\top$ (truth).
-The induction principle ensures that the interpretation of datatypes is standard.
+Datatypes are additionally characterized by an induction principle.
 For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
 induction prohibits models that contain cyclic values---e.g.,
 an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
 $\const{S}(\const{S}(\ldots))$.
 
-For codatatypes, the dual notion is called coinduction. It makes it possible to
-derive the equality of pairs of codatatype values
-$v_1, w_1 \mathbin: \delta_1,\,\ldots,\,v_\ell, w_\ell \mathbin: \delta_\ell$, based on
-suitable coinduction witnesses $R_1,\ldots,R_\ell$:
-%
-\[
-\begin{aligned}[t]
-\text{Coinduction:}\quad
-\AXC{\strut$\begin{gathered}\textstyle \smash{\bigwedge_{\vthinspace i}\, R_i[v_i, w_i]} \\[-\jot]\textstyle
-\bigwedge_{\vthinspace i}\, \forall v\; w.\;\, R_i[v, w] \medrightarrow
-  \bigwedge_{\vthinspace j}\, \const{d}_{\negvthinspace j}(v) \mathrel\land \const{d}_{\negvthinspace j}(w)
-  \medrightarrow \bigwedge_{\vthinspace k}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
-\end{gathered}$}
-\UIC{\strut$\bigwedge_{\vthinspace i}\, v_i \teq w_i$}
-\DP
-\end{aligned}
-\]
-The notation $x \sim y$ stands for $R_{\iPrime}[x, y]$ if there exists some
-$\iPrime$ such that the formula is type-correct or $x \teq y$ otherwise.
-The second premise ensures that the coinduction witnesses are
-bisimulations. The first premise and the conclusion capture the notion that
-equality is the largest bisimulation on codatatypes. Thus, the coinduction
-principle encodes a form of extensionality:\ Two values that yield the same
-observations must be equal, where the observations are made through selectors
-and discriminators.
-
-In addition, codatatypes are guaranteed to contain all values corresponding to
+For codatatypes, the dual notion is called coinduction.
+By this principle, two values that yield the same observations must be equal, 
+where the observations are made through selectors and discriminators. In 
+addition, codatatypes are guaranteed to contain all values corresponding to 
 infinite ground constructor terms.
-In general, this cannot be captured by a
-first-order axiomatization, since there may be uncountably many of them.
-For example, $\ty{stream}_{\vthinspace\ty{int}}$ is isomorphic to the uncountable
-function space $\ty{nat} \to \ty{int}$. Bj\o rner gives a rigorous treatment of
-this aspect \cite{bjoerner-1998}.
 
 Given a signature $\Sig$, $\thD$ refers to the \emph{theory of
 datatypes and codatatypes},
@@ -649,61 +580,41 @@ expansion \cite[Theorem 8.1, 2$\,{\Leftrightarrow}\,$5]{rutten-2000}.
 %        consider uniqueness -- no way to express that certain infinite
 %        acyclic objects do not exist
 
-For datatypes, any recursive specification gives rise to an infinite datatype.
-Paradoxically, this does not extend to codatatypes:
-Some codatatypes are so degenerate as to be finite even though they
-have infinite values. A simple example is
-\vthinspace$\keyw{codatatype}~\ty{a} = \const{A}(\ty{a})$, which is corecursive
-and yet has a cardinality of one;
-its unique value is $\MU a.\; \const{A}(a)$. Other specimens are
-$\ty{stream}_{\vthinspace\ty{unit}\,}$
-and both \ty{b} and \ty{c} in the specification
-\[\begin{aligned}[t]
-      \keyw{codatatype}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: \ty{b},\: \ty{unit}) \\[-1\jot]
-      \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{b},\: \ty{c})
-\end{aligned}
-\]
-assuming \ty{unit} is a datatype with the single constructor $\const{Unity} :
-\ty{unit}$. We call such codatatypes
-\emph{corecursive singletons}, or simply singletons.
-For the decision procedure, it will be
-crucial to detect these. %, even if they rarely arise in practice.
-A type may also be a corecursive singleton only in some models. If the example
-above is altered to make \ty{unit} an uninterpreted type, \ty{b} and \ty{c} will be
-singletons precisely when \ty{unit} is interpreted as a singleton.
-Fortunately, given cardinalities for the ordinary types,
-it is easy to characterize this degenerate case.
-
-% In other words, all finite corecursive codatatypes are corecursive singletons.
-
-\begin{lemma}%[Corecursive Singletons]%
-\label{lem:corecursive-singletons}%
-\afterDot
-Let $\delta$ be a corecursive codatatype. For any interpretation in $\JJJJ$,
-the domain interpreting $\delta$ is either infinite or a singleton. In the
-latter case, $\delta$ necessarily has a single constructor, whose arguments have
-types that are interpreted as singleton domains.
-\end{lemma}
-
-\begin{proof}
-By definition, the type is equipped with at least one (directly or indirectly)
-corecursive constructor $\const{C}$. If it additional has second
-corecursive constructor $\const{D}$, it is possible to encode infinitely many
-alternation patterns---e.g.,
-$\const{C}(\const{D}(\const{C}(\const{C}(\ldots))))$---all of which correspond
-to distinct values (by distinctness and injectivity). If the type has a
-noncorecursive constructor $\const{E}$, it is possible to create terms of
-arbitrary depth---e.g., $\const{C}(\ldots(\const{C}(\const{E}))\ldots)$. In
-either case, there can be no finite models.
-
-Therefore, $\const{C}$ must be the only constructor.
-If any of its noncorecursive arguments has a cardinality greater than 1,
-it is possible to encode alternation patterns using it---e.g.,
-$\const{C}(0,\: \const{C}(1,\: \const{C}(0,\: \const{C}(0,\: \ldots))))$---which
-again excludes finite models. Otherwise, the coinduction principle ensures
-that the type has at most one value.
-\xqed
-\end{proof}
+%For datatypes, any recursive specification gives rise to an infinite %datatype.
+%Paradoxically, this does not extend to codatatypes:
+%Some codatatypes are so degenerate as to be finite even though they
+%have infinite values. A simple example is
+%\vthinspace$\keyw{codata}~\ty{a} = \const{A}(\ty{a})$, which is corecursive
+%and yet has a cardinality of one;
+%its unique value is $\MU a.\; \const{A}(a)$. Other specimens are
+%$\ty{stream}_{\vthinspace\ty{unit}\,}$
+%and both \ty{b} and \ty{c} in the specification
+%\[\begin{aligned}[t]
+%      \keyw{codata}\;\, \ty{b} & \,=\, \const{B}(\ty{b},\: \ty{c},\: %\ty{b},\: \ty{unit}) \\[-1\jot]
+%      \keyw{and}\;\, \ty{c} & \,=\, \const{C}(\ty{a},\: \ty{b},\: \ty{c})
+%\end{aligned}
+%\]
+%assuming \ty{unit} is a datatype with the single constructor $\const{Unity} :
+%\ty{unit}$. We call such codatatypes
+%\emph{corecursive singletons}, or simply singletons.
+%For the decision procedure, it will be
+%crucial to detect these. %, even if they rarely arise in practice.
+%A type may also be a corecursive singleton only in some models. If the %example
+%above is altered to make \ty{unit} an uninterpreted type, \ty{b} and \ty{c} %will be
+%singletons precisely when \ty{unit} is interpreted as a singleton.
+%Fortunately, given cardinalities for the ordinary types,
+%it is easy to characterize this degenerate case.
+%
+%% In other words, all finite corecursive codatatypes are corecursive %singletons.
+%
+%\begin{lemma}%[Corecursive Singletons]%
+%\label{lem:corecursive-singletons}%
+%\afterDot
+%Let $\delta$ be a corecursive codatatype. For any interpretation in $\JJJJ$,
+%the domain interpreting $\delta$ is either infinite or a singleton. In the
+%latter case, $\delta$ necessarily has a single constructor, whose arguments %have
+%types that are interpreted as singleton domains.
+%\end{lemma}
 
 \section{The Decision Procedure -- AJR 4 columns} % for (Co)datatypes}
 \label{sec:the-decision-procedure}
@@ -740,9 +651,6 @@ datatype with $n$~nullary constructors
 %JB: I fully agree, but I tuned the titles a little bit. Also, I tried
 %%% to avoid such "meta" (or "road-sign") wording as
 %%% "This section will describe such-and-such".
-
-\subsection{A Calculus for $\thD$}
-\label{sec:calculus-for-dc}
 
 % whose derivation rules are applied until saturation or contradiction.
 
@@ -1175,7 +1083,7 @@ based on a recursive computation of the cardinalities of the
 constructors' argument types.
 %This step relies on the assumption that uninterpreted types are infinite.
 
-\subsection{Termination and Correctness of the Calculus}
+\paragraph{Termination and Correctness.}
 \label{sec:termination-and-correctness}
 
 We now show the termination and correctness of the calculus.
@@ -1190,598 +1098,23 @@ $\Ec$ is $\thD$-satisfiable.
 \afterDot
 All derivation trees are finite.
 \end{theorem}
-\begin{proof}
-Consider a derivation tree with root node $\Ec$. Let $D \subseteq \tEc$ be the
-set of terms whose types are finite datatypes, and let $\SSS \subseteq \tEc$ be
-the set of terms occurring as arguments to selectors. For each term $t \in
-D$\negvthinspace, let
-\begin{align*}
-\smash{\SSSS 0_t} & = \{ t \}
-& \smash{\SSSS {i+1}_t} & = \smash{\SSSS i_t \mathrel\cup \{ \const s( u ) \mid u\typ{\delta} \in \SSSS i_t{,}~ \delta \in \Data{,}~ \left|\delta\right| \text{ is finite}{,}~ \const{s} \in \Sel^{\delta}}  \}
-\end{align*}
-%for $i \geq 0$, let ;
-and let $\SSSS \infty_t$ be the limit of this sequence.
-This is a finite set for each $t$, 
-because all chains of selectors applied to $t$ are finite.
-%because in the absence of (co)recursion
-%one eventually reaches a point where no selector can be applied.
-%%% TODO: Clarify above step in report.
-Let $\SSSS \infty$ be the union of all sets $\SSSS \infty_t$ where $t \in D$,
-and let $\tcEc$ be the set of subterms of
-%
-$\Ec \mathrel\cup \{ \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\smash{\,n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)} \mid \smash{t\typ{\delta} \in \SSS \mathrel\cup \SSSS \infty{,}~ \const C_{\negvthinspace j} \in \smash{\Ctr^\delta}} \}$.
-%
-In a derivation tree with root node~$\Ec$,
-it can be shown by induction
-on the rules of the calculus that each non-root node $\Fc$ is such that
-$\Terms(\Fc) \subseteq \tcEc$, and hence contains an equality between two terms from $\tcEc$ not occurring in its parent node.
-Thus, the depth of a branch in a derivation tree with root node $\Ec$ is at most $\left| \smash{\tcEc}\vphantom{X} \right|{\!}^2$,
-which is finite since $\tcEc$ is finite.
-\xqed
-\end{proof}
 
 \begin{theorem}[Refutation Soundness]%
 \label{thm:rs}%
 \afterDot
 If there exists a closed derivation tree with root node\/ $\Ec$, then\/ $\Ec$ is $\thD$-unsatisfiable.
 \end{theorem}
-\begin{proof}
-The proof is by structural induction on the derivation tree with root node $\Ec$.
-If the tree is an application of \rn{Conflict}, \rn{Clash}, or \rn{Acyclic},
-then $\Ec$ is $\thD$-unsatisfiable.
-For \rn{Conflict}, this is a consequence of equality reasoning.
-For \rn{Clash}, this is a consequence of distinctness.
-For \rn{Acyclic}, the construction of $\Val$ indicates that the class of values that term~$t$ can take in models of $\Ec$ is infeasible.
-If the child nodes of $\Ec$ are closed derivation trees
-whose root nodes are the result of applying \rn{Split} on $t\typ{\delta}$,
-by the induction hypothesis $\Ec \mathrel\cup t \teq \smash{\const C_{\negvthinspace j}\bigl( \const s^1_{\negvthinspace j}( t ), \ldots, \const s^{\,\smash{n_{\negvthinspace j}}}_{\negvthinspace j}( t ) \bigr)}$ is
-$\thD$-unsatisfiable
-for each $\const C_{\negvthinspace j} \in \smash{\Ctr^\delta}$.
-Since by exhaustiveness, all models of $\thD$ entail exactly one
-$\DISC{\negvthinspace j}$,
-$\Ec$ is $\thD$-unsatisfiable.
-Otherwise, the child node of $\Ec$ is a closed derivation tree
-whose root
-node $\Ec \mathrel\cup t \teq u$ is obtained by applying one of the rules \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, \rn{Inject}, \rn{Unique}, or \rn{Single}.
-In each of these cases, $\Ec \vDash_{\thD} t \teq u$.
-For \rn{Refl}, \rn{Sym}, \rn{Trans}, \rn{Cong}, this is a consequence of equality reasoning.
-For \rn{Inject}, this is a consequence of injectivity.
-For \rn{Unique}, the construction of $\Val$ indicates that the values of $t$ and $u$ are equivalent in all models of $\Ec$.
-For \rn{Single}, $t$~and~$u$ must have the same value since the cardinality of their type is one.
-By the induction hypothesis, $\Ec \mathrel\cup t \teq u$ is $\thD$-unsatisfiable
-and thus $\Ec$ is $\thD$-unsatisfiable.
-\xqed
-\end{proof}
 
 It remains to show the converse of the previous theorem: If a derivation tree
 with root node $\Ec$ contains a saturated node, then $\Ec$ is
 $\thD$-satisfiable.
 The proof relies on a specific interpretation $\J$ that satisfies $\Ec$.
 
-First, we define the set of interpretations of the theory $\thD$,
-which requires custom terminology concerning $\mu$-terms.
-Given a $\mu$-term $t$ with subterm $u$,
-the \emph{expansion of $u$ with respect to $t$} is the $\mu$-term $\expand{t}{u}^\emptyset$,
-abbreviated to
-$\expand{t}{u}$, as returned by the function
-%where $x \leadsto \MU x.\; \const{C}( \vec u ) \in t$ indicates that $\MU x.\;
-%\const{C}( \vec u )$ is the subterm of $t$ that binds this occurrence of
-%variable $x$:
-\[\begin{array}{@{}r@{}c@{}l@{}}
-\expand{t}{x}^B & {} \,=\, {} &
-\textstyle\relax{\begin{cases}
-    x & \text{if $x \in B$}   \\[-\jot]
-    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u}^{\smash{B \,\uplus\, \{ x \}}}\bigr)} & \text{if
-    $\MU x.\; \const{C}( \vec u )$ binds this occurrence of $x \notin B$ in $t$}
-\end{cases}} ~ \\
-\expand{t}{\MU x.\; \const{C}( \vec u )}^B & = &
-\textstyle\begin{cases}
-    x & \text{if $x \in B$} \\[-\jot]
-    \MU x.\; \const{C}\smash{\bigl( \expand{t}{ \vec u }^{\smash{B \,\uplus\, \{ x \}}}\bigr)} & \text{otherwise}
-\end{cases}
-\end{array}\]
-The recursion will eventually terminate because each recursive call adds one bound
-variable to $B$ and there are finitely many distinct bound variables in a $\mu$-term.
-Intuitively, the expansion of a subterm is a self-contained
-$\mu$-term that denotes the same value as the original subterm---\allowbreak e.g.,
-$\expand{\MU x.\: \const{C}(\MU y.\: \const{D}(x))}{\MU y.\: \const{D}(x)} =
- \MU y.\: \const{D}(\MU x.\: \const{C}(y))$.
-%
-%\rem{TODO: add small examples}
-%\rem{TODO: explain why terminates}
-
-The $\mu$-term $u$
-is a \emph{self-similar subterm} of~$t$ if
-$u$ is a proper subterm of~$t$,
-$t$ and $u$ are of the forms $\MU x.\; \const{C}( t_1, \ldots, t_n )$
-and $\MU y.\; \const{C}( u_1, \ldots, u_n )$,
-and $\expand{t}{ t_k } \aequiv \expand{t}{ u_k }$ for all $k$. % \in [n]
-The $\mu$-term $t$ is \emph{normal} if it does not contain %any
-self-similar subterms
-and all of its proper subterms are also normal.
-Thus, $t = \MU x.\; \const{C}( \MU y.\; \const{C}( y ) )$ is not normal
-because $\MU y.\; \const{C}( y )$ is a self-similar subterm of~$t$.
-Their arguments have the same expansion with respect to~$t$:
-$\expand{t}{\MU y.\; \const{C}( y )} =
-\MU y.\; \const{C}\bigl( \expand{t}{y}^{\smash{\{y\}}} \bigr) =
-\MU y.\; \const{C}( y )$
-is $\alpha$-equivalent to
-$\expand{t}{y} =
-\MU y.\; \const{C}\bigl( \expand{t}{y}^{\smash{\{y\}}} \bigr) =
-\MU y.\; \const{C}( y )$.
-The term $u = \MU x.\; \const{C}( \MU y.\; \const{C}( x ) )$ is also not normal,
-since $\MU y.\; \const{C}( x )$ is a self-similar subterm of $u$,
-noting that
-%
-$\expand{u}{\MU y.\; \const{C}( x )}
- = \MU y.\; \const{C}\bigl( \expand{u}{x}^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \expand{u}{\MU x.\allowbreak\; \const{C}( \MU y.\allowbreak\; \const{C}( x ) ) }^{\smash{\{y\}}} \bigr)
- = \MU y.\; \const{C}\bigl( \MU x.\allowbreak\; \const{C}( \expand{u}{\MU y.\allowbreak\; \const{C}( x )}^{\smash{\{x,y\}}} ) \bigr)
- = \MU y.\allowbreak\; \const{C}( \MU x.\allowbreak\; \const{C}( y ) )$
-is $\alpha$-equivalent to $\expand{u}{x} = u$.
-% for the renaming $\{ x \mapsto y, y \mapsto x \}$.
-
-For any $\mu$-term $t$ of the form $\MU x.\; \const C( \vec u )$,
-its \emph{normal form} $\nf{t}$ is obtained
-by replacing all of the self-similar subterms of~$t$ with $x$
-%and by replacing all of the abnormal subterms of $t$ with their corresponding normal forms.
-and by recursively normalizing the other subterms.
-For variables, $\nf{x} = x$.
-Thus, $\nf{\MU x.\; \const{C}( \MU y.\; \const{C}( x ) )} = \MU x.\; \const{C}( x )$.
-
-%\begin{lemma}
-%\label{lem:mu-norm-arg}
-%If the $\mu$-terms $\vec u$ are in normal form and $t = \nf{\MU x.\; \const{C}( \vec u )} = \MU x.\; \const{C}( \vec w )$
-%for some $\mu$-terms $\vec w$,
-%then $\vec u \vsim \expand{t}{\vec w}$\vthinspace.
-%\end{lemma}
-% TODO:
-%\begin{proof}
-%\qed
-%\end{proof}
-
-%\begin{lemma}
-%\label{lem:mu-norm-interp}
-%If the $\mu$-term $t$ is normal and $u$ is a subterm of $t$, then $\expand{t}{u}$ is normal.
-%\end{lemma}
-%\begin{proof}
-%\qed
-%\end{proof}
-
-%\begin{lemma}
-%\label{lem:mu-cong}
-%If $t_u = \MU x.\; \const{C}( \vec u )$ and $t_w = \MU y.\; \const{C}( \vec w )$ are in normal form,
-%then $\expand{t_u}{ \vec u } \vsim \expand{t_w}{ \vec w }$ if and only if $t_u \vsim t_w$.
-%\end{lemma}
-%\begin{proof}
-%\rem{TODO}
-%\qed
-%\end{proof}
-
-We now define the class of interpretations for $\thD$.
-$\interp{\J}{\tau}$ denotes the interpretation type $\tau$ in $\J$---that is, a
-nonempty set of domain elements for that type.
-$\interp{\J}{\const{f}}$ denotes the interpretation of a function $\const{f}$ in $\J$.
-If $\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$,
-then $\interp{\J}{\const{f}}$ is a total function from $\interp{\J}{\tau_1} \times \cdots \times \interp{\J}{\tau_n}$ to $\interp{\J}{\tau}$.
-%To simplify the presentation,
-All types are interpreted as sets of $\mu$-terms, but
-only values of types in $\Codata$ may contain cycles.
-%Since all values of types in $\Data$ and $\Nondata$ are acyclic,
-%a typical representation for these values can be obtained by
-%dropping each of its $\mu$-bindings.
-%For example, the $\mu$-term $\MU x.\; \const{Z}$ representing the integer constant zero
-%is simply $\const{Z}$ after dropping the $\mu$-binding of $x$.
-
-\begin{definition}[Normal Interpretation]
-\afterDot%
-\label{def:norm-interpretation}%
-\rm
-An interpretation $\J$ is \emph{normal} if the following conditions are met:
-\begin{enumerate}
-\item
-For each type $\tau$,
-%%% sets *contain* elements, they *include* other sets
-$\interp{\J}{\tau}$ includes a maximal set of closed normal $\mu$-terms of that type that are
-unique up to $\alpha$-equivalence and acyclic unless $\tau \in \Codata$.\strut
-
-\item
-For each constructor term $\vphantom{s^k}\const{C}( \vec t \,)$ of type $\tau$,
-$\interp{\J}{\const{C}}( \interp{\J}{\vec t\,} )$ is the value
-in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
-$\nf{\MU x.\; \const{C}( \interp{\J}{\vec t\,} )}$, where $x$ is fresh.\strut
-
-\item
-For each selector term $\const s^k_{\negvthinspace j}( t )$ of type $\tau$, % for some $\vec u$,
-if $\interp{\J}{t}$ is $\MU x.\; \const{C}_{\negvthinspace j}( \vec u )$,
-then $\J\negvvthinspace( \const s^k_{\negvthinspace j} )\bigl( \interp{\J}{t} \bigr)$ is the value
-in $\interp{\J}{\tau}$ that is $\alpha$-equivalent to
-$\expand{\interp{\J}{t}}{u_k}$.
-\end{enumerate}
-\end{definition}
-
-Not all normal interpretations are models of codatatypes, because
-models must contain all possible infinite terms, not only cyclic ones. However,
-acyclic infinite values are not interesting for deciding universal formulas:
-For such formulas, it is trivial to extend any normal interpretation with extra
-domain elements to obtain a genuine model if desired. %Hence, we focus on normal interpretations.
-
-When constructing a model $\J$ of $\Ec$,
-it remains only to specify how $\J$ interprets wrongly applied selector terms and variables.
-For the latter, this will be based on the mapping $\Val$ computed in phase~2 of the calculus.
-
-{\looseness=-1
-First, we need the following definitions.
-We write $t \vsimv{x} u$ if $\mu$-terms $t$ and $u$ are syntactically equivalent
-for some renaming that avoids capturing any variable other than~$x$.
-For example,
-$\MU x.\; \const{D}( x ) \vsimv{y} \MU x.\; \const{D}( y )$
-(by renaming $y$ to $x$),
-$\MU x.\; \const{C}( x, x ) \vsimv{x} \MU y.\; \const{C}( x, y )$, and
-$\MU x.\; \const{C}( z, x ) \vsimv{z} \MU y.\; \const{C}( z, y )$,
-but
-$\MU x.\; \const{D}( x ) \not\vsimv{x} \MU x.\; \const{D}( y )$ and
-$\MU x.\; \const{C}( x, x ) \not\vsimv{y} \MU y.\; \const{C}( x, y )$.
-For a variable $x\typ{\tau}$ and a normal interpretation $\J$,
-we let $\BAD_{\smash{\J}}^x( \Val )$ denote the set consisting of all values
-$v \in \interp{\J}{\tau}$
-such that $v \vsimv{x} \expand{t}{u}$ for some subterm $u$ of a term $t$
-occurring in the range of $\Val$. This set describes shapes of terms to avoid
-when assigning a $\mu$-term to $x$.
-
-}
-
-The \emph{completion} $\ValC$ of $\Val$ for a normal interpretation $\J$
-assigns values from $\J$ to unassigned variables in the domain of $\Val$.
-We construct $\ValC$ by initially setting $\ValC := \nf{\Val}$
-and by exhaustively applying the following rule:%
-\[
-\hbox{\(
-\inferrule{
-  {\Varec{x}}\typ{\tau} \in \FV( \ValC )
-  \betweenantes
-  \MU {\Varec{x}}.\; t \aequiv v
-  \betweenantes
-  v \in \interp{\J}{\tau}
-  \betweenantes
-  v \notin \BAD_{\smash{\J}}^{\Varec{x}}(\ValC)
-}{
-  \ValC := \nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}
-}
-\)
-%\rn{Assign}
-}
-\]
-%
-Given an unassigned variable in $\ValC$, this rule assigns it a fresh
-value---one that does not occur in $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$
-modulo $\alpha$-equivalence---excluding
-not only existing terms in the range of $\ValC$ but also
-terms that could emerge as a result of the update.
-%\rem{TODO: What guarantees that such a value exists? (Answer: infinitely many values
-%of codatatypes, of which only finitely many are in
-%$\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$?)}
-Since this update removes one
-variable from $\FV( \ValC )$ and does not add any variables to $\FV( \ValC
-)$, the process eventually terminates. We normalize all terms in
-the range of $\ValC$ at each step.
-
-%The last premise is admittedly rather technical.
-To ensure disequality literals are satisfied by an interpretation based on $\ValC$,
-it suffices that $\ValC$ is injective modulo $\alpha$-equivalence.
-This invariant holds initially, and
-the last premise in the above rule ensures that it is maintained.
-%More precisely,
-The set $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is an overapproximation of the values
-that, when assigned to ${\Varec{x}}$, will cause values in the range of $\ValC$ to become $\alpha$-equivalent.
-%This premise is not strictly necessary in practice, 
-%as one could compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
-%injectivity afterward, repeating until a suitable value is found.
-For infinite codatatypes, it is always possible to find fresh values $v$
-because $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is a finite set.
-%Injectivity is important to satisfy disequality literals.
-%For infinite codatatypes, it is always possible to find suitable values $v$.
-%For example,
-%if the longest cycle in $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is of length $n$, a fresh value
-%can be constructed with a cycle of length $n + 1$.
-
-\begin{examplex}
-Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
-Let $\Ec$ be the set
-$\{
-u \teq \const{C}( z ),\;
-v \teq \const{D}( z ),\;
-w \teq \const{E}( y ),\;
-x \teq \const{C}( v ),\;
-z \not\teq v
-\}$.
-After applying the calculus to saturation on $\Ec$,
-the mapping $\Val$ is as follows:
-%\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
-%\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
-\[\begin{array}{r@{}c@{}r@{}l@{\qquad}r@{}c@{}r@{}l@{\qquad}r@{}c@{}l}
-\Val \ec{u} & {}\,=\,{} & \MU {\Varec{u}}.\; & \const{C}( {\Varec{z}} ) &
-\Val \ec{w} & = & \MU {\Varec{w}}.\; & \const{E}( {\Varec{y}} ) &
-\Val \ec{y} & {}\,=\,{} & {\Varec{y}} \\
-\Val \ec{v} & = & \MU {\Varec{v}}.\; & \const{D}( {\Varec{z}} ) &
-\Val \ec{x} & {}\,=\,{} & \MU {\Varec{x}}.\; & \const{C}( \MU {\Varec{v}}.\; \const{D}( {\Varec{z}} ) ) &
-\Val \ec{z} & = & {\Varec{z}}
-\end{array}\]
-%
-To construct a completion $\ValC$, we must choose values for ${\Varec{y}}$ and ${\Varec{z}}$,
-which are free in~$\Val$.
-Modulo $\alpha$-equivalence, $\smash{\BAD_{\smash{\J}}^{{\Varec{z}}}( \Val )} =
-%\begin{array}{c}
-\{
-\MU a.\: \const{C}( a ),\:
-\MU a.\: \const{D}( a ),\allowbreak\:
-\MU a.\: \const{C}( \const{D}( a )),\allowbreak\:
-\const{C}( \MU a.\: \const{D}( a ))
-\}
-%\end{array}
-$.
-Now consider a normal interpretation $\J$ that evaluates variables in $\Ec$ based on~$\Val$:
-$\interp{\J}{u} = \Val \ec{u}$, $\interp{\J}{v} = \Val \ec{v}$, and so on.
-Assigning a value for $\Val \ec{z}$ that is $\alpha$-equivalent to a value in $\BAD_{\smash{\J}}^{{\Varec{z}}}( \Val )$
-may cause values in the range of $\Val$ to become $\alpha$-equivalent,
-which in turn may cause $\Ec$ to be falsified by~$\J$.
-For example, assign $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$ for ${\Varec{z}}$.
-After the substitution, $\Val \ec{v} = \MU {\Varec{v}}.\; \const{D}( \MU {\Varec{z}}.\; \const{D}( {\Varec{z}} ) )$,
-which has normal form $\MU {\Varec{v}}.\; \const{D}( {\Varec{v}} )$,
-which is $\alpha$-equivalent to $\MU {\Varec{z}}.\; \const{D}( {\Varec{z}} )$.
-However, this contradicts the disequality $z \not\teq v$ in~$\Ec$.
-On the other hand, if the value assigned to ${\Varec{z}}$ is fresh, %not $\alpha$-equivalent to any term in $\BAD_{\smash{\J}}^{{\Varec{z}}}( \Val )$,
-the values in the range of $\Val$ remain $\alpha$-disequivalent.
-We can assign a value such as
-$\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$,
-$\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$, or
-$\MU {\Varec{z}}.\; \const{C}( \const{C}( \const{D}( {\Varec{z}} ) ) )$
-to ${\Varec{z}}$.
-
-Legal substitutions for ${\Varec{z}}$ may cause the range of $\Val$ to contain abnormal terms.
-For example, after assigning $\MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) )$ to $\Varec{z}$, we have
-$\Val \ec{u} = \MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( \const{C}( {\Varec{z}} ) ) )$,
-with normal form
-$\MU {\Varec{u}}.\; \const{C}( \MU {\Varec{z}}.\; \const{D}( {\Varec{u}} ) )$.
-This explains why the term is normalized in the rule's conclusion.
-\xend
-\end{examplex}
-
-In the following lemma about $\ValC$,
-$\vphantom{\Bigl(_j}\muvar( t ) = \relax{\begin{cases}
-  t & \text{if $t$ is a variable} \\[-\jot]
-  x & \text{if $t$ is of the form $\MU {x}.\; u$.}
-\end{cases}}$
-
-\pagebreak[2]
-
-\begin{lemma}
-\label{lem:interpretation-completion}
-If $\Val$ is constructed for a saturated set $\Ec$
-and $\ValC$ is a completion of $\Val$ for a normal interpretation $\J$, the following properties hold:
-\begin{enumerate}
-\item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
-\item[\rm (2)]
-$\ValC \ec{x} = \expand{\ValC \ec{y}}{ t }$ for
-all subterms $t$ of $\ValC \ec{y}$ with $\muvar(t) = {\Varec{x}}$.
-\item[\rm (3)]
-$\ValC \ec{x} \vsim \ValC \ec{y}$ if and only if $\ec{x} = \ec{y}$.
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-To show (1), we first show that $\ValC$ contains no free variables.
-Assume by contradiction that $\ValC$ contains a free variable ${\Varec{y}}$ for some $\ec{y}$ of type $\tau$.
-Then it must be the case that $\ec{y}$ does not contain a constructor term,
-or else ${\Varec{y}}$ would not occur as a free variable in~$\Val$.
-Consider the case when $\tau$ is finite.
-By assumption, $\tau \notin \Nondata$.
-Since \rn{Split} does not apply to $\Ec$, we have $\tau \notin \Data$.
-If $\tau \in \Codata$, then $\tau$ is corecursive by assumption, and by Lemma~\ref{lem:corecursive-singletons},
-the cardinality of $\tau$ must be one.
-Since \rn{Single} does not apply, % to $\Ec$,
-there is only one equivalence class of type $\tau$ in $\Ec$,
-and thus there are no terms in $\BAD_{\smash{\J}}^{\Varec{y}}(\ValC)$ of type $\tau$.
-This is a contradiction, since %our %model
-completion can assign the value in the domain of $\tau$ to ${\Varec{y}}$.
-Now, consider the case when $\tau$ is infinite.
-This is also a contradiction,
-since there are only a finite number of closed terms in $\BAD_{\smash{\J}}^{\Varec{y}}(\ValC)$,
-and thus %our %model
-completion can assign a value not occurring in $\BAD_{\smash{\J}}^{\Varec{y}}(\ValC)$ to ${\Varec{y}}$.
-By construction, $\ValC \ec{x}$ is normal.
-Since \rn{Acyclic} does not apply, $\Val \ec{x}$ is acyclic when $\tau \in \Data$.
-Moreover, the construction of $\ValC$ applies substitutions of the form
-$\{ {\Varec{y}} \mapsto t \}$, where $t$ is acyclic when the type of ${\Varec{y}}$ is not a codatatype.
-Thus, $\ValC \ec{x}$ is acyclic when $\tau \notin \Codata$.
-Therefore, by definition, $\ValC \ec{x}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
-
-We now show that (2) and (3) hold initially for $\Val$.
-For all equivalence classes $\ec{z}$,
-each pair of constructor terms $\const{C}_{\negvthinspace j}( \vec t \,)$ and $\const{C}_{\negvthinspace\jPrime}( \vec u )$ in $\ec{z}$
-are such that $j = \jPrime$, since \rn{Clash} does not apply, % to $\Ec$,
-and are such that $\ec{ \vec t \,} = \ec{ \vec u }$, since \rn{Inject} does not apply. % to $\Ec$.
-Thus,
-$\Val$ was constructed by applying a sequence of substitutions
-where all substitutions for variables ${\Varec{z}}$
-were uniquely of the form $\{ {\Varec{z}} \mapsto \const{C}_{\negvthinspace j}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} ) \}$
-when $\ec{z}$ contains a constructor $\const{C}_{\negvthinspace j}( t_1, \ldots, t_n )$.
-Suppose $\Val \ec{y}$ has a subterm $t$ such that $\muvar(t) = {\Varec{x}}$.
-Both $\Val \ec{x}$ and the subterm $t$ of $\Val \ec{y}$ were
-constructed by applying a sequence of substitutions of the form mentioned above to ${\Varec{x}}$.
-Moreover, free variables ${\Varec{z}}$ in $t$ that are bound in $\Val \ec{y}$ are interpreted in
-the expansion of $\expand{\Val \ec{y}}{ t }$ as a term
-constructed by a sequence of substitutions of the form mentioned above to ${\Varec{z}}$. %\rem{TODO: more detail}
-Thus, we have
-$\expand{\Val \ec{y}}{ t } = \expand{\Val \ec{x}}{ \Val \ec{x} } = \Val \ec{x}$, and %thus
-(2) holds for $\Val$.
-Property (3) holds for $\Val$ since \rn{Unique} does not apply.
-
-We now show that $\Val = \nf{\Val}$.
-Assume by contradiction $\Val \ec{x} \neq \nf{\Val \ec{x}}$ for some $\Val \ec{x}$ of minimal size.
-We have that $\Val \ec{x}$ is of the form $\MU {\Varec{x}}.\; \const{C}( t_1, \ldots, t_n )$.
-Due to the construction of~$\Val$,
-we know $\ec{x}$ contains a constructor $\const{C}( z_1, \ldots, z_n )$ and $\muvar( t_i ) = z_i$ for some $i$. % \in [n]$.
-Since $\Val \ec{x}$ is a minimal, it
-contains a subterm of the form $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$
-where $\expand{\Val \ec{x}}{ t_i } \aequiv \expand{\Val \ec{x} }{ u_i }$ for some $i$. % \in [n]$.
-Due to the construction of $\Val$, $\ec{y}$ contains a constructor $\const{C}( w_1, \ldots, w_n )$ and $\muvar( u_i ) = w_i$ for some $i$. % \in [n]$.
-Since \rn{Cong} does not apply, % to $\Ec$
-we have $\ec{w_{\negvthinspace j}}$ and $\ec{z_{\negvthinspace j}}$ are distinct for some $j$.
-By (2), $\expand{\Val \ec{x}}{ t_{\negvthinspace j} } = \Val \ec{z_{\negvthinspace j}}$
-and $\expand{\Val \ec{x}}{ u_{\negvthinspace j} } = \Val \ec{w_{\negvthinspace j}}$,
-which are not $\alpha$-equivalent by (3), contradicting the fact that $\MU {\Varec{y}}.\; \const{C}( u_1, \ldots, u_n )$ is a self-similar subterm of $\Val \ec{x}$.
-Thus, $\Val = \nf{\Val}$, and (2) and~(3) hold for $\nf{\Val}$.
-
-We now show that if (2) and (3) hold for some $\Val_1$,
-they also hold for $\nf{\Val_1 \sigma}$,
-where $\sigma$ is a substitution of the form $\{ {\Varec{x}} \mapsto \MU{\Varec{x}}.\; t \}$,
-${\Varec{x}} \in FV( \Val_1 )$,
-and $\MU {\Varec{x}}.\; t$ is not $\alpha$-equivalent to a term in $\BAD_{\smash{\J}}^{\Varec{x}}(\Val_1)$.
-To show (2),
-by assumption of (2) on $\Val_1$, we have $\expand{\Val_1 \ec{y}}{ u } = \Val_1 \ec{x}$ for
-all subterms $u$ of $\Val_1 \ec{y}$ where $\muvar(t) = {\Varec{x}}$.
-Thus, $\expand{\Val_1 \sigma \ec{y}}{ u } = \Val_1 \sigma \ec{x}$ and
-$\expand{\nf{\Val_1 \sigma} \ec{y}}{ u } = \nf{\Val_1 \sigma} \ec{x}$.
-To show (3),
-consider two distinct equivalence classes $\ec{y}$ and $\ec{z}$,
-and assume by contradiction that $\nf{\Val_1 \sigma} \ec{y} \aequiv \nf{\Val_1 \sigma} \ec{z}$.
-Due to (3) for $\Val_1$,
-$\ec{y}$ and $\ec{z}$ must have (minimal) subterms
-where $t_1$ occurs in $\Val_1 \ec{y}$ the same position~$p$ as $t_2$ occurs in $\Val_1 \ec{z}$,
-and $t_1 \not\aequiv t_2$.
-%We first show that $\nf{\Val_1 \sigma} \ec{y}$ (and for the same reasons, $\nf{\Val_1 \sigma} \ec{z}$)
-%also contains position $p$.
-%If this were not the case,
-%then without loss of generality we may assume
-%$\Val_1 \sigma \ec{y}$ contains a self-similar subterm
-%$\MU {\Varec{w}}.\; u$ that strictly contains $t_1 \sigma$.
-If $t_1$ (resp. $t_2$) is a free variable that is not ${\Varec{x}}$,
-then $\nf{\Val_1 \sigma} \ec{y}$ (resp. $\nf{\Val_1 \sigma} \ec{z}$)
-contains $t_1$ (resp. $t_2$) at position~$p$,
-and $\nf{\Val_1 \sigma} \ec{z}$ (resp. $\nf{\Val_1 \sigma} \ec{y}$) does not.
-If $t_1$ is of the form $\MU w_1.\; \const{C}( \vec t \,)$
-and $t_2$ is of the form $\MU w_2.\; \const{D}( \vec u )$,
-then the expansion %\rem{TODO: define}
-of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
-are $\alpha$-disequivalent at position~$p$.
-Since $t_1$ and $t_2$ are minimal,
-say $t_1$ is of the form $\MU w.\; \const{C}( \vec t \,)$,
-and $t_2$ is ${\Varec{x}}$.
-Since $\sigma$ maps ${\Varec{x}}$ to a closed $\mu$-term $\MU {\Varec{x}}.\; t$,
-we have that $FV( t_1 ) \subseteq \{ {\Varec{x}} \}$,
-or else the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
-are $\alpha$-disequivalent at position~$p$ since they do not contain the same free variables.
-Since $\expand{\Val_1 \ec{y}}{t_1}$ is normal,
-there is a closed $\mu$-term $v \in \BAD_{\smash{\J}}^{\Varec{x}}( \Val_1 )$
-such that $v \vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}$.
-Thus, by assumption on the selection of $\MU {\Varec{x}}.\; t$,
-we have $\smash{\MU {\Varec{x}}.\; t \not\vsimv{\Varec{x}} \expand{\Val_1 \ec{y}}{t_1}}$,
-which implies that the expansion of $\nf{\Val_1 \sigma} \ec{y}$ and $\nf{\Val_1 \sigma} \ec{z}$
-are $\alpha$-disequivalent at position~$p$. %\rem{TODO: more detail}
-
-Thus, by induction on the number of applications of the above rule used to obtain $\ValC$,
-we have that $\ValC$ satisfies (2) and (3).
-\xqed
-\end{proof}
-
-Intuitively, this lemma states three properties of $\ValC$ that together ensure that
-a normal interpretation~$\J$ can be constructed that satisfies $\Ec$.
-Property~(1) states that the values in the range of $\ValC$ are
-$\alpha$-equivalent to a value in normal interpretation. This means they are
-closed, normal, and acyclic when required. Property~(2) states that the
-interpretation of all subterms in the range of $\ValC$ depends on its associated
-variable only. In other words, the interpretation of a subterm $t$ where
-$\muvar(t) = {\Varec{x}}$ is equal to
-$\ValC \ec{x}$, independently of the context.
-Property~(3) states that $\ValC$ is injective (modulo
-$\alpha$-equivalence), which ensures %in the following
-that distinct values are
-assigned to distinct equivalence classes.
-
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
 \afterDot
 If there exists a derivation tree with root node $\Ec$ containing a saturated node, then $\Ec$ is $\thD$-satisfiable.
 \end{theorem}
-\begin{proof}
-Let $\Fc$ be a saturated node in a derivation tree with root node $\Ec$.
-%We will construct a model $\J$ for a set of equalities $\Fc$ that is equivalent to $\Fc_0$, and where
-%all equivalence classes of $\Fc$ contain at least one variable, and all selectors in $\Fc$ are applied to variables only.
-%The former comes with no loss of generality since new equalities of the form $y \teq t$ for fresh variable $y$ can be added to $\Fc$ without affecting its satisfiability,
-%The latter also comes with no loss of generality since nested applications of selectors in $\Fc_0$ can be replaced by fresh variables while adding equalities to $\Fc\!$.
-We consider a normal interpretation $\J$
-that interprets wrongly applied selectors based on equality information in~$\Fc$
-and that interprets the variables of $\Fc$ based on the completion $\ValC$.
-% of %the mapping $\Val$. % from phase~2.
-For the variables, let $\interp{\J}{x\typ{\tau}}$ be the value in $\J(\tau)$ that is $\alpha$-equivalent
-with $\ValC \ec{x}$ for each variable $x \in \Terms(\Fc)$,
-which by Lemma~\ref{lem:interpretation-completion}(1) is guaranteed to exist.
-
-We first show that $\J$ satisfies all equalities $t_1 \teq t_2 \in \Fc\!$. % where $t_1$ and $t_2$ have type $\tau$.
-To achieve this, we show
-by structural induction on $t\typ\tau$
-that $\interp{\J}{t} \aequiv \ValC \ec{t}$ for all terms $t \in \Terms( \Fc )$,
-which implies $\J \vDash t_1 \teq t_2$ since $\J$ is normal.
-
-If $t$ is a variable, then $\interp{\J}{t} \vsim \ValC \ec{ t }$ by construction.
-
-If $t$ is a constructor term of the form $\const{C}( u_1, \ldots, u_n )$,
-then $\interp{\J}{t}$ is $\alpha$-equivalent with $\nf{\MU x.\allowbreak\; \const{C}( \interp{\J}{u_1},\allowbreak \ldots,\allowbreak \interp{\J}{u_n} ) }$ for some fresh $x$,
-which by the induction hypothesis is $\alpha$-equivalent with $\nf{\MU x.\; \const{C}( \ValC \ec{ u_1 }, \ldots, \ValC \ec{ u_n } )}$.
-Call this term $t'$.
-%By Lemma~\ref{lem:interpretation-completion}(2) and due to our construction of $\ValC$, we have $\ValC \ec{t}$ is a term
-%of the form $\MU {\Varec{t}}.\; \const{C}( w_1, \ldots, w_n )$
-%where $\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} do not apply to~$\Fc\!$,
-by the construction of $\ValC$ we have that $\ValC \ec{t}$ is a term
-of the form $\MU {\Varec{t}}.\; \const{C}( w_1,\allowbreak \ldots,\allowbreak w_n )$
-where
-$\muvar(w_i) = {\Varec{u_i}}$ for each~$i$.  Thus by Lemma~\ref{lem:interpretation-completion}(2),
-$\expand{\ValC \ec{t}}{w_i} = \ValC \ec{u_i}$.
-For each $i$, let $u_\iPrime$ be the $i$\vvthinspace th argument of $t'$.
-%By Lemma~\ref{lem:mu-norm-arg},
-We have that
-$\expand{t'}{u_\iPrime} \vsim \ValC \ec{u_i}$, and
-thus $\expand{t'}{u_\iPrime} \vsim \expand{\ValC \ec{t}}{ w_i }$. % for each $i \in [n]$.
-%By Lemma~\ref{lem:mu-cong}, we have $t' \vsim t_w$.
-Thus, $\interp{\J}{t} \vsim t' \vsim \ValC \ec{t}$, and
-we have $\interp{\J}{t} \vsim \ValC \ec{t}$.
-
-If $t$ is a selector term %of the form
-$\const s^k_{\negvthinspace j}( u )$,
-since \rn{Split} does not apply to $\Fc\!$,
-$\ec{u}$ must contain a term of the form $\smash{\const C_{\negvthinspace\jPrime}\bigl( \const s^1_{\negvthinspace\jPrime}( u ), \ldots, \const s^{n}_{\negvthinspace\jPrime}( u ) \bigr)}$ for some $\jPrime$.
-%By Lemma~\ref{lem:interpretation-completion}(2) and due to our construction of $\ValC$, we have $\ValC \ec{u}$ is of the form
-%$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
-%where $\expand{\ValC \ec{u} }{ w_i } = \ValC \ec{ \const s^i_{\negvthinspace\jPrime}( u )}$ for $i \in [n]$.
-Since \rn{Inject} and \rn{Clash} are not applicable, % to $\Fc\!$,
-by construction $\ValC\ec{u}$ must be of the form
-$\MU {\Varec{u}}.\; \const C_{\negvthinspace\jPrime}( w_1, \ldots, w_n )$,
-where
-$\muvar(w_i) = \smash{\Varec{\vphantom{I}\smash{\const s^i_{\negvthinspace\jPrime}( u )}}}$
-for each~$i$, and thus by Lemma~\ref{lem:interpretation-completion}(2),
-$\expand{\ValC \ec{u}}{ w_i } = \ValC \ec{ \smash{\const s^i_{\negvthinspace\jPrime}( u )}}$.
-If $j = \jPrime$, then $\interp{\J}{t}$ is $\alpha$-equivalent with $\expand{\ValC \ec{u}}{w_k}$, which is equal to $\ValC \ec{ \smash{ \const s^k_{\negvthinspace j}( u )}}
-= \ValC \ec{t}$.
-If $j \neq \jPrime$, since \rn{Cong} does not apply,
-any term of the form $\smash{\const s^k_{\negvthinspace j}( u' )}$ not occurring in $\ec{t}$
-is such that $[u] \not= [u']$.
-By the induction hypothesis and Lemma~\ref{lem:interpretation-completion}(3), $\interp{\J}{u} \neq \interp{\J}{u'}$ for all such $u$, $u'$.
-Thus, we may interpret $\smash{\interp{\J}{\const s^k_{\negvthinspace j}}( \interp{\J}{u} )}$ as the value in $\interp{\J}{\tau}$ that is $\alpha$-equivalent with $\ValC \ec{ t }$.
-
-We now show that all disequalities in $\Fc$ are satisfied by $\J$.
-Assume $t \tneq u \in \Fc\!$.
-Since \rn{Conflict} does not apply, $t \teq u \notin \Fc$ and thus $\ec{t}$ and $\ec{u}$ are distinct.
-Since $\interp{\J}{t} \vsim \ValC \ec{t}$ and $\interp{\J}{u} \vsim \ValC \ec{u}$,
-by Lemma~\ref{lem:interpretation-completion}(3), $\interp{\J}{t} \neq \interp{\J}{u}$, and thus $\J \vDash t \tneq u$.
-
-Since $\Fc$ contains only equalities and disequalities, we have $\J \vDash \Fc\!$,
-and since $\Ec \subseteq \Fc\!$,
-% is a superset of $\Ec$,
-we conclude that $\J \vDash \Ec$.
-\xqed
-\end{proof}
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
 calculus is sound and complete for the universal theory of (co)datatypes. We may
@@ -1966,30 +1299,6 @@ could not be proved without it, but failed for 17~goals that could be proved
 without it. This potentially points to poor interactions between the decision
 procedure and the quantifier instantiation module
 \cite{ReynoldsTinelliMoura14}.
-
-%* and finally, we look in more detail at one or two such proofs, by presenting
-%  it and explaining it (and, before that, understanding it)
-%
-Overall, four proofs were found thanks to
-the acyclicity rule and 17~required uniqueness. Interestingly,
-no proofs were lost by enabling these rules. Among the 17 proofs requiring uniqueness,
-some were simple arguments of the form
-\keyw{by}~\textit{coinduction}~\textit{auto}
-in Isabelle \cite{blanchette-et-al-2014-impl}, while others
-involved more elaborate reasoning, including the following example
-about Stern--Brocot trees:
-%
-\begin{quote}
-\keyw{lemma} \,\textit{\nummodden\_unique}: \,$x = \const{Node}\;0\;\const{num}\; x \vthinspace\Longrightarrow\vthinspace x = \const{\nummodden}$ \\
-\keyw{proof} \,(\textit{coinduction arbitrary}: $x$ \textit{rule}: \textit{tree.coinduct\_strong}) \\
-\noindent\hbox{}\quad  \keyw{case} (\textit{Eq\_tree} $x$) \keyw{show} \textit{?case} \\
-\noindent\hbox{}\qquad  \keyw{by} (\textit{subst} (1 2 3 4) \textit{Eq\_tree}) (\textit{simp add}: \textit{eqTrueI}[OF \textit{Eq\_tree}]) \\
-\keyw{qed}
-\end{quote}
-%
-\noindent
-The tree \const{\nummodden} is defined as $\const{\nummodden} =
-\const{Node}\;0\;\const{num}\;\const{\nummodden}$.
 
 \section{Conclusion -- JB 0.25 column}
 \label{sec:conclusion}
