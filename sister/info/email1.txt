@@ -1,0 +1,58 @@
+As you are probably aware, since 2011 there is an
+arrangement between some of the major AI conferences and IJCAI that
+allows authors to present  the best papers from these conferences in
+a special Sister Conference Best Paper Track at IJCAI. The Sister
+Conference Track has become one of the most popular tracks at IJCAI.
+
+The program chairs of CADE have confirmed that your CADE-25 paper "A
+Decision Procedure for (Co)datatypes in SMT Solvers" is an excellent piece
+of work and would be suitable for presentation to a wider audience. We have
+great pleasure in inviting you to submit this work of yours for inclusion in
+this track.
+
+We believe this is a way to celebrate work like yours, to give your
+work exposure to a more general audience, and to help tackle the
+splintering of the research community into separate discipline
+conferences. As you may know, IJCAI'16 is going to be held in
+New York (http://ijcai-16.org/).
+
+We are asking authors to prepare a new version that is more accessible
+to the wider IJCAI audience. This solves any copyright issues. And by
+including a more general paper in the IJCAI proceedings,
+the IJCAI delegates have material to read to get more technical
+insight and references. In addition, IJCAI proceedings are
+freely available online (and widely cited) so your exposure will
+go beyond just the delegates attending the conference itself.
+
+Your paper will need to fit into 4 pages (+1 page references) using
+the IJCAI two column format. Formatting instructions can be found at:
+
+http://ijcai-16.org/downloads/FormattingGuidelinesIJCAI-16.zip
+
+Your paper will be lightly reviewed, but mostly for accessibility
+and so that we can continue to claim that the IJCAI proceedings
+are fully reviewed. We don't expect any technical issues but the
+reviewers may have some useful input to give to help make your
+work even more accessible. We are also aware that some of you can
+only go to conference to present work which has been through a
+referee process so we want your paper to count as such. To give
+time for the referees to provide some input, we ask for you to upload
+your paper by February 29, 2016. The final camera ready copy will be
+due by April 20.
+
+Please submit your paper through the IJCAI'16 submission site:
+
+https://easychair.org/conferences/?conf=ijcai16
+
+and start by selecting the *special* Track "Sister Conference Best
+Paper Track". If you have any questions, please feel free to contact us.
+We look forwards to receiving seeing you in New York. We would have
+liked to offer you some financial support but with around 15 sister
+conferences participating (and thus roughly 30 best papers
+being presented over the whole week), our budget does not
+allow this. We will, however, look forward to giving you a
+Best Paper certificate to go with the one from the original conference.
+
+Finally, could you please simply acknowledge receiving this email and
+let us know if you are interested in presenting your work in the
+IJCAI Sister Conference Best Paper track?

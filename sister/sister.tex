@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[letter]{article}
 % The file ijcai16.sty is the style file for IJCAI-16 (same as ijcai07.sty).
 \usepackage{ijcai16}
 
@@ -10,7 +10,7 @@
 \usepackage[scaled=.86]{helvet}
 \usepackage{booktabs}
 \usepackage{bussproofs}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage{color}
 \usepackage{mathptmx}
 \usepackage{mathpartir}
@@ -151,7 +151,11 @@ non-redun-dant counter-examples counter-example mono-morph-ize mono-morph-ized}
 
 \title{A Decision Procedure for (Co)datatypes in SMT Solvers}
 
-\author {Andrew Reynolds \and Jasmin Christian Blanchette\thanks{In memoriam Morgan Deters 1979--2015}}
+\author {Andrew Reynolds \and Jasmin Christian Blanchette\thanks{In memoriam Morgan Deters 1979--2015} \\
+Department of Computer Science, The University of Iowa, USA \and \\
+Inria Nancy -- Grand Est \& LORIA Villers-l\`es-Nancy, France
+}
+
 %\authorrunning {A. Reynolds \and J. C. Blanchette}
 
 %\institute{
@@ -165,6 +169,51 @@ non-redun-dant counter-examples counter-example mono-morph-ize mono-morph-ized}
 \maketitle
 
 \begin{abstract}
+New abstract.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+  * a general introduction to automatic theorem proving \\
+
+  * relation to AI
+   * among the earliest AI goals
+   * yet somewhat disconnected from mainstream AI
+     (with some exceptions, e.g. Urban ..., MaSh)
+
+  * followed by an intro to SMT and what it's used for \\
+  * followed to why theories are important (more efficient reasoning) \\
+  * followed to why (co)datatypes are important
+
+  * both for proving
+   * not finitely axiomatizable
+  * and for model finding
+   * Nunchaku
+
+\section{%The Theory of
+(Co)datatypes}
+\label{sec:co-datatypes}
+
+xxx
+
+\section{The Decision Procedure} % for (Co)datatypes}
+\label{sec:the-decision-procedure}
+
+\section{Evaluation} % on Isabelle Problems}
+\label{sec:evaluation}
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+\newpage
+
+X
+
+\newpage
+
+\begin{abstract}
 %Codatatypes naturally capture potentially infinite data structures and
 %processes.
 We present a decision procedure that combines reasoning about
@@ -176,9 +225,6 @@ implemented in CVC4, a state-of-the-art SMT solver. An evaluation based on
 problems generated from formalizations developed with Isabelle demonstrates the
 potential of the procedure.
 \end{abstract}
-
-%% The institutions above shouldn't count as footnotes
-\setcounter{footnote}{0}
 
 \section{Introduction}
 \label{sec:introduction}
@@ -2446,7 +2492,7 @@ action ``Contre-exemples utilisables par Isabelle et Coq'' (CUIC).
 
 }
 
-\bibliographystyle{spmpsci}
+\bibliographystyle{named}
 \bibliography{bib}{}
 
 \end{document}
