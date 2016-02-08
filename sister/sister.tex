@@ -169,51 +169,6 @@ Inria Nancy -- Grand Est \& LORIA Villers-l\`es-Nancy, France
 \maketitle
 
 \begin{abstract}
-New abstract.
-\end{abstract}
-
-\section{Introduction -- JB 2 columns}
-\label{sec:introduction}
-
-  * a general introduction to automatic theorem proving \\
-
-  * relation to AI
-   * among the earliest AI goals
-   * yet somewhat disconnected from mainstream AI
-     (with some exceptions, e.g. Urban ..., MaSh)
-
-  * followed by an intro to SMT and what it's used for \\
-  * followed to why theories are important (more efficient reasoning) \\
-  * followed to why (co)datatypes are important
-
-  * both for proving
-   * not finitely axiomatizable
-  * and for model finding
-   * Nunchaku
-
-\section{%The Theory of
-(Co)datatypes -- AJR 0.75 column}
-\label{sec:co-datatypes}
-
-xxx
-
-\section{The Decision Procedure -- AJR 3.75 columns} % for (Co)datatypes}
-\label{sec:the-decision-procedure}
-
-\section{Evaluation -- JB 1 column} % on Isabelle Problems}
-\label{sec:evaluation}
-
-
-\section{Conclusion -- JB 0.5 column}
-\label{sec:conclusion}
-
-\newpage
-
-X
-
-\newpage
-
-\begin{abstract}
 %Codatatypes naturally capture potentially infinite data structures and
 %processes.
 We present a decision procedure that combines reasoning about
@@ -226,8 +181,24 @@ problems generated from formalizations developed with Isabelle demonstrates the
 potential of the procedure.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction -- JB 2 columns}
 \label{sec:introduction}
+
+%  * a general introduction to automatic theorem proving \\
+
+%  * relation to AI
+%   * among the earliest AI goals
+%   * yet somewhat disconnected from mainstream AI
+%     (with some exceptions, e.g. Urban ..., MaSh)
+%
+%  * followed by an intro to SMT and what it's used for \\
+%  * followed to why theories are important (more efficient reasoning) \\
+%  * followed to why (co)datatypes are important
+%
+%  * both for proving
+%   * not finitely axiomatizable
+%  * and for model finding
+%   * Nunchaku
 
 Freely generated algebraic datatypes are ubiquitous in functional programs and
 formal specifications. They are especially
@@ -360,100 +331,6 @@ a description of the generation of models with $\mu$-binders in CVC4
 (Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}), and a more
 comprehensive evaluation (Section~\ref{sec:evaluation-on-isabelle-problems}).
 
-%  * useful both for proving and for model finding
-
-%\ref{sec:examples}
-
-%  * benchmarking is often an issue -- esp. codatatypes
-%
-%Polymorphic types, nested (co)recursion, and datatype--codatatype mixtures fall
-
-%  * setting: FOL
-%    * core procedure is restricted to ground
-%      * but theory solver cooperates
-
-%  * codatatypes were added later, motivated by the use of SMT solvers as
-%    backends to proof assistants (more specifically, CVC4 to Isabelle/HOL)
-
-%  * setting :
-%    * universal formulas
-%    * many-sorted logic
-%   * mutually (co)recursive types with constructors, selectors, and
-%      discriminators
-
-%  * codatatypes: from a theoretical and implementational point of view, like
-%      datatypes but:
-%    * infinite values (infinitely many nested constructors)
-%    * codatatypes are never empty (e.g. finite streams are rejected)
-
-%\[
-%      \keyw{codatatype}\; \,\ty{llist} \,=\, \const{LNil} \,\mid\, \const{LCons}(\ty{int},\: \ty{llist})
-%\]
-
-%  * consider a natural fragment---datatypes as supported in modern SMT solvers
-%    and the SMT-LIB standard, and codatatypes as their duals
-%    * mutual recursion, but no polymorphism, nested recursion
-%  * integrated with Nelson--Oppen
-
-% * SMT-Lib
-
-%  * one implication is that if $m$ equals $ES(n)$ and $n$ equals $ES(m)$, necessarily
-%    $m$ and $n$ must be equal.
-
-%  * perhaps the most commonly used codatatype is that of lazy lists or sequences.
-%    using a syntax similar to Standard ML, Haskell, or SMT-LIB
-
-%  * less briefly: codatatypes and why they are useful
-%    * in Agda, Coq, Matita -- recently also in Isabelle/HOL \cite{nipkow-et-al-2002}
-%    * but not in SMT-LIB 2 \cite{barrett-et-al-2010}
-
-\paragraph{Related Work.} Barrett
-et al.\ \cite{barrett-et-al-2007} provide a good account of
-related work on datatypes as of 2007, in addition to describing their
-implementation in CVC3.
-Since then, datatypes have been added not only to CVC4 (a complete rewrite of CVC3)
-but also to the SMT solver
-Z3 \cite{de-moura-bjoerner-2008} in unpublished work by Leonardo de Moura and to a SPASS-like %prototypical
-superposition prover by Wand \cite{wand-2014}.
-In his Ph.D.\ thesis \cite{bjoerner-1998}, Bj\o rner introduced a decision procedure for
-(co)datatypes in STeP, the Stanford Temporal Prover.
-Closely related are the automatic structural
-% cruanes-201x,wand-weidenbach-201x,  -- both were rejected
-induction in SMT solvers
-\cite{reynolds-kuncak-2014}
-and superposition provers\cite{kersani-peltier-2013,cruanes-2015},
-the (co)datatype and (co)induction support in Dafny \cite{leino-moskal-2014},
-and the (\hbox{semi-})decision procedures for datatypes
-implemented in Leon \cite{suter-et-al-2011} and RADA \cite{pham-et-al-2013}.
-%
-Datatypes are supported by the higher-order model finder Refute
-\cite{weber-2008} for Isabelle. Its successor, Nitpick
-\cite{blanchette-nipkow-2010}, can also generate models involving cyclic
-codatatype values. Cyclic values have been studied extensively under the heading
-of regular or rational trees---see Carayol and Morvan
-\cite{carayol-morvan-2006} and Djellou et al.\ \cite{djelloul-et-al-2008}
-for recent work.
-The $\mu$-notation is inspired by the $\mu$-calculus
-\cite[etc.]{kozen-1983,endrullis-et-al-2011}.
-
-%, notably in the context of constraint logic programming
-
-%  * Ro\c{s}u --- equality of streams is...
-%     http://dl.acm.org/citation.cfm?doid=1159803.1159827
-
-%     * point to Barrett et al. for SMT datatypes
-%       * about their own work, they say: "our focus is on generality and
-%         efficiency rather than immediacy of implementation"
-%       * (deal more directly with finite sorts than Barrett et al., Section 6.1)
-%     * additional ones since then (e.g. strings?)
-%     * anything about codatatypes?
-%       * proof assistants like Agda, Coq, etc. have them
-%       * Dafny, CoALP
-%       * also a lot of theoretical research, some of which is loosely connected,
-%         e.g. decision procedure for corecursive functions (Henning in Nijmegen)
-%
-%     * ODDITY: Oppen 1980: single-constructor, recursive -- infinite values?
-
 \paragraph{Conventions.}
 Our setting is a monomorphic (or many-sorted) first-order logic.
 A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
@@ -494,15 +371,9 @@ The operator $\bigwedge_{\vthinspace i}\, \varphi_i$ abbreviates a conjunction
 $\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
 Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
 
-%* although nothing prevents composing the decision procedure with theories
-%  providing polymorphic types (parametric sorts), such as for arrays (e.g., $\ty{array}(\alpha,\beta)$)
-
 \section{%The Theory of
-(Co)datatypes}
+(Co)datatypes -- AJR 0.75 column}
 \label{sec:co-datatypes}
-
-%    (terminology: freely-generated, inductive, algebraic, ..., sometimes
-%    with different meanings; we'll clarify below what we use)
 
 We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
@@ -834,21 +705,7 @@ that the type has at most one value.
 \xqed
 \end{proof}
 
-%  * assume for simplicity no indirect recursion, but this does not radically
-%    change the argument
-%  * assume there are at least two values built with C.
-%    they must be different at some point, e.g.
-%    C(0, C(1, C(0, ...))) and C(0, C(1, C(1, ...)))
-%    can use that to create infinitely alternation patterns
-%  * leaves us with the case of a single constructor
-% * since we are looking at a specific model, we can assume all uninterpreted
-%   types are finite datatypes with nullary constructors corresponding to their
-%   elements
-% * if two
-% * either there is only one ``path'' from ctr to itself
-%   or at least two;
-
-\section{The Decision Procedure} % for (Co)datatypes}
+\section{The Decision Procedure -- AJR 4 columns} % for (Co)datatypes}
 \label{sec:the-decision-procedure}
 
 Given a fixed signature~$\Sig$,
@@ -1933,298 +1790,8 @@ The proof of solution soundness is constructive in that it provides a
 method for constructing a model for a saturated configuration, by means of the
 mapping $\ValC$.
 
-\section{Implementation in CVC4}
-\label{sec:implementation-as-a-theory-solver-in-cvc4}
-
-The decision procedure was presented at a high level of abstraction, omitting
-quite a few details. This section describes the main aspects of the
-implementation within the SMT solver CVC4:\ the integration of the
-procedure into CDCL($T$)
-\cite{ganzinger-et-al-2004}, the construction of models with $\mu$-terms,
-and the extension of the procedure to quantified formulas.
-%, and some of the optimizations.
-
-\subsection{A Theory Solver for $\thD$}
-
-The decision procedure is implemented as a \relax{theory solver} of CVC4---that is, a
-specialized procedure for determining the satisfiability of conjunctions of
-literals for its theory.
-Given a theory $T = T_1 \mathrel\cup \cdots \mathrel\cup T_n$ and a set of
-input clauses $F$ in conjunctive normal form, the CDCL($T$) procedure
-incrementally builds partial assignments of
-truth values to the atoms of~$F$ such that no clause in $F$ is falsified. We can regard such a
-partial assignment as a set $M$ of true literals.
-% where $a \in M$ for all atoms $a$ that
-%it assigned the value $\top$ and $\neg\: a \in M$ for all atoms that it assigns
-%the value $\bot$.
-%at a high level,
-By a variant \cite{jovanovic2011sharing}
-of the Nelson--Oppen method \cite{nelson-oppen-1979},
-each $T_i$-solver %for $i = 1, \ldots, l$  n?
-takes as input the union $M_i$
-of
-\begin{itemize}
-\item the purified form of $T_i$-literals occurring in $M$, where fresh
-variables replace terms containing symbols not belonging to~$T_i$;
-\item additional (dis)equalities between variables of types not belonging to
-$T_i$.
-\end{itemize}
-Each $T_i$-solver
-either reports that a subset $C$ of $M_i$ is $T_i$-unsatisfiable, in which case
-$\neg\: C$ is added to $F\!$, adds a clause to $F\!$, or does nothing.
-When $M$ is a complete assignment for $F\!$, a theory solver can choose to do
-nothing only if $M_i$ is indeed $T_i$-satisfiable.
-
-Assume $\Ec$ is initially the set $M_i$ described above. With each equality $t \teq u$ added
-to $\Ec$, we associate a set of equalities from $M_i$ that together entail $t
-\teq u$, which we call its \emph{explanation}.
-Similarly, each $\Val \ec{x}$ is assigned an explanation---that is, a set
-of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of
-$\Ec$ are of the form $\Val \ec{x}$. For example, if $x \teq \const{C}( x ) \in
-M_i$, then $x \teq \const{C}( x )$ is an %(possible)
-explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
-The rules of the calculus are implemented as follows. For all rules with
-conclusion $\bot$, we report the union of the explanations for all premises is
-$\thD$-unsatisfiable. For \rn{Split}, we add the exhaustiveness clause %of the form
-$\DISC{1} \mathrel\lor \cdots \mathrel\lor \DISC{m}$ to $F$.
-Decisions on which branch to take are thus performed externally by the SAT
-solver. % and not by the theory solver.
-All other rules add equalities to the
-internal state of the theory solver. The rules in phase~1 are performed
-eagerly---that is, for partial satisfying assignments $M$---while the rules in
-phases~2 and~3 are performed only for complete satisfying
-assignments $M$.
-
-\begin{figure}[t!]
-\normalsize
-\centering
-\flushleft $\rn{Acyclic}(t)$:
-
-\vspace*{-\topsep}
-
-\begin{enumerate}
-\item Let $U$ be the datatype equivalence classes of $\Ec$.
-\item Repeat until $U \neq \emptyset$:
-\begin{itemize}
-\item[\ ] For some $\ec{t} \in U$, $\rn{Traverse}( \ec{t}, U, \emptyset )$.
-\end{itemize}
-\end{enumerate}
-
-\flushleft $\rn{Traverse}( \ec{t}, U, P )$:
-
-\vspace*{-\topsep}
-
-\begin{enumerate}
-\item If $\ec{t} \in P$, $\rn{Acyclic}(t)$.
-\item If $\ec{t} \in U$:
-\begin{enumerate}
-\item[2.1.] If $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$, then for each $j = 1, \ldots k$:
-\begin{itemize}
-\item[2.1.1.] $\rn{Traverse}( \ec{t_j}, U, P \cup \{ \ec{t} \} )$.
-\end{itemize}
-\item[2.2.] $U := U \textbackslash \{ \ec{t} \}$.
-\end{enumerate}
-\end{enumerate}
-\vspace*{-\topsep}
-\caption{\,Algorithm for checking \rn{Acyclic}}
-\label{fig:acyclic-algo}
-\end{figure}
-
-\begin{figure}[t!]
-\normalsize
-\centering
-
-\flushleft $\rn{Unique}(t, u)$:
-
-\vspace*{-\topsep}
-
-\begin{enumerate}
-\item Let $\mathcalx{U}$ be a partition of the equivalence classes of $\Ec$ such that $\ec{t} =_{\mathcalx{U}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if
-  $t$, $u$ have type $\delta \in \Codata$,
-  $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$,
-  and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$.
-
-\item Repeat until $\mathcalx{U}$ is unchanged:
-\begin{enumerate}
-\item[2.1.] $\mathcalx{U}' := \emptyset$.
-\item[2.2.] For each $U_i \in \mathcalx{U}$:
-\begin{itemize}
-\item[2.2.1.] Let $\mathcalx{U}_{\vthinspace i}$ be a partition of $U_i$ such that $\ec{t} =_{\mathcalx{U}_{\vthinspace i}} \ec{u}$ for distinct $\ec{t}, \ec{u}$ if and only if
-\begin{itemize}
-\item $\const{C}( t_1, \ldots, t_k ) \in \ec{t}$ and $\const{C}( u_1, \ldots, u_k ) \in \ec{u}$, and
-\item $\ec{t_j} =_{\mathcalx{U}} \ec{u_j}$ for each $j = 1, \ldots, k$.
-\end{itemize}
-\item[2.2.2.] $\mathcalx{U}' := \mathcalx{U}' \cup \mathcalx{U}_{\vthinspace i}$.
-\end{itemize}
-\item[2.3.] $\mathcalx{U} := \mathcalx{U}'$.
-\end{enumerate}
-\item If distinct $\ec{t}, \ec{u} \in U$ for some $U \in \mathcalx{U}$, $\rn{Unique}(t,u)$.
-\end{enumerate}
-\vspace*{-\topsep}
-\caption{\,Algorithm for checking \rn{Unique}}
-\label{fig:uniqueness-algo}
-\end{figure}
-
-Before constructing a model for $F\!$, the theory solver constructs neither $\mu$-terms nor the mapping $\Val$.
-Instead, it relies on the algorithms in Figs.~\ref{fig:acyclic-algo} and~\ref{fig:uniqueness-algo}
-for determining whether the rules \rn{Acyclic} and \rn{Unique} apply to the set $\Ec$.
-
-For \rn{Acyclic}, Fig.~\ref{fig:acyclic-algo} considers the set $U$ of all datatype equivalence classes of $\Ec$.
-We choose an arbitrary $\ec{t}$ in $U$ and call the recursive subprocedure $\rn{Traverse}$,
-which takes as input the current equivalence class we are processing, the set of equivalence classes $U$ we have yet to process,
-and the set of equivalence classes $P$ we are currently processing.
-If a call to $\rn{Traverse}( \ec{t}, U, P )$ is such that $\ec{t} \in P$,
-we know that the rule \rn{Acyclic} applies to $t$.
-Otherwise, if we have yet to process $\ec{t}$, as indicated by the condition $\ec{t} \in U$,
-then if $\ec{t}$ contains a constructor term $\const{C}( t_1, \ldots, t_k )$, 
-then we recursively call $\rn{Traverse}$ on each of $\ec{t_1}, \ldots, \ec{t_n}$.
-If this succeeds, we remove $\ec{t}$ from $U$.
-
-For \rn{Unique}, Fig.~\ref{fig:uniqueness-algo} considers a partition $\mathcalx{U}$ of the equivalence classes of our set $\Ec$
-such that codatatype equivalence classes having a constructor term with top symbol $\const{C}$ are placed in the same subset, 
-for each constructor $\const{C}$.
-We write $\ec{t} =_{\mathcalx{U}} \ec{u}$ to denote that $\ec{t}$ and $\ec{u}$ reside in the same subset within $\mathcalx{U}$.
-We then refine $\mathcalx{U}$ by 
-constructing a partition $\mathcalx{U}_{\vthinspace i}$ of each $U_i \in \mathcalx{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcalx{U}_{\vthinspace i}$ 
-if and only if they contain constructor terms $\const{C}( t_1, \ldots, t_k )$ and $\const{C}( u_1, \ldots, u_k )$
-where each $t_j, u_j$ are such that $\ec{t_j}$ and $\ec{u_j}$ reside in the same subset of $\mathcalx{U}$ for each $j=1, \ldots, k$.
-Let $\mathcalx{U'}$ be the union of each of these partitions.
-We update $\mathcalx{U}$ to $\mathcalx{U'}$.
-This refinement is repeated until $\mathcalx{U}$ is left unchanged.
-If the resulting partition $\mathcalx{U}$ contains a subset $U$ having two distinct equivalence classes $\ec{t}$ and $\ec{u}$, then \rn{Unique} applies to $t$ and $u$.
-This algorithm is analogous to Hopcroft's algorithm for minimizing
-deterministic finite automata \cite{hopcroft-1971}---terms correspond to
-states, argument positions $1,\ldots,k$ correspond to input symbols, and the top constructor symbol
-of a term generalizes the accepting/rejecting status of a state.
-
-%Instead, $\Val$ is computed implicitly by traversing the equivalence classes of $\Ec$ during phase~2.
-%To detect whether \rn{Acyclic} applies,
-%the procedure considers each equivalence class $\ec{t}$ containing a datatype constructor $\const{C}( t_1, \ldots, t_n )$.
-%It visits $\ec{t_1}, \ldots, \ec{t_n}$ and all constructor arguments in these equivalence classes recursively.
-%If while doing so it returns to $\ec{t}$, it deduces that \rn{Acyclic} applies. % to $t$.
-%To recognize when the premise of \rn{Unique} holds,
-%the procedure considers the set $\SSS$ of all codatatype equivalence classes. It
-%simultaneously visits the equivalence classes of arguments of constructor terms in each equivalence class in $\SSS$,
-%while partitioning $\SSS$ into $\SSS_1, \ldots, \SSS_n$ based on the top-most symbol of constructor terms in these equivalence classes
-%and the equivalence of their arguments of ordinary types.
-%It then partitions each set %in this partition %in the same manner
-%recursively.
-%If %after doing so,
-%the resulting partition contains a set $\SSS_i$ containing distinct terms $u$
-%and $v$, it deduces that \rn{Unique} applies to $u$ and~$v$.
-
-The implementation of the decision procedure uses several optimizations
-following the lines of Barrett et al.\ \cite{barrett-et-al-2007}.
-%and are not reflected in the presentation of the calculus.
-We briefly mention the main ones.
-Discriminators are part of the signature and not abbreviations.
-This requires extending the decision procedure with several
-rules, % \cite{barrett-et-al-2007},
-which apply uniformly to datatypes and codatatypes.
-This approach often leads to better performance because it introduces terms
-less eagerly to $\tEc$.
-Selectors are collapsed eagerly:
-If $\const s^k_{\negvthinspace j}( t ) \in \tEc$ and $t =
-\const{C}_{\negvthinspace j}( u_1, \ldots, u_n )$, the solver directly adds
-$\smash{\const s^k_{\negvthinspace j}( t ) \teq u_k}$ to $\Ec$, whereas the presented calculus
-would apply \rn{Split} and \rn{Inject} before adding this equality.
-To reduce the number of unique literals considered by the calculus, we
-compute a normal form for literals as a preprocessing step. In particular, we
-replace $u \teq t$ by $t \teq u$ if $t$ is smaller than $u$ with respect to some term
-ordering, replace $\smash{\const{C}_{\negvthinspace j}( \vec t \,) \teq
-\const{C}_{\negvthinspace\jPrime}( \vec u )}$ with $\bot$ when $j \neq \jPrime$,
-replace all selector terms of the form $\smash{\const{s}^{\,k}_{\negvthinspace j}(
-\const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )}$ by $t_k$, and replace
-occurrences of discriminators $\smash{\const{d}_{\negvthinspace j}(
-\const{C}_{\negvthinspace\jPrime}( \vec t \,) )}$ by $\top$ or $\bot$
-based on whether $j = \jPrime$.
-
-% AJR : this paragraph may have been what confused Reviewer #2. It does suggest that we are copying verbatim what was in CVC3 (which is what Reviewer #2 thought).
-% Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation), 
-% maybe we should just remove this paragraph.
-
-% JB to AJR: I'd rather keep the para, based on feedback by Pascal.
-
-As Barrett et al.\ %\cite{barrett-et-al-2007}
-observed for their procedure,
-it is both theoretically and
-empirically beneficial to delay applications of \rn{Split} as long as
-possible. Similarly, \rn{Acyclic} and \rn{Unique} are fairly expensive because
-they require traversing the equivalence classes, which is why they are part of
-phase~2.
-
-\subsection{Model Construction}
-
-When instructed to do so, the implementation produces models for satisfiable inputs.
-As described in Section~\ref{sec:termination-and-correctness},
-given a saturated set $\Ec$, we %may
-construct a map $\ValC$ from 
-the equivalence classes of $\Ec$ to closed normal $\MU$-terms.
-Recall that our construction of $\ValC$ requires choosing values $\MU {\Varec{x}}.\; t$ for each $\Varec{x} \in \FV( \ValC )$
-such that $\MU {\Varec{x}}.\; t$ does not occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
-To choose values, % $\MU {\Varec{x}}.\; t$,
-we use a fair enumerator for each (co)datatype $\tau$,
-which lists all the values
-of type $\tau$ in a normal interpretation. %, which are closed normal $\MU$-terms.
-
-%Concretely,
-For codatatypes, we enumerate a stream of \relax{every} $\MU$-term of our signature $\Sig$ in a fair manner,
-discarding those that have free variables or are not normal.
-For those that are closed and normal, we then check whether they occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
-This set does not need to be explicitly constructed.
-%We do not explicitly construct the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
-To determine if a term $\MU {\Varec{x}}.\; t$ occurs in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$, 
-we check if it is $\alpha$-equivalent to a closed term $(\MU {\Varec{y}}.\; u) \{ \Varec{x} \mapsto z \}$ for
-some $\MU {\Varec{y}}.\; u$ in the range of $\ValC$ and variable $z$.
-This can be efficiently achieved by matching the term $\MU {\Varec{x}}.\; t$ with %the term
-$\MU {\Varec{y}}.\; u$.
-
-%Once the mapping $\ValC$ is constructed, our model $\J$ interprets
-%$\J( x ) = \ValC \ec{x}$ for each variable $x$ occurring free in $\Ec$.
-
-\subsection{Extension to Quantified Formulas}
-
-While the decision procedure is restricted to universal conjectures, users often
-want to solve problems that feature universal axioms and existential
-conjectures.
-%%% @ANDY: not sure how to phrase this now
-%where checking satisfiability requires reasoning about ground literals in the
-%presence of universally quantified formulas.
-Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete 
-instantiation-based 
-techniques~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
-These techniques extend naturally to quantified
-formulas involving datatypes and codatatypes.
-
-However, the presence of quantifiers poses an additional challenge in
-the context of (co)datatypes. Quantified formulas can entail an upper bound on
-the cardinality of an uninterpreted type $\ty{u}$.
-By assuming that uninterpreted types have infinite cardinality, the calculus
-presented in Section~\ref{sec:the-decision-procedure} is \relax{incomplete}
-since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
-applied.
-This does not %necessarily
-impact the correctness of the procedure in this setting,
-since %by assumption
-the solver is already incomplete for quantified formulas.
-
-Nonetheless, two techniques help increase the precision of the solver.
-First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
-uninterpreted types.
-Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
-For example, the codatatype $\ty{stream}_{\vthinspace\ty{u}}$ %, where $\ty{u}$ is uninterpreted.
-has cardinality one precisely when $\ty{u}$ has cardinality one.
-If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
-the implementation adds the clause %of the form
-$(\exists x\;y\typ{\ty{u}}.\;\, x \not\teq y ) \mathrel\vee s \teq t$ to $F\!$,
-which states that either the cardinality of $\ty{u}$ is greater than one or
-$s$ must be equal to $t$.
-
-%\section{Examples}
-%\label{sec:examples}
-
-\section{Evaluation on Isabelle Problems}
-\label{sec:evaluation-on-isabelle-problems}
+\section{Evaluation -- JB 1 column} % on Isabelle Problems}
+\label{sec:evaluation}
 
 \newcommand\gandl{SBT}
 \newcommand\HD[1]{\hbox to2em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
@@ -2424,7 +1991,7 @@ about Stern--Brocot trees:
 The tree \const{\nummodden} is defined as $\const{\nummodden} =
 \const{Node}\;0\;\const{num}\;\const{\nummodden}$.
 
-\section{Conclusion}
+\section{Conclusion -- JB 0.25 column}
 \label{sec:conclusion}
 
 We introduced a decision procedure for the universal theory of datatypes and
@@ -2454,10 +2021,6 @@ As future work, it would be useful to implement
 proof reconstruction for (co)data\-type inferences in Isabelle.
 In addition, it might be worthwhile to
 extend SMT solvers with dedicated support for (co)recursion.
-
-%Finally, it might be possible to go
-%further in terms of supporting nested and mixed (co)recursion and quantified
-%formulas over (co)datatypes in solvers.
 
 {
 \footnotesize
