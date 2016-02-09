@@ -2197,12 +2197,12 @@ soundness, without which the generated models would often be
 spurious. For example, given the constraints
 \begin{align*}
 \const{zeros} & \teq \const{SCons}(0,\:\const{zeros})
-& \const{sconst}~n & \teq \const{SCons}(n,\:\const{sconst}~n)
+& \const{repeat}(n) & \teq \const{SCons}(n,\:\const{repeat}(n))
 \end{align*}
 on streams, the conjecture
-$\const{zeros} \teq \const{sconst}~0$
+$\const{zeros} \teq \const{repeat}(0)$
 would be ``refuted'' by a spurious countermodel that interprets
-\const{zero} and $\const{sconst}~0$ by two distinct
+\const{zero} and $\const{repeat}(0)$ by two distinct
 values that both correspond to the term
 $\MU s.\; \const{SCons}(0, s)$,
 violating uniqueness.
