@@ -573,9 +573,10 @@ whose variables are interpreted existentially.
 The decision procedure is formulated as a tableau-like calculus.
 %Following the tradition of refutational theorem proving,
 Proving a universal quantifier-free conjecture is reduced to showing that
-its negation is unsatisfiable. The presentation is
-inspired by Barrett et al.\ \shortcite{barrett-et-al-2007} but at
-a higher level, using unoriented equations instead of oriented ones.
+its negation is unsatisfiable. 
+%The presentation is
+%inspired by Barrett et al.\ \shortcite{barrett-et-al-2007} but at
+%a higher level, using unoriented equations instead of oriented ones.
 
 To simplify the presentation, we make a few assumptions about
 the signature. %$\Sig$.
@@ -678,7 +679,7 @@ one constructor term that is unique up to congruence.
 Thus, in the subsequent phases, 
 when considering the case that $\ec{t}$ contains constructor terms,
 it is enough %for our purposes
-to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among these.
+to select an arbitrary constructor term from $\ec{t}$ among these.
 
 \subsection{Phase 2: Applying Acyclicity and Uniqueness}
 
@@ -773,7 +774,7 @@ result of the unfolding is bounded by the number of equivalence classes of
 $\Ec$, and thus the construction of $\Val$ will terminate.
 
 \begin{figure}[t!]
-\normalsize
+\small
 \centering
 \begin{tabular}{c}
 \(
@@ -784,7 +785,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 }
 \)
 \rn{Refl}
-\qquad
+\quad
 \(
 \inferrule{
  t \teq u \in \Ec
@@ -793,7 +794,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 }
 \)
 \rn{Sym}
-\qquad
+\quad
 \(
 \inferrule{
   s \teq t,\; t \teq u \in \Ec
@@ -813,7 +814,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 }
 \)
 \rn{Cong}
-\qquad
+\quad
 \(
 \inferrule{
   t \teq u,\; t \tneq u \in \Ec
@@ -831,7 +832,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 }
 \)
 \rn{Inject}
-\qquad
+\quad
 \(
 \inferrule{
   \const{C}( \vec t \,) \teq \const{D}( \vec u ) \in \Ec
@@ -851,7 +852,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 
 \begin{figure}[t!]
 \vspace*{+6pt} %% TYPESETTING HACK
-\normalsize
+\small
 \centering
 \begin{tabular}{@{}c@{}}
 \(
@@ -886,7 +887,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 
 \begin{figure}[t!]
 \vspace*{+6pt} %% TYPESETTING HACK
-\normalsize
+\small
 \centering
 \begin{tabular}{c}
 \(
@@ -904,8 +905,8 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
   %\right|
   \text{ is finite} \bigr)
 }{
-  \Ec := \Ec,\: \DISC{1} %\ROR
-  \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
+  \parallel_{i=1 \ldots n} \Ec := \Ec,\: \DISC{i} %\ROR
+ % \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
 }
 \)
 \rn{Split}
