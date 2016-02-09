@@ -1110,13 +1110,13 @@ because the acyclicity and uniqueness rules are necessary for solution
 soundness, without which the generated models would often be
 spurious. For example, given the constraints
 \begin{align*}
-\const{zeros} & = \const{SCons}(0,\:\const{zeros})
-& \const{sconst}~n & = \const{SCons}(n,\:\const{sconst}~n)
+\const{zeros} & \teq \const{SCons}(0,\:\const{zeros})
+& \const{repeat}(n) & \teq \const{SCons}(n,\:\const{repeat}(n))
 \end{align*}
 the conjecture
-$\const{zeros} = \const{sconst}~0$
+$\const{zeros} = \const{repeat}(0)$
 would be ``refuted'' by a spurious countermodel that interprets
-\const{zero} and $\const{sconst}~0$ by two distinct
+\const{zero} and $\const{repeat}(0)$ by two distinct
 values $\MU s.\; \const{SCons}(0, s)$,
 violating uniqueness.
 
