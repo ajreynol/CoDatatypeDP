@@ -1,0 +1,3 @@
+cp sister.pdf ~/hgs/papers_etc/homepage/codp_sister.pdf
+copyweb
+(cd ~/hgs/papers_etc/homepage/; hg ci -m "updated codp_sister.pdf"; hg push)

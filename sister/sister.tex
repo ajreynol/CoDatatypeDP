@@ -169,16 +169,14 @@ Inria Nancy -- Grand Est \& LORIA, Villers-l\`es-Nancy, France
 \maketitle
 
 \begin{abstract}
-%Codatatypes naturally capture potentially infinite data structures and
-%processes.
-We present a decision procedure that combines reasoning about
-datatypes and codatatypes. The dual of the acyclicity rule for datatypes is a
-uniqueness rule that identifies observationally equal codatatype values,
-including cyclic values. The procedure decides universal
-problems and is composable via the Nelson--Oppen method. It has been
-implemented in CVC4, a state-of-the-art SMT solver. An evaluation based on
-problems generated from formalizations developed with Isabelle demonstrates the
-potential of the procedure.
+Datatypes and codatatypes are useful to represent infinite and potentially
+infinite data structures and processes. We describe a decision procedure that
+combines reasoning about datatypes and codatatypes. The procedure has been
+integrated in CVC4, a state-of-the-art SMT (satisfiability modulo theories)
+solver, which can be used both as a general constraint solver and as an
+automatic theorem prover. An evaluation based on problems generated from
+interactive formal proofs developed using the Isabelle proof assistant
+demonstrates the potential of the decision procedure.
 \end{abstract}
 
 \section{Introduction -- JB 2 columns}
@@ -247,16 +245,17 @@ $\infty$.
 Datatypes and codatatypes are an integral part of many proof assistants,
 including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
 have emerged in a few automatic theorem provers as well. The SMT-LIB
-\cite{barrett-et-al-2015}
-format, supported by most SMT
+format \cite{barrett-et-al-2015}, supported by most SMT
 (satisfiability modulo theories)
 solvers, is being extended with a syntax for datatypes.
 In this article, we introduce a
 unified decision procedure for universal problems involving datatypes and codatatypes
 in combination (Section~\ref{sec:the-decision-procedure}).
 The procedure is described abstractly as a %tableau-like
-calculus and is composable via the Nelson--Oppen method \cite{nelson-oppen-1979}.
-It generalizes the procedure by Barrett et al.\ \cite{barrett-et-al-2007},
+calculus and is composable via the Nelson--Oppen \shortcite{nelson-oppen-1979}
+method.
+It generalizes the procedure by Barrett et al.\
+\shortcite{barrett-et-al-2007},
 which covers only datatypes.
 %To our knowledge, our procedure is the first of its kind for the theory of
 %codatatypes.
@@ -272,8 +271,7 @@ of infinite sequences or streams over an element type $\tau$ is
 allowed, even though it has no base case. By contrast, the
 corresponding datatype specification
 $$\vthinspace\keyw{data}~\;\ty{fstream}_{\vthinspace\tau} \,=\allowbreak\, \const{FSCons}(\tau,\allowbreak\: \ty{fstream}_{\vthinspace\tau})\vthinspace$$
-would be rejected as non-well-founded
-\cite{blanchette-et-al-2015-esop}.
+would be rejected as non-well-founded.
 %
 Second, \emph{a uniqueness rule takes the place of the acyclicity rule of datatypes.}
 Cyclic constraints such as
@@ -322,14 +320,11 @@ problems generated from Isabelle/HOL \cite{nipkow-et-al-2002}
 formalizations using the Sledgehammer tool \cite{blanchette-et-al-2013-smt}
 demonstrates the usefulness of the approach (Section~\ref{sec:evaluation-on-isabelle-problems}).
 
-An earlier version of this article was presented at the CADE-25 conference in
-Berlin, Germany \cite{reynolds-blanchette-2015-codata}.
-This article extends the conference paper with additional
-background material on (co)datatypes (Section~\ref{sec:co-datatypes}), more
-detailed metatheoretical proofs (Section~\ref{sec:the-decision-procedure}),
-a description of the generation of models with $\mu$-binders in CVC4
-(Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}), and a more
-comprehensive evaluation (Section~\ref{sec:evaluation-on-isabelle-problems}).
+The original version of this paper was presented at the CADE-25 conference in
+Berlin, Germany \cite{reynolds-blanchette-2015-codata}. An more comprehensive
+version, including detailed proofs, has been accepted in a special issue of
+the \emph{Journal of Automated Reasoning}
+\cite{reynolds-blanchette-201x-codata}.
 
 \paragraph{Conventions.}
 Our setting is a monomorphic (or many-sorted) first-order logic.
@@ -629,7 +624,7 @@ The decision procedure is formulated as a tableau-like calculus.
 %Following the tradition of refutational theorem proving,
 Proving a universal quantifier-free conjecture is reduced to showing that
 its negation is unsatisfiable. The presentation is
-inspired by Barrett et al.\ \cite{barrett-et-al-2007} but at
+inspired by Barrett et al.\ \shortcite{barrett-et-al-2007} but at
 a higher level, using unoriented equations instead of oriented ones.
 
 To simplify the presentation, we make a few assumptions about
@@ -1160,8 +1155,7 @@ as translator from Isabelle to SMT-LIB.
 %recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.}
 We
 included all the formalizations from the Isabelle distribution (Distro, 1179~goals)
-and the \emph{Archive of Formal Proofs} (AFP, 3014~goals) \cite{klein-et-al-afp}
-that define codatatypes falling within the supported fragment. We
+and the \emph{Archive of Formal Proofs} (AFP, 3014~goals) that define codatatypes falling within the supported fragment. We
 also included formalizations about Bird and Stern--Brocot trees (\gandl,
 265~goals) \cite{gammie-lochbihler-2016}. To exercise the datatype support, formalizations about finite
 lists and trees
@@ -1304,9 +1298,7 @@ procedure and the quantifier instantiation module
 \label{sec:conclusion}
 
 We introduced a decision procedure for the universal theory of datatypes and
-codatatypes. Our main
-contribution has been the support for codatatypes. Both the metatheory and
-the implementation in CVC4 rely on $\mu$-terms to represent cyclic values.
+codatatypes. Our approach relies on $\mu$-terms to represent cyclic values.
 Although this aspect is primarily motivated by codatatypes, it makes
 a uniform account of datatypes and codatatypes possible---in particular,
 the acyclicity rule for datatypes exploits $\mu$-terms to detect cycles.
@@ -1326,43 +1318,25 @@ for generating counterexamples in proof assistants
 %as an alternative to Nitpick;
 in this context, the acyclicity and uniqueness rules are
 crucial to exclude spurious countermodels.
-As future work, it would be useful to implement
-proof reconstruction for (co)data\-type inferences in Isabelle.
-In addition, it might be worthwhile to
-extend SMT solvers with dedicated support for (co)recursion.
+%As future work, it would be useful to implement
+%proof reconstruction for (co)data\-type inferences in Isabelle.
+%In addition, it might be worthwhile to
+%extend SMT solvers with dedicated support for (co)recursion.
 
-{
-\footnotesize
-\def\ackname{Acknowledgment}
-\paragraph{\footnotesize\ackname.}
-\looseness=-1
-We owe a great debt to the development team of CVC4,
-including Clark Barrett and Cesare Tinelli,
-and in particular Morgan Deters,
-who jointly with the first author
-developed the initial version
-of the theory solver for datatypes in CVC4.
-%
-Our present and former bosses, Viktor Kuncak, Stephan Merz, Tobias Nipkow,
-Cesare Tinelli, and Christoph Weidenbach, have either encouraged the research on
-codatatypes or at least benevolently tolerated it, both of which we are thankful
-for.
-%
-Peter Gammie and Andreas Lochbihler pointed us to useful benchmarks.
-Andrei Popescu helped clarify our thoughts regarding codatatypes and indicated
-related work. Dmitriy Traytel took part in discussions about degenerate
-codatatypes.
-%
-Pascal Fontaine, Andreas Lochbihler, Andrei Popescu, Christophe Ringeissen, Mark
-Summerfield, Dmitriy Traytel, and the anonymous reviewers suggested many
-textual improvements. The second author's work was partially supported by
+\section*{Acknowledgment}
+
+We owe a great debt to the development team of CVC4, including Clark Barrett
+and Cesare Tinelli, and in particular Morgan Deters, who jointly with the
+first author developed the initial version of the decision procedure for
+datatypes in CVC4.
+We want to thank everyone who helped us with the longer versions of
+this paper.
+The second author's work was partially supported by
 the Deutsche
 Forschungs\-gemein\-schaft %(DFG)
 project ``Den Hammer h\"arten'' (grant NI\,491\slash 14-1)
 and the Inria technological development
 action ``Contre-exemples utilisables par Isabelle et Coq'' (CUIC).
-
-}
 
 \bibliographystyle{named}
 \bibliography{bib}{}
