@@ -1,4 +1,14 @@
-TODO:
+TODO for JASMIN:
+
+  - the description of the induction and coinduction rule is currently quite
+    dense, and not very easy to follow. The connectives in the rules range over
+    several indices, and it is quite hard at the moment to keep track of all of
+    them. I would ask the authors to:
+    2. provide a simple example of application of the rules for the benefit of
+       the reader
+
+
+TODO for ANDY:
 
   * Page 12, Lemma 2: who is $x$? Any variable? A concrete one?
     The same applies to $y$ in the second point.
@@ -7,13 +17,6 @@ TODO:
     of a better way to improve it. Maybe taking a running example and showing
     how J and A* are constructed might help and this is the only big change I
     would suggest the authors to make.
-
-  - the description of the induction and coinduction rule is currently quite
-    dense, and not very easy to follow. The connectives in the rules range over
-    several indices, and it is quite hard at the moment to keep track of all of
-    them. I would ask the authors to:
-    2. provide a simple example of application of the rules for the benefit of
-       the reader
 
   - the procedure is complete only if all ordinary types have infinite
     cardinality. The paper observes that this is not a problem, because ordinary
