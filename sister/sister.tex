@@ -21,6 +21,9 @@
 \usepackage{url}
 \usepackage[all]{xy}
 
+%\let\emph=\textit
+%\let\em=\relax %%% avoid emphasized "et al."
+
 \newcommand\yasx{\mskip.5mu y\mskip.5mu} %%% TYPESETTING: hack so that y is exactly as wide as x
 
 \newcommand\DISC[1]{t \teq \const{C}_{#1}\negvthinspace\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
@@ -154,11 +157,15 @@ non-redun-dant counter-examples counter-example mono-morph-ize mono-morph-ized}
 
 \begin{document}
 
-\title{A Decision Procedure for (Co)datatypes in SMT Solvers}
+\title{A Decision Procedure for (Co)datatypes in SMT Solvers\thanks{In memoriam Morgan Deters 1979--2015}}
 
-\author {Andrew Reynolds \and Jasmin Christian Blanchette\thanks{In memoriam Morgan Deters 1979--2015} \\
-Department of Computer Science, The University of Iowa, USA \and \\
-Inria Nancy -- Grand Est \& LORIA, Villers-l\`es-Nancy, France
+\author {Andrew Reynolds \\
+Department of Computer Science \\
+The University of Iowa, USA
+\And
+Jasmin Christian Blanchette \\
+Inria Nancy -- Grand Est \& LORIA \\
+Villers-l\`es-Nancy, France
 }
 
 %\authorrunning {A. Reynolds \and J. C. Blanchette}
@@ -233,16 +240,14 @@ terms, and only those. As a simple example, the codatatype specification
 %
 \[\keyw{codata}~\,\ty{enat} \,=\, \const{Z} \,\mid\, \const{S}(\ty{enat})\]
 %
-%(using an ML-like syntax)
+(using an ML- or Haskell-like syntax)
 introduces a type that
 captures the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
-in Peano (unary) notation, extended with an
+in unary notation, extended with an
 infinite value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
 The equation $\const{S}(\infty) \teq \infty$ holds as expected,
 because both sides expand to the infinite term
-$\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies
-%the value~
-$\infty$.
+$\const{S}(\const{S}(\const{S}(\ldots)))$, i.e., $\infty$.
 
 Datatypes and codatatypes are an integral part of many proof assistants,
 including Coq, Isabelle, and PVS. In recent years, datatypes
@@ -252,7 +257,7 @@ unified decision procedure for universal problems involving datatypes and codata
 in combination (Section~\ref{sec:the-decision-procedure}).
 The procedure is described abstractly as a %tableau-like
 calculus and can be composed with other theories in an SMT solver.
-It generalizes the procedure by Barrett et al.\
+It generalizes the procedure by Barrett {\em et al.}\
 \shortcite{barrett-et-al-2007},
 which covers only datatypes.
 %To our knowledge, our procedure is the first of its kind for the theory of
@@ -581,7 +586,7 @@ abstract calculus.
 Proving a universal quantifier-free conjecture is reduced to showing that
 its negation is unsatisfiable. 
 %The presentation is
-%inspired by Barrett et al.\ \shortcite{barrett-et-al-2007} but at
+%inspired by Barrett {\em et al.} \shortcite{barrett-et-al-2007} but at
 %a higher level, using unoriented equations instead of oriented ones.
 
 To simplify the presentation, we make a few assumptions about
