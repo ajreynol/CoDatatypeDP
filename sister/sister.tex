@@ -176,19 +176,28 @@ integrated in CVC4, a state-of-the-art SMT (satisfiability modulo theories)
 solver, which can be used both as a general constraint solver and as an
 automatic theorem prover. An evaluation based on problems generated from
 interactive formal proofs developed using the Isabelle proof assistant
-demonstrates the potential of the decision procedure.
+demonstrates the potential of our decision procedure.
 \end{abstract}
 
 \section{Introduction -- JB 2 columns}
 \label{sec:introduction}
 
+Automatic theorem proving
+* much focus on FOL
+* two main approaches:
+  superposition---e.g., E, SPASS, Vampire
+  SMT (satisfiability modulo theory) solvers---e.g., CVC4, veriT, Yices, Z3
+* SMT is also useful for model finding, or constraint solving: given some   
+  constraints, find an assignment of its variables that satisfy them
+
+* strength of the SMT approach is that it can compose different efficient
+  decision procedures and other solvers for various theories---e.g., equality,
+  linear arithmetic, and first-order quantifiers.
+* the main scientific question is: which theories would be useful to
+  applications, and which ones can be supported efficiently in SMT solvers?
+
 %  * a general introduction to automatic theorem proving \\
 
-%  * relation to AI
-%   * among the earliest AI goals
-%   * yet somewhat disconnected from mainstream AI
-%     (with some exceptions, e.g. Urban ..., MaSh)
-%
 %  * followed by an intro to SMT and what it's used for \\
 %  * followed to why theories are important (more efficient reasoning) \\
 %  * followed to why (co)datatypes are important
