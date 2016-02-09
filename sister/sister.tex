@@ -590,8 +590,8 @@ bound on the cardinality of any uninterpreted type, so it is safe to consider th
 infinite. As for ordinary types interpreted finitely by other theories (e.g.,
 bit vectors), each interpreted type having finite cardinality~$n$
 can be viewed as a %n enumeration
-datatype with $n$~nullary constructors
-\cite{barrett-et-al-2007}.
+datatype with $n$~nullary constructors.
+%\cite{barrett-et-al-2007}.
 
 %AJR: would prefer splitting this section into two parts (calculus, correctness), let me know if you agree.
 %JB: I fully agree, but I tuned the titles a little bit. Also, I tried
@@ -906,7 +906,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
   %\right|
   \text{ is finite} \bigr)
 }{
-  \parallel_{i=1 \ldots n} \Ec := \Ec,\: \DISC{i} %\ROR
+  {\mathop{\big|\kern-.25ex\big|}\vthinspace}_{i=1}^n\, \Ec := \Ec,\: \DISC{i} %\ROR
  % \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
 }
 \)
@@ -940,12 +940,13 @@ A possible sequence of unfolding steps is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
-%\item \noindent\rlap{Initially:}\phantom{Unfold $\Varec{x}$:\enskip}$\{  \}$
-\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
-\item \noindent\rlap{Unfold $\vthinspace\Varec{y}\negvthinspace$}\phantom{Unfold $\Varec{x}$}:\enskip$\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
-  \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}$
-\item \noindent\rlap{Unfold $\Varec{x}$:}\phantom{Unfold $\Varec{x}$:\enskip}$\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\;
-  \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}$
+\item Unfold $\Varec{x}$:\enskip $\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
+\item Unfold $\Varec{y}$:\enskip $\Val = \{\vthinspace  \!\begin{aligned}[t]
+  & \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\; \\[-.5\jot]
+  & \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}\end{aligned}$
+\item Unfold $\Varec{x}$:\enskip $\Val = \{\vthinspace \!\begin{aligned}[t]
+  & \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\; \\[-.5\jot]
+  & \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}\end{aligned}$
 \end{enumerate}
 %
 The resulting $\Val$ indicates that the values for $x$ and $y$ in models of $\Ec$
