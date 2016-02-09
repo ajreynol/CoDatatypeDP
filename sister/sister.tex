@@ -22,8 +22,6 @@
 
 \newcommand\DISC[1]{t \teq \const{C}_{#1}\negvthinspace\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
 
-\newcommand\typ[1]{^{\vthinspace #1}}
-
 \newcommand\MU{\vvthinspace\mu\vvthinspace}
 
 \newtheorem{examplex}{Example}%{\itshape}{\rmfamily}
@@ -252,11 +250,8 @@ $\const{S}(\const{S}(\const{S}(\ldots)))$, which uniquely identifies
 $\infty$.
 
 Datatypes and codatatypes are an integral part of many proof assistants,
-including Agda, Coq, Isabelle, Matita, and PVS. In recent years, datatypes
-have emerged in a few automatic theorem provers as well. The SMT-LIB
-format \cite{barrett-et-al-2015}, supported by most SMT
-(satisfiability modulo theories)
-solvers, is being extended with a syntax for datatypes.
+including Coq, Isabelle, and PVS. In recent years, datatypes
+have emerged in a few automatic theorem provers as well.
 In this article, we introduce a
 unified decision procedure for universal problems involving datatypes and codatatypes
 in combination (Section~\ref{sec:the-decision-procedure}).
@@ -312,8 +307,8 @@ The $\mu$-binder notation associates a name with
 a subterm; it is used to represent cyclic values in the metatheory and
 in the generated models. For example,
 the $\mu$-term $\const{SCons}(1,\: \MU s.\; \const{SCons}(0,\: \const{SCons}(9,\: s)))$
-stands for the lasso-shaped sequence $1, 0, 9, 0, 9, %0, 9,
-\ldots$\afterLdots.
+stands for the lasso-shaped sequence $1, 0, 9, 0, 9, 0, 9,
+\dotsc$.
 
 %%% 1090909 is a prime number
 
@@ -325,61 +320,23 @@ integrated in the development version of the solver and is expected to be part
 of the CVC4~1.5 release.
 %
 An evaluation on %hand-crafted examples and on
-problems generated from Isabelle/HOL \cite{nipkow-et-al-2002}
-formalizations using the Sledgehammer tool \cite{blanchette-et-al-2013-smt}
-demonstrates the usefulness of the approach (Section~\ref{sec:evaluation-on-isabelle-problems}).
+problems generated from Isabelle\slash HOL
+formalizations demonstrates the usefulness of the approach (Section~\ref{sec:evaluation-on-isabelle-problems}).
 
 The original version of this paper was presented at the CADE-25 conference in
 Berlin, Germany \cite{reynolds-blanchette-2015-codata}. An more comprehensive
-version, including detailed proofs, has been accepted in a special issue of
-the \emph{Journal of Automated Reasoning}
-\cite{reynolds-blanchette-201x-codata}.
-
-\paragraph{Conventions.}
-Our setting is a monomorphic (or many-sorted) first-order logic.
-A signature $\Sig = (\Types, \Funcs)$ consists of a set of types $\Types$ and a
-set of function symbols $\Funcs$\negvthinspace. Types are atomic sorts and interpreted as
-nonempty domains. The set~$\Types$ must contain a
-distinguished type \ty{bool} interpreted as the set of truth
-values. %, and may contain other interpreted types (e.g., \ty{int}, \ty{real}).
-The metavariables $\delta,\:\varepsilon$ range over (co)datatypes,
-whereas $\tau,\:\upsilon$ range over arbitrary types.
-
-Function symbols are written in a sans-serif font (e.g., $\const{f}$, $\const{g}$) to
-distinguish them from variables (e.g., $x$, $y$).
-Symbol names starting with an uppercase letter (e.g.,
-$\const{S}$) are reserved for constructors. With each function symbol \const{f}
-is associated a list of argument types $\tau_1,\ldots,\tau_n$ (for $n \ge 0$)
-and a return type $\tau$, written
-$\const{f} : \tau_1 \times \cdots \times \tau_n \to \tau$;
-this notation collapses to $\const{f} : \tau$ if $n = 0$.
-%
-Functions invocations $\const{f}(t_1,\ldots,t_n)$
-apply the $n$-ary function symbol
-\const{f} to $n$ %well-typed
-arguments $t_1 \mathbin{:} \tau_1$, \ldots, $t_n \mathbin{:}
-\tau_n$ of the right types.
-Nullary function symbols, also called constants, can appear without
-parentheses in terms.
-The set $\Funcs$ must at least contain
-$\const{true},\, \const{false} : \ty{bool}$, interpreted as truth values.
-The only predicate is equality, written $\teq$;
-it belongs to the logical symbols.
-Other predicates can be represented as functions to $\ty{bool}$,
-with $\const{p}(\ldots)$ abbreviating $\const{p}(\ldots) \teq \const{true}$.
-The notation $t\typ{\tau}$ stands for a term $t$ of type~$\tau$;
-it should not be confused with $t :\nobreak \tau$,
-which is a statement expressing that $t$ has type $\tau$.
-When applied to terms, the standard equality symbol~$=$ denotes syntactic equality.
-The operator $\bigwedge_{\vthinspace i}\, \varphi_i$ abbreviates a conjunction
-$\varphi_1 \mathrel\land \cdots \mathrel\land \varphi_n$.
-Finally, $\bar x$ abbreviates a list or tuple $x_1,\ldots,x_n$.
+version, including detailed proofs, will appear in a special issue of the
+\emph{Journal of Automated Reasoning}.
+%\cite{reynolds-blanchette-201x-codata2}.
 
 \section{%The Theory of
 (Co)datatypes -- AJR 0.75 column}
 \label{sec:co-datatypes}
 
-We fix a signature $\Sig = (\Types, \Funcs)$. The types are partitioned into
+Our setting is a monomorphic (or many-sorted) first-order logic.
+We fix a signature $\Sig = (\Types, \Funcs)$ consisting of a set of types $\Types$ and a
+set of function symbols $\Funcs$\negvthinspace.
+The types are partitioned into
 $\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
 \emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the remaining
 \emph{ordinary types} (which can be interpreted or not). The function symbols are
@@ -394,7 +351,7 @@ over $\Sig$,
 without $\mu$-binders.
 %(Section~\ref{sec:implementation-as-a-theory-solver-in-cvc4}).
 
-%\paragraph{Specifications.}
+%\paragraph{Specifications}
 In an SMT problem, the signature is typically given by specifying first the
 uninterpreted %ordinary
 types in any order, then the (co)datatypes with their constructors
@@ -711,7 +668,7 @@ are saturated.
 %the derivation rules of our calculus are given in \emph{guarded assignment form},
 %where a rule can be applied to $\Ec$ if it meets all of the specified premises for $\Ec$.
 
-\paragraph{Phase 1: Computing the Bidirectional Closure \rm(Fig.~\ref{fig:cc-rules}).}
+\paragraph{Phase 1: Computing the Bidirectional Closure \rm(Fig.~\ref{fig:cc-rules})}
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
 whereas the \rn{Inject} and \rn{Clash} rules %together
 compute the unification (downward) closure.
@@ -735,7 +692,7 @@ when considering the case that $\ec{t}$ contains constructor terms,
 it is enough %for our purposes
 to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among these.
 
-\paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(Fig.~\ref{fig:ab-rules}).}
+\paragraph{Phase 2: Applying Acyclicity and Uniqueness \rm(Fig.~\ref{fig:ab-rules})}
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 %The premises of the rules that make up the second phase refer to
 The rules in this phase are described in terms of a mapping $\Val$
@@ -787,7 +744,7 @@ $\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
-The $\mu$-term $\Val[t\typ{\tau}]$ describes a class of $\tau$ values
+The $\mu$-term $\Val[t]$ describes a class of values
 that $t$ and other members of $t$'s equivalence class can take in models of $\Ec$.
 When $\tau$ is a datatype, % \in \Data$,
 a cyclic $\mu$-term describes an infeasible class of values.
@@ -910,11 +867,9 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \begin{tabular}{@{}c@{}}
 \(
 \inferrule{
-%  t\typ{\delta}
-%  \betweenantes
-  \delta \in \Data
+  t : \delta \in \Data
   \betweenantes
-  \Val \smash{\ec{t\typ{\delta}}} = \MU x.\; u
+  \Val \smash{\ec{t}} = \MU x.\; u
   \betweenantes
   x \in \FV( u )
 }{
@@ -922,13 +877,12 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 }
 \)
 \rn{Acyclic}
-\kern1.5em\( %%% TYPESETTING: should be \quad
+\\[5\jot]
+\(
 \inferrule{
-% t, u\typ{\delta}
-% \betweenantes
- \delta \in \Codata
+ t, u : \delta \in \Codata
  \betweenantes
- \Val \smash{\ec{t\typ{\delta}}} \aequiv \Val \smash{\ec{u\typ{\delta}}}
+ \Val \smash{\ec{t}} \aequiv \Val \smash{\ec{u}}
 }{
  \Ec := \Ec,\: t \teq u
 }
@@ -948,7 +902,9 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \begin{tabular}{c}
 \(
 \inferrule{
-  t\typ{\delta} \in \tEc
+  t : \delta
+  \betweenantes
+  t \in \tEc
   \betweenantes
   \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
 \\
@@ -967,9 +923,9 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \\[5\jot]
 \(
 \inferrule{
-  t\typ{\delta}, u\typ{\delta} \in \tEc
+  t, u : \delta \in \Codata
   \betweenantes
-  \delta \in \Codata
+  t, u \in \tEc
   \betweenantes
   \delta \text{ is a singleton}
 }{
@@ -1069,7 +1025,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{y}$,
 \xend
 \end{examplex}
 
-\paragraph{Phase 3: Branching \rm(Fig.~\ref{fig:split-rule}).}
+\paragraph{Phase 3: Branching \rm(Fig.~\ref{fig:split-rule})}
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
 $t$'s equivalence class must contain a
 $\delta$ constructor term.
@@ -1087,9 +1043,7 @@ based on a recursive computation of the cardinalities of the
 constructors' argument types.
 %This step relies on the assumption that uninterpreted types are infinite.
 
-\paragraph{Termination and Correctness.}
-\label{sec:termination-and-correctness}
-
+\paragraph{Termination and Correctness}
 We now show the termination and correctness of the calculus.
 Correctness means the following:
 If there exists a closed derivation tree with root node
@@ -1159,7 +1113,7 @@ To evaluate this,
 we generated benchmark problems from existing interactive
 proof goals arising in existing
 Isabelle formalizations, using Sledgehammer \cite{blanchette-et-al-2013-smt}
-as translator from Isabelle to SMT-LIB.
+as translator.
 %There are not yet many benchmarks available, since codatatypes are a
 %recent addition to Isabelle \cite{blanchette-et-al-2014-impl}. \rem{Necessary to mention this? Seems to detract from significance of contribution.}
 We
