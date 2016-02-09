@@ -686,7 +686,7 @@ to select an arbitrary constructor term from $\ec{t}$ among these.
 %For presentation of the rules in this phase, we rely on a representation of terms in the $\mu$-notation.
 %The premises of the rules that make up the second phase refer to
 The rules in this phase are described in terms of a mapping $\Val$
-that assigns to each equivalence class a $\mu$-term as its representative.
+that assigns to each equivalence class a $\mu$-term. % as its representative.
 %\rem{Not explicitly constructed, add here?}
 
 Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
@@ -734,12 +734,7 @@ $\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 %where in the latter case, a $\mu$-term with a bound variable denotes an infeasible term.
 %where the latter case adds the restriction on $\mu$-terms $t$ that no subterms of $t$ contain are bound variables.
 
-The $\mu$-term $\Val[t]$ describes a class of values
-that $t$ and other members of $t$'s equivalence class can take in models of $\Ec$.
-When $\tau$ is a datatype, % \in \Data$,
-a cyclic $\mu$-term describes an infeasible class of values.
-
-The mapping $\Val$ is defined as follows.
+The mapping $\Val$ is constructed as follows.
 %
 With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
 of the same type as $u$. %not occurring in $\tEc$,
@@ -772,6 +767,12 @@ and $\Val[x \mapsto t]$ denotes the variable-\emph{capturing} substitution of $t
 $x$ in $\Val$'s range. It is easy to see that the height of terms produced as a
 result of the unfolding is bounded by the number of equivalence classes of
 $\Ec$, and thus the construction of $\Val$ will terminate.
+
+%AJR: moved this paragraph after the construction to avoid mistaking this paragraph as part of the formal definition.
+The $\mu$-term $\Val[t]$ describes a class of values
+that $t$ and other members of $t$'s equivalence class can take in models of $\Ec$.
+When $\tau$ is a datatype, % \in \Data$,
+a cyclic $\mu$-term describes an infeasible class of values.
 
 \begin{figure}[t!]
 \small
@@ -963,7 +964,7 @@ unsatisfiable.
 For uniqueness, if $\ec{t}$, $\ec{u}$ are two codatatype equivalence classes
 whose values $\Val \ec{t}$, $\Val \ec{u}$ are $\alpha$-equivalent,
 %for a capture-avoiding renaming of $\mu$-bound variables,
-then $t \teq u$. Comparison for $\alpha$-equivalence may seem too restrictive, since
+then $t$ is equal to $u$. Comparison for $\alpha$-equivalence may seem too restrictive, since
 $\MU x.\; \const{S}(x)$ and $\MU y.\; \const{S}(\const{S}(y))$ specify the same
 value despite being $\alpha$-disequivalent, but the rule will
 make progress by discovering that the subterm $\const{S}(y)$ of $\MU y.\;
@@ -983,13 +984,14 @@ $\{ y,\, \const{S}(\const{S}(y)) \}$,
 and $\{ \const{S}(y) \}$.
 Constructing $\Val$ yields
 \begin{align*}
-\Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x}) &
-\kern0.25em %% TYPESETTING
-\Val \ec{y} & \,=\,
+\Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x}) 
+\kern2.0em %% TYPESETTING
+\Val \ec{y}  \,=\,
 \MU {\Varec{y}}.\; \const{S}(\smash{\MU {\VAREC{\const{S}(y)}}}.\; \const{S}( {\Varec{y}} ) )
-\kern0.25em %% TYPESETTING
- &
-\Val \ec{\const{S}(y)} & =
+%\kern0.25em %% TYPESETTING
+% &
+\\
+\Val \ec{\const{S}(y)} & \,=\, 
 \MU {\VAREC{\const{S}(y)}}.\; \const{S}(\MU {\Varec{y}}.\; \const{S}( {\VAREC{\const{S}(y)}} ) )
 \end{align*}
 Since $\Val \ec{y} \aequiv \Val \ec{\const{S}(y)}$,
@@ -1024,13 +1026,9 @@ $\delta$ constructor term.
 This is enforced in the third phase by the \rn{Split} rule.
 Another rule, \rn{Single}, focuses on the degenerate case where two
 terms %from $\tEc$
-have the same corecursive singleton type
-%(Section~\ref{sec:co-datatypes})
+are of a \emph{singleton} type (one for which there exists only one value),
 and are therefore equal.
-(FIXME)
-
-Some codatatypes are so degenerate as to be finite even though they
-have infinite values. A simple example is
+Notice that corecursive singleton types may have infinite values. A simple example is
 \vthinspace$\keyw{codata}~\ty{a} = \const{A}(\ty{a})$, which is corecursive
 and yet has a cardinality of one;
 its unique value is $\MU a.\; \const{A}(a)$.
@@ -1046,14 +1044,15 @@ constructors' argument types.
 
 \subsection{Termination and Correctness}
 
-We now show (FIXME) the termination and correctness of the calculus.
-Correctness means the following:
-If there exists a closed derivation tree with root node
-$\Ec$, then $\Ec$ is %$\thD$-
-unsatisfiable; and if there exists
-a derivation tree with root node $\Ec$ that contains a saturated node, then
-$\Ec$ is %$\thD$-
-satisfiable.
+%We now show (FIXME) the termination and correctness of the calculus.
+%Correctness means the following:
+%If there exists a closed derivation tree with root node
+%$\Ec$, then $\Ec$ is %$\thD$-
+%unsatisfiable; and if there exists
+%a derivation tree with root node $\Ec$ that contains a saturated node, then
+%$\Ec$ is %$\thD$-
+%satisfiable.
+We state the following properties of derivation trees generated by the calculus.
 
 \begin{theorem}[Termination]%
 \label{thm:t}%
@@ -1079,8 +1078,17 @@ By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
 calculus is sound and complete for the universal theory of (co)datatypes. We may
 rightly call it a decision procedure for that theory.
 The proof of solution soundness is constructive in that it provides a
-method for constructing a model for a saturated configuration, by means of the
-mapping $\ValC$.
+method for constructing a model for a saturated configuration.
+%AJR : if necessary...
+%To give an intuition how this model is constructed,
+%we consider the mapping $\Val$ from Step 2 of the procedure,
+%and apply additional substitutions over the free variables in its range
+%to obtain a mapping, call it $\ValC$, 
+%from equivalence classes to closed $\MU$-terms.
+%Then, for each equivalence class $\ec{t}$ in the domain of $\ValC$,
+%we interpret each variable in $\ec{t}$ as $\ValC \ec{t}$.
+%The properties of a saturated configuration ensure
+%that $\ValC$ can be constructed such that all constraints in our input are satisfied.
 
 \section{Evaluation} % on Isabelle Problems}
 \label{sec:evaluation}
