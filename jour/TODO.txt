@@ -1,14 +1,5 @@
 TODO:
 
-  * Page 5, Induction: adding the range for $k$ and $i$ in the $\land$s
-    might be helpful. The same applies to coinduction
-
-  * Page 5, Coinduction: I would suggest to add parenthesis in order to
-    improve the reading.
-
-  * Page 7, Phase 2: there is a sequence of term1 != term2 != term3.
-    How should the reader interpret this? Are all pairwise different?
-
   * Page 12, Lemma 2: who is $x$? Any variable? A concrete one?
     The same applies to $y$ in the second point.
 
@@ -21,7 +12,6 @@ TODO:
     dense, and not very easy to follow. The connectives in the rules range over
     several indices, and it is quite hard at the moment to keep track of all of
     them. I would ask the authors to:
-    1. rewrite the rules by making the indices explicit
     2. provide a simple example of application of the rules for the benefit of
        the reader
 
@@ -41,7 +31,21 @@ TODO:
     impact in practice? E.g. does it make sense to try to minimize the produced
     explanations, or would the cost outweigh the benefit? 
 
+
+DONE:
+
+  * Page 7, Phase 2: there is a sequence of term1 != term2 != term3.
+    How should the reader interpret this? Are all pairwise different?
+
   - Page 17: "By assuming ... infinite cardinality". I had to read the sentence
     a few times before realizing it was not a typo. Although I'm not a native
     English speaker, perhaps this could be rephrased, e.g. "Since it assumes
     that ... infinite cardinality, ".
+
+  * Page 5, Coinduction: I would suggest to add parenthesis in order to
+    improve the reading.
+
+  * Page 5, Induction: adding the range for $k$ and $i$ in the $\land$s
+    might be helpful. The same applies to coinduction
+
+  * 1. rewrite the rules by making the indices explicit

@@ -655,8 +655,8 @@ values $v_1 : \delta_1, \ldots, v_\ell : \delta_\ell$:
 \[
 \begin{aligned}[t]
 \text{Induction:}\quad
-\AXC{\strut$\bigwedge_{\vthinspace i,j}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\vthinspace k}\, \mathcalx{IH}[x_k]\bigr) \medrightarrow P_i[\const C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
-\UIC{\strut$\bigwedge_{\vthinspace i}\, P_i[v_i]$}
+\AXC{\strut$\bigwedge_{\vthinspace i=1}^\ell \bigwedge_{\vthinspace j=1}^{m_i}\, \forall x_1 \ldots \vthinspace x_{n_{i\negvthinspace j}}.\; \bigl(\bigwedge_{\vthinspace k=1}^{ n_{i\negvthinspace j}}\, \mathcalx{IH}[x_k]\bigr) \medrightarrow P_i[\const C_{i\negvthinspace j}(x_1,\ldots,x_{n_{ij}})]$}
+\UIC{\strut$\bigwedge_{\vthinspace i=1}^{\ell}\, P_i[v_i]$}
 \DP
 \end{aligned}
 \]
@@ -677,12 +677,12 @@ suitable coinduction witnesses $R_1,\ldots,R_\ell$:
 \[
 \begin{aligned}[t]
 \text{Coinduction:}\quad
-\AXC{\strut$\begin{gathered}\textstyle \smash{\bigwedge_{\vthinspace i}\, R_i[v_i, w_i]} \\[-\jot]\textstyle
-\bigwedge_{\vthinspace i}\, \forall v\; w.\;\, R_i[v, w] \medrightarrow
-  \bigwedge_{\vthinspace j}\, \const{d}_{\negvthinspace j}(v) \mathrel\land \const{d}_{\negvthinspace j}(w)
-  \medrightarrow \bigwedge_{\vthinspace k}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)
+\AXC{\strut$\begin{gathered}\textstyle \smash{\bigwedge_{\vthinspace i=1}^\ell \, R_i[v_i, w_i]} \\[-\jot]\textstyle
+\bigwedge_{\vthinspace i=1}^\ell\, \bigl(\forall v\; w.\;\, R_i[v, w] \medrightarrow
+  \bigwedge_{\vthinspace j=1}^{m_i}\, \bigl(\const{d}_{\negvthinspace j}(v) \mathrel\land \const{d}_{\negvthinspace j}(w)
+  \medrightarrow \bigwedge_{\vthinspace k=1}^{n_{i\negvthinspace j}}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)\bigr)\bigr)
 \end{gathered}$}
-\UIC{\strut$\bigwedge_{\vthinspace i}\, v_i \teq w_i$}
+\UIC{\strut$\bigwedge_{\vthinspace i=1}^\ell \, v_i \teq w_i$}
 \DP
 \end{aligned}
 \]
@@ -946,8 +946,8 @@ are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound v
 %$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
 $\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$,
 but
-$\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
-\not\aequiv \MU y.\; \const{D}( y, x )$.
+$\MU x.\; \const{C}( x )$, $\MU x.\; \const{D}( y, x )$, $\MU x.\; \const{D}( z, x )$, and
+$\MU y.\; \const{D}( y, x )$ are all $\alpha$-disequivalent.
 Two $\mu$-terms can denote the same value despite being $\alpha$-disequivalent---e.g.,
 $\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 %In the \rn{Acyclic} rule,
@@ -2157,7 +2157,7 @@ formulas involving datatypes and codatatypes.
 However, the presence of quantifiers poses an additional challenge in
 the context of (co)datatypes. Quantified formulas can entail an upper bound on
 the cardinality of an uninterpreted type $\ty{u}$.
-By assuming that uninterpreted types have infinite cardinality, the calculus
+Since it assumes that uninterpreted types have infinite cardinality, the calculus
 presented in Section~\ref{sec:the-decision-procedure} is \relax{incomplete}
 since it may fail to recognize cases where \rn{Split} and \rn{Single} should be
 applied.
@@ -2169,7 +2169,8 @@ the solver is already incomplete for quantified formulas.
 Nonetheless, two techniques help increase the precision of the solver.
 First, we can apply \rn{Split} to datatype terms whose cardinality depends on the finiteness of
 uninterpreted types.
-Second, we can conditionally apply \rn{Single} to codatatype terms that may have cardinality one.
+Second, we can conditionally apply \rn{Single} to codatatype terms whose type
+potentially has cardinality one.
 For example, the codatatype $\ty{stream}_{\vthinspace\ty{u}}$ %, where $\ty{u}$ is uninterpreted.
 has cardinality one precisely when $\ty{u}$ has cardinality one.
 If there exist two equivalence classes $\ec{s}$ and $\ec{t}$ for this type,
@@ -2193,13 +2194,13 @@ negation, in the refutational style) and for model finding
 It is in fact vital for finite model finding,
 because the acyclicity and uniqueness rules are necessary for solution
 soundness, without which the generated models would often be
-spurious. For example, given the axioms
+spurious. For example, given the constraints
 \begin{align*}
-\const{zeros} & = \const{SCons}(0,\:\const{zeros})
-& \const{sconst}~n & = \const{SCons}(n,\:\const{sconst}~n)
+\const{zeros} & \teq \const{SCons}(0,\:\const{zeros})
+& \const{sconst}~n & \teq \const{SCons}(n,\:\const{sconst}~n)
 \end{align*}
 on streams, the conjecture
-$\const{zeros} = \const{sconst}~0$
+$\const{zeros} \teq \const{sconst}~0$
 would be ``refuted'' by a spurious countermodel that interprets
 \const{zero} and $\const{sconst}~0$ by two distinct
 values that both correspond to the term
