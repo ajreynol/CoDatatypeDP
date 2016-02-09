@@ -1062,11 +1062,11 @@ The proof of solution soundness is constructive in that it provides a
 method for constructing a model for a saturated configuration, by means of the
 mapping $\ValC$.
 
-\section{Implementation and Evaluation} % on Isabelle Problems}
+\section{Evaluation} % on Isabelle Problems}
 \label{sec:evaluation}
 
 \newcommand\gandl{SBT}
-\newcommand\HD[1]{\hbox to2em{\footnotesize\hfill\!\!\!\!#1\!\!\!\!\hfill}}
+\newcommand\HD[1]{\hbox to2em{\relax\hfill\!\!\!\!#1\!\!\!\!\hfill}}
 
 The decision procedure for (co)datatypes is useful both for proving (via
 negation, in the refutational style) and for model finding
@@ -1103,8 +1103,9 @@ also included formalizations about Bird and Stern--Brocot trees (\gandl,
 265~goals). % \cite{gammie-lochbihler-2016}.
 To exercise the datatype support, formalizations about finite
 lists and trees
-were added to the first two benchmark sets. The formalizations were selected before
-conducting any experiments.
+were added to the first two benchmark sets.
+%The formalizations were selected before
+%conducting any experiments.
 %The experimental data are available
 %online.%
 %\footnote{\url{http://lara.epfl.ch/~reynolds/JAR-CADE2015-cdt/}}
@@ -1119,12 +1120,8 @@ goal. The resulting problem was given to the
 development version of CVC4
 (from 15 September 2015) and to
 Z3 4.3.2 for comparison, each running for
-up to 60~s on StarExec \cite{stump-et-al-2014-starexec}.
+up to 60~s. % on StarExec \cite{stump-et-al-2014-starexec}.
 Problems not involving any (co)datatypes were left out.
-Due to the lack of machinery in Isabelle for parsing CVC4 proofs and
-reconstructing inferences about (co)datatypes, the solvers are trusted
-as oracles. % in these experiments.
-%Z3 is included for comparison.
 
 CVC4 was run on each problem several times, with the
 support for datatypes and codatatypes either enabled or disabled. The
@@ -1137,7 +1134,7 @@ decision procedure is disabled, the problems may contain
 basic lemmas about constructors and selectors, allowing some (co)datatype
 reasoning. This is especially true for problems generated using 256~lemmas.
 The problems with 16~lemmas put more stress on the decision procedure but are
-less typical of Sledgehammer-generated problems.
+less typical of Sledgehammer problems.
 
 % when this makes sense.
 %This allows us to answer the question, \relax{What are the
@@ -1157,69 +1154,34 @@ less typical of Sledgehammer-generated problems.
 \newcommand\captioni{\,Number of solved goals with 16~lemmas per goal}
 \newcommand\captionii{\,Number of solved goals with 256~lemmas per goal}
 
-\begin{table*}[t!]
+%%% TYPESETTING: hack
+\setcounter{table}{3}
+
+\begin{table}[t!]
 \normalsize
-\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1.5em}c@{\kern.5em}c@{\;}}
-  & \multicolumn{2}{@{}c@{\kern1em}}{Distro} & \multicolumn{2}{@{}c@{\kern1em}}{AFP} & \multicolumn{2}{@{}c@{\kern1.5em}}{\gandl} & \multicolumn{2}{@{}c@{\;}}{Overall} \\[-0.5pt]
-  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
+\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\;}}
+  & \multicolumn{2}{@{}c@{\kern1em}}{16 lemmas\;} & \multicolumn{2}{@{}c@{\;}}{256 lemmas} \\%[-0.5pt]
+  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{\,Z3}
 \MIDRULE
 No (co)datatypes
-  & 287 & 282 & 765 & 771 & 47 & 44 & 1099 & 1097 \\%[\jot]
-%Datatype simplification only
-%  &  \\
+ &  1099  &  1097  &  2209  &  1911 \\%[\jot]
 Datatypes without \rn{Acyclic}
-  & 298 & -- & 771 & -- & 47 & -- & 1116 & -- \\
+ &  1116  &  -- &  2211  &  -- \\
 Full datatypes
-  & 298 & 294 & 775 & 783 & 47 & 44 & 1120 & 1121 \\%[\jot]
-%Codatatype simplification only
-%  &  \\
+ &  1120  &  1121  &  2211  &  1901 \\%[\jot]
 Codatatypes without \rn{Unique}\!\!
-  & 288 & -- & 797 & -- & 47 & -- & 1132 & -- \\
+ &  1132  &  --  &  2208  &  -- \\
 Full codatatypes
-  & 288 & -- & 797 & -- & \bfseries 52 & -- & 1137 & -- \\%[\jot]
+ &  1137  &  -- &  \bfseries 2220  &  -- \\%[\jot]
 Full (co)datatypes
-  & \bfseries 299 & -- & \bfseries 806 & -- & \bfseries 52 & -- & \bfseries 1157 & -- %\\[\jot]
+ &  \bfseries 1157  &  -- &  2219  &  -- %\\[\jot]
 \end{tabular}\end{center}
 \caption{\captioni}
-\label{tab:benchsixteen}
-\end{table*}
+\label{tab:bench}
+\end{table}
 
-\begin{table*}[t!]
-\normalsize
-\begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1.5em}c@{\kern.5em}c@{\;}}
-  & \multicolumn{2}{@{}c@{\kern1em}}{Distro} & \multicolumn{2}{@{}c@{\kern1em}}{AFP} & \multicolumn{2}{@{}c@{\kern1.5em}}{\gandl} & \multicolumn{2}{@{}c@{\;}}{Overall} \\[-0.5pt]
-  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
-\MIDRULE
-No (co)datatypes
-  & 617 & 560 & 1503 & 1271 & 89 & 80 & 2209 & 1911 \\%[\jot]
-%Datatype simplification only
-%  &  \\
-Datatypes without \rn{Acyclic}
-  & 617 & -- & \bfseries 1504 & -- & 90 & -- & 2211 & -- \\
-Full datatypes
-  & 617 & 560 & \bfseries 1504 & 1263 & 90 & 78 & 2211 & 1901 \\%[\jot]
-%Codatatype simplification only
-%  &  \\
-Codatatypes without \rn{Unique}\!\!
-  & 617 & -- & 1501 & -- & 90 & -- & 2208 & -- \\
-Full codatatypes
-  & \bfseries 620 & -- & 1502 & -- & 98 & -- & \bfseries 2220 & -- \\%[\jot]
-Full (co)datatypes
-  & 619 & -- & 1501 & -- & \bfseries 99 & -- & 2219 & -- %\\[\jot]
-\end{tabular}\end{center}
-\caption{\captionii}
-\label{tab:benchtwofiftysix}
-\end{table*}
-
-The results are summarized in Tables \ref{tab:benchsixteen} and
-\ref{tab:benchtwofiftysix}.
-%The goals in Table \ref{tab:benchsixteen} include 16
-%heuristically selected lemmas (before monomorphization);
-%\cite{meng-paulson-2009-relev};
-%that number is increased to 256 for Table \ref{tab:benchtwofiftysix}.
-The decision procedure
-makes a difference across all three benchmark suites. For the 16-lemma
-problems, it accounts for an overall
+The results are summarized in Table \ref{tab:bench}.
+For the 16-lemma problems, it accounts for an overall
 success rate increase of over 5\%.
 Moreover, every aspect of the procedure, including the
 more expensive rules, makes a contribution.
@@ -1235,9 +1197,10 @@ the theoretically stronger instances of the decision
 procedure do not always subsume the weaker ones in practice.
 The raw data reveal that the full procedure proved 27~goals that
 could not be proved without it, but failed for 17~goals that could be proved
-without it. This potentially points to poor interactions between the decision
-procedure and the quantifier instantiation module
-\cite{ReynoldsTinelliMoura14}.
+without it.
+%This potentially points to poor interactions between the decision
+%procedure and the quantifier instantiation module
+%\cite{ReynoldsTinelliMoura14}.
 
 \section{Conclusion}
 \label{sec:conclusion}
