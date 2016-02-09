@@ -776,9 +776,9 @@ When $\tau$ is a datatype, % \in \Data$,
 a cyclic $\mu$-term describes an infeasible class of values.
 
 \begin{figure}[t!]
-\small
+%\small
 \centering
-\begin{tabular}{c}
+\begin{tabular}{@{}c@{}}
 \(
 \inferrule{
   t \in \tEc
@@ -796,7 +796,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
 }
 \)
 \rn{Sym}
-\quad
+\\[5\jot]
 \(
 \inferrule{
   s \teq t,\; t \teq u \in \Ec
@@ -805,7 +805,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
 }
 \)
 \rn{Trans}
-\\[5\jot]
+\quad
 \(
 \inferrule{
   \vec t \teq \vec u \in \Ec
@@ -815,8 +815,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
   \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
 }
 \)
-\rn{Cong}
-\quad
+\rn{Cong}\\[5\jot]
 \(
 \inferrule{
   t \teq u,\; t \tneq u \in \Ec
@@ -825,7 +824,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
 }
 \)
 \rn{Conflict}
-\\[5\jot]
+\quad
 \(
 \inferrule{
   \const{C}( \vec t \,) \teq \const{C}( \vec u ) \in \Ec
@@ -834,7 +833,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
 }
 \)
 \rn{Inject}
-\quad
+\\[5\jot]
 \(
 \inferrule{
   \const{C}( \vec t \,) \teq \const{D}( \vec u ) \in \Ec
@@ -854,7 +853,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
 
 \begin{figure}[t!]
 \vspace*{+6pt} %% TYPESETTING HACK
-\small
+%\small
 \centering
 \begin{tabular}{@{}c@{}}
 \(
@@ -889,9 +888,9 @@ a cyclic $\mu$-term describes an infeasible class of values.
 
 \begin{figure}[t!]
 \vspace*{+6pt} %% TYPESETTING HACK
-\small
+%\small
 \centering
-\begin{tabular}{c}
+\begin{tabular}{@{}c@{}}
 \(
 \inferrule{
   t : \delta
