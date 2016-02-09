@@ -26,7 +26,7 @@
 
 \newcommand\yasx{\mskip.5mu y\mskip.5mu} %%% TYPESETTING: hack so that y is exactly as wide as x
 
-\newcommand\DISC[1]{t \teq \const{C}_{#1}\negvthinspace\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
+\newcommand\DISC[1]{t \teq \const{C}_{#1}\negvthinspace\bigl(\const s^1_{#1}( t ), \dotsc,\const s^{n_{#1}}_{#1}( t )\bigr)}
 
 \newcommand\MU{\vvthinspace\mu\vvthinspace}
 
@@ -187,7 +187,7 @@ to reason about such types. The procedure has been
 integrated in CVC4, a modern SMT (satisfiability modulo theories)
 solver, which can be used both as a constraint solver and as an
 automatic theorem prover. An evaluation based on formalizations developed
-in the Isabelle proof assistant demonstrates the potential of our
+in the Isabelle proof assistant demonstrates the potential of the
 procedure.
 \end{abstract}
 
@@ -199,17 +199,18 @@ In the past decade, satisfiability modulo theories (SMT) solvers
 % \cite{ganzinger-et-al-2004}
 have emerged as one of the most powerful ways to
 prove theorems in first-order logic. These solvers are also useful for model
-finding, or constraint solving: given a set of constraints, they can be used
+finding, or constraint solving: Given a set of constraints, they can be used
 to find a variable assignment that satisfy them.
 
-A great benefit of the SMT approach is that it provides a general framework
+A great benefit of the SMT approach is that it provides a flexible framework
 for composing optimized decision procedures and other solvers for various
 theories, including equality, linear arithmetic on $\mathbb{Z}$ and
 $\mathbb{R}$, and first-order quantifiers ($\forall$,~$\exists$). In this
 context, two recurrent scientific questions are:
 \begin{itemize}
 \item Which theories would be useful to applications?
-\item Which theories can be coded efficiently in SMT solvers?
+\item Which theories could be implemented efficiently in \\ %%% TYPESETTING: hack
+SMT solvers?
 \end{itemize}
 
 This paper suggests the following partial answer:\ freely generated algebraic
@@ -242,7 +243,7 @@ terms, and only those. As a simple example, the codatatype specification
 %
 (using an ML- or Haskell-like syntax)
 introduces a type that
-captures the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\ldots$\afterLdots{},
+captures the natural numbers $\const{Z}$, $\const{S}(\const{Z})$, $\const{S}(\const{S}(\const{Z}))$, $\dotsc$,
 in unary notation, extended with an
 infinite value $\infty = \const{S}(\const{S}(\const{S}(\ldots)))$.
 The equation $\const{S}(\infty) \teq \infty$ holds as expected,
@@ -315,7 +316,7 @@ formalizations demonstrates its usefulness (Section~\ref{sec:evaluation}).
 
 The original version of this paper was presented at the CADE-25 conference in
 Berlin, Germany \cite{reynolds-blanchette-2015-codata}. An more comprehensive
-version %, including detailed proofs,
+article %, including detailed proofs,
 will appear in a special issue of the
 \emph{Journal of Automated Reasoning}. We refer to these for a description of
 related work.
@@ -380,9 +381,9 @@ Schematically:
 \[
 \begin{aligned}[t]
 \!(\keyw{co})\keyw{data}\;\,
-  \delta_1 & {}=\, \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \ldots, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m_1\!}(\ldots)} \\[+0.5\jot]
+  \delta_1 & {}=\, \smash{\const{C}_{11\!}(\bigl[\const{s}_{11\!}^1{:}\bigr]\vthinspace \tau_{11\!}^1, \dotsc, \bigl[\const{s}_{11\!}^{n_{11\!}}{:}\bigr]\vthinspace \tau_{11\!}^{n_{11\!}})} \mid \cdots \mid \smash{\const{C}_{1m_1\!}(\ldots)} \\[+0.5\jot]
    \smash{\vdots\,\,\,} \\[-0.5\jot]
-  \keyw{and}\; \,\delta_{\elllx} & =\, \smash{\const{C}_{\elll 1\!}(%\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \ldots, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}}
+  \keyw{and}\; \,\delta_{\elllx} & =\, \smash{\const{C}_{\elll 1\!}(%\bigl[\const{s}_{\elll 1\!}^1{:}\bigr]\vthinspace \tau_{\elll 1\!}^1, \dotsc, \bigl[\const{s}_{\elll 1\!}^{n_{\elll 1\!}}{:}\bigr]\vthinspace \tau_{\elll 1\!}^{n_{\elll 1\!}}
   \ldots)} \mid \cdots \mid \smash{\const{C}_{\elll m_{\elllx}\!}(\ldots)}
 \end{aligned}
 \]
@@ -398,7 +399,7 @@ For types with several constructors, it is useful to provide discriminators
 $\const{d}_{i\negvthinspace j} : \delta_i \to \ty{bool}$.
 We let $\const{d}_{i\negvthinspace j}(t)$
 be an abbreviation for
-$t \teq \const{C}_{i\negvthinspace j}\relax(\const{s}_{i\negvthinspace j}^1(t), \ldots, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(t)\relax)$.
+$t \teq \const{C}_{i\negvthinspace j}\relax(\const{s}_{i\negvthinspace j}^1(t), \dotsc, \const{s}_{i\negvthinspace j}^{\,n_{\smash{{i\negvthinspace j}}}}(t)\relax)$.
 %This will simplify the presentation. % of the decision procedure.
 
 %A type $\delta$ depends on another type $\varepsilon$ if $\varepsilon$ is the
@@ -466,14 +467,14 @@ $\jPrime$, and $k$ within bounds:
     \smash{\const{C}_{i\negvthinspace j}(\bar x) \tneq \const{C}_{i\negvthinspace \jPrime}(\bar y) \quad\text{if $j \not= \jPrime$}}
   \\[-0.5\jot]
 \text{Injectivity:}\enskip
-  & %\forall x_1,\ldots,x_{n_{i\negvthinspace j}} y.\;\,
-    \smash{\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(y_1,\ldots,y_{n_{i\negvthinspace j}}) \medrightarrow x_k \teq y_k}
+  & %\forall x_1,\dotsc,x_{n_{i\negvthinspace j}} y.\;\,
+    \smash{\const{C}_{i\negvthinspace j}(x_1,\dotsc,x_{n_{i\negvthinspace j}}) \teq \const{C}_{i\negvthinspace j}(y_1,\dotsc,y_{n_{i\negvthinspace j}}) \medrightarrow x_k \teq y_k}
   \\[-0.5\jot]
 \text{Exhaustiveness:}\enskip
   & \smash{\const{d}_{i1}(x) \mathrel\lor \cdots \mathrel\lor \const{d}_{im_i}(x)}
   \\[-0.5\jot]
 \text{Selection:}\enskip
-  & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\ldots,x_{n_{i\negvthinspace j}})) \teq x_k}
+  & \smash{\const{s}_{i\negvthinspace j}^{\,k}(\const{C}_{i\negvthinspace j}(x_1,\dotsc,x_{n_{i\negvthinspace j}})) \teq x_k}
 \end{aligned}
 \]
 %
@@ -611,8 +612,8 @@ datatype with $n$~nullary constructors.
 
 % whose derivation rules are applied until saturation or contradiction.
 
-%We will commonly denote tuples of terms $( t_1, \ldots, t_n )$ in bold font, as $\vec t$.
-%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
+%We will commonly denote tuples of terms $( t_1, \dotsc, t_n )$ in bold font, as $\vec t$.
+%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\dotsc,t_n) )$
 %are simplified to $t_k$. All literals added to $\Ec$ are also implicitly
 %normalized in this manner.
 
@@ -653,7 +654,7 @@ subsequent
 phases. The rules are applied until the derivation tree is closed or all leaf nodes
 are saturated.
 
-%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\ldots,t_n) )$
+%We assume that all $\Sig$-terms in $\Ec$ are \emph{normalized}, meaning that all subterms of the form $\const{s}^{\,k}_{\negvthinspace j}( \const{C}_{\negvthinspace j}(t_1,\dotsc,t_n) )$
 %are simplified to $t_i$, and moreover assume that all %additional
 %literals added to $\Ec$ are normalized in this manner.
 %We present the calculus in three steps.
@@ -833,7 +834,7 @@ $\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 
 %Recall that $\mu$-bindings can be used for representing possibly cyclic terms and values.
 %(Section~\ref{sec:introduction}).
-% for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots ))$.
+% for example, $\MU x.\; \const{C}( \const{0}, x )$ represents the cyclic value $\const{C}( \const{0}, \const{C}( \const{0}, \ldots))$.
 %either in the case when $\tau$ is a codatatype or datatype type,
 %$\tau \notin \Codata$.
 
@@ -873,11 +874,11 @@ is refined by applying the following unfolding rule exhaustively:\strut
 \inferrule{
   {\Varec{u}} \in \FV( \Val )
   \betweenantes
-  \const{C}( t_1, \ldots, t_n ) \in \ec{u}
+  \const{C}( t_1, \dotsc, t_n ) \in \ec{u}
   \betweenantes
   \const{C} \in \Ctr
 }{
-  \Val := \Val [{\Varec{u}} \mapsto \MU {\Varec{u}}.\; \const{C}( {\Varec{t_1}}, \ldots, {\Varec{t_n}} )]
+  \Val := \Val [{\Varec{u}} \mapsto \MU {\Varec{u}}.\; \const{C}( {\Varec{t_1}}, \dotsc, {\Varec{t_n}} )]
 }
 \)
 %\rn{Unfold}
@@ -912,8 +913,8 @@ trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 \end{enumerate}
 %
 The resulting $\Val$ indicates that the values for $x$ and $y$ in models of $\Ec$
-must be of the forms $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}},\allowbreak \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots ))))$
-and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots ))))$,
+must be of the forms $\const{C}( {\Varec{w}}, \const{C}( {\Varec{z}},\allowbreak \const{C}( {\Varec{w}},\allowbreak \const{C}( {\Varec{z}},\ldots))))$
+and $\const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \const{C}( {\Varec{z}}, \const{C}( {\Varec{w}}, \ldots))))$,
 respectively. %, for some values of ${\Varec{w}}$ and ${\Varec{z}}$.
 \xend
 \end{examplex}
@@ -994,7 +995,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{\yasx}$,
   \betweenantes
   t \in \tEc
   \betweenantes
-  \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
+  \Ctr^\delta = \{ \const{C}_1, \dotsc, \const{C}_m \}
 \\
   \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
   \text{ or }
