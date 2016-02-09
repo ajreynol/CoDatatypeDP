@@ -20,6 +20,8 @@
 \usepackage{url}
 \usepackage[all]{xy}
 
+\newcommand\yasx{\mskip.5mu y\mskip.5mu} %%% TYPESETTING: hack so that y is exactly as wide as x
+
 \newcommand\DISC[1]{t \teq \const{C}_{#1}\negvthinspace\bigl(\const s^1_{#1}( t ), \ldots,\const s^{n_{#1}}_{#1}( t )\bigr)}
 
 \newcommand\MU{\vvthinspace\mu\vvthinspace}
@@ -887,19 +889,19 @@ When $\tau$ is a datatype, % \in \Data$,
 a cyclic $\mu$-term describes an infeasible class of values.
 
 \begin{examplex}
-Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and~$\ec{z}$
-such that $\const{C}(w,y) \in \ec{x}$ and $\const{C}(z,x) \in \ec{y}$ for some $\const{C} \in \Ctr$.
+Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{\yasx}$, and~$\ec{z}$
+such that $\const{C}(w,y) \in \ec{x}$ and $\const{C}(z,x) \in \ec{\yasx}$ for some $\const{C} \in \Ctr$.
 A possible sequence of unfolding steps is given below, omitting
 trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
 %
 \begin{enumerate}
-\item Unfold $\Varec{x}$:\enskip $\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) \vthinspace\}$
-\item Unfold $\Varec{y}$:\enskip $\Val = \{\vthinspace  \!\begin{aligned}[t]
-  & \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\; \\[-.5\jot]
-  & \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}\end{aligned}$
+\item Unfold $\Varec{x}$:\enskip $\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{\yasx}} ) \vthinspace\}$
+\item Unfold $\Varec{\yasx}$:\enskip $\Val = \{\vthinspace  \!\begin{aligned}[t]
+  & \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{\yasx}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\; \\[-.5\jot]
+  & \ec{\yasx} \mapsto \MU {\Varec{\yasx}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) \vthinspace\}\end{aligned}$
 \item Unfold $\Varec{x}$:\enskip $\Val = \{\vthinspace \!\begin{aligned}[t]
-  & \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\; \\[-.5\jot]
-  & \ec{y} \mapsto \MU {\Varec{y}}.\; \const{C}( {\Varec{z}},\; \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{y}} ) ) \vthinspace\}\end{aligned}$
+  & \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\; \MU {\Varec{\yasx}}.\; \const{C}( {\Varec{z}},\, {\Varec{x}} ) ),\; \\[-.5\jot]
+  & \ec{\yasx} \mapsto \MU {\Varec{\yasx}}.\; \const{C}( {\Varec{z}},\; \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{\yasx}} ) ) \vthinspace\}\end{aligned}$
 \end{enumerate}
 %
 The resulting $\Val$ indicates that the values for $x$ and $y$ in models of $\Ec$
@@ -940,17 +942,17 @@ Constructing $\Val$ yields
 \begin{align*}
 \Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x}) 
 \kern2.0em %% TYPESETTING
-\Val \ec{y}  \,=\,
-\MU {\Varec{y}}.\; \const{S}(\smash{\MU {\VAREC{\const{S}(y)}}}.\; \const{S}( {\Varec{y}} ) )
+\Val \ec{\yasx}  \,=\,
+\MU {\Varec{\yasx}}.\; \const{S}(\smash{\MU {\VAREC{\const{S}(y)}}}.\; \const{S}( {\Varec{\yasx}} ) )
 %\kern0.25em %% TYPESETTING
 % &
 \\
 \Val \ec{\const{S}(y)} & \,=\, 
-\MU {\VAREC{\const{S}(y)}}.\; \const{S}(\MU {\Varec{y}}.\; \const{S}( {\VAREC{\const{S}(y)}} ) )
+\MU {\VAREC{\const{S}(y)}}.\; \const{S}(\MU {\Varec{\yasx}}.\; \const{S}( {\VAREC{\const{S}(y)}} ) )
 \end{align*}
-Since $\Val \ec{y} \aequiv \Val \ec{\const{S}(y)}$,
+Since $\Val \ec{\yasx} \aequiv \Val \ec{\const{S}(y)}$,
 %for the renaming
-%$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
+%$\{ {\Varec{\yasx}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{\yasx}} \}$,
 the \rn{Unique} rule applies to derive $y \teq \const{S}(y)$.
 %Intuitively, this equality holds, since the values of $y$ and $\const{S}(y)$
 %are equivalent.
@@ -963,11 +965,11 @@ The mapping $\Val$ is updated accordingly:
 \begin{align*}
 \Val \ec{x} & \,=\, \MU {\Varec{x}}.\; \const{S}(\Varec{x})
 &
-\Val \ec{y} & \,=\, \MU {\Varec{y}}.\; \const{S}({\Varec{y}})
+\Val \ec{\yasx} & \,=\, \MU {\Varec{\yasx}}.\; \const{S}({\Varec{\yasx}})
 \end{align*}
-Since $\Val \ec{x} \aequiv \Val \ec{y}$,
+Since $\Val \ec{x} \aequiv \Val \ec{\yasx}$,
 %for the renaming
-%$\{ {\Varec{y}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{y}} \}$,
+%$\{ {\Varec{\yasx}} \mapsto {\VAREC{\const{S}(y)}}, {\VAREC{\const{S}(y)}} \mapsto {\Varec{\yasx}} \}$,
 \rn{Unique} can finally be applied to derive $x \teq y$.
 \xend
 \end{examplex}
