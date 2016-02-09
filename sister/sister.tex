@@ -658,6 +658,82 @@ are saturated.
 
 \subsection{Phase 1: Computing the Bidirectional Closure}
 
+\begin{figure}[b!]
+%\small
+\centering
+\begin{tabular}{@{}c@{}}
+\(
+\inferrule{
+  t \in \tEc
+}{
+  \Ec := \Ec,\: t \teq t
+}
+\)
+\rn{Refl}
+\quad
+\(
+\inferrule{
+ t \teq u \in \Ec
+}{
+ \Ec := \Ec,\: u \teq t
+}
+\)
+\rn{Sym}
+\\[5\jot]
+\(
+\inferrule{
+  s \teq t,\; t \teq u \in \Ec
+}{
+  \Ec := \Ec,\: s \teq u
+}
+\)
+\rn{Trans}
+\quad
+\(
+\inferrule{
+  \vec t \teq \vec u \in \Ec
+  \betweenantes
+  \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
+}{
+  \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
+}
+\)
+\rn{Cong}\\[5\jot]
+\(
+\inferrule{
+  t \teq u,\; t \tneq u \in \Ec
+}{
+  \bot
+}
+\)
+\rn{Conflict}
+\quad
+\(
+\inferrule{
+  \const{C}( \vec t \,) \teq \const{C}( \vec u ) \in \Ec
+}{
+  \Ec := \Ec,\: \vec t \teq \vec u
+}
+\)
+\rn{Inject}
+\\[5\jot]
+\(
+\inferrule{
+  \const{C}( \vec t \,) \teq \const{D}( \vec u ) \in \Ec
+  \betweenantes
+  \const{C} \not= \const{D}
+}{
+  \bot
+}
+\)
+\rn{Clash}
+\end{tabular}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Derivation rules for bidirectional closure%.
+}
+\label{fig:cc-rules}
+\end{figure}
+
 In conjunction with \rn{Refl}, \rn{Sym}, and \rn{Trans}, the \rn{Cong} rule computes the congruence (upward) closure,
 whereas the \rn{Inject} and \rn{Clash} rules %together
 compute the unification (downward) closure.
@@ -689,6 +765,41 @@ to select an arbitrary constructor term from $\ec{t}$ among these.
 The rules in this phase are described in terms of a mapping $\Val$
 that assigns to each equivalence class a $\mu$-term. % as its representative.
 %\rem{Not explicitly constructed, add here?}
+
+\begin{figure}[b!]
+%\vspace*{+6pt} %% TYPESETTING HACK
+%\small
+\centering
+\begin{tabular}{@{}c@{}}
+\(
+\inferrule{
+  t : \delta \in \Data
+  \betweenantes
+  \Val \smash{\ec{t}} = \MU x.\; u
+  \betweenantes
+  x \in \FV( u )
+}{
+  \bot
+}
+\)
+\rn{Acyclic}
+\\[5\jot]
+\(
+\inferrule{
+ t, u : \delta \in \Codata
+ \betweenantes
+ \Val \smash{\ec{t}} \aequiv \Val \smash{\ec{u}}
+}{
+ \Ec := \Ec,\: t \teq u
+}
+\)
+\rn{Unique}
+\end{tabular}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Derivation rules for acyclicity and uniqueness%.
+}
+\label{fig:ab-rules}
+\end{figure}
 
 Formally, $\mu$-\emph{terms} are defined recursively as being either a variable $x$
 or an applied constructor
@@ -774,164 +885,6 @@ The $\mu$-term $\Val[t]$ describes a class of values
 that $t$ and other members of $t$'s equivalence class can take in models of $\Ec$.
 When $\tau$ is a datatype, % \in \Data$,
 a cyclic $\mu$-term describes an infeasible class of values.
-
-\begin{figure}[t!]
-%\small
-\centering
-\begin{tabular}{@{}c@{}}
-\(
-\inferrule{
-  t \in \tEc
-}{
-  \Ec := \Ec,\: t \teq t
-}
-\)
-\rn{Refl}
-\quad
-\(
-\inferrule{
- t \teq u \in \Ec
-}{
- \Ec := \Ec,\: u \teq t
-}
-\)
-\rn{Sym}
-\\[5\jot]
-\(
-\inferrule{
-  s \teq t,\; t \teq u \in \Ec
-}{
-  \Ec := \Ec,\: s \teq u
-}
-\)
-\rn{Trans}
-\quad
-\(
-\inferrule{
-  \vec t \teq \vec u \in \Ec
-  \betweenantes
-  \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
-}{
-  \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
-}
-\)
-\rn{Cong}\\[5\jot]
-\(
-\inferrule{
-  t \teq u,\; t \tneq u \in \Ec
-}{
-  \bot
-}
-\)
-\rn{Conflict}
-\quad
-\(
-\inferrule{
-  \const{C}( \vec t \,) \teq \const{C}( \vec u ) \in \Ec
-}{
-  \Ec := \Ec,\: \vec t \teq \vec u
-}
-\)
-\rn{Inject}
-\\[5\jot]
-\(
-\inferrule{
-  \const{C}( \vec t \,) \teq \const{D}( \vec u ) \in \Ec
-  \betweenantes
-  \const{C} \not= \const{D}
-}{
-  \bot
-}
-\)
-\rn{Clash}
-\end{tabular}
-\vspace*{-2pt} %% TYPESETTING HACK
-\caption{\,Derivation rules for bidirectional closure%.
-}
-\label{fig:cc-rules}
-\end{figure}
-
-\begin{figure}[t!]
-\vspace*{+6pt} %% TYPESETTING HACK
-%\small
-\centering
-\begin{tabular}{@{}c@{}}
-\(
-\inferrule{
-  t : \delta \in \Data
-  \betweenantes
-  \Val \smash{\ec{t}} = \MU x.\; u
-  \betweenantes
-  x \in \FV( u )
-}{
-  \bot
-}
-\)
-\rn{Acyclic}
-\\[5\jot]
-\(
-\inferrule{
- t, u : \delta \in \Codata
- \betweenantes
- \Val \smash{\ec{t}} \aequiv \Val \smash{\ec{u}}
-}{
- \Ec := \Ec,\: t \teq u
-}
-\)
-\rn{Unique}
-\end{tabular}
-\vspace*{-2pt} %% TYPESETTING HACK
-\caption{\,Derivation rules for acyclicity and uniqueness%.
-}
-\label{fig:ab-rules}
-\end{figure}
-
-\begin{figure}[t!]
-\vspace*{+6pt} %% TYPESETTING HACK
-%\small
-\centering
-\begin{tabular}{@{}c@{}}
-\(
-\inferrule{
-  t : \delta
-  \betweenantes
-  t \in \tEc
-  \betweenantes
-  \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
-\\
-  \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
-  \text{ or }
-  \bigl( \delta \in \Data \text{ and } %\left|
-  \delta
-  %\right|
-  \text{ is finite} \bigr)
-}{
-  {\mathop{\big|\kern-.25ex\big|}\vthinspace}_{i=1}^n\, \Ec := \Ec,\: \DISC{i} %\ROR
- % \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
-}
-\)
-\rn{Split}
-\\[5\jot]
-\(
-\inferrule{
-  t, u : \delta \in \Codata
-  \betweenantes
-  t, u \in \tEc
-  \betweenantes
-  \delta \text{ is a singleton}
-}{
-  \Ec := \Ec,\: t \teq u
-}
-\)
-\rn{Single}
-\end{tabular}
-\vspace*{-2pt} %% TYPESETTING HACK
-\caption{\,Derivation rules for branching%.
-%All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
-%Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
-}
-\label{fig:split-rule}
-\end{figure}
 
 \begin{examplex}
 Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{y}$, and~$\ec{z}$
@@ -1033,6 +986,53 @@ Notice that corecursive singleton types may have infinite values. A simple examp
 \vthinspace$\keyw{codata}~\ty{a} = \const{A}(\ty{a})$, which is corecursive
 and yet has a cardinality of one;
 its unique value is $\MU a.\; \const{A}(a)$.
+
+\begin{figure}[t!]
+%\vspace*{+6pt} %% TYPESETTING HACK
+%\small
+\centering
+\begin{tabular}{@{}c@{}}
+\(
+\inferrule{
+  t : \delta
+  \betweenantes
+  t \in \tEc
+  \betweenantes
+  \Ctr^\delta = \{ \const{C}_1, \ldots, \const{C}_m \}
+\\
+  \bigl( \const s( t ) \in \tEc \text{ and } \const s \in \Sel^\delta \bigr)
+  \text{ or }
+  \bigl( \delta \in \Data \text{ and } %\left|
+  \delta
+  %\right|
+  \text{ is finite} \bigr)
+}{
+  {\mathop{\big|\kern-.25ex\big|}\vthinspace}_{i=1}^n\, \Ec := \Ec,\: \DISC{i} %\ROR
+ % \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
+}
+\)
+\rn{Split}
+\\[5\jot]
+\(
+\inferrule{
+  t, u : \delta \in \Codata
+  \betweenantes
+  t, u \in \tEc
+  \betweenantes
+  \delta \text{ is a singleton}
+}{
+  \Ec := \Ec,\: t \teq u
+}
+\)
+\rn{Single}
+\end{tabular}
+\vspace*{-2pt} %% TYPESETTING HACK
+\caption{\,Derivation rules for branching%.
+%All pairs of terms whose type has cardinality 1 are entailed to be equal (the degenerate case).
+%Constructors must be assigned for all terms $t$ if has a selector is applied to it, or if $t$ has finite datatype type.
+}
+\label{fig:split-rule}
+\end{figure}
 
 Both
 \rn{Split}'s finiteness assumption %on the datatype
