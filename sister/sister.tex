@@ -184,10 +184,10 @@ Villers-l\`es-Nancy, France
 Datatypes and codatatypes are useful to represent finite and potentially
 infinite objects. We describe a decision procedure
 to reason about such types. The procedure has been
-integrated in CVC4, a modern SMT (satisfiability modulo theories)
+integrated into CVC4, a modern SMT (satisfiability modulo theories)
 solver, which can be used both as a constraint solver and as an
 automatic theorem prover. An evaluation based on formalizations developed
-in the Isabelle proof assistant demonstrates the potential of the
+in the Isabelle proof assistant shows the potential of the
 procedure.
 \end{abstract}
 
@@ -199,11 +199,11 @@ In the past decade, satisfiability modulo theories (SMT) solvers
 % \cite{ganzinger-et-al-2004}
 have emerged as one of the most powerful ways to
 prove theorems in first-order logic. These solvers are also useful for model
-finding, or constraint solving: Given a set of constraints, they can be used
+finding, or constraint solving: Given some constraints, they can be used
 to find a variable assignment that satisfy them.
 
 A great benefit of the SMT approach is that it provides a flexible framework
-for composing optimized decision procedures and other solvers for various
+for composing dedicated decision procedures and other solvers for various
 theories, including equality, linear arithmetic on $\mathbb{Z}$ and
 $\mathbb{R}$, and first-order quantifiers ($\forall$,~$\exists$). In this
 context, two recurrent scientific questions are:
@@ -216,7 +216,7 @@ SMT solvers?
 This paper suggests the following partial answer:\ freely generated algebraic
 and coalgebraic datatypes---also called \emph{datatypes} and
 \emph{codatatypes}, respectively.
-Datatypes are ubiquitous in functional programs and formal specifications.
+Datatypes are ubiquitous in functional programming and formal specifications.
 They are useful to represent finite data structures in computer
 science but also arise in formalized mathematics.
 And to represent infinite objects,
@@ -280,7 +280,7 @@ are unsatisfiable for datatypes,
 thanks to an acyclicity rule,
 but satisfiable for codatatypes. 
 For the latter, a uniqueness rule ensures that two values
-having the same infinite expansion must be equal; from $x
+having the same infinite expansion are equal; from $x
 \teq \const{S}(x)$ and
 $y \teq \const{S}(y)$, it deduces $x \teq y$.
 These two rules cannot be finitely axiomatized, so they naturally belong in
@@ -328,18 +328,18 @@ related work.
 
 Our setting is a monomorphic (many-sorted) first-order logic.
 We fix a signature %$\Sig = (\Types, \Funcs)$
-consisting of a set of types $\Types$ and a
-set of function symbols $\Funcs$\negvthinspace.
+consisting of a set of types and a
+set of function symbols.
 The types are partitioned into
-$\Types = \Data \mathrel{\uplus} \Codata \mathrel{\uplus} \Nondata$, where $\Data$ are the
-\emph{datatypes}, $\Codata$ are the \emph{codatatypes}, and $\Nondata$ are the remaining
-\emph{ordinary types}.
+the \emph{datatypes} $\Data$,
+the \emph{codatatypes} $\Codata$,
+and the are the remaining \emph{ordinary types} $\Nondata$.
 % (which can be interpreted or not).
 The function symbols are
-partitioned into $\Funcs = \Ctr \mathrel{\uplus} \Sel$, where $\Ctr$ are the
-\emph{constructors} and $\Sel$ are the \emph{selectors}. There is no need to
-consider further function symbols because they can be abstracted away as
-variables when combining theories.
+partitioned into the
+\emph{constructors} $\Ctr$ and the \emph{selectors} $\Sel$.
+There is no need to consider further function symbols because they can be
+abstracted away as variables when combining theories.
 %Exceptionally, it is convenient to use numeric constants ($0$, $1$, \ldots)\ 
 %in
 %examples.
@@ -493,8 +493,7 @@ $\jPrime$, and $k$ within bounds:
 %
 Datatypes are additionally characterized by an induction principle.
 For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
-induction prohibits models that contain infinite values.
-% $\const{S}(\const{S}(\ldots))$.
+induction prohibits infinite values $\const{S}(\const{S}(\ldots))$.
 %
 For codatatypes, the dual notion is called coinduction:
 Two values that yield the same observations must be equal, 
@@ -578,8 +577,8 @@ Given a fixed signature, %~$\Sig$,
 the decision procedure for the universal theory of (co)data\-types %$\thD$
 determines the
 %$\thD$-
-satisfiability of finite sets $\Ec$ of literals:\ equalities
-and disequalities between first-order terms, %$\Sig$-terms,
+satisfiability of finite sets $\Ec$ of constraints:\ equalities ($\teq$)
+and disequalities ($\not\teq$) between first-order terms, %$\Sig$-terms,
 whose variables are interpreted existentially.
 The decision procedure is formulated as an %tableau-like
 abstract calculus.
@@ -750,7 +749,8 @@ compute the unification (downward) closure.
 For unification, %additional
 equalities are inferred based on the injectivity of constructors by \rn{Inject},
 and failures to unify equated terms are recognized by \rn{Clash}.
-\rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ has no model.
+\rn{Conflict} recognizes when an equality and its negation both occur in $\Ec$, in which case $\Ec$ is
+unsatisfiable.
 
 Let $\tEc$ denote the set of %$\Sig$-
 terms occurring in $\Ec$.
