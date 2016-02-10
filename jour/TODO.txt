@@ -1,9 +1,3 @@
-TODO for JASMIN:
-
-  - 2. provide a simple example of application of the rules for the benefit of
-       the reader
-
-
 TODO for ANDY:
 
   * Page 12, Lemma 2: who is $x$? Any variable? A concrete one?
@@ -48,3 +42,6 @@ DONE:
     might be helpful. The same applies to coinduction
 
   * 1. rewrite the rules by making the indices explicit
+
+  - 2. provide a simple example of application of the rules for the benefit of
+       the reader
