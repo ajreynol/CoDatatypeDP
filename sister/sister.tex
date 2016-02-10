@@ -673,7 +673,7 @@ are saturated.
 \inferrule{
   t \in \tEc
 }{
-  \Ec := \Ec,\: t \teq t
+  t \teq t \in \Ec
 }
 \)
 \rn{Refl}
@@ -682,7 +682,7 @@ are saturated.
 \inferrule{
  t \teq u \in \Ec
 }{
- \Ec := \Ec,\: u \teq t
+ u \teq t \in \Ec
 }
 \)
 \rn{Sym}
@@ -691,7 +691,7 @@ are saturated.
 \inferrule{
   s \teq t,\; t \teq u \in \Ec
 }{
-  \Ec := \Ec,\: s \teq u
+  s \teq u \in \Ec
 }
 \)
 \rn{Trans}
@@ -702,7 +702,7 @@ are saturated.
   \betweenantes
   \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
 }{
-  \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
+  \const f( \vec t \,) \teq \const f( \vec u ) \in \Ec
 }
 \)
 \rn{Cong}\\[5\jot]
@@ -719,7 +719,7 @@ are saturated.
 \inferrule{
   \const{C}( \vec t \,) \teq \const{C}( \vec u ) \in \Ec
 }{
-  \Ec := \Ec,\: \vec t \teq \vec u
+  \vec t \teq \vec u \in \Ec
 }
 \)
 \rn{Inject}
@@ -798,7 +798,7 @@ that assigns to each equivalence class a $\mu$-term. % as its representative.
  \betweenantes
  \Val \smash{\ec{t}} \aequiv \Val \smash{\ec{u}}
 }{
- \Ec := \Ec,\: t \teq u
+ t \teq u \in \Ec
 }
 \)
 \rn{Unique}
@@ -1002,8 +1002,8 @@ Since $\Val \ec{x} \aequiv \Val \ec{\yasx}$,
   %\right|
   \text{ is finite} \bigr)
 }{
-  {\mathop{\big|\kern-.25ex\big|}\vthinspace}_{i=1}^n\, \Ec := \Ec,\: \DISC{i} %\ROR
- % \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
+  {\mathop{\big|\kern-.25ex\big|}\vthinspace}_{i=1}^n\, \DISC{i} \in \Ec %\ROR
+ % \ROR \cdots \ROR \DISC{m} \in \Ec
 }
 \)
 \rn{Split}
@@ -1016,7 +1016,7 @@ Since $\Val \ec{x} \aequiv \Val \ec{\yasx}$,
   \betweenantes
   \delta \text{ is a singleton}
 }{
-  \Ec := \Ec,\: t \teq u
+  t \teq u \in \Ec
 }
 \)
 \rn{Single}
