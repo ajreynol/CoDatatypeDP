@@ -824,8 +824,8 @@ are syntactically equivalent for some capture-avoiding renaming of $\mu$-bound v
 %$\MU x.\; \const{C}( x ) \aequiv \MU y.\; \const{C}( y )$ and
 $\MU x.\; \const{D}( y, x ) \aequiv \MU z.\; \const{D}( y, z )$,
 but
-$\MU x.\; \const{C}( x ) \not\aequiv \MU x.\; \const{D}( y, x ) \not\aequiv \MU x.\; \const{D}( z, x )
-\not\aequiv \MU y.\; \const{D}( y, x )$.
+$\MU x.\; \const{C}( x )$, $\MU x.\; \const{D}( y, x )$, $\MU x.\; \const{D}( z, x )$,
+and $\MU y.\; \const{D}( y, x )$ are all $\alpha$-disequivalent.
 Two $\mu$-terms can denote the same value despite being $\alpha$-disequivalent---e.g.,
 $\MU x.\; \const{S}( x ) \not\aequiv \MU y.\; \const{S}( \const{S}( y ) )$.
 %In the \rn{Acyclic} rule,
@@ -898,7 +898,7 @@ a cyclic $\mu$-term describes an infeasible class of values.
 Suppose that $\Ec$ contains four distinct equivalence classes $\ec{w}$, $\ec{x}$, $\ec{\yasx}$, and~$\ec{z}$
 such that $\const{C}(w,y) \in \ec{x}$ and $\const{C}(z,x) \in \ec{\yasx}$ for some $\const{C} \in \Ctr$.
 A possible sequence of unfolding steps is given below, omitting
-trivial entries such as $\ec{w} \mapsto {\Varec{w}}$.
+trivial entries $\ec{t} \mapsto {\Varec{t}}$.
 %
 \begin{enumerate}
 \item Unfold $\Varec{x}$:\enskip $\Val = \{\vthinspace  \ec{x} \mapsto \MU {\Varec{x}}.\; \const{C}( {\Varec{w}},\, {\Varec{\yasx}} ) \vthinspace\}$
@@ -1031,7 +1031,8 @@ Since $\Val \ec{x} \aequiv \Val \ec{\yasx}$,
 
 If a selector is applied to a term $t$, or if $t$'s type is a finite datatype,
 $t$'s equivalence class must contain a
-$\delta$ constructor term.
+%$\delta$
+constructor term.
 This is enforced in the third phase by the \rn{Split} rule.
 Another rule, \rn{Single}, focuses on the degenerate case where two
 terms %from $\tEc$
@@ -1118,7 +1119,7 @@ spurious. For example, given the constraints
 & \const{repeat}(n) & \teq \const{SCons}(n,\:\const{repeat}(n))
 \end{align*}
 the conjecture
-$\const{zeros} = \const{repeat}(0)$
+$\const{zeros} \teq \const{repeat}(0)$
 would be ``refuted'' by a spurious countermodel that interprets
 \const{zero} and $\const{repeat}(0)$ by two distinct
 values $\MU s.\; \const{SCons}(0, s)$,
@@ -1194,7 +1195,7 @@ less typical of Sledgehammer problems.
 %%% TYPESETTING: hack
 \setcounter{table}{3}
 
-\begin{table}[h!]
+\begin{table}[t!]
 \normalsize
 \begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\;}}
   & \multicolumn{2}{@{}c@{\kern1em}}{$n = 16$\,} & \multicolumn{2}{@{}c@{\;}}{$n = 256$\;} \\%[-0.5pt]
@@ -1229,7 +1230,7 @@ is much smaller, at 0.5\%.
 %users, the practical usefulness of interpreted (co)datatypes is roughly
 %comparable to that of arithmetic \cite{blanchette-et-al-2013-smt}, although this
 %obviously depends on the application.
-Table~\ref{tab:bench} indicates that
+The table indicates that
 the theoretically stronger instances of the decision
 procedure do not always subsume the weaker ones in practice.
 The raw data reveal that the full procedure proved 27~goals that
