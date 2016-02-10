@@ -1,10 +1,6 @@
 TODO for JASMIN:
 
-  - the description of the induction and coinduction rule is currently quite
-    dense, and not very easy to follow. The connectives in the rules range over
-    several indices, and it is quite hard at the moment to keep track of all of
-    them. I would ask the authors to:
-    2. provide a simple example of application of the rules for the benefit of
+  - 2. provide a simple example of application of the rules for the benefit of
        the reader
 
 

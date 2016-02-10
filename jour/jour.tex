@@ -545,8 +545,10 @@ $t \teq \const{C}_{i\negvthinspace j}\bigl(\const{s}_{i\negvthinspace j}^1(t), \
 
 Here are a few examples of legal specifications of (co)datatype families:
 \[\begin{aligned}[t]
-      \keyw{codatatype}\; \,\ty{llist}_{\vthinspace\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(%\const{lhead}{:}\;
-      \tau,\: %\const{ltail}{:}\;
+      \keyw{datatype}\; \,\ty{list}_{\vthinspace\tau} & \,=\, \const{Nil} \,\mid\, \const{Cons}(\const{hd}{:}\;
+      \tau,\: \const{tl}{:}\; \ty{list}_{\vthinspace\tau}) \\%[-.5\jot]
+      \keyw{codatatype}\; \,\ty{llist}_{\vthinspace\tau} & \,=\, \const{LNil} \,\mid\, \const{LCons}(\const{lhd}{:}\;
+      \tau,\: \const{ltl}{:}\;
       \ty{llist}_{\vthinspace\tau}) \\%[-.5\jot]
       \keyw{datatype}\;\, \ty{tree}_{\vthinspace\tau} & \,=\, \const{Node}(\tau,\:\, \ty{forest}_{\vthinspace\tau}) \\[-\jot]
       \keyw{and}\;\,\, \ty{forest}_{\vthinspace\tau} & \,=\, \const{FNil} \,\mid\, \const{FCons}(\ty{tree}_{\vthinspace\tau},\:\, \ty{forest}_{\vthinspace\tau})
@@ -665,8 +667,7 @@ denotes either $P_{\iPrime}[x]$ if there exists some $\iPrime$ such that
 the formula is type-correct or else $\top$ (truth).
 The induction principle ensures that the interpretation of datatypes is standard.
 For the natural numbers constructed from $\const{Z}$ and $\const{S}$,
-induction prohibits models that contain cyclic values---e.g.,
-an $n$ such that $n \teq \const{S}(n)$---or even infinite acyclic values
+induction prohibits models that contain infinite values
 $\const{S}(\const{S}(\ldots))$.
 
 For codatatypes, the dual notion is called coinduction. It makes it possible to
@@ -678,9 +679,9 @@ suitable coinduction witnesses $R_1,\ldots,R_\ell$:
 \begin{aligned}[t]
 \text{Coinduction:}\quad
 \AXC{\strut$\begin{gathered}\textstyle \smash{\bigwedge_{\vthinspace i=1}^\ell \, R_i[v_i, w_i]} \\[-\jot]\textstyle
-\bigwedge_{\vthinspace i=1}^\ell\, \bigl(\forall v\; w.\;\, R_i[v, w] \medrightarrow
-  \bigwedge_{\vthinspace j=1}^{m_i}\, \bigl(\const{d}_{\negvthinspace j}(v) \mathrel\land \const{d}_{\negvthinspace j}(w)
-  \medrightarrow \bigwedge_{\vthinspace k=1}^{n_{i\negvthinspace j}}\, \const{s}_{i\negvthinspace j}^{\,k}(v) \sim \const{s}_{i\negvthinspace j}^{\,k}(w)\bigr)\bigr)
+\bigwedge_{\vthinspace i=1}^\ell\, \bigl(\forall x\; y.\;\, R_i[x, y] \medrightarrow
+  \bigwedge_{\vthinspace j=1}^{m_i}\, \bigl(\const{d}_{\negvthinspace j}(x) \medrightarrow \const{d}_{\negvthinspace j}(y)
+  \mathrel\land \bigwedge_{\vthinspace k=1}^{n_{i\negvthinspace j}}\, \const{s}_{i\negvthinspace j}^{\,k}(x) \sim \const{s}_{i\negvthinspace j}^{\,k}(y)\bigr)\bigr)
 \end{gathered}$}
 \UIC{\strut$\bigwedge_{\vthinspace i=1}^\ell \, v_i \teq w_i$}
 \DP
@@ -695,7 +696,37 @@ principle encodes a form of extensionality:\ Two values that yield the same
 observations must be equal, where the observations are made through selectors
 and discriminators.
 
-In addition, codatatypes are guaranteed to contain all values corresponding to
+\begin{examplex}
+The induction principle for $\ty{list}_{\vthinspace\tau}$ is given below:
+\[
+\AXC{\strut$P[\const{Nil}]$}
+  \AXC{\strut$\forall x,\, \mathit{xs}.\;\vthinspace P[\mathit{xs}] \medrightarrow P[\const{Cons}(x, \mathit{xs})]$}
+\BIC{\strut$P[vs]$}
+\DP
+\]
+Assuming that $\const{lnull}$ and its negation are the discriminators
+associated with \const{LNil} and \const{LCons},
+the coinduction principle for $\ty{llist}_{\vthinspace\tau}$ is
+\[
+\AXC{\strut$R[\mathit{vs},\, \mathit{ws}]$}
+  \AXC{$\phantom{\forall \mathit{xs}\; \mathit{ys}.\;\,} \!\begin{aligned}[b]
+      \llap{\ensuremath{\forall \mathit{xs}\; \mathit{ys}.\;\,}}
+    & R[\mathit{xs}, \mathit{ys}]
+      \medrightarrow
+      \bigl(\const{lnull}(\mathit{xs}) \medrightarrow \const{lnull}(\mathit{ys})\bigr)
+\\[-\jot]      
+    & \kern2em{\mathrel\land}\;
+      \bigl(\lnot\;\const{lnull}(\mathit{xs}) \medrightarrow \lnot\;\const{lnull}(\mathit{ys})
+        \mathrel\land \const{hd}(\mathit{xs}) \teq \const{hd}(\mathit{ys})
+        \mathrel\land R[\const{tl}(\mathit{xs}), \const{tl}(\mathit{ys})]\bigr)
+\end{aligned}$}
+\BIC{\strut$\mathit{vs} \teq \mathit{ws}$}
+\DP
+\]
+\xend
+\end{examplex}
+
+Codatatypes are guaranteed to contain all values corresponding to
 infinite ground constructor terms.
 In general, this cannot be captured by a
 first-order axiomatization, since there may be uncountably many of them.
@@ -1022,7 +1053,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \inferrule{
   t \in \tEc
 }{
-  \Ec := \Ec,\: t \teq t
+  t \teq t \in \Ec
 }
 \)
 \rn{Refl}
@@ -1031,7 +1062,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \inferrule{
  t \teq u \in \Ec
 }{
- \Ec := \Ec,\: u \teq t
+ u \teq t \in \Ec
 }
 \)
 \rn{Sym}
@@ -1040,7 +1071,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \inferrule{
   s \teq t,\; t \teq u \in \Ec
 }{
-  \Ec := \Ec,\: s \teq u
+  s \teq u \in \Ec
 }
 \)
 \rn{Trans}
@@ -1051,7 +1082,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
   \betweenantes
   \const f( \vec t \,),\, \const f( \vec u ) \in \tEc
 }{
-  \Ec := \Ec,\: \const f( \vec t \,) \teq \const f( \vec u )
+  \const f( \vec t \,) \teq \const f( \vec u ) \in \Ec
 }
 \)
 \rn{Cong}
@@ -1069,7 +1100,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
 \inferrule{
   \const{C}( \vec t \,) \teq \const{C}( \vec u ) \in \Ec
 }{
-  \Ec := \Ec,\: \vec t \teq \vec u
+  \vec t \teq \vec u \in \Ec
 }
 \)
 \rn{Inject}
@@ -1118,7 +1149,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
  \betweenantes
  \Val \smash{\ec{t\typ{\delta}}} \aequiv \Val \smash{\ec{u\typ{\delta}}}
 }{
- \Ec := \Ec,\: t \teq u
+ t \teq u \in \Ec
 }
 \)
 \rn{Unique}
@@ -1147,8 +1178,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
   %\right|
   \text{ is finite} \bigr)
 }{
-  \Ec := \Ec,\: \DISC{1} %\ROR
-  \ROR \cdots \ROR \Ec := \Ec,\: \DISC{m}
+  \DISC{1} \in \Ec \ROR \cdots \ROR \DISC{m} \in \Ec
 }
 \)
 \rn{Split}
@@ -1161,7 +1191,7 @@ $\Ec$, and thus the construction of $\Val$ will terminate.
   \betweenantes
   \delta \text{ is a singleton}
 }{
-  \Ec := \Ec,\: t \teq u
+  t \teq u \in \Ec
 }
 \)
 \rn{Single}
