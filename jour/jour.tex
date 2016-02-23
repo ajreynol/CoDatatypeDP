@@ -1688,7 +1688,7 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \relax{\begin{cases}
 \begin{lemma}
 \label{lem:interpretation-completion}
 If $\Val$ is constructed for a saturated set $\Ec$
-and $\ValC$ is a completion of $\Val$ for a normal interpretation $\J$, the following properties hold:
+and $\ValC$ is a completion of $\Val$ for a normal interpretation $\J$, the following hold for all $\ec{x}$ and $\ec{y}$ in the domain of $\ValC$:
 \begin{enumerate}
 \item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
 \item[\rm (2)]
@@ -1970,9 +1970,13 @@ of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of
 $\Ec$ are of the form $\Val \ec{x}$. For example, if $x \teq \const{C}( x ) \in
 M_i$, then $x \teq \const{C}( x )$ is an %(possible)
 explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
+In the case that multiple rules could derive the same conclusion,
+the implementation simply keeps the first explanation it encountered.
 The rules of the calculus are implemented as follows. For all rules with
 conclusion $\bot$, we report the union of the explanations for all premises is
-$\thD$-unsatisfiable. For \rn{Split}, we add the exhaustiveness clause %of the form
+$\thD$-unsatisfiable. The implementation does not 
+use any techniques to minimize the size of this set, which in some cases may be non-minimal.
+For \rn{Split}, we add the exhaustiveness clause %of the form
 $\DISC{1} \mathrel\lor \cdots \mathrel\lor \DISC{m}$ to $F$.
 Decisions on which branch to take are thus performed externally by the SAT
 solver. % and not by the theory solver.
@@ -2125,6 +2129,14 @@ replace all selector terms of the form $\smash{\const{s}^{\,k}_{\negvthinspace j
 occurrences of discriminators $\smash{\const{d}_{\negvthinspace j}(
 \const{C}_{\negvthinspace\jPrime}( \vec t \,) )}$ by $\top$ or $\bot$
 based on whether $j = \jPrime$.
+Finally, finite ordinary types are not converted to finite datatypes.
+We instead rely on standard extensions of Nelson-Oppen theory combination~\cite{tinelli2005combining}, which
+impose requirements regarding terms having finite sorts are shared
+between multiple theories.  In particular, given an ordinary type $\tau$ of finite cardinality $n$
+belonging to theory $T_i$, the theory solver for $T_i$ must 
+communicate enough equalities over shared terms to
+ensure all other theory solvers, including the one for $\thD$, 
+interpret $\tau$ as a set having cardinality at most $n$.
 
 % AJR : this paragraph may have been what confused Reviewer #2. It does suggest that we are copying verbatim what was in CVC3 (which is what Reviewer #2 thought).
 % Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation), 

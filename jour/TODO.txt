@@ -1,28 +1,10 @@
 TODO for ANDY:
 
-  * Page 12, Lemma 2: who is $x$? Any variable? A concrete one?
-    The same applies to $y$ in the second point.
 
   * I found the "Solution Soundness" proof hard to follow, but I cannot think
     of a better way to improve it. Maybe taking a running example and showing
     how J and A* are constructed might help and this is the only big change I
     would suggest the authors to make.
-
-  - the procedure is complete only if all ordinary types have infinite
-    cardinality. The paper observes that this is not a problem, because ordinary
-    types with finite cardinality n can be viewed as datatypes with n
-    constructors. I wonder how practical this is, especially in situations in
-    which n is finite but large (e.g. bit-vectors). More specifically, it would
-    be interesting to understand whether this is actually the strategy used in
-    the implementation, or if instead some other "trick" is applied
-    (e.g. similarly to what is done for improving the precision when solving
-    quantified problems)
-
-  - regarding the integration into CDCL(T), it would be interesting to read more
-    about the generation of explanations. In particular, does the procedure
-    ensure that explanations are minimal/irredundant? If not, does this have an
-    impact in practice? E.g. does it make sense to try to minimize the produced
-    explanations, or would the cost outweigh the benefit? 
 
 
 DONE:
@@ -45,3 +27,22 @@ DONE:
 
   - 2. provide a simple example of application of the rules for the benefit of
        the reader
+
+  * Page 12, Lemma 2: who is $x$? Any variable? A concrete one?
+    The same applies to $y$ in the second point.
+
+  - regarding the integration into CDCL(T), it would be interesting to read more
+    about the generation of explanations. In particular, does the procedure
+    ensure that explanations are minimal/irredundant? If not, does this have an
+    impact in practice? E.g. does it make sense to try to minimize the produced
+    explanations, or would the cost outweigh the benefit? 
+
+  - the procedure is complete only if all ordinary types have infinite
+    cardinality. The paper observes that this is not a problem, because ordinary
+    types with finite cardinality n can be viewed as datatypes with n
+    constructors. I wonder how practical this is, especially in situations in
+    which n is finite but large (e.g. bit-vectors). More specifically, it would
+    be interesting to understand whether this is actually the strategy used in
+    the implementation, or if instead some other "trick" is applied
+    (e.g. similarly to what is done for improving the precision when solving
+    quantified problems)
