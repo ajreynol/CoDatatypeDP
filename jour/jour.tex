@@ -1616,6 +1616,7 @@ because $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is a finite set.
 %can be constructed with a cycle of length $n + 1$.
 
 \begin{examplex}
+\label{ex:assign}
 Let $\delta$ be a codatatype with the constructors $\const{C},\, \const{D},\, \const{E} :\delta \rightarrow \delta$.
 Let $\Ec$ be the set
 $\{
@@ -1623,9 +1624,10 @@ u \teq \const{C}( z ),\;
 v \teq \const{D}( z ),\;
 w \teq \const{E}( y ),\;
 x \teq \const{C}( v ),\;
+v \teq s,\;
 z \not\teq v
 \}$.
-After applying the calculus to saturation on $\Ec$,
+After applying the calculus to saturation on $\Ec$, 
 the mapping $\Val$ is as follows:
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
@@ -1638,6 +1640,8 @@ the mapping $\Val$ is as follows:
 \Val \ec{z} & = & {\Varec{z}}
 \end{array}\]
 %
+Here, $\ec{u}$ denotes the equivalence class $\{ u, \const{C}( z ) \}$,
+$\ec{v}$ denotes $\{ v, \const{C}( z ), s \}$, and so on.
 To construct a completion $\ValC$, we must choose values for ${\Varec{y}}$ and ${\Varec{z}}$,
 which are free in~$\Val$.
 Modulo $\alpha$-equivalence, $\smash{\BAD_{\smash{\J}}^{{\Varec{z}}}( \Val )} =
@@ -1828,6 +1832,32 @@ Property~(3) states that $\ValC$ is injective (modulo
 $\alpha$-equivalence), which ensures %in the following
 that distinct values are
 assigned to distinct equivalence classes.
+
+\begin{examplex}
+\label{ex:assign-complete}
+Continuing with Example~\ref{ex:assign}, while extending $\Val$ to its corresponding completion $\ValC$,
+we may, for instance, assign $\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$ to $\Varec{z}$,
+and subsequently assign $\MU {\Varec{y}}.\; \const{D}( {\Varec{y}} )$ to $\Varec{y}$.
+We obtain the following mapping $\ValC$ from equivalence classes to $\MU$-terms:
+\[\begin{array}{r@{}c@{}r@{}l@{\qquad}r@{}c@{}r@{}l@{\qquad}r@{}c@{}l}
+\ValC \ec{u} & {}\,=\,{} & \MU {\Varec{u}}.\; & \const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
+\ValC \ec{w} & = & \MU {\Varec{w}}.\; & \const{E}( \MU {\Varec{y}}.\; \const{D}( {\Varec{y}} ) ) &
+\ValC \ec{y} & {}\,=\,{} & \MU {\Varec{y}}.\; \const{D}( {\Varec{y}} ) \\
+\ValC \ec{v} & = & \MU {\Varec{v}}.\; & \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
+\ValC \ec{x} & {}\,=\,{} & \MU {\Varec{x}}.\; & \const{C}( \MU {\Varec{v}}.\; \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) ) &
+\ValC \ec{z} & = & \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )
+\end{array}\]
+Notice that $\ValC$ satisfies the properties from Lemma~\ref{lem:interpretation-completion} for a normal interpretation $\J$:
+all terms in the range of $\ValC$ are closed and normal, 
+$\ValC \ec{s} = \expand{\ValC \ec{y}}{ t }$ for all subterms $t$ where $\muvar(t) = {\Varec{s}}$ for all $s$,
+and all terms in the range of $\ValC$ are pairwise alpha-disequivalent.
+We may construct an interpretation $\J$ where variables are assigned the value
+that is alpha-equivalent to one from $\interp{\J}{\delta}$, and is uniquely associated to its equivalence class by $\ValC$.
+For instance, up to renaming,
+$\interp{\J}{u}$ is $\const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$,
+$\interp{\J}{v}$ and $\interp{\J}{s}$ are $\const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$, and so on.
+\xend
+\end{examplex}
 
 \begin{theorem}[Solution Soundness]%
 \label{thm:ss}%
