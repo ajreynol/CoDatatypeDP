@@ -1,11 +1,6 @@
 TODO for ANDY:
 
 
-  * I found the "Solution Soundness" proof hard to follow, but I cannot think
-    of a better way to improve it. Maybe taking a running example and showing
-    how J and A* are constructed might help and this is the only big change I
-    would suggest the authors to make.
-
 
 DONE:
 
@@ -46,3 +41,8 @@ DONE:
     the implementation, or if instead some other "trick" is applied
     (e.g. similarly to what is done for improving the precision when solving
     quantified problems)
+
+  * I found the "Solution Soundness" proof hard to follow, but I cannot think
+    of a better way to improve it. Maybe taking a running example and showing
+    how J and A* are constructed might help and this is the only big change I
+    would suggest the authors to make.

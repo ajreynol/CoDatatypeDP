@@ -1835,7 +1835,8 @@ assigned to distinct equivalence classes.
 
 \begin{examplex}
 \label{ex:assign-complete}
-Continuing with Example~\ref{ex:assign}, while extending $\Val$ to its corresponding completion $\ValC$,
+Consider $\Val$ from Example~\ref{ex:assign}.
+While extending $\Val$ to its corresponding completion $\ValC$,
 we may, for instance, assign $\MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )$ to $\Varec{z}$,
 and subsequently assign $\MU {\Varec{y}}.\; \const{D}( {\Varec{y}} )$ to $\Varec{y}$.
 We obtain the following mapping $\ValC$ from equivalence classes to $\MU$-terms:
@@ -1851,11 +1852,11 @@ Notice that $\ValC$ satisfies the properties from Lemma~\ref{lem:interpretation-
 all terms in the range of $\ValC$ are closed and normal, 
 $\ValC \ec{s} = \expand{\ValC \ec{y}}{ t }$ for all subterms $t$ where $\muvar(t) = {\Varec{s}}$ for all $s$,
 and all terms in the range of $\ValC$ are pairwise alpha-disequivalent.
-We may construct an interpretation $\J$ where variables are assigned the value
+We may construct an interpretation $\J$ where variables are interpreted as the value
 that is alpha-equivalent to one from $\interp{\J}{\delta}$, and is uniquely associated to its equivalence class by $\ValC$.
-For instance, up to renaming,
-$\interp{\J}{u}$ is $\const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$,
-$\interp{\J}{v}$ and $\interp{\J}{s}$ are $\const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$, and so on.
+%For instance, up to renaming,
+%$\interp{\J}{u}$ is $\const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$,
+%$\interp{\J}{v}$ and $\interp{\J}{s}$ are $\const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$, and so on.
 \xend
 \end{examplex}
 
@@ -1942,6 +1943,31 @@ and since $\Ec \subseteq \Fc\!$,
 we conclude that $\J \vDash \Ec$.
 \xqed
 \end{proof}
+
+\begin{examplex}
+\label{ex:model}
+Continuing Example~\ref{ex:assign-complete}, let $\J$ be a normal interpretation, where
+up to renaming of $\MU$-bound variables, we have:
+\[\begin{array}{r@{}c@{}r@{}c@{}l@{\qquad}r@{}c@{}l@{\qquad}r@{}c@{}l}
+& &\interp{\J}{u} & {}\,=\,{} &  \const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
+\interp{\J}{w} & = &  \const{E}( \MU {\Varec{y}}.\; \const{D}( {\Varec{y}} ) ) &
+\interp{\J}{y} & {}\,=\,{} & \MU {\Varec{y}}.\; \const{D}( {\Varec{y}} ) \\
+\interp{\J}{v} & = & \interp{\J}{s} & = & \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
+\interp{\J}{x} & {}\,=\,{} & \const{C}( \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) ) &
+\interp{\J}{z} & = & \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )
+\end{array}\]
+It can be shown $\J$ satisfies $\Ec =
+\{
+u \teq \const{C}( z ),\;
+v \teq \const{D}( z ),\;
+w \teq \const{E}( y ),\;
+x \teq \const{C}( v ),\;
+v \teq s,\;
+z \not\teq v
+\}$.
+\xend
+\end{examplex}
+
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
 calculus is sound and complete for the universal theory of (co)datatypes. We may
