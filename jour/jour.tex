@@ -2029,7 +2029,7 @@ $\Ec$ are of the form $\Val \ec{x}$. For example, if $x \teq \const{C}( x ) \in
 M_i$, then $x \teq \const{C}( x )$ is an %(possible)
 explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
 If multiple rules can derive the same conclusion,
-the implementation simply keeps the first explanation it encounters.
+the solver simply keeps the first explanation it encounters.
 
 The rules of the calculus are implemented as follows. For all rules with
 conclusion $\bot$, we report the union of the explanations for all premises is
