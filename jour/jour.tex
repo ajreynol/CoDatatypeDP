@@ -267,7 +267,7 @@ Cyclic constraints such as
 $x \teq \const{S}(x)$ %, where $\const{C}$ is a constructor,
 are unsatisfiable for datatypes,
 thanks to an acyclicity rule,
-but satisfiable for codatatypes. 
+but satisfiable for codatatypes.
 For the latter, a uniqueness rule ensures that two values
 having the same infinite expansion are equal; from $x
 \teq \const{S}(x)$ and
@@ -714,7 +714,7 @@ the coinduction principle for $\ty{llist}_{\vthinspace\tau}$ is
     & R[\mathit{xs}, \mathit{ys}]
       \medrightarrow
       \bigl(\const{lnull}(\mathit{xs}) \medrightarrow \const{lnull}(\mathit{ys})\bigr)
-\\[-\jot]      
+\\[-\jot]
     & \kern2em{\mathrel\land}\;
       \bigl(\lnot\;\const{lnull}(\mathit{xs}) \medrightarrow \lnot\;\const{lnull}(\mathit{ys})
         \mathrel\land \const{hd}(\mathit{xs}) \teq \const{hd}(\mathit{ys})
@@ -949,7 +949,7 @@ denote the equivalence class of $t$ in $\Ec$.
 Moreover, at the end of this phase, each equivalence class $\ec{t}$ contains
 at most %%% JB: dropped ()'s
 one constructor term that is unique up to congruence.
-Thus, in the subsequent phases, 
+Thus, in the subsequent phases,
 when considering the case that $\ec{t}$ contains constructor terms,
 it is enough %for our purposes
 to select an arbitrary constructor term $\const{C}( \vec t\, ) \in \ec{t}$ among these.
@@ -1015,13 +1015,13 @@ The mapping $\Val$ is defined as follows.
 %
 With each equivalence class $\ec{u}$, we associate a fresh variable $\Varec{u}$
 of the same type as $u$. %not occurring in $\tEc$,
-For a term $t \in \tEc$, 
+For a term $t \in \tEc$,
 we write $\Varec{t}$ to denote the variable associated with
 the equivalence class $\ec{t}$.
 Initially, we set $\Val\ec{u} := {\Varec{u}}$ for each equivalence class $\ec{u}$. Because $\Varec{u}$ is
 unconstrained,
 this indicates that there are initially no
-constraints on the values for any equivalence class $\ec{u}$. 
+constraints on the values for any equivalence class $\ec{u}$.
 The mapping $\Val$
 is refined by applying the following unfolding rule exhaustively:\strut
 \[
@@ -1331,7 +1331,7 @@ D$\negvthinspace, let
 \end{align*}
 %for $i \geq 0$, let ;
 and let $\SSSS \infty_t$ be the limit of this sequence.
-This is a finite set for each $t$, 
+This is a finite set for each $t$,
 because all chains of selectors applied to $t$ are finite.
 %because in the absence of (co)recursion
 %one eventually reaches a point where no selector can be applied.
@@ -1604,7 +1604,7 @@ the last premise in the above rule ensures that it is maintained.
 %More precisely,
 The set $\BAD_{\smash{\J}}^{\Varec{x}}(\ValC)$ is an overapproximation of the values
 that, when assigned to ${\Varec{x}}$, will cause values in the range of $\ValC$ to become $\alpha$-equivalent.
-%This premise is not strictly necessary in practice, 
+%This premise is not strictly necessary in practice,
 %as one could compute $\nf{\ValC [ {\Varec{x}} \mapsto \MU {\Varec{x}}.\; t ]}$ optimistically and check
 %injectivity afterward, repeating until a suitable value is found.
 For infinite codatatypes, it is always possible to find fresh values $v$
@@ -1627,7 +1627,7 @@ x \teq \const{C}( v ),\;
 v \teq s,\;
 z \not\teq v
 \}$.
-After applying the calculus to saturation on $\Ec$, 
+After applying the calculus to saturation on $\Ec$,
 the mapping $\Val$ is as follows:
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l}
 %\[\begin{array}{r@{}c@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l@{}l@{\;}l@{\qquad}r@{}c@{}r@{\;}l}
@@ -1692,7 +1692,8 @@ $\vphantom{\Bigl(_j}\muvar( t ) = \relax{\begin{cases}
 \begin{lemma}
 \label{lem:interpretation-completion}
 If $\Val$ is constructed for a saturated set $\Ec$
-and $\ValC$ is a completion of $\Val$ for a normal interpretation $\J$, the following hold for all $\ec{x}$ and $\ec{y}$ in the domain of $\ValC$:
+and $\ValC$ is a completion of $\Val$ for a normal interpretation $\J$, the following
+properties hold for all $\ec{x}$ and $\ec{y}$ in the domain of $\ValC$:
 \begin{enumerate}
 \item[\rm (1)] $\ValC \ec{x\typ{\tau}}$ is $\alpha$-equivalent to a value in $\interp{\J}{\tau}$.
 \item[\rm (2)]
@@ -1848,12 +1849,14 @@ We obtain the following mapping $\ValC$ from equivalence classes to $\MU$-terms:
 \ValC \ec{x} & {}\,=\,{} & \MU {\Varec{x}}.\; & \const{C}( \MU {\Varec{v}}.\; \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) ) &
 \ValC \ec{z} & = & \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )
 \end{array}\]
-Notice that $\ValC$ satisfies the properties from Lemma~\ref{lem:interpretation-completion} for a normal interpretation $\J$:
-all terms in the range of $\ValC$ are closed and normal, 
+Notice that $\ValC$ satisfies the properties from Lemma~\ref{lem:interpretation-completion}
+for a normal interpretation $\J$:
+All terms in the range of $\ValC$ are closed and normal,
 $\ValC \ec{s} = \expand{\ValC \ec{y}}{ t }$ for all subterms $t$ where $\muvar(t) = {\Varec{s}}$ for all $s$,
-and all terms in the range of $\ValC$ are pairwise alpha-disequivalent.
+and all terms in the range of $\ValC$ are pairwise $\alpha$-disequivalent.
 We may construct an interpretation $\J$ where variables are interpreted as the value
-that is alpha-equivalent to one from $\interp{\J}{\delta}$, and is uniquely associated to its equivalence class by $\ValC$.
+that is $\alpha$-equivalent to one from $\interp{\J}{\delta}$ and that is uniquely associated
+with its equivalence class by $\ValC$.
 %For instance, up to renaming,
 %$\interp{\J}{u}$ is $\const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$,
 %$\interp{\J}{v}$ and $\interp{\J}{s}$ are $\const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) )$, and so on.
@@ -1947,7 +1950,7 @@ we conclude that $\J \vDash \Ec$.
 \begin{examplex}
 \label{ex:model}
 Continuing Example~\ref{ex:assign-complete}, let $\J$ be a normal interpretation, where
-up to renaming of $\MU$-bound variables, we have:
+up to renaming of $\MU$-bound variables, we have
 \[\begin{array}{r@{}c@{}r@{}c@{}l@{\qquad}r@{}c@{}l@{\qquad}r@{}c@{}l}
 & &\interp{\J}{u} & {}\,=\,{} &  \const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
 \interp{\J}{w} & = &  \const{E}( \MU {\Varec{y}}.\; \const{D}( {\Varec{y}} ) ) &
@@ -1956,7 +1959,7 @@ up to renaming of $\MU$-bound variables, we have:
 \interp{\J}{x} & {}\,=\,{} & \const{C}( \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) ) &
 \interp{\J}{z} & = & \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )
 \end{array}\]
-It can be shown $\J$ satisfies $\Ec =
+It can be shown that $\J$ satisfies $\Ec =
 \{
 u \teq \const{C}( z ),\;
 v \teq \const{D}( z ),\;
@@ -1967,7 +1970,6 @@ z \not\teq v
 \}$.
 \xend
 \end{examplex}
-
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
 calculus is sound and complete for the universal theory of (co)datatypes. We may
@@ -2026,11 +2028,12 @@ of equalities from $M_i$ that entail that the values of $\ec{x}$ in models of
 $\Ec$ are of the form $\Val \ec{x}$. For example, if $x \teq \const{C}( x ) \in
 M_i$, then $x \teq \const{C}( x )$ is an %(possible)
 explanation for $\Val \ec{x} = \MU {\Varec{x}}.\; \const{C}( {\Varec{x}} )$.
-In the case that multiple rules could derive the same conclusion,
-the implementation simply keeps the first explanation it encountered.
+If multiple rules can derive the same conclusion,
+the implementation simply keeps the first explanation it encounters.
+
 The rules of the calculus are implemented as follows. For all rules with
 conclusion $\bot$, we report the union of the explanations for all premises is
-$\thD$-unsatisfiable. The implementation does not 
+$\thD$-unsatisfiable. The implementation does not
 use any techniques to minimize the size of this set, which in some cases may be non-minimal.
 For \rn{Split}, we add the exhaustiveness clause %of the form
 $\DISC{1} \mathrel\lor \cdots \mathrel\lor \DISC{m}$ to $F$.
@@ -2123,16 +2126,16 @@ and the set of equivalence classes $P$ we are currently processing.
 If a call to $\rn{Traverse}( \ec{t}, U, P )$ is such that $\ec{t} \in P$,
 we know that the rule \rn{Acyclic} applies to $t$.
 Otherwise, if we have yet to process $\ec{t}$, as indicated by the condition $\ec{t} \in U$,
-then if $\ec{t}$ contains a constructor term $\const{C}( t_1, \ldots, t_k )$, 
+then if $\ec{t}$ contains a constructor term $\const{C}( t_1, \ldots, t_k )$,
 then we recursively call $\rn{Traverse}$ on each of $\ec{t_1}, \ldots, \ec{t_n}$.
 If this succeeds, we remove $\ec{t}$ from $U$.
 
 For \rn{Unique}, Fig.~\ref{fig:uniqueness-algo} considers a partition $\mathcalx{U}$ of the equivalence classes of our set $\Ec$
-such that codatatype equivalence classes having a constructor term with top symbol $\const{C}$ are placed in the same subset, 
+such that codatatype equivalence classes having a constructor term with top symbol $\const{C}$ are placed in the same subset,
 for each constructor $\const{C}$.
 We write $\ec{t} =_{\mathcalx{U}} \ec{u}$ to denote that $\ec{t}$ and $\ec{u}$ reside in the same subset within $\mathcalx{U}$.
-We then refine $\mathcalx{U}$ by 
-constructing a partition $\mathcalx{U}_{\vthinspace i}$ of each $U_i \in \mathcalx{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcalx{U}_{\vthinspace i}$ 
+We then refine $\mathcalx{U}$ by
+constructing a partition $\mathcalx{U}_{\vthinspace i}$ of each $U_i \in \mathcalx{U}$ such that distinct $\ec{t}$ and $\ec{u}$ reside in the same subset of $\mathcalx{U}_{\vthinspace i}$
 if and only if they contain constructor terms $\const{C}( t_1, \ldots, t_k )$ and $\const{C}( u_1, \ldots, u_k )$
 where each $t_j, u_j$ are such that $\ec{t_j}$ and $\ec{u_j}$ reside in the same subset of $\mathcalx{U}$ for each $j=1, \ldots, k$.
 Let $\mathcalx{U'}$ be the union of each of these partitions.
@@ -2186,16 +2189,16 @@ occurrences of discriminators $\smash{\const{d}_{\negvthinspace j}(
 \const{C}_{\negvthinspace\jPrime}( \vec t \,) )}$ by $\top$ or $\bot$
 based on whether $j = \jPrime$.
 Finally, finite ordinary types are not converted to finite datatypes.
-We instead rely on standard extensions of Nelson-Oppen theory combination~\cite{tinelli2005combining}, which
+We instead rely on standard extensions of the Nelson--Oppen method~\cite{tinelli2005combining}, which
 impose requirements regarding terms having finite sorts are shared
 between multiple theories.  In particular, given an ordinary type $\tau$ of finite cardinality $n$
-belonging to theory $T_i$, the theory solver for $T_i$ must 
+belonging to theory $T_i$, the theory solver for $T_i$ must
 communicate enough equalities over shared terms to
-ensure all other theory solvers, including the one for $\thD$, 
+ensure that all other theory solvers, including the one for $\thD$,
 interpret $\tau$ as a set having cardinality at most $n$.
 
 % AJR : this paragraph may have been what confused Reviewer #2. It does suggest that we are copying verbatim what was in CVC3 (which is what Reviewer #2 thought).
-% Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation), 
+% Since we aren't saying anything new beyond what is said in Barrett et al (and honestly, we didn't critically evaluate the performance of the updated implementation),
 % maybe we should just remove this paragraph.
 
 % JB to AJR: I'd rather keep the para, based on feedback by Pascal.
@@ -2213,7 +2216,7 @@ phase~2.
 When instructed to do so, the implementation produces models for satisfiable inputs.
 As described in Section~\ref{sec:termination-and-correctness},
 given a saturated set $\Ec$, we %may
-construct a map $\ValC$ from 
+construct a map $\ValC$ from
 the equivalence classes of $\Ec$ to closed normal $\MU$-terms.
 Recall that our construction of $\ValC$ requires choosing values $\MU {\Varec{x}}.\; t$ for each $\Varec{x} \in \FV( \ValC )$
 such that $\MU {\Varec{x}}.\; t$ does not occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
@@ -2228,7 +2231,7 @@ discarding those that have free variables or are not normal.
 For those that are closed and normal, we then check whether they occur in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
 This set does not need to be explicitly constructed.
 %We do not explicitly construct the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$.
-To determine if a term $\MU {\Varec{x}}.\; t$ occurs in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$, 
+To determine if a term $\MU {\Varec{x}}.\; t$ occurs in the set $\BAD_{\smash{\J}}^{\Varec{x}}( \ValC )$,
 we check if it is $\alpha$-equivalent to a closed term $(\MU {\Varec{y}}.\; u) \{ \Varec{x} \mapsto z \}$ for
 some $\MU {\Varec{y}}.\; u$ in the range of $\ValC$ and variable $z$.
 This can be efficiently achieved by matching the term $\MU {\Varec{x}}.\; t$ with %the term
@@ -2245,8 +2248,8 @@ conjectures.
 %%% @ANDY: not sure how to phrase this now
 %where checking satisfiability requires reasoning about ground literals in the
 %presence of universally quantified formulas.
-Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete 
-instantiation-based 
+Many SMT solvers, including CVC4, can reason about quantified formulas using incomplete
+instantiation-based
 techniques~\cite{MouraBjoerner07,ReynoldsTinelliMoura14}.
 These techniques extend naturally to quantified
 formulas involving datatypes and codatatypes.
@@ -2378,7 +2381,7 @@ less typical of Sledgehammer-generated problems.
 \normalsize
 \begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1.5em}c@{\kern.5em}c@{\;}}
   & \multicolumn{2}{@{}c@{\kern1em}}{Distro} & \multicolumn{2}{@{}c@{\kern1em}}{AFP} & \multicolumn{2}{@{}c@{\kern1.5em}}{\gandl} & \multicolumn{2}{@{}c@{\;}}{Overall} \\[-0.5pt]
-  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
+  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3}
 \MIDRULE
 No (co)datatypes
   & 287 & 282 & 765 & 771 & 47 & 44 & 1099 & 1097 \\%[\jot]
@@ -2405,7 +2408,7 @@ Full (co)datatypes
 \normalsize
 \begin{center}\begin{tabular}{@{\;}l@{\kern1.5em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1em}c@{\kern.5em}c@{\kern1.5em}c@{\kern.5em}c@{\;}}
   & \multicolumn{2}{@{}c@{\kern1em}}{Distro} & \multicolumn{2}{@{}c@{\kern1em}}{AFP} & \multicolumn{2}{@{}c@{\kern1.5em}}{\gandl} & \multicolumn{2}{@{}c@{\;}}{Overall} \\[-0.5pt]
-  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3} 
+  & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4} & \HD{Z3} & \HD{CVC4}& \HD{Z3}
 \MIDRULE
 No (co)datatypes
   & 617 & 560 & 1503 & 1271 & 89 & 80 & 2209 & 1911 \\%[\jot]
