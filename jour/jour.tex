@@ -75,7 +75,7 @@
 
 \newcommand\medrightarrow{\mathrel{{{\color{black}\relbar}\kern-0.9ex\rlap{\color{white}\ensuremath{\blacksquare}}\kern-0.9ex}\joinrel{\color{black}\rightarrow}}}
 
-\newcommand\xend{{\hfill$\scriptstyle\blacksquare$}}
+\newcommand\xend{{\hfill\llap{$\scriptstyle\blacksquare$}}}
 \newcommand\xqed{{\hfill$\scriptstyle\squareforqed$}}
 
 \renewcommand{\vec}[1]{\bar #1}
@@ -392,7 +392,8 @@ of regular or rational trees---see Carayol and Morvan
 \cite{carayol-morvan-2006} and Djellou et al.\ \cite{djelloul-et-al-2008}
 for recent work.
 The $\mu$-notation is inspired by the $\mu$-calculus
-\cite[etc.]{kozen-1983,endrullis-et-al-2011}.
+\cite{kozen-1983,endrullis-et-al-2011}.
+% [etc.]
 
 %, notably in the context of constraint logic programming
 
@@ -1951,24 +1952,26 @@ we conclude that $\J \vDash \Ec.$
 \label{ex:model}
 Continuing Example~\ref{ex:assign-complete}, let $\J$ be a normal interpretation, where
 up to renaming of $\MU$-bound variables, we have
-\[\begin{array}{r@{}c@{}r@{}c@{}l@{\qquad}r@{}c@{}l@{\qquad}r@{}c@{}l}
-& &\interp{\J}{u} & {}\,=\,{} &  \const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
+\[\begin{array}{r@{}c@{}l@{\qquad}r@{}c@{}l@{\qquad}r@{}c@{}l}
+\interp{\J}{u} & {}\,=\,{} &  \const{C}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
 \interp{\J}{w} & = &  \const{E}( \MU {\Varec{y}}.\; \const{D}( {\Varec{y}} ) ) &
 \interp{\J}{y} & {}\,=\,{} & \MU {\Varec{y}}.\; \const{D}( {\Varec{y}} ) \\
-\interp{\J}{v} & = & \interp{\J}{s} & = & \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
+\interp{\J}{s} \,=\, \interp{\J}{v} & = & \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) &
 \interp{\J}{x} & {}\,=\,{} & \const{C}( \const{D}( \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} ) ) ) &
 \interp{\J}{z} & = & \MU {\Varec{z}}.\; \const{E}( {\Varec{z}} )
 \end{array}\]
-It can be shown that $\J$ satisfies $\Ec =
-\{
-u \teq \const{C}( z ),\;
-v \teq \const{D}( z ),\;
-w \teq \const{E}( y ),\;
-x \teq \const{C}( v ),\;
-v \teq s,\;
-z \not\teq v
-\}.$
-\xend
+%It can be shown that
+It is easy to see that $\J$ satisfies the constraints
+
+\vskip\abovedisplayskip
+
+\noindent
+\hbox{}{\color{white}\xend}$u \teq \const{C}( z )$\hfill
+$v \teq \const{D}( z )$\hfill
+$w \teq \const{E}( y )$\hfill
+$x \teq \const{C}( v )$\hfill
+$v \teq\nobreak s$\hfill
+$z \not\teq v$\xend
 \end{examplex}
 
 By Theorems~\ref{thm:t},~\ref{thm:rs}, and~\ref{thm:ss}, the
@@ -2056,7 +2059,7 @@ assignments $M.$
 \item Let $U$ be the datatype equivalence classes of $\Ec.$
 \item Repeat until $U \neq \emptyset$:
 \begin{itemize}
-\item[\ ] For some $\ec{t} \in U,$ $\rn{Traverse}( \ec{t}, U, \emptyset ).$
+\item[2.1.] For some $\ec{t} \in U,$ $\rn{Traverse}( \ec{t}, U, \emptyset ).$
 \end{itemize}
 \end{enumerate}
 
@@ -2076,7 +2079,7 @@ assignments $M.$
 \end{enumerate}
 \end{enumerate}
 \vspace*{-\topsep}
-\caption{\,Algorithm for checking \rn{Acyclic}}
+\caption{\,Algorithm for applying the \rn{Acyclic} rule}
 \label{fig:acyclic-algo}
 \end{figure}
 
@@ -2111,7 +2114,7 @@ assignments $M.$
 \item If distinct $\ec{t}, \ec{u} \in U$ for some $U \in \mathcalx{U},$ $\rn{Unique}(t,u).$
 \end{enumerate}
 \vspace*{-\topsep}
-\caption{\,Algorithm for checking \rn{Unique}}
+\caption{\,Algorithm for applying the \rn{Unique} rule}
 \label{fig:uniqueness-algo}
 \end{figure}
 
