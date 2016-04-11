@@ -1,0 +1,15 @@
+TODO:
+
+  * Since the Sister Conference Best Paper track typically attracts a large
+    attendance and readership from outside the specialised area, the authors might
+    consider to add a few pointers to literature that introduces or surveys the
+    use of SMT solvers in AI.
+
+  * In section 3.4 I suggest to add a reference to the proofs.
+
+KIND OF DONE:
+
+  * Acronyms such as CAV and even CADE, J.ACM in the references should be spelled
+    out.
+    >>> J. ACM stands for Journal of the ACM. I see no point in expanding that.
+    >> And we're not going to expand ACM if they themselves don't expand it.
