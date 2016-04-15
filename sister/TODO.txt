@@ -1,9 +1,5 @@
 TODO:
 
-  * Since the Sister Conference Best Paper track typically attracts a large
-    attendance and readership from outside the specialised area, the authors might
-    consider to add a few pointers to literature that introduces or surveys the
-    use of SMT solvers in AI.
 
 KIND OF DONE:
 
@@ -15,3 +11,9 @@ KIND OF DONE:
 DONE:
 
   * In section 3.4 I suggest to add a reference to the proofs.
+  
+  * Since the Sister Conference Best Paper track typically attracts a large
+    attendance and readership from outside the specialised area, the authors might
+    consider to add a few pointers to literature that introduces or surveys the
+    use of SMT solvers in AI.
+    >>> Referenced de Moura/Bjorner applications of SMT paper
