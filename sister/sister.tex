@@ -1,9 +1,10 @@
 \documentclass[letter]{article}
 % The file ijcai16.sty is the style file for IJCAI-16 (same as ijcai07.sty).
 \usepackage{ijcai16}
+\usepackage{times}
 
 \usepackage[T1]{fontenc}
-\usepackage{flushend}
+%\usepackage{flushend}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -134,19 +135,25 @@
 \newcommand\negvvthinspace{\kern-0.041667em}
 
 %%% For final version as well?
-\usepackage[
-   a4paper,
-   pdftex,
-   pdftitle={A Decision Procedure for (Co)datatypes in SMT Solvers},
-   pdfauthor={Andrew Reynolds and Jasmin Christian Blanchette},
-   pdfkeywords={},
-   pdfborder={0 0 0},
-   draft=false,
-   bookmarksnumbered,
-   bookmarks,
-   bookmarksdepth=2,
-   bookmarksopenlevel=2,
-   bookmarksopen]{hyperref}
+%\usepackage[
+%   a4paper,
+%   pdftex,
+%   pdftitle={A Decision Procedure for (Co)datatypes in SMT Solvers},
+%   pdfauthor={Andrew Reynolds, Jasmin Christian Blanchette},
+%   pdfkeywords={Decision Procedures, Automated Theorem Proving, Satisfiability Modulo Theories},
+%   pdfborder={0 0 0},
+%   draft=false,
+%   bookmarksnumbered,
+%   bookmarks,
+%   bookmarksdepth=2,
+%   bookmarksopenlevel=2,
+%   bookmarksopen]{hyperref}
+
+\pdfinfo{
+  /Title (A Decision Procedure for (Co)datatypes in SMT Solvers)
+  /Author (Andrew Reynolds, Jasmin Christian Blanchette)
+  /Keywords (Decision Procedures, Automated Theorem Proving, Satisfiability Modulo Theories)
+}
 
 \urlstyle{ttstyle}
 
