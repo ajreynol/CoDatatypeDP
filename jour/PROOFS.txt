@@ -34,3 +34,6 @@ Line 421: Remove spurious indentation (cf. authors' PDF).
 
 Line 584: Avoid "M" alone on its line using ~ (in LaTeX) or by removing M
 altogether (since it is redundant).
+
+Below line 602/Figure 4:  The caption of Figure 4 should be placed beneath the 
+figure, analogously to Figure 5.
