@@ -1,0 +1,36 @@
+Answers to queries:
+
+
+1. Lausanne is correct.
+
+2. Please change the corresponding author to be Andrew Reynolds.
+
+3. Bold highlights the maximum of a (big) column (e.g. the Distro column), as
+is customary in our field.
+
+
+Comments:
+
+
+Lines 23, 118, 124 (first row): There should be some spacing on both sides of
+the vertical bar (|). See the authors' PDF.
+
+Line 54: The four dots (....) are poorly spaced out. There should be the same
+amount of space between all of them. See the authors' PDF.
+
+Lines 177, 292, 309, 434, 509, and 546: In our PDF, we carefully distinguished
+between an "end of example" symbol (a solid black square) and an "end of
+proof" (or QED) symbol (an open square). Readers with a mathematics background
+will find the use of an "end of proof" symbol at the end of an example
+strange. Please revert to the solid black square, which Springer has allowed
+in previous J. Automated Reasoning publications.
+
+Lines 377 and 378: There is a spurious paragraph break not present in the
+authors' PDF.
+
+Lines 420, 504, and 543: The equal signs should be aligned column-wise.
+
+Line 421: Remove spurious indentation (cf. authors' PDF).
+
+Line 584: Avoid "M" alone on its line using ~ (in LaTeX) or by removing M
+altogether (since it is redundant).
